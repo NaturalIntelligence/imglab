@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ImgLab</title>
+	<style type="text/css">
+		#container{
+			height: 600px;
+		}
+		#img_home{
+			width: 70%;
+			height: 100%;
+			border: 1px solid black;
+			display: block;
+			overflow: scroll;
+			float: left;
+			position: relative;
+			resize: both;
+			
+		}
+		.sidebar{
+			width: 14%;
+    		height: 100%;
+    		float: left;
+		}
+		#actualData, #alteredData{
+			height: 90%;
+			width: 100%;
+		}
+		#facedata{
+			width: 100%;
+			height: 80%;
+		}
+		#canvas{
+			position: absolute;
+		}
+		#img{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+		}
+		#img_overlay{
+			position: absolute;
+			z-index: 1;
+		}
+		.ptn{
+			position: absolute;
+			width: 5px;
+			height: 5px;
+			background-color: #ff0000;
+		}
+		.clear{
+			clear:both;
+		}
+	</style>
+	<script src="js/thirdparty/jquery.min.js" ></script>
+	<script src="js/Face++DataParser.js"></script>
+	<script src="js/FaceBox.js"></script>
+	<script src="js/face++api.js"></script>
+	<script src="js/labels.js"></script>
+	<script src="js/thirdparty/jsplumb.min.js"></script>
+	
+</head>
+<body>
+
+
+<form>
+	<input type="text" id="image_url" name="image_url" placeholder="URL">
+    <input type="button" id="imgUrlBtn" value="GO" />
+    Or
+	<input type="file" id="image_file" value="Browse" onchange="readURL(this)" />
+</form>
+
+<b>Cursor Position</b>
+<div>
+	X: <input type="text" id="x"> Y: <input type="text" id="y">
+	<b>Dimentions :</b> <span id="imgdimentions"></span>
+	<input type="button" name="faceppBtn" id="faceppBtn" value="Fetch detail fron Face++" />
+</div>
+<div id="info"></div>
+
+<div id="container">
+	<div id="img_home">
+		<img id="img"/>
+		<canvas id="canvas"></canvas>
+		<div id="img_overlay"></div>
+		<!-- <canvas id="canvas"> </canvas> -->
+	</div>
+	
+	<div class="sidebar">
+		<textarea id="actualData" ></textarea>
+		<input type="button" id="plotActualBtn" value="Plot on Image" />
+	</div>
+	<div class="sidebar">
+		<textarea id="alteredData" ></textarea>
+		<input type="button" id="plotAlteredBtn" value="Plot on Image" />
+	</div>
+</div>
+<div class="clear"></div>
+
+	<input type="button" id="plotApiBtn" value="Plot on Image" />
+	<input type="button" id="clrPointsBtn" value="Clear all points" />
+<script>
+
+	//Display image from the URL or file path
+	$('#imgUrlBtn').on('click', function() {
+	    $('#img').attr('src',  $('#image_url').val());
+	});
+
+	$('#clrPointsBtn').on('click', function() {
+	    deleteAllPoints();
+	});
+
+	$('#plotActualBtn').on('click', function() {
+		deleteAllPoints();
+	    actualData = JSON.parse($("#actualData").val());
+	    alteredData = JSON.parse($("#actualData").val());
+	    plotWith(actualData);
+	});
+
+	$('#img').on('load',function(){
+	    $("#imgdimentions").text($('#img').width() + "," + $('#img').height());
+	    $("#img_overlay").width($("#img").width());
+		$("#img_overlay").height($("#img").height());
+	});
+
+    $("#img_overlay").mousemove(function(event) {
+        var cordinates = getCordinates(event,this);
+        $("#x").val(cordinates.x);
+        $("#y").val(cordinates.y);
+    });
+
+    $("#img_overlay").mousedown(function (ev) {
+        var cordinates = getCordinates(ev,this);
+        drawPoint(1,cordinates,labels.length);
+    })
+
+
+    $("#plotApiBtn").click(function(){
+    	if(faces.length > 0){
+    		faces.forEach(function(face){
+    			drawPoints(face);
+    		})
+    	}else{
+    		$("#info").text("No face to draw!!");
+    	}
+
+    });
+
+    $("#faceppBtn").click(function(){
+    	fetch();
+    });
+
+    function getCordinates(event, element){
+		var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").get(0).offsetLeft - element.offsetLeft;
+        var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").get(0).offsetTop - element.offsetTop;
+        return {x:x,y:y};
+    }
+
+	/* 	To show the image*/
+	function readURL(input) {
+		console.log("show image")
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#img').attr('src', e.target.result)
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+</script>
+
+</body>
+</html>
