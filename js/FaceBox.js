@@ -47,3 +47,39 @@ var drawRectangle = function(face_rectangle,gender){
     }).*/
     appendTo($("#img_home"));	
 }
+
+function confirm(cordinates){
+    $.confirm({
+        content: 'Please select the label <br>' + generateLabelSelectionBox(),
+        type: 'green',
+        buttons: {   
+            ok: {
+                text: "ok!",
+                btnClass: 'btn-primary',
+                action: function(){
+                     var lbl= this.$content.find('select').val();
+                     drawPoint(0,cordinates,labels.indexOf(lbl));
+                }
+            },
+            cancel: function(){
+                    console.log('the user clicked cancel');
+            }
+        }
+    });
+}
+
+function generateLabelSelectionBox(){
+    var elementStr = "<select>"
+    labels.forEach(function(label,index){
+        if(alteredData.faces[0].landmark[label]){
+            elementStr += "<option disabled value='"+label+"'>"+index + " " + label+"</option>"    
+        }else{
+            elementStr += "<option value='"+label+"'>"+index + " " + label+"</option>"
+        }
+    });
+
+    elementStr += "</select>";
+
+    return elementStr;
+
+}

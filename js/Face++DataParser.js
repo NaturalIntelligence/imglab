@@ -1,6 +1,6 @@
 
 
-var alteredData;
+var alteredData = { faces : [ {landmark : {}}]};
 var actualData;
 function fetch(){
 
@@ -26,7 +26,7 @@ function fetch(){
 	    success: function(data) {
             //jsonData = $.parseJSON(data);
             actualData = data;
-            alteredData = data;
+            //alteredData = data;
             $('#actualData').text(JSON.stringify(data));
             $('#alteredData').text(JSON.stringify(data));
             deleteAllPoints();
@@ -41,6 +41,7 @@ function fetch(){
 
 var deleteAllPoints= function(){
 	$("#img_overlay").empty();
+	alteredData = { faces : [ {landmark : {}}]};
 }
 
 function plotWith(jsonData){
@@ -66,6 +67,12 @@ var drawPoints = function(id,landmark){
 
 function drawPoint(id,coordinates,num){
   var point = getPointElement(id,coordinates.x,coordinates.y,labels[num]);
+  
+  if(!alteredData.faces) alteredData.faces = [];
+  if(!alteredData.faces[id]) alteredData.faces[id] = { landmark : {}};
+
+  alteredData.faces[id].landmark[labels[num]] = coordinates;
+  
   $("#img_overlay").append(point);
   jsPlumb.draggable(point,{
   	/*drag: function(e){
@@ -77,11 +84,9 @@ function drawPoint(id,coordinates,num){
         if(labels.indexOf(lbl)){
         	var tmp = e.el.id.split("_");
         	console.log(alteredData.faces[tmp[0]].landmark[lbl]);
-        	alteredData.faces[tmp[0]].landmark[lbl].x = e.pos[0];
-        	alteredData.faces[tmp[0]].landmark[lbl].y = e.pos[1];
+        	alteredData.faces[tmp[0]].landmark[lbl].x = e.pos[0];// for left position
+        	alteredData.faces[tmp[0]].landmark[lbl].y = e.pos[1];// for top position
         }
-        //console.log(e.pos[0]); // for left position
-    	//console.log(e.pos[1]); // for top position
     }
   });
 }
