@@ -5,8 +5,8 @@ var actualData;
 function fetch(){
 
 	var formData = new FormData();
-	formData.append('api_key', 'yourkey');
-	formData.append('api_secret', 'yoursecret');
+	formData.append('api_key', $("#api_key").val());
+	formData.append('api_secret', $("#api_secret").val());
 	formData.append('return_landmark', 1);
 	//formData.append('return_attributes', "gender,age,smiling,headpose,facequality,blur,eyestatus,ethnicity,emotion");
 	formData.append('return_attributes', "gender,age,headpose");
@@ -72,7 +72,7 @@ function drawPoint(id,coordinates,num){
   if(!alteredData.faces[id]) alteredData.faces[id] = { landmark : {}};
 
   alteredData.faces[id].landmark[labels[num]] = coordinates;
-  
+
   $("#img_overlay").append(point);
   jsPlumb.draggable(point,{
   	/*drag: function(e){
