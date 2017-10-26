@@ -15,7 +15,7 @@ $('#plotActualBtn').on('click', function() {
 });
 
 $('#img').on('load',function(){
-    $("#imgdimentions").text($('#img').width() + "," + $('#img').height());
+    $("#imgdimentions").text("w:" + $('#img').width() + ", h:" + $('#img').height());
     $("#img_overlay").width($("#img").width());
 	$("#img_overlay").height($("#img").height());
 });
@@ -62,12 +62,24 @@ $("#faceppBtn").click(function(){
 
 /*  To show the image*/
 function readURL(input) {
-    console.log("show image")
     if (input.files && input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
             $('#img').attr('src', e.target.result)
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function readPointsFile(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            //$('#img').attr('src', e.target.result)
+            //detect the filetype and drawPoints()
         };
 
         reader.readAsDataURL(input.files[0]);

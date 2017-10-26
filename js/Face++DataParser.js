@@ -2,9 +2,12 @@
 
 var alteredData = { faces : [ {landmark : {}}]};
 var actualData;
+
+
 function fetch(){
 
 	var formData = new FormData();
+	
 	formData.append('api_key', $("#api_key").val());
 	formData.append('api_secret', $("#api_secret").val());
 	formData.append('return_landmark', 1);

@@ -5,6 +5,7 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/jquery-confirm.min.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
 	<script src="js/thirdparty/jquery.min.js" ></script>
 	<script src="js/thirdparty/jsplumb.min.js"></script>
@@ -34,10 +35,8 @@
 		    Or
 		</div>
 		<div class="col-sm-2">
-			<!-- <input type="file" id="image_file" value="Browse" onchange="readURL(this)" /> -->
-			<label class="btn-bs-file btn btn-outline-info">
-		        Browse
-		        <input type="file" id="image_file" value="Browse" onchange="readURL(this)" />
+			<label class="btn-bs-file btn btn-outline-info">Browse
+		        <input type="file" id="image_file" value="Browse" accept="image/*"  onchange="readURL(this)" />
 		    </label>
 	    </div>
     </div>
@@ -48,21 +47,38 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-2" style="background-color: #e1e6ea">
-			
+			<span id="imgdimentions"></span>
 		</div>
-		<div class="col-sm-10" >
+		<div class="col-sm-8" >
 			<div style="height: 600px">
 				<div id="img_home">
 					<img id="img"/>
-					<canvas id="canvas"></canvas>
+					<!-- <canvas id="canvas"></canvas> -->
 					<div id="img_overlay"></div>
 					<span id="tooltip-span"></span>
 				</div>
 				
-				<div class="sidebar">
-					<textarea id="actualData" ></textarea>
-					<input type="button" id="plotActualBtn" value="Plot on Image" />
-				</div>
+				
+			</div>
+		</div>
+		<div class="col-sm-2" >
+			<h5>Plot <i class="fa fa2x fa-info-circle" title="Plot points using following methods and adjust them to improve the accuracy."></i></h5>
+			<input class="form-control" type="text" name="api_key" id="api_key" placeholder="api_key" />
+			<input class="form-control" type="text" name="api_secret" id="api_secret" placeholder="api_secret" />
+			<br>
+			<input class="btn btn-success" type="button" name="faceppBtn" id="faceppBtn" value="Face++" />
+
+			
+			<hr>
+			<small>Select a file to read landmarks and face box position. (fpp, xml, pts)</small><br>
+			<label class="btn-bs-file btn btn-outline-info">Browse
+		        <input type="file" id="points_file" value="Browse data file" accept=".fpp,.pts,.xml" onchange="readPointsFile(this)" />
+		    </label>
+
+			<hr>
+			<div class="sidebar">
+				<textarea id="actualData" ></textarea>
+				<input type="button" id="plotActualBtn" value="Plot on Image" />
 			</div>
 		</div>
 	</div>
@@ -71,17 +87,11 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-4">
-			<b>Dimentions :</b> <span id="imgdimentions"></span>
+			
 			<br><input class="btn btn-danger" type="button" id="clrPointsBtn" value="Clear all points" />
 		</div>
 		<div class="col-sm-4">
-			<div>
-				<input class="form-control" type="text" name="api_key" id="api_key" placeholder="api_key" />
-				<br>
-				<input class="form-control" type="text" name="api_secret" id="api_secret" placeholder="api_secret" />
-				<br>
-				<input class="btn btn-success" type="button" name="faceppBtn" id="faceppBtn" value="Fetch detail fron Face++" />
-			</div>
+			
 		</div>
 		<div class="col-sm-4">
 			

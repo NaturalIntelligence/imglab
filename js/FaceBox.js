@@ -69,7 +69,7 @@ function confirm(cordinates){
 }
 
 function generateLabelSelectionBox(){
-    var elementStr = "<select>"
+    var elementStr = "<select class='form-control'>"
     labels.forEach(function(label,index){
         if(alteredData.faces[0].landmark[label]){
             elementStr += "<option disabled value='"+label+"'>"+index + " " + label+"</option>"    
