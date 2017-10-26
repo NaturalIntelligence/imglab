@@ -2,71 +2,14 @@
 <html>
 <head>
 	<title>ImgLab</title>
-	<style type="text/css">
-		#container{
-			height: 600px;
-		}
-		#img_home{
-			width: 70%;
-			height: 100%;
-			border: 1px solid black;
-			display: block;
-			overflow: scroll;
-			float: left;
-			position: relative;
-			resize: both;
-			
-		}
-		.sidebar{
-			width: 28%;
-    		height: 100%;
-    		float: left;
-		}
-		#actualData, #alteredData{
-			height: 90%;
-			width: 100%;
-		}
-		#facedata{
-			width: 100%;
-			height: 80%;
-		}
-		#canvas{
-			position: absolute;
-		}
-		#img{
-			position: absolute;
-			top: 0px;
-			left: 0px;
-		}
-		#img_overlay{
-			position: absolute;
-			z-index: 1;
-		}
-		.ptn{
-			position: absolute;
-			width: 5px;
-			height: 5px;
-			background-color: #ff0000;
-		}
-		.clear{
-			clear:both;
-		}
-		#tooltip-span {
-		    /*display:none;*/
-		    /*display:block;*/
-		    position:absolute;
-		    overflow:hidden;
-		    background-color: black;
-		    color: white;
-		}
-	</style>
 	<script src="js/thirdparty/jquery.min.js" ></script>
 	<script src="js/Face++DataParser.js"></script>
 	<script src="js/FaceBox.js"></script>
 	<script src="js/face++api.js"></script>
 	<script src="js/labels.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="js/thirdparty/jsplumb.min.js"></script>
-
+	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/jquery-confirm.min.css">
 	<script src="js/thirdparty/jquery-confirm.min.js"></script>
 	
@@ -80,8 +23,6 @@
     Or
 	<input type="file" id="image_file" value="Browse" onchange="readURL(this)" />
 </form>
-
-<b>Cursor Position</b>
 
 <div>
 	<input type="text" name="api_key" id="api_key" placeholder="api_key" />
