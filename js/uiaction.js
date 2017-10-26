@@ -22,9 +22,14 @@ $('#img').on('load',function(){
 
 //To display conrdinates
 $("#img_overlay").mousemove(function(event) {
+    $("#tooltip-span").show();
     var cordinates = getCordinates(event,this);
     $("#tooltip-span").css({"left" : cordinates.x + 15 + "px", "top" : cordinates.y + 15 + "px"});
     $("#tooltip-span").html("x:" + cordinates.x + "<br> y:" + cordinates.y);
+});
+
+$("#img_overlay").mouseout(function(event) {
+    $("#tooltip-span").hide();
 });
 
 //To create new point
@@ -50,8 +55,8 @@ $("#faceppBtn").click(function(){
 });
 
  function getCordinates(event, element){
-    var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").get(0).offsetLeft - element.offsetLeft;
-    var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").get(0).offsetTop - element.offsetTop;
+    var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").offset().left - element.offsetLeft;
+    var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").offset().top - element.offsetTop;
     return {x:x,y:y};
 }
 
