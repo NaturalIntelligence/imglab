@@ -5,7 +5,7 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/jquery-confirm.min.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+	<!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
 
 	<script src="js/thirdparty/jquery.min.js" ></script>
 	<script src="js/thirdparty/jsplumb.min.js"></script>
@@ -19,24 +19,30 @@
 	
 </head>
 <body>
-
+            <a href="https://github.com/NaturalIntelligence/imglab"><img class="bring-up" style="position: absolute; top: 0; left: 0; border: 0;" src="img/githubribon.png" alt="Fork me on GitHub"></a>
 <h1 style="text-align: center;"> ImgLab</h1>
 <p style="text-align: center;">This is the webbased tool to label images with boxes and landmarks. You can also use Face++ API to prepopulate the points and then adjust them to improve the position by dragging them.</p>
 
 <div class="container">
 	<div class="row">
 	    <div class="col-sm-8">
-			<input class="form-control" type="text" id="image_url" name="image_url" placeholder="Image URL">
+
+		    <div class="input-group">
+				<input class="form-control" type="text" id="image_url" name="image_url" placeholder="Image URL">
+		      <span class="input-group-btn">
+		        <button class="btn btn-outline-info" type="button" id="imgUrlBtn">Show</button>
+		      </span>
+			</div>
 		</div>
-		<div class="col-sm-1">
+		<!-- <div class="col-sm-1">
 		    <input  class="btn btn-outline-info" type="button" id="imgUrlBtn" value="Show" />
-	    </div>
+	    </div> -->
 	    <div class="col-sm-1">
 		    Or
 		</div>
-		<div class="col-sm-2">
-			<label class="btn-bs-file btn btn-outline-info">Browse
-		        <input type="file" id="image_file" value="Browse" accept="image/*"  onchange="readURL(this)" />
+		<div class="col-sm-3">
+			<label class="btn-bs-file btn btn-outline-info">Browse an Image file
+		        <input type="file" id="image_file" accept="image/*"  onchange="readURL(this)" />
 		    </label>
 	    </div>
     </div>
@@ -47,6 +53,13 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-2" style="background-color: #e1e6ea">
+			<h5>Point Detail</h5>
+			<input class="form-control form-control-sm" type="text" id="lbltxtbox" placeholder="Label">
+			<div class="row">
+				<div class="col">x: <span id="div_x"></div><div class="col"> <span id="div_y">y: </div>
+			</div>
+			<input class="form-control form-control-sm" disabled type="text" id="boxlbl" placeholder="Box Label">
+			<hr>
 			<span id="imgdimentions"></span>
 		</div>
 		<div class="col-sm-8" >
@@ -62,7 +75,8 @@
 			</div>
 		</div>
 		<div class="col-sm-2" >
-			<h5>Plot <i class="fa fa2x fa-info-circle" title="Plot points using following methods and adjust them to improve the accuracy."></i></h5>
+			<h5>Plotting options </h5>
+			<small>Plot points using following methods and adjust them to improve the accuracy.</small>
 			<input class="form-control" type="text" name="api_key" id="api_key" placeholder="api_key" />
 			<input class="form-control" type="text" name="api_secret" id="api_secret" placeholder="api_secret" />
 			<br>

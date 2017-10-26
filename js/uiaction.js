@@ -26,6 +26,33 @@ $("#img_overlay").mousemove(function(event) {
     var cordinates = getCordinates(event,this);
     $("#tooltip-span").css({"left" : cordinates.x + 15 + "px", "top" : cordinates.y + 15 + "px"});
     $("#tooltip-span").html("x:" + cordinates.x + "<br> y:" + cordinates.y);
+
+    if(tmpBox !== ""){
+        drawFaceBox(cordinates);
+    }
+});
+
+function drawFaceBox(cordinates){
+    var position = tmpBox.position();
+    var left = tmpBox.position().left,top = tmpBox.position().top;
+    if (cordinates.x < startingPosition.left) {
+        left = cordinates.x;
+    }
+
+    if (cordinates.y < startingPosition.top) {
+        top = cordinates.y;
+    } 
+
+    $(tmpBox).css({
+        top: top,
+        left: left,
+        width: Math.abs(cordinates.x - startingPosition.left) ,
+        height: Math.abs(cordinates.y - startingPosition.top) ,
+    })
+}
+
+$("#img_overlay").mouseup(function(event) {
+    tmpBox = "";
 });
 
 $("#img_overlay").mouseout(function(event) {
@@ -33,9 +60,18 @@ $("#img_overlay").mouseout(function(event) {
 });
 
 //To create new point
-$("#img_overlay").mousedown(function (ev) {
+/*$("#img_overlay").mousedown(function (ev) {
     var cordinates = getCordinates(ev,this);
     confirm(cordinates);
+})*/
+
+var tmpBox = "";
+$("#img_overlay").mousedown(function (ev) {
+    var cordinates = getCordinates(ev,this);
+    tmpBox = $("<div class='facebox'></div>")
+        .css({ top : cordinates.y, left : cordinates.x})
+        .appendTo($("#img_overlay"));
+    startingPosition = tmpBox.position();
 })
 
 
