@@ -300,3 +300,6 @@ $("#lbltxtbox").on("input",function(ev){
     $(".ptn.selected").attr("label",$("#lbltxtbox").val());
 })
 
+$(".deleteBtn").click(function(){
+    $(".selected").remove();
+});
