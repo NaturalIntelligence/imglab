@@ -55,10 +55,15 @@ function drawFaceBox(cordinates){
 }
 
 $("#img_overlay").mouseup(function(event) {
-    if(tmpBox != "" && (tmpBox.width() < 20 || tmpBox.height() < 20)){
-        tmpBox.remove();
+    if(tmpBox != ""){
+        if(tmpBox.width() < 20 || tmpBox.height() < 20){
+            tmpBox.remove();
+        }else{
+            select(tmpBox);
+        }
     }
     tmpBox = "";
+    
 });
 
 $("#img_overlay").mouseout(function(event) {
@@ -95,17 +100,17 @@ $(document).on('click', '.facebox', function(ev){
 
 });
 
-/*$(document).on('click', '.ptn', function(ev){
+$(document).on('click', '.ptn', function(ev){
     //ev.stopPropagation()
 
     if(!document.getElementById('plotType').checked) {
-       
+        toggleSelect(ev.target);
     }else{
         //Select the box to change box settings
         $(ev.el).addClass("selected");
     }
 
-});*/
+});
 
 var tmpBox = "";
 $("#img_overlay").mousedown(function (ev) {
@@ -113,16 +118,16 @@ $("#img_overlay").mousedown(function (ev) {
 
         if ($(ev.target).is('div.facebox')){ // select the box
              //ev.stopPropagation();
-             $(ev.target).toggleClass("selected");
+             toggleSelect($(ev.target));
              return;
         }else{
-            $(".facebox").removeClass("selected");
+            deselect($(ev.target));
             var cordinates = getCordinates(ev,this);
             tmpBox = $("<div class='facebox'></div>")
                 .css({ top : cordinates.y, left : cordinates.x})
                 .appendTo($("#img_overlay"));
             //makeItDraggable(tmpBox);
-            tmpBox.addClass("selected");
+            
             startingPosition = tmpBox.position();
         }
     } else {
@@ -134,7 +139,58 @@ $("#img_overlay").mousedown(function (ev) {
          return;
     }*/
     
-})
+});
+
+/************* Select,Deselect an element and show corresponding widget */
+function deselectAll(){
+    $("#boxDtl, #ptnDtl").hide();
+    $("#boxDtl, #ptnDtl").removeClass("selected");
+}
+
+function select(el){
+    deselectAll();
+    $(el).addClass("selected");
+    if($(el).hasClass("facebox")){
+        displayBoxWidget(el)
+    }else{
+        displayPointWidget(el)
+    }
+}
+
+function deselect(el){
+    $(el).removeClass("selected");
+    if($(el).hasClass("facebox")){
+        $("#boxDtl").hide();
+    }else{
+        $("#ptnDtl").hide();
+    }
+}
+
+function toggleSelect(el){
+    if($(el).hasClass("selected")){
+        deselect(el);
+    }else{
+        select(el);
+    }
+
+}
+
+function displayBoxWidget(el){
+    $("#lbltxtbox").val("Unknown");
+    $("#div_l").text(el.position().left);
+    $("#div_t").text(el.position().top);
+    $("#div_w").text(el.width());
+    $("#div_h").text(el.height());
+    $("#boxDtl").show();
+}
+
+function displayPointWidget(el){
+    $("#lbltxtbox").val("Unknown");
+    $("#div_x").text($(el).position().left);
+    $("#div_y").text($(el).position().top);
+    $("#ptnDtl").show();
+}
+/*************End: Select,Deselect an element and show corresponding widget */
 
 $("#plotType").click(function(ev){
     jsPlumb.toggleDraggable($(".facebox"));
