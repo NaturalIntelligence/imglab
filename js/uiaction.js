@@ -54,7 +54,7 @@ function drawFaceBox(cordinates){
 }
 
 $("#img_overlay").mouseup(function(event) {
-    if(tmpBox.width() < 20 || tmpBox.height() < 20){
+    if(tmpBox != "" && (tmpBox.width() < 20 || tmpBox.height() < 20)){
         tmpBox.remove();
     }
     tmpBox = "";
@@ -72,8 +72,10 @@ $(document).on('mousedown', '.facebox', function(ev){
     if(!document.getElementById('plotType').checked) {
         //Create a point
 
-        var cordinates = getCordinates(ev,this);
-        confirm(cordinates);
+        if($(ev.target).is('div.facebox')){
+            var cordinates = getCordinates(ev);
+            confirm(cordinates);
+        }
     }else{
         //Select the box to change box settings
     }
@@ -106,6 +108,7 @@ $(document).on('click', '.facebox', function(ev){
 
 var tmpBox = "";
 $("#img_overlay").mousedown(function (ev) {
+    console.log(getCordinates(ev,this));
     if(document.getElementById('plotType').checked) { //Box operation
 
         if ($(ev.target).is('div.facebox')){ // select the box
@@ -166,8 +169,14 @@ $("#faceppBtn").click(function(){
 });
 
  function getCordinates(event, element){
-    var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").offset().left - element.offsetLeft;
-    var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").offset().top - element.offsetTop;
+    //console.log(event.pageX ,$("#img_home").scrollLeft(),$("#img_home").offset().left,element.offsetLeft);
+    if(element){
+        var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").offset().left - element.offsetLeft;
+        var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").offset().top - element.offsetTop;
+    }else{
+        var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").offset().left;
+        var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").offset().top;
+    }
     return {x:x,y:y};
 }
 
