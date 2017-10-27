@@ -68,6 +68,7 @@ $("#img_overlay").mouseup(function(event) {
         if(tmpBox.width() < 20 || tmpBox.height() < 20){
             tmpBox.remove();
         }else{
+
             select(tmpBox);
         }
     }
@@ -125,6 +126,7 @@ $(document).on('click', '.ptn', function(ev){
 
 var tmpBox = "";
 $("#img_overlay").mousedown(function (ev) {
+    deselectAll();
     if(document.getElementById('plotType').checked) { //Box operation
 
         if ($(ev.target).is('div.facebox')){ // select the box
@@ -155,7 +157,7 @@ $("#img_overlay").mousedown(function (ev) {
 /************* Select,Deselect an element and show corresponding widget */
 function deselectAll(){
     $("#boxDtl, #ptnDtl").hide();
-    $("#boxDtl, #ptnDtl").removeClass("selected");
+    $(".selected").removeClass("selected");
 }
 
 function select(el){
