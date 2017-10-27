@@ -37,13 +37,26 @@
 .clear{
 	clear:both;
 }
-#tooltip-span {
-    display:none;
-    /*display:block;*/
+
+#h_line, #v_line, #tooltip-span {
+	display:none;
     position:absolute;
     overflow:hidden;
+}
+
+#tooltip-span {
     background-color: black;
     color: white;
+}
+
+#h_line{
+	border: 1px solid yellow;
+    width: 100%;
+}
+
+#v_line {
+	border: 1px solid red;
+ 	height: 100%;
 }
 /*body{ background-color: #2c3e50;  }*/
 .btn-bs-file{
