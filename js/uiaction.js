@@ -1,3 +1,4 @@
+
 //Display image from the URL or file path
 $('#imgUrlBtn').on('click', function() {
     $('#img').attr('src',  $('#image_url').val());
@@ -21,6 +22,7 @@ $('#img').on('load',function(){
 });
 
 //To display conrdinates
+//To draw rectangle
 $("#img_overlay").mousemove(function(event) {
     $("#tooltip-span").show();
     var cordinates = getCordinates(event,this);
@@ -52,6 +54,9 @@ function drawFaceBox(cordinates){
 }
 
 $("#img_overlay").mouseup(function(event) {
+    if(tmpBox.width() < 20 || tmpBox.height() < 20){
+        tmpBox.remove();
+    }
     tmpBox = "";
 });
 
@@ -60,20 +65,90 @@ $("#img_overlay").mouseout(function(event) {
 });
 
 //To create new point
-/*$("#img_overlay").mousedown(function (ev) {
-    var cordinates = getCordinates(ev,this);
-    confirm(cordinates);
-})*/
+/* To bind an event with elements dynamically created.*/
+$(document).on('mousedown', '.facebox', function(ev){
+    //ev.stopPropagation()
+
+    if(!document.getElementById('plotType').checked) {
+        //Create a point
+
+        var cordinates = getCordinates(ev,this);
+        confirm(cordinates);
+    }else{
+        //Select the box to change box settings
+    }
+
+});
+
+$(document).on('click', '.facebox', function(ev){
+    //ev.stopPropagation()
+
+    if(!document.getElementById('plotType').checked) {
+       
+    }else{
+        //Select the box to change box settings
+        //$(ev.el).addClass("selected");
+    }
+
+});
+
+/*$(document).on('click', '.ptn', function(ev){
+    //ev.stopPropagation()
+
+    if(!document.getElementById('plotType').checked) {
+       
+    }else{
+        //Select the box to change box settings
+        $(ev.el).addClass("selected");
+    }
+
+});*/
 
 var tmpBox = "";
 $("#img_overlay").mousedown(function (ev) {
-    var cordinates = getCordinates(ev,this);
-    tmpBox = $("<div class='facebox'></div>")
-        .css({ top : cordinates.y, left : cordinates.x})
-        .appendTo($("#img_overlay"));
-    startingPosition = tmpBox.position();
+    if(document.getElementById('plotType').checked) { //Box operation
+
+        if ($(ev.target).is('div.facebox')){ // select the box
+             //ev.stopPropagation();
+             $(ev.target).toggleClass("selected");
+             return;
+        }else{
+            $(".facebox").removeClass("selected");
+            var cordinates = getCordinates(ev,this);
+            tmpBox = $("<div class='facebox'></div>")
+                .css({ top : cordinates.y, left : cordinates.x})
+                .appendTo($("#img_overlay"));
+            //makeItDraggable(tmpBox);
+            tmpBox.addClass("selected");
+            startingPosition = tmpBox.position();
+        }
+    } else {
+        //do nothing
+    }
+
+    /*if ($(ev.target).is('div.facebox')){
+         //ev.stopPropagation();
+         return;
+    }*/
+    
 })
 
+$("#plotType").click(function(ev){
+    jsPlumb.toggleDraggable($(".facebox"));
+});
+
+
+function makeItDraggable(el){
+  jsPlumb.draggable(el,{
+    /*drag: function(e){
+        //console.log(e.pos[0]); // for left position
+        //console.log(e.pos[1]); // for top position
+    },
+    stop: function(e){
+        //do something
+    }*/
+  });
+}
 
 $("#plotApiBtn").click(function(){
 	if(faces.length > 0){
