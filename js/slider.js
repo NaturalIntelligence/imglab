@@ -19,9 +19,9 @@ function addToSlider(imgData){
     var img = document.createElement('img');
     img.src = imgData.data;
     //set an extra attribute reference to main images array
-    var seq = document.createAttribute("seq"); 
-    seq.value = imgData.seq;
-    img.setAttributeNode(seq);
+    var label = document.createAttribute("label"); 
+    label.value = imgData.name;
+    img.setAttributeNode(label);
     img.width = img.height = 80;
     thumbnails.push(img);
     photolist.append(thumbnails);
@@ -59,6 +59,7 @@ function emptySlider(){
 
 
 $(document).on('click', '.photolist img', function(ev){
-    currentImg = images[$(this).attr('seq')];
+    currentImg = images[$(this).attr('label')];
     $('#img').attr('src', currentImg.data)
+    $('#img').attr('label', $(this).attr('label'))
 });

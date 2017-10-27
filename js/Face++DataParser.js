@@ -68,43 +68,22 @@ var drawPoints = function(id,landmark){
 	
 }
 
-function drawPoint(id,coordinates,num){
-  var point = getPointElement(id,coordinates.x,coordinates.y,labels[num]);
-  
-  if(!alteredData.faces) alteredData.faces = [];
-  if(!alteredData.faces[id]) alteredData.faces[id] = { landmark : {}};
+function drawPoint(coordinates,el){
+  var point = getPointElement(coordinates.x,coordinates.y);
 
-  alteredData.faces[id].landmark[labels[num]] = coordinates;
-
-  $("#img_overlay").append(point);
+  $(el).append(point);
   jsPlumb.draggable(point,{
-  	/*drag: function(e){
-        //console.log(e.pos[0]); // for left position
-    	//console.log(e.pos[1]); // for top position
-    },*/
+  	drag: function(e){
+        displayPointWidget($(e.el));
+    },
     stop: function(e){
-        var lbl = $(e.el).attr("label");
-        if(labels.indexOf(lbl)){
-        	var tmp = e.el.id.split("_");
-        	console.log(alteredData.faces[tmp[0]].landmark[lbl]);
-        	alteredData.faces[tmp[0]].landmark[lbl].x = e.pos[0];// for left position
-        	alteredData.faces[tmp[0]].landmark[lbl].y = e.pos[1];// for top position
-        }
+        displayPointWidget($(e.el));
     }
   });
 }
 
-function getPointElement(id,x,y,lbl){
-	return $('<div class="ptn" id="'+id+'_'+ lbl+'" label="'+lbl+'"></div>')
+function getPointElement(x,y){
+	return $('<div class="ptn"></div>')
             .css('top', (y - 3) + 'px')
             .css('left', (x - 3) + 'px');
-}
-
-function clearCanvas(canvas) {
-	
-    var ctx = canvas.getContext('2d');
-    var width = canvas.width,
-        height = canvas.height;
-    ctx.fillStyle = '#EEE';
-    ctx.fillRect(0, 0, width, height);
 }

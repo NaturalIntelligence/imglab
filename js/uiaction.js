@@ -63,12 +63,14 @@ function drawFaceBox(cordinates){
     })
 }
 
+
+//Create a box
 $("#img_overlay").mouseup(function(event) {
     if(tmpBox != ""){
         if(tmpBox.width() < 20 || tmpBox.height() < 20){
             tmpBox.remove();
         }else{
-
+            //images[$("#img").attr("src")].
             select(tmpBox);
         }
     }
@@ -91,8 +93,9 @@ $(document).on('mousedown', '.facebox', function(ev){
         //Create a point
 
         if($(ev.target).is('div.facebox')){
-            var cordinates = getCordinates(ev);
-            confirm(cordinates);
+            var cordinates = getCordinates(ev,ev.target);
+            //confirm(cordinates);
+            drawPoint(cordinates,ev.target);
         }
     }else{
         //Select the box to change box settings
@@ -146,11 +149,6 @@ $("#img_overlay").mousedown(function (ev) {
     } else {
         //do nothing
     }
-
-    /*if ($(ev.target).is('div.facebox')){
-         //ev.stopPropagation();
-         return;
-    }*/
     
 });
 
@@ -189,7 +187,8 @@ function toggleSelect(el){
 }
 
 function displayBoxWidget(el){
-    $("#lbltxtbox").val("Unknown");
+    var lbl = $(el).attr("label");
+    $("#boxtxtbox").val( lbl || "");
     $("#div_l").text(el.position().left);
     $("#div_t").text(el.position().top);
     $("#div_w").text(el.width());
@@ -198,9 +197,10 @@ function displayBoxWidget(el){
 }
 
 function displayPointWidget(el){
-    $("#lbltxtbox").val("Unknown");
+    $("#lbltxtbox").val($(".ptn.selected").attr("label"));
     $("#div_x").text($(el).position().left);
     $("#div_y").text($(el).position().top);
+    $("#ptnboxlbl").val($(".ptn.selected").parent().attr("label"));
     $("#ptnDtl").show();
 }
 /*************End: Select,Deselect an element and show corresponding widget */
@@ -238,13 +238,8 @@ $("#faceppBtn").click(function(){
 });
 
  function getCordinates(event, element){
-    if(element){
-        var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").offset().left - element.offsetLeft;
-        var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").offset().top - element.offsetTop;
-    }else{
-        var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").offset().left;
-        var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").offset().top;
-    }
+    var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").offset().left - element.offsetLeft;
+    var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").offset().top - element.offsetTop;
     return {x:x,y:y};
 }
 
@@ -261,21 +256,20 @@ function readFolder(input) {
         images = []; //create an empty list
 
         for(i=0;i<input.files.length;i++){
-            readFile(input.files[i],i);
+            readFile(input.files[i]);
         }
     }
 }
 
-function readFile(f,i){
+function readFile(f){
     if(f.type.startsWith("image")){
         var reader = new FileReader();
         reader.onload = function (e) {
             var imgData = {
-                location : f.name,
-                data: e.target.result,
-                seq:i
+                name : f.name,
+                data: e.target.result
             };
-            images.push(imgData); 
+            images[f.name] = imgData; 
             addToSlider(imgData);
         }
         reader.readAsDataURL(f);
@@ -298,5 +292,11 @@ function readPointsFile(input) {
     }
 }
 
+$("#boxtxtbox").on("input",function(ev){
+    $(".facebox.selected").attr("label",$("#boxtxtbox").val());
+})
 
+$("#lbltxtbox").on("input",function(ev){
+    $(".ptn.selected").attr("label",$("#lbltxtbox").val());
+})
 
