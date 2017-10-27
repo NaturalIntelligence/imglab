@@ -251,8 +251,8 @@ function readURL(input) {
 
 
 function readFolder(input) {
-    emptySlider();
-    if (input.files) {
+    if (input.files && input.files[0]) {
+        emptySlider();
         images = []; //create an empty list
 
         for(i=0;i<input.files.length;i++){
