@@ -5,17 +5,18 @@ $('#imgUrlBtn').on('click', function() {
 });
 
 $('#clrPointsBtn').on('click', function() {
-    deleteAllPoints();
+    deleteAll();
 });
 
 $('#plotActualBtn').on('click', function() {
-	deleteAllPoints();
+	deleteAll();
     actualData = JSON.parse($("#actualData").val());
     alteredData = JSON.parse($("#actualData").val());
     plotWith(actualData);
 });
 
 $('#img').on('load',function(){
+    deleteAll();
     $("#imgdimentions").text("w:" + $('#img').width() + ", h:" + $('#img').height());
     $("#img_overlay").width($("#img").width());
 	$("#img_overlay").height($("#img").height());
@@ -108,7 +109,6 @@ $(document).on('click', '.facebox', function(ev){
 
 var tmpBox = "";
 $("#img_overlay").mousedown(function (ev) {
-    console.log(getCordinates(ev,this));
     if(document.getElementById('plotType').checked) { //Box operation
 
         if ($(ev.target).is('div.facebox')){ // select the box
@@ -169,7 +169,6 @@ $("#faceppBtn").click(function(){
 });
 
  function getCordinates(event, element){
-    //console.log(event.pageX ,$("#img_home").scrollLeft(),$("#img_home").offset().left,element.offsetLeft);
     if(element){
         var x = event.pageX + $("#img_home").scrollLeft() - $("#img_home").offset().left - element.offsetLeft;
         var y = event.pageY + $("#img_home").scrollTop() - $("#img_home").offset().top - element.offsetTop;

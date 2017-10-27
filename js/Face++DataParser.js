@@ -32,7 +32,7 @@ function fetch(){
             //alteredData = data;
             $('#actualData').text(JSON.stringify(data));
             $('#alteredData').text(JSON.stringify(data));
-            deleteAllPoints();
+            deleteAll();
             plotWith(data);
 	    },
 	    error: function(err) {
@@ -42,7 +42,7 @@ function fetch(){
 	});
 }
 
-var deleteAllPoints= function(){
+var deleteAll= function(){
 	$("#img_overlay").empty();
 	alteredData = { faces : [ {landmark : {}}]};
 }
