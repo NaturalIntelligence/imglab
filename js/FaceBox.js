@@ -1,3 +1,15 @@
+/*var images = [{
+    location : "",
+    boxes : [{
+        label : "",
+        position : {}, //top,left,width,height
+        points : []
+    }]
+}]*/
+
+var images = [];
+var currentImg;
+
 var drawRectangle = function(face_rectangle,gender){
 	// change box color based on gender
 	var rgbColor,

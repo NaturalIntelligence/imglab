@@ -2,6 +2,10 @@
 //Display image from the URL or file path
 $('#imgUrlBtn').on('click', function() {
     $('#img').attr('src',  $('#image_url').val());
+    currentImg = {
+        location : $('#image_url').val()
+    }
+    images = [ currentImg];
 });
 
 $('#clrPointsBtn').on('click', function() {
@@ -18,6 +22,7 @@ $('#plotActualBtn').on('click', function() {
 
 $('#img').on('load',function(){
     deleteAll();deselectAll();
+
     $("#imgdimentions").text("w:" + $('#img').width() + ", h:" + $('#img').height());
     $("#img_overlay").width($("#img").width());
 	$("#img_overlay").height($("#img").height());
@@ -238,22 +243,46 @@ $("#faceppBtn").click(function(){
 
 /*  To show the image*/
 function readURL(input) {
-    if (input.files && input.files[0]) {
+    readFolder(input);
+}
+
+
+
+function readFolder(input) {
+    emptySlider();
+    if (input.files) {
+        images = []; //create an empty list
+
+        for(i=0;i<input.files.length;i++){
+            readFile(input.files[i],i);
+        }
+    }
+}
+
+function readFile(f,i){
+    if(f.type.startsWith("image")){
         var reader = new FileReader();
-
         reader.onload = function (e) {
-            $('#img').attr('src', e.target.result)
-        };
-
-        reader.readAsDataURL(input.files[0]);
+            var imgData = {
+                location : f.name,
+                data: e.target.result,
+                seq:i
+            };
+            images.push(imgData); 
+            addToSlider(imgData);
+        }
+        reader.readAsDataURL(f);
     }
 }
 
 function readPointsFile(input) {
     if (input.files && input.files[0]) {
+
+        
         var reader = new FileReader();
 
         reader.onload = function (e) {
+            
             //$('#img').attr('src', e.target.result)
             //detect the filetype and drawPoints()
         };
@@ -261,3 +290,6 @@ function readPointsFile(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+
+
