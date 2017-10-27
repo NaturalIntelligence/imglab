@@ -6,6 +6,7 @@ $('#imgUrlBtn').on('click', function() {
 
 $('#clrPointsBtn').on('click', function() {
     deleteAll();
+    deselectAll();
 });
 
 $('#plotActualBtn').on('click', function() {
@@ -16,7 +17,7 @@ $('#plotActualBtn').on('click', function() {
 });
 
 $('#img').on('load',function(){
-    deleteAll();
+    deleteAll();deselectAll();
     $("#imgdimentions").text("w:" + $('#img').width() + ", h:" + $('#img').height());
     $("#img_overlay").width($("#img").width());
 	$("#img_overlay").height($("#img").height());
