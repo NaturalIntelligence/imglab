@@ -97,6 +97,5 @@ var labels = ["contour_left1"
 		,"mouth_lower_lip_bottom"
 
 		,"mouth_left_corner"
-		,"mouth_right_corner"
-		,"other"]
+		,"mouth_right_corner"]
 

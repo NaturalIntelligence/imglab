@@ -10,9 +10,7 @@ You can either import a file from a URL or from your computer. You can plot the 
 # TO DO
 * refactor
 * Fix Face++ API draw
-* export to file (ptn,xml,fpp)
-* export to dlib compatible file
-* save data of currently open file for editing
+* Fix box size bug
 * load points from a file
 * Image scalling
 * filter for (un)labelled images

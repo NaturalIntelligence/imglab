@@ -72,10 +72,10 @@ function drawPoint(coordinates,el,lbl){
   jsPlumb.draggable(point,{
     drag: function(e){
         displayPointWidget($(e.el));
-    },
+    }/*,
     stop: function(e){
         displayPointWidget($(e.el));
-    }
+    }*/
   });
 
   return point;
@@ -83,9 +83,26 @@ function drawPoint(coordinates,el,lbl){
 
 /*Add box on the image*/
 function appendBox(css){
-    return $("<div class='facebox'></div>")
+    var tmpBox =  $("<div class='facebox'></div>")
             .css(css)
             .appendTo($("#img_overlay"));
+    makeItDraggable(tmpBox);
+    return tmpBox;
+}
+
+/* make a box dragabble*/
+function makeItDraggable(el){
+  jsPlumb.draggable(el,{
+    start: function(e){
+        select(el);
+    },
+    drag: function(e){
+        displayBoxWidget($(e.el));
+    }/*,
+    stop: function(e){
+         displayBoxWidget($(e.el));
+    }*/
+  });
 }
 
 /* Save data to a file */

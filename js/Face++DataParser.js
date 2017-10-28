@@ -16,7 +16,14 @@ function fetch(){
 	if($("#image_url").val() != ""){
 		formData.append('image_url', $("#image_url").val());
 	}else{
-		formData.append('image_file', $('input[type=file]')[0].files[0]); 
+		for(var i in $('input[type=file]')[0].files){
+			var file = $('input[type=file]')[0].files[i];
+			if(file.name == $("#img").attr("label")){
+				formData.append('image_file', file); 				
+			}
+		}
+		//formData.append('image_file', $('input[type=file]')[0].files[index]); 
+		//formData.append('image_base64', $('#img').attr("src").substring("data:image/jpeg;base64,".length-1)); 
 	}
 	// Attach file
 
@@ -30,8 +37,8 @@ function fetch(){
             //jsonData = $.parseJSON(data);
             actualData = data;
             //alteredData = data;
-            $('#actualData').text(JSON.stringify(data));
-            $('#alteredData').text(JSON.stringify(data));
+            //$('#actualData').text(JSON.stringify(data));
+            //$('#alteredData').text(JSON.stringify(data));
             deleteAll();
             plotWith(data);
 	    },
@@ -45,8 +52,9 @@ function fetch(){
 function plotWith(jsonData){
 	if(jsonData.faces.length > 0){
 		jsonData.faces.forEach(function(face,index){
-			drawRectangle(face.face_rectangle,face.attributes.gender.value);
-			drawPoints(index,face.landmark);
+			//drawRectangle(face.face_rectangle,face.attributes.gender.value);
+			var box = appendBox(face.face_rectangle);
+			drawPoints(box,face.landmark);
 			//jsPlumb.draggable($(".ptn"));
 		});
 		$("#info").text(jsonData.faces.length + " face(s) detected!!");
@@ -55,9 +63,9 @@ function plotWith(jsonData){
 	}
 }
 
-var drawPoints = function(id,landmark){
+var drawPoints = function(el,landmark){
 	labels.forEach(function(property,index){
-		drawPoint(id,landmark[property],index);
+		drawPoint(landmark[property],el,property);
 	});
 	
 }

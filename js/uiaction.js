@@ -2,10 +2,11 @@
 //Display image from the URL or file path
 $('#imgUrlBtn').on('click', function() {
     $('#img').attr('src',  $('#image_url').val());
-    currentImg = {
-        location : $('#image_url').val()
-    }
-    images = [ currentImg];
+    $('#img').attr('label',$('#image_url').val());
+    images = { };
+    images[$('#image_url').val()] = {
+            name : $('#image_url').val()
+        }
 });
 
 $('#clrPointsBtn').on('click', function() {
@@ -143,12 +144,8 @@ $("#img_overlay").mousedown(function (ev) {
         }else{
             deselect($(ev.target));
             var cordinates = getCordinates(ev,this);
-            /*tmpBox = $("<div class='facebox'></div>")
-                .css({ top : cordinates.y, left : cordinates.x})
-                .appendTo($("#img_overlay"));*/
-                tmpBox = appendBox({ top : cordinates.y,
-                                     left : cordinates.x});
-            makeItDraggable(tmpBox);
+            tmpBox = appendBox({ top : cordinates.y,
+                                left : cordinates.x});
             
             startingPosition = tmpBox.position();
         }
@@ -166,20 +163,6 @@ $("#plotType").on("switchChange.bootstrapSwitch",function(ev){
     }
 });
 
-
-function makeItDraggable(el){
-  jsPlumb.draggable(el,{
-    start: function(e){
-        select(el);
-    },
-    drag: function(e){
-        displayBoxWidget($(e.el));
-    }/*,
-    stop: function(e){
-        //do something
-    }*/
-  });
-}
 
 $("#plotApiBtn").click(function(){
 	if(faces.length > 0){
