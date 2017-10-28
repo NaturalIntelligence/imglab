@@ -9,15 +9,13 @@ You can either import a file from a URL or from your computer. You can plot the 
 
 # TO DO
 * refactor
-* load points from a file
+* Fix Face++ API draw
 * export to file (ptn,xml,fpp)
 * export to dlib compatible file
-* Send selected image file to the API
-* warn user on image switch when label is empty
+* load points from a file
 * Image scalling
 * filter for (un)labelled images
-* Delete all points of a box
-* load data from ptn, xml file. 
+* Resizable box
 * Tool to draw points in straight line (eg nose, chin, eyebrows' center)
 * API compatible landmark label
 * Show dlib, face++ specific point schemes
@@ -25,3 +23,4 @@ You can either import a file from a URL or from your computer. You can plot the 
 * show warning when use try to load images if there is any labelled image already loaded.
 * 
 * draw the line between landmark points
+* Highlight empty button when there is any point in box

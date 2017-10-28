@@ -7,7 +7,9 @@
     }]
 }]*/
 
-var images = [];
+var images = {};
+var imagesData = {};
+
 
 function getNextBoxCounter(imgName){
     if(images[imgName].boxes){

@@ -64,8 +64,7 @@ $(document).on('click', '.photolist img', function(ev){
     if(result === -1){
         alert("some boxes or points are not labelled.");
     }else{
-        var currentImg = images[$(this).attr('label')];
-        $('#img').attr('src', currentImg.data)
+        $('#img').attr('src', imagesData[$(this).attr('label')].data)
         $('#img').attr('label', $(this).attr('label'))
     }
     

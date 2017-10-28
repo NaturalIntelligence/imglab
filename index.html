@@ -15,6 +15,8 @@
 	<script src="js/thirdparty/jsplumb.min.js"></script>
 	<!-- <script src="js/thirdparty/jquery-confirm.min.js"></script> -->
 	<script src="js/thirdparty/bootstrap.min.js"></script>
+	<script src="js/thirdparty/Blob.js"></script>
+	<script src="js/thirdparty/FileSaver.min.js"></script>
 
 	
 	
@@ -85,7 +87,8 @@
 					<div class="col">w: <span id="div_w"></span></div>
 					<div class="col">h: <span id="div_h"></span></div>
 				</div>
-				<input type="button" class="btn btn-outline-danger deleteBtn" value="Delete">
+				<input type="button" class="btn btn-outline-danger btn-sm deleteBtn" value="Delete">
+				<input type="button" class="btn btn-outline-danger btn-sm" id="emptyBox" value="Empty">
 				<hr>
 			</div>
 			
@@ -107,8 +110,9 @@
 			</div>
 		</div>
 		<div class="col-sm-2" >
-			<h5>Plotting options </h5>
+			<h5>Time Saver </h5>
 			<small>Plot points using following methods and adjust them to improve the accuracy.</small>
+			<hr>
 			<input class="form-control" type="text" name="api_key" id="api_key" placeholder="api_key" />
 			<input class="form-control" type="text" name="api_secret" id="api_secret" placeholder="api_secret" />
 			<br>
@@ -132,15 +136,20 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-sm-4">
-			
+		<div class="col-sm-2 text-center">
 			<br><input class="btn btn-danger" type="button" id="clrPointsBtn" value="Clear all points" />
 		</div>
-		<div class="col-sm-4">
-			
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-outline-primary" type="button" id="exportBtn" value="Save" />
 		</div>
-		<div class="col-sm-4">
-			
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-outline-primary" type="button" id="exportDlibBtn" value="Save as dlib format" />
+		</div>
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-outline-primary" disabled type="button" id="" value="placeholder" />
+		</div>
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-outline-primary" disabled type="button" id="" value="placeholder" />
 		</div>
 	</div>
 </div>

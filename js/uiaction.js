@@ -209,8 +209,8 @@ function readFiles(input) {
         hideWidgets();
         deleteAll();
         $('#img').attr("src", "");
-        images = []; //create an empty list
-
+        images = {}; //create an empty list
+        imagesData = {};
         for(i=0;i<input.files.length;i++){
             readFile(input.files[i]);
         }
@@ -221,11 +221,12 @@ function readFile(f){
     if(f.type.startsWith("image")){
         var reader = new FileReader();
         reader.onload = function (e) {
+            images[f.name] = { name : f.name};
             var imgData = {
                 name : f.name,
                 data: e.target.result
             };
-            images[f.name] = imgData; 
+            imagesData[f.name] = imgData
             addToSlider(imgData);
         }
         reader.readAsDataURL(f);
@@ -260,3 +261,15 @@ $(".deleteBtn").click(function(){
     $(".selected").remove();
     hideWidgets();
 });
+
+$("#emptyBox").click(function(){
+    $(".selected").empty();
+});
+
+var deleteAll= function(){
+    $("#img_overlay").empty();
+}
+
+$("#exportBtn").click(function(){
+    download(images,"labelled.json","text/plain");
+})
