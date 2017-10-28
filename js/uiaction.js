@@ -277,3 +277,12 @@ $("#exportBtn").click(function(){
 $("#exportDlibBtn").click(function(){
     download(toDlib(images),"labelled.xml","text/plain");
 })
+
+$("#exportPtsBtn").click(function(){
+    var box = $(".facebox.selected");
+    if(box.length === 1){
+        download(toDlibPts( box ),$("#img").attr("label")+".pts","text/plain");
+    }else{
+        $("#info").text("Please select a box.");
+    }
+})

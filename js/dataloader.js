@@ -81,6 +81,7 @@ function drawPoint(coordinates,el,lbl){
   return point;
 }
 
+/*Add box on the image*/
 function appendBox(css){
     return $("<div class='facebox'></div>")
             .css(css)

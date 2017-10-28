@@ -5,7 +5,7 @@ var dlib_header = "<?xml version='1.0' encoding='ISO-8859-1'?>"
     +"<comment>"
     +"   This dataset is manually crafted or adjusted using ImgLab web tool"
     +"   Check more detail on https://github.com/NaturalIntelligence/imglab"
-    +"</comment>";
+    +"</comment>\n";
 
 /*var dlib_data = "  <image file='#FILENAME#'>"
     
@@ -16,17 +16,31 @@ var dlib_footer = "</images>"
 function toDlib(imgs){
     var imgXMLStr = "";
     for(var img in imgs){
-        imgXMLStr += "<image file='"+ imgs[img].name+"'>";
+        imgXMLStr += "<image file='"+ imgs[img].name+"'>\n";
         var boxes = imgs[img].boxes;
         if(boxes){
             for(var box in boxes){
-                imgXMLStr += "<box top='"+boxes[box].top+"' left='"+boxes[box].left+"' width='"+boxes[box].width+"' height='"+boxes[box].height+"'>";
-                imgXMLStr += "<label>"+box+"</label>";
-                imgXMLStr += "</box>"
+                imgXMLStr += "<box top='"+boxes[box].top+"' left='"+boxes[box].left+"' width='"+boxes[box].width+"' height='"+boxes[box].height+"'>\n";
+                imgXMLStr += "<label>"+box+"</label>\n";
+                imgXMLStr += "</box>\n"
             }
         }
-        imgXMLStr += "</image>";
+        imgXMLStr += "</image>\n";
     }
 
     return dlib_header + imgXMLStr + dlib_footer;
+}
+
+/*PTS file contains landmark points in an image file */
+function toDlibPts(boxEl){
+    var data = "version: 1\n"
+            +"n_points:  "+boxEl.children().length+"\n"
+            +"{\n";
+    boxEl.children().each(function(){
+        data += $(this).position().left + " " + $(this).position().top + "\n";
+    });
+
+    data += "}";
+
+    return data;
 }
