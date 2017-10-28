@@ -8,14 +8,20 @@ You can either import a file from a URL or from your computer. You can plot the 
 
 
 # TO DO
-* API compatible landmark label
-* export to file
+* refactor
+* load points from a file
+* export to file (ptn,xml,fpp)
 * export to dlib compatible file
-* draw the line between landmark points
 * Send selected image file to the API
-* Image scalling
 * warn user on image switch when label is empty
+* Image scalling
 * filter for (un)labelled images
 * Delete all points of a box
 * load data from ptn, xml file. 
 * Tool to draw points in straight line (eg nose, chin, eyebrows' center)
+* API compatible landmark label
+* Show dlib, face++ specific point schemes
+* show face++ labeles instead of automatic number
+* show warning when use try to load images if there is any labelled image already loaded.
+* 
+* draw the line between landmark points
