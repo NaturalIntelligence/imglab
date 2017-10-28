@@ -70,8 +70,10 @@ $("#img_overlay").mouseup(function(event) {
         if(tmpBox.width() < 20 || tmpBox.height() < 20){
             tmpBox.remove();
         }else{
-            //images[$("#img").attr("src")].
+            tmpBox.attr("label", getNextBoxCounter($("#img").attr("label")));
             select(tmpBox);
+            persistLabelingData();
+
         }
     }
     tmpBox = "";
@@ -253,6 +255,7 @@ function readURL(input) {
 function readFolder(input) {
     if (input.files && input.files[0]) {
         emptySlider();
+        $('#img').attr("src", "");
         images = []; //create an empty list
 
         for(i=0;i<input.files.length;i++){

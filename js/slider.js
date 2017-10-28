@@ -59,7 +59,37 @@ function emptySlider(){
 
 
 $(document).on('click', '.photolist img', function(ev){
+    persistLabelingData();
     currentImg = images[$(this).attr('label')];
     $('#img').attr('src', currentImg.data)
     $('#img').attr('label', $(this).attr('label'))
 });
+
+function persistLabelingData(){
+    if($('#img').attr("src")){
+        var name = $('#img').attr('label');
+        if(!images[name].boxes){ images[name].boxes = []};
+        $('.facebox').each(function(box,i){
+            var boxlbl = $(this).attr("label");
+            images[name].boxes[boxlbl] = { 
+                left: $(this).position().left,
+                top: $(this).position().top,
+                width: $(this).width(),
+                height: $(this).height()
+            }
+
+             if(!images[name].boxes[boxlbl].points){ images[name].boxes[boxlbl].points = []};
+            //persist points
+            $('.facebox').children().each(function(point,i){
+                images[name].boxes[boxlbl].points[$(this).attr("label")] = {
+                    x: $(this).position().left,
+                    y: $(this).position().top,
+                }
+            });
+        });
+    }
+}
+
+function restoreLabelingData(){
+
+}
