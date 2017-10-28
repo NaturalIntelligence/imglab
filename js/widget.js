@@ -54,3 +54,7 @@ function hideWidgets(){
     $(".widget").hide();
 }
 /*************End: Select,Deselect an element and show corresponding widget */
+
+var deleteAll= function(){
+    $("#img_overlay").empty();
+}

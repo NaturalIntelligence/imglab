@@ -42,11 +42,6 @@ function fetch(){
 	});
 }
 
-var deleteAll= function(){
-	$("#img_overlay").empty();
-	alteredData = { faces : [ {landmark : {}}]};
-}
-
 function plotWith(jsonData){
 	if(jsonData.faces.length > 0){
 		jsonData.faces.forEach(function(face,index){
@@ -67,23 +62,3 @@ var drawPoints = function(id,landmark){
 	
 }
 
-function drawPoint(coordinates,el,lbl){
-  var point = $('<div class="ptn"></div>')
-            .css('top', coordinates.y + 'px')
-            .css('left', coordinates.x + 'px')
-            .appendTo(el);
-  if(!lbl){
-  	lbl = $(el).find(".ptn").length;
-  }
-  point.attr("label" ,lbl);
-  jsPlumb.draggable(point,{
-  	drag: function(e){
-        displayPointWidget($(e.el));
-    },
-    stop: function(e){
-        displayPointWidget($(e.el));
-    }
-  });
-
-  return point;
-}

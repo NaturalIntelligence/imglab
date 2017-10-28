@@ -60,9 +60,13 @@ function emptySlider(){
 
 
 $(document).on('click', '.photolist img', function(ev){
-    saveAllBoxData();
-    var currentImg = images[$(this).attr('label')];
-    $('#img').attr('src', currentImg.data)
-    $('#img').attr('label', $(this).attr('label'))
+    var result = saveAllBoxData();
+    if(result === -1){
+        alert("some boxes or points are not labelled.");
+    }else{
+        var currentImg = images[$(this).attr('label')];
+        $('#img').attr('src', currentImg.data)
+        $('#img').attr('label', $(this).attr('label'))
+    }
     
 });

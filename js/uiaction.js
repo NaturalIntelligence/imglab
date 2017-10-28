@@ -202,16 +202,12 @@ $("#faceppBtn").click(function(){
     return {x:x,y:y};
 }
 
-/*  To show the image*/
-function readURL(input) {
-    readFolder(input);
-}
-
-
-
-function readFolder(input) {
+/* Load selected images or images fom a folder in slider*/
+function readFiles(input) {
     if (input.files && input.files[0]) {
         emptySlider();
+        hideWidgets();
+        deleteAll();
         $('#img').attr("src", "");
         images = []; //create an empty list
 

@@ -39,12 +39,12 @@
 		</div>
 		<div class="col-sm-2">
 			<label class="btn-bs-file btn btn-outline-info">Browse Image files
-		        <input type="file" id="image_file" accept="image/*"  onchange="readURL(this)"  multiple/>
+		        <input type="file" id="image_file" accept="image/*"  onchange="readFiles(this)"  multiple/>
 		    </label>
 	    </div>
 	    <div class="col-sm-2">
 			<label class="btn-bs-file btn btn-outline-info">Browse Image folder
-				<input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readFolder(this)" >
+				<input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readFiles(this)" >
 		    </label>
 	    </div>
     </div>

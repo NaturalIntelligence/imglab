@@ -4,7 +4,7 @@ function saveAllBoxData(){
         var name = $('#img').attr('label');
         images[name].boxes = []; //rewrite all the data
         $('.facebox').each(function(box,i){
-            saveBoxData(this);
+            return saveBoxData(this);
         });
     }
 }
@@ -15,6 +15,7 @@ function saveBoxData(el){
         var name = $('#img').attr('label');
         if(!images[name].boxes){ images[name].boxes = []};
         var boxlbl = $(el).attr("label");
+        if(!boxlbl || boxlbl === "") return -1;
         images[name].boxes[boxlbl] = { 
             left: $(el).position().left,
             top: $(el).position().top,
@@ -26,6 +27,7 @@ function saveBoxData(el){
         //persist points
         $(el).children().each(function(){
             var pointlbl = $(this).attr("label");
+            if(!pointlbl || pointlbl === "") return -1;
             images[name].boxes[boxlbl].points[pointlbl] = {
                 x: $(this).position().left,
                 y: $(this).position().top,
