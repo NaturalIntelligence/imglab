@@ -271,5 +271,9 @@ var deleteAll= function(){
 }
 
 $("#exportBtn").click(function(){
-    download(images,"labelled.json","text/plain");
+    download(JSON.stringify(images),"labelled.json","text/plain");
+})
+
+$("#exportDlibBtn").click(function(){
+    download(toDlib(images),"labelled.xml","text/plain");
 })

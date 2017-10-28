@@ -89,6 +89,7 @@ function appendBox(css){
 
 /* Save data to a file */
 function download(data, filename, type) {
-    var blobData = new Blob([JSON.stringify(images)], {type: "text/plain;charset=utf-8"})
-    saveAs(blobData, "labels.lbl");
+    var blobData = new Blob([data], {type: type + ";charset=utf-8"})
+    saveAs(blobData, filename);
 }
+
