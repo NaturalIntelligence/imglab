@@ -62,16 +62,20 @@ function plotWith(jsonData){
 
 var drawPoints = function(id,landmark){
 	labels.forEach(function(property,index){
-		if(property !== "other")
-		drawPoint(id,landmark[property],index);	
+		drawPoint(id,landmark[property],index);
 	});
 	
 }
 
-function drawPoint(coordinates,el){
-  var point = getPointElement(coordinates.x,coordinates.y);
-
-  $(el).append(point);
+function drawPoint(coordinates,el,lbl){
+  var point = $('<div class="ptn"></div>')
+            .css('top', coordinates.y + 'px')
+            .css('left', coordinates.x + 'px')
+            .appendTo(el);
+  if(!lbl){
+  	lbl = $(el).find(".ptn").length;
+  }
+  point.attr("label" ,lbl);
   jsPlumb.draggable(point,{
   	drag: function(e){
         displayPointWidget($(e.el));
@@ -80,10 +84,6 @@ function drawPoint(coordinates,el){
         displayPointWidget($(e.el));
     }
   });
-}
 
-function getPointElement(x,y){
-	return $('<div class="ptn"></div>')
-            .css('top', (y - 3) + 'px')
-            .css('left', (x - 3) + 'px');
+  return point;
 }

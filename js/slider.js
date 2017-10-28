@@ -22,6 +22,7 @@ function addToSlider(imgData){
     var label = document.createAttribute("label"); 
     label.value = imgData.name;
     img.setAttributeNode(label);
+    img.title = imgData.name;
     img.width = img.height = 80;
     thumbnails.push(img);
     photolist.append(thumbnails);
@@ -59,37 +60,68 @@ function emptySlider(){
 
 
 $(document).on('click', '.photolist img', function(ev){
-    persistLabelingData();
-    currentImg = images[$(this).attr('label')];
+    saveAllBoxData();
+    var currentImg = images[$(this).attr('label')];
     $('#img').attr('src', currentImg.data)
     $('#img').attr('label', $(this).attr('label'))
+    
 });
 
-function persistLabelingData(){
+function saveAllBoxData(){
     if($('#img').attr("src")){
         var name = $('#img').attr('label');
-        if(!images[name].boxes){ images[name].boxes = []};
+        images[name].boxes = []; //rewrite all the data
         $('.facebox').each(function(box,i){
-            var boxlbl = $(this).attr("label");
-            images[name].boxes[boxlbl] = { 
-                left: $(this).position().left,
-                top: $(this).position().top,
-                width: $(this).width(),
-                height: $(this).height()
-            }
-
-             if(!images[name].boxes[boxlbl].points){ images[name].boxes[boxlbl].points = []};
-            //persist points
-            $('.facebox').children().each(function(point,i){
-                images[name].boxes[boxlbl].points[$(this).attr("label")] = {
-                    x: $(this).position().left,
-                    y: $(this).position().top,
-                }
-            });
+            saveBoxData(this);
         });
     }
 }
 
-function restoreLabelingData(){
 
+function saveBoxData(el){
+    if($('#img').attr("src")){
+        var name = $('#img').attr('label');
+        if(!images[name].boxes){ images[name].boxes = []};
+        var boxlbl = $(el).attr("label");
+        images[name].boxes[boxlbl] = { 
+            left: $(el).position().left,
+            top: $(el).position().top,
+            width: $(el).width(),
+            height: $(el).height()
+        }
+
+        images[name].boxes[boxlbl].points = []; // rewrite points data
+        //persist points
+        $(el).children().each(function(){
+            var pointlbl = $(this).attr("label");
+            images[name].boxes[boxlbl].points[pointlbl] = {
+                x: $(this).position().left,
+                y: $(this).position().top,
+            }
+        });
+    }
+}
+
+function drawAllBoxData(boxes){
+    if(boxes){
+        for (var boxlbl in boxes) {
+            if (boxes.hasOwnProperty(boxlbl)) {
+                var tmpBox = appendBox({
+                    top: boxes[boxlbl].top,
+                    left: boxes[boxlbl].left,
+                    width: boxes[boxlbl].width,
+                    height: boxes[boxlbl].height
+                });
+                tmpBox.attr("label", boxlbl);
+                
+                // Add points
+                var points = boxes[boxlbl].points;
+                for (var pointlbl in points) {
+                    if (points.hasOwnProperty(pointlbl)) {
+                        drawPoint(points[pointlbl],tmpBox,pointlbl);
+                    }
+                }
+            }
+        }
+    }
 }

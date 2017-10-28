@@ -21,7 +21,9 @@ $('#plotActualBtn').on('click', function() {
 });
 
 $('#img').on('load',function(){
-    deleteAll();deselectAll();
+    deleteAll();
+    drawAllBoxData(images[$(this).attr('label')].boxes);
+    deselectAll();
 
     $("#imgdimentions").text("w:" + $('#img').width() + ", h:" + $('#img').height());
     $("#img_overlay").width($("#img").width());
@@ -70,10 +72,8 @@ $("#img_overlay").mouseup(function(event) {
         if(tmpBox.width() < 20 || tmpBox.height() < 20){
             tmpBox.remove();
         }else{
-            tmpBox.attr("label", getNextBoxCounter($("#img").attr("label")));
+            tmpBox.attr("label", $("#img_overlay .facebox").length);
             select(tmpBox);
-            persistLabelingData();
-
         }
     }
     tmpBox = "";
@@ -96,8 +96,8 @@ $(document).on('mousedown', '.facebox', function(ev){
 
         if($(ev.target).is('div.facebox')){
             var cordinates = getCordinates(ev,ev.target);
-            //confirm(cordinates);
-            drawPoint(cordinates,ev.target);
+            var point = drawPoint(cordinates,ev.target);
+            select(point);
         }
     }else{
         //Select the box to change box settings
@@ -141,9 +141,11 @@ $("#img_overlay").mousedown(function (ev) {
         }else{
             deselect($(ev.target));
             var cordinates = getCordinates(ev,this);
-            tmpBox = $("<div class='facebox'></div>")
+            /*tmpBox = $("<div class='facebox'></div>")
                 .css({ top : cordinates.y, left : cordinates.x})
-                .appendTo($("#img_overlay"));
+                .appendTo($("#img_overlay"));*/
+                tmpBox = appendBox({ top : cordinates.y,
+                                     left : cordinates.x});
             //makeItDraggable(tmpBox);
             
             startingPosition = tmpBox.position();
@@ -153,6 +155,12 @@ $("#img_overlay").mousedown(function (ev) {
     }
     
 });
+
+function appendBox(css){
+    return $("<div class='facebox'></div>")
+            .css(css)
+            .appendTo($("#img_overlay"));
+}
 
 /************* Select,Deselect an element and show corresponding widget */
 function deselectAll(){
@@ -204,6 +212,10 @@ function displayPointWidget(el){
     $("#div_y").text($(el).position().top);
     $("#ptnboxlbl").val($(".ptn.selected").parent().attr("label"));
     $("#ptnDtl").show();
+}
+
+function hideWidgets(){
+    $(".widget").hide();
 }
 /*************End: Select,Deselect an element and show corresponding widget */
 
@@ -305,4 +317,5 @@ $("#lbltxtbox").on("input",function(ev){
 
 $(".deleteBtn").click(function(){
     $(".selected").remove();
+    hideWidgets();
 });
