@@ -64,8 +64,11 @@ function plotWith(jsonData){
 }
 
 var drawPoints = function(el,landmark){
+	var l = el.position().left, t = el.position().top; 
+
 	labels.forEach(function(property,index){
-		drawPoint(landmark[property],el,property);
+		drawPoint({x: landmark[property].x - l,
+				   y: landmark[property].y - t},el,property);
 	});
 	
 }

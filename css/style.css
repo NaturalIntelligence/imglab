@@ -50,12 +50,12 @@
 }
 
 #h_line{
-	border: 1px solid yellow;
+	outline: 1px solid yellow;
     width: 100%;
 }
 
 #v_line {
-	border: 1px solid red;
+	outline: 1px solid red;
  	height: 100%;
 }
 /*body{ background-color: #2c3e50;  }*/
@@ -74,9 +74,9 @@
 }
 .facebox {
 	position: absolute;
-    border: 2px solid #12BDDC;
-    border-color: rgba(18,189,220,0.8);
-    border-radius: 10px;
+    outline: 2px solid #12BDDC;
+    outline-color: rgba(18,189,220,0.8);
+    outline-radius: 10px;
 }
 #ptnDtl, #boxDtl{
 	display: none;
