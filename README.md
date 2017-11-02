@@ -5,7 +5,7 @@ Web based tool to label images for object. So that they can be used to train dli
 # How to use
 You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which gets automatically plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to correct location.
 
-
+[![ImgLab Tutorial](https://img.youtube.com/vi/4yLL21weN8w/0.jpg)](https://www.youtube.com/watch?v=4yLL21weN8w)
 
 # TO DO
 * load points from a file
