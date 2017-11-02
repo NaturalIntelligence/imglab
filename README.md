@@ -8,18 +8,15 @@ You can either import a file from a URL or from your computer. You can plot the 
 
 
 # TO DO
-* refactor
-* Fix Face++ API draw
-* Fix box size bug
 * load points from a file
 * Image scalling
-* filter for (un)labelled images
-* Resizable box
 * API compatible landmark label
 * Show dlib, face++ specific point schemes
 * show face++ labeles instead of automatic number
 * show warning when use try to load images if there is any labelled image already loaded.
 * 
+* filter for (un)labelled images
 * Tool to draw points in straight line (eg nose, chin, eyebrows' center)
 * draw the line between landmark points
 * Highlight empty button when there is any point in box
+* Resizable box
