@@ -29,6 +29,7 @@ function saveBoxData(el){
             var pointlbl = $(this).attr("label");
             if(!pointlbl || pointlbl === "") return -1;
             images[name].boxes[boxlbl].points[pointlbl] = {
+                label: $(this).attr("label"),
                 x: $(this).position().left,
                 y: $(this).position().top,
             }
