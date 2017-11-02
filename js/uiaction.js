@@ -200,6 +200,7 @@ function readFiles(input) {
     }
 }
 
+/*read an image file and add to slider  saveAllBoxData();*/
 function readFile(f){
     if(f.type.startsWith("image")){
         var reader = new FileReader();
@@ -216,12 +217,10 @@ function readFile(f){
     }
 }
 
+/* For future use*/
 function readPointsFile(input) {
     if (input.files && input.files[0]) {
-
-        
         var reader = new FileReader();
-
         reader.onload = function (e) {
             
             //$('#img').attr('src', e.target.result)
@@ -254,10 +253,14 @@ var deleteAll= function(){
 }
 
 $("#exportBtn").click(function(){
+    //save data of currently open image
+    saveAllBoxData();
     download(JSON.stringify(images),"labelled.json","text/plain");
 })
 
 $("#exportDlibBtn").click(function(){
+    //save data of currently open image
+    saveAllBoxData();
     download(toDlib(images),"labelled.xml","text/plain");
 })
 
