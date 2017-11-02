@@ -5,7 +5,7 @@
 
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/slider.css">
-	<!-- <link rel="stylesheet" href="css/jquery-confirm.min.css"> -->
+	<link rel="stylesheet" href="css/jquery-confirm.min.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/bootstrap-switch.min.css">
 	<!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
@@ -13,8 +13,8 @@
 	<script src="js/thirdparty/jquery.min.js" ></script>
 	<script src="js/thirdparty/bootstrap-switch.min.js"></script>
 	<script src="js/thirdparty/jsplumb.min.js"></script>
-	<!-- <script src="js/thirdparty/jquery-confirm.min.js"></script> -->
-	<script src="js/thirdparty/bootstrap.min.js"></script>
+	<script src="js/thirdparty/jquery-confirm.min.js"></script>
+	<script src="js/thirdparty/bootstrap.min.js"/>
 	<script src="js/thirdparty/Blob.js"></script>
 	<script src="js/thirdparty/FileSaver.min.js"></script>
 
@@ -166,7 +166,18 @@
 	<script type="text/javascript">
 		$(function(){
 			$("[name='plotType']").bootstrapSwitch();
+			setTimeout(function(){
+                $.dialog({
+                    title: '',
+                    content: '<p>If you like my work, plz give me a '
+                    + '<a href="https://github.com/NaturalIntelligence/imglab/stargazers">star</a>'
+                    + ' on GitHub.</p>'
+                });
+            }, 7000);
 		})
+
+		setTimeout(function(){
+		},10000);
 	</script>
 </body>
 </html>
