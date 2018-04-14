@@ -94,10 +94,10 @@ function drawAllBoxData(boxes){
         for (var boxlbl in boxes) {
             if (boxes.hasOwnProperty(boxlbl)) {
                 var tmpBox = appendBox({
-                    top: boxes[boxlbl].top,
-                    left: boxes[boxlbl].left,
-                    width: boxes[boxlbl].width,
-                    height: boxes[boxlbl].height
+                    top: boxes[boxlbl].top + "px",
+                    left: boxes[boxlbl].left  + "px",
+                    width: boxes[boxlbl].width + "px",
+                    height: boxes[boxlbl].height + "px"
                 });
                 tmpBox.attr("label", boxlbl);
                 
@@ -105,6 +105,10 @@ function drawAllBoxData(boxes){
                 var points = boxes[boxlbl].points;
                 for (var pointlbl in points) {
                     if (points.hasOwnProperty(pointlbl)) {
+                        /* var pointXY = {
+                            x: points[pointlbl].x,
+                            y: points[pointlbl].y
+                        } */
                         drawPoint(points[pointlbl],tmpBox,pointlbl);
                     }
                 }
@@ -113,6 +117,7 @@ function drawAllBoxData(boxes){
     }
 }
 
+//points are relative to image. But while displaying they should be relative to label box
 function drawPoint(coordinates,el,lbl){
   var point = $('<div class="ptn"></div>')
             .css('top', coordinates.y + 'px')
@@ -157,11 +162,5 @@ function makeItDraggable(el){
         //displayBoxWidget($(e.el));
     }
   });
-}
-
-/* Save given data to a file */
-function download(data, filename, type) {
-    var blobData = new Blob([data], {type: type + ";charset=utf-8"})
-    saveAs(blobData, filename);
 }
 
