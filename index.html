@@ -17,6 +17,7 @@
 	<script src="js/thirdparty/bootstrap.min.js"/>
 	<script src="js/thirdparty/Blob.js"></script>
 	<script src="js/thirdparty/FileSaver.min.js"></script>
+	<script src="js/thirdparty/fxp.js"></script>
 
 	
 	
@@ -120,11 +121,11 @@
 
 			
 			<hr>
-			<small>Select a file to read landmarks and face box position. (fpp, xml, pts)</small><br>
+			<small>Select a file to read landmarks and face box position. (xml, json)</small><br>
 			<label id="loadDataFileBtn" class="btn-bs-file btn btn-outline-info">Browse
 		        
 			</label>
-			<input type="file" id="loadDataFileInput" style="display:none" value="Browse data file" accept=".fpp,.pts,.xml,.json" onchange="readPointsFile(this)" />
+			<input type="file" id="loadDataFileInput" style="display:none" value="Browse data file" accept=".fpp,.xml,.json" onchange="readPointsFile(this)" />
 
 			<hr>
 			<div class="sidebar">
