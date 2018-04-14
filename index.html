@@ -121,9 +121,10 @@
 			
 			<hr>
 			<small>Select a file to read landmarks and face box position. (fpp, xml, pts)</small><br>
-			<label class="btn-bs-file btn btn-outline-info">Browse
-		        <input type="file" id="points_file" value="Browse data file" accept=".fpp,.pts,.xml" onchange="readPointsFile(this)" />
-		    </label>
+			<label id="loadDataFileBtn" class="btn-bs-file btn btn-outline-info">Browse
+		        
+			</label>
+			<input type="file" id="loadDataFileInput" style="display:none" value="Browse data file" accept=".fpp,.pts,.xml,.json" onchange="readPointsFile(this)" />
 
 			<hr>
 			<div class="sidebar">
@@ -157,8 +158,8 @@
 	<script src="js/uiaction.js"></script>
 	<script src="js/widget.js"></script>
 	<script src="js/FaceBox.js"></script>
-	<script src="js/face++api.js"></script>
 	<script src="js/labels.js"></script>
+	<script src="js/labelFileLoader.js"></script>
 	<script src="js/dataloader.js"></script>
 	<script src="js/slider.js"></script>
 	<script src="js/Face++DataParser.js"></script>
