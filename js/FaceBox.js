@@ -7,28 +7,30 @@
     }]
 }]*/
 
-var images = {};
-var imagesData = {};
+var images = {}; //contains label information
+var imagesData = {}; //contains images data
 
-
+//TODO: getIndexOfNextBox
 function getNextBoxCounter(imgName){
     if(images[imgName].boxes){
         return images[imgName].boxes.length;
     }else{
-        images[imgName].boxes = [];
+        images[imgName].boxes = {};
         return 0;
     }
 }
 
+//TODO: getIndexOfNextPoint
+//get the index to create another point in a box
 function getNextPointsCounter(imgName,boxLabel){
     if(images[imgName].boxes && images[imgName].boxes[boxLabel].points){
         return images[imgName].boxes[boxLabel].points.length;
     }else{
         if(!images[imgName].boxes) {
             images[imgName].boxes = [];
-            images[imgName].boxes[boxLabel] = { points : []};
+            images[imgName].boxes[boxLabel] = { points : {}};
         }else if(!images[imgName].boxes[boxLabel]) {
-            images[imgName].boxes[boxLabel] = { points : []};
+            images[imgName].boxes[boxLabel] = { points : {}};
         }
         return 0;
     }

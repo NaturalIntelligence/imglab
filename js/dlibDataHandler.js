@@ -13,7 +13,12 @@ var dlib_header = "<?xml version='1.0' encoding='ISO-8859-1'?>\n"
                +"  </image>"
 var dlib_box_data = +"    <box top='130' left='129' width='92' height='91'/>"*/
 var dlib_footer = "</images>"
-             +"</dataset>"
+             +"</dataset>";
+
+//create face data xml file for dlib
+//face data xml file can have data for multiple images
+//for each image there can be multiple labelled box
+//each labelled box can have multiple feature points called parts
 function toDlib(imgs){
     var imgXMLStr = "";
     for(var img in imgs){
