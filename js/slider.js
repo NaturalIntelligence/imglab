@@ -60,8 +60,6 @@ function emptySlider(){
 
 
 $(document).on('click', '.photolist img', function(ev){
-    //saveAllBoxData();
     $('#img').attr('src', imagesData[$(this).attr('label')].data)
     $('#img').attr('label', $(this).attr('label'))
-    
 });

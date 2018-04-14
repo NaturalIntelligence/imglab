@@ -41,12 +41,12 @@
 		</div>
 		<div class="col-sm-2">
 			<label class="btn-bs-file btn btn-outline-info">Browse Image files
-		        <input type="file" id="image_file" accept="image/*"  onchange="readFiles(this)"  multiple/>
+		        <input type="file" id="image_file" accept="image/*"  onchange="readImageFiles(this)"  multiple/>
 		    </label>
 	    </div>
 	    <div class="col-sm-2">
 			<label class="btn-bs-file btn btn-outline-info">Browse Image folder
-				<input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readFiles(this)" >
+				<input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)" >
 		    </label>
 	    </div>
     </div>
@@ -155,6 +155,7 @@
 	</div>
 </div>
 
+	<script src="js/fileOperation.js"></script>
 	<script src="js/uiaction.js"></script>
 	<script src="js/widget.js"></script>
 	<script src="js/FaceBox.js"></script>
@@ -174,11 +175,9 @@
                     + '<a href="https://github.com/NaturalIntelligence/imglab/stargazers">star</a>'
                     + ' on GitHub.</p>'
                 });
-            }, 7000);
+            }, 10);
 		})
 
-		setTimeout(function(){
-		},10000);
 	</script>
 </body>
 </html>

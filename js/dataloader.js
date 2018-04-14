@@ -1,44 +1,4 @@
 
-function saveAllBoxData(){
-    /* if($('#img').attr("src")){
-        var name = $('#img').attr('label');
-        //rewrite all labeling information
-        images[name].boxes = {}; 
-        $('.facebox').each(function(box,i){
-            return saveBoxData(this);
-        });
-    } */
-}
-
-//persist labelled data (box , feature points) in global variable
-// so that the same data can be plotted when user move between images
-function saveBoxData(el){
-    if($('#img').attr("src")){
-        var name = $('#img').attr('label');
-        if(!images[name].boxes){ images[name].boxes = {}};
-        var boxlbl = $(el).attr("label");
-        if(!boxlbl || boxlbl === "") return -1;
-        images[name].boxes[boxlbl] = { 
-            left: $(el).position().left,
-            top: $(el).position().top,
-            width: $(el).width(),
-            height: $(el).height()
-        }
-
-        images[name].boxes[boxlbl].points = []; // rewrite points data
-        //persist points
-        $(el).children().each(function(){
-            var pointlbl = $(this).attr("label");
-            if(!pointlbl || pointlbl === "") return -1;
-            images[name].boxes[boxlbl].points[pointlbl] = {
-                label: $(this).attr("label"),
-                x: $(this).position().left,
-                y: $(this).position().top,
-            }
-        });
-    }
-}
-
 //add or update label box
 function updateLabelBox(box_el){
     var imgName = $('#img').attr("label");

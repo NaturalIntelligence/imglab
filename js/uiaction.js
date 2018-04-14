@@ -20,7 +20,7 @@ $('#loadDataFileBtn').on('click', function() {
     $.confirm({
         title: 'Read me carefully',
         content: '<p>Due to the security reasons, browser doesn\'t allow me to load the images.'
-            + '<br> So please load the images first before loading the label information.'
+            + ' So please load the images manually.</p>'
             + '<br> If you are ready click to \'open\' otherwise cancel.' 
         ,
         type: 'red',
@@ -37,7 +37,6 @@ $('#loadDataFileBtn').on('click', function() {
             }
         }
     });
-    //alert if anything is already open
     //alert for unsaved data
     //load images or ask user to load the images first as you can't install images
     //save data in global variable
@@ -229,61 +228,6 @@ $("#faceppBtn").click(function(){
     return {x:x,y:y};
 }
 
-/* Load selected images or images fom a folder in slider*/
-function readFiles(input) {
-    if (input.files && input.files[0]) {
-        emptySlider();
-        hideWidgets();
-        clearCanvas();
-        $('#img').attr("src", "");
-        //images = {}; //create an empty list
-        imagesData = {};
-        for(i=0;i<input.files.length;i++){
-            readFile(input.files[i]);
-        }
-    }
-}
-
-/*read an image file and add to slider  saveAllBoxData();*/
-function readFile(f){
-    if(f.type.startsWith("image")){
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            //images[f.name] = { name : f.name};
-            var imgData = {
-                name : f.name,
-                data: e.target.result
-            };
-            imagesData[f.name] = imgData
-            addToSlider(imgData);
-        }
-        reader.readAsDataURL(f);
-    }
-}
-
-/* For future use*/
-function readPointsFile(input) {
-    if (input.files && input.files[0]) {
-        var pointFile = input.files[0];
-        emptyCanvas();
-        deselectAll();
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            if(pointFile.name.endsWith(".pts")){
-                loadPts(e.target.result);
-            }else if(pointFile.name.endsWith(".json")){
-                loadJson(e.target.result);
-            }else if(pointFile.name.endsWith(".fpp")){
-                loadFpp(e.target.result);
-            }else{
-                console.log("Not supported");
-            }
-        };
-
-        reader.readAsText(input.files[0]);
-    }
-}
-
 //Box label
 $("#boxtxtbox").on("input",function(ev){
     var oldLabel = $(".facebox.selected").attr("label");
@@ -330,14 +274,10 @@ var emptyCanvas= function(){
 }
 
 $("#exportBtn").click(function(){
-    //save data of currently open image
-    //saveAllBoxData();
     download(JSON.stringify(images),"labelled.json","text/plain");
 })
 
 $("#exportDlibBtn").click(function(){
-    //save data of currently open image
-    //saveAllBoxData();
     download(toDlib(images),"labelled.xml","text/plain");
 })
 
