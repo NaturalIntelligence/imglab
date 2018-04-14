@@ -25,14 +25,18 @@ function toDlib(imgs){
         imgXMLStr += "\t<image file='"+ imgs[img].name+"'>\n";
         var boxes = imgs[img].boxes;
         if(boxes){
-            for(var box in boxes){
-                var l = boxes[box].left, t = boxes[box].top;
-                imgXMLStr += "\t\t<box top='"+t+"' left='"+l+"' width='"+boxes[box].width+"' height='"+boxes[box].height+"'>\n";
-                imgXMLStr += "\t\t\t<label>"+box+"</label>\n";
+            var b_keys = Object.keys(boxes);
+            for(var box_i in b_keys){
+                var box = boxes [ b_keys[box_i] ];
+                var l = box.left, t = box.top;
+                imgXMLStr += "\t\t<box top='"+t+"' left='"+l+"' width='"+box.width+"' height='"+box.height+"'>\n";
+                imgXMLStr += "\t\t\t<label>"+b_keys[box_i]+"</label>\n";
                 //Add points information
-                var points = boxes[box].points;
-                for(var point in points){
-                    imgXMLStr += "\t\t\t<part name='"+points[point].label+"' x='"+(points[point].x+l)+"' y='"+(points[point].y+t)+"'/>\n";
+                var points = box.points;
+                var p_keys = Object.keys(points);
+                for(var point_i in p_keys){
+                    var point = points [ p_keys[point_i] ];
+                    imgXMLStr += "\t\t\t<part name='"+p_keys[point_i]+"' x='"+(point.x + l)+"' y='"+(point.y + t)+"'/>\n";
                 }
                 imgXMLStr += "\t\t</box>\n"
             }
@@ -43,7 +47,7 @@ function toDlib(imgs){
     return dlib_header + imgXMLStr + dlib_footer;
 }
 
-/*PTS file contains landmark points in an image file */
+/*PTS file contains landmark points location without label and of single label box only  */
 function toDlibPts(boxEl){
     var data = "version: 1\n"
             +"n_points:  "+boxEl.children().length+"\n"
