@@ -21,9 +21,11 @@ var dlib_footer = "</images>"
 //each labelled box can have multiple feature points called parts
 function toDlib(imgs){
     var imgXMLStr = "";
-    for(var img in imgs){
-        imgXMLStr += "\t<image file='"+ imgs[img].name+"'>\n";
-        var boxes = imgs[img].boxes;
+    var img_keys = Object.keys(imgs);
+    for(var img_i in img_keys){
+        var img = imgs [ img_keys[img_i] ];
+        imgXMLStr += "\t<image file='"+ img_keys[img_i] +"'>\n";
+        var boxes = img.boxes;
         if(boxes){
             var b_keys = Object.keys(boxes);
             for(var box_i in b_keys){
