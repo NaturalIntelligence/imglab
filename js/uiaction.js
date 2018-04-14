@@ -111,7 +111,6 @@ $("#img_overlay").mouseup(function(event) {
             tmpBox.remove();
         }else{
             tmpBox.attr("label", $("#img_overlay .facebox").length);
-            //TODO: save box informtion
             updateLabelBox(tmpBox);
             select(tmpBox);
         }
@@ -290,9 +289,9 @@ function readPointsFile(input) {
 $("#boxtxtbox").on("input",function(ev){
     var oldLabel = $(".facebox.selected").attr("label");
     var newLabel = $("#boxtxtbox").val();
-    $(".facebox.selected").attr("label",newLabel);
+
+    $(".facebox.selected").attr("label",newLabel);//for next time
     updateLabelBoxLabel(oldLabel,newLabel);
-    //TODO: update box label
 })
 
 $("#lbltxtbox").on("input",function(ev){
@@ -301,6 +300,13 @@ $("#lbltxtbox").on("input",function(ev){
 })
 
 $(".deleteBtn").click(function(){
+    if ( isLabelBox( $(".selected") ) ){
+        deleteLabelBox($(".selected"));
+    }else if( isFeaturePoint ( $(".selected") ) ){
+        deleteFeaturePoint($(".selected"));
+    }else{
+        throw Error("Select a Label box or feature point to delete.");
+    }
     $(".selected").remove();
     //TODO: update detail
     hideWidgets();
@@ -336,3 +342,11 @@ $("#exportPtsBtn").click(function(){
         $("#info").text("Please select a box.");
     }
 })
+
+function isLabelBox(el){
+    return $(el).hasClass("facebox");
+}
+
+function isFeaturePoint(el){
+    return $(el).hasClass("ptn");
+}

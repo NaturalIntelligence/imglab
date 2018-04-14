@@ -59,6 +59,13 @@ function updateLabelBox(box_el){
     }
 }
 
+function deleteLabelBox(box_el){
+    var imgName = $('#img').attr("label");
+    var boxlbl = $(box_el).attr("label");
+
+    delete images[imgName].boxes[boxlbl] ;
+}
+
 
 function updateLabelBoxLabel(oldLabel,newLabel){
     var imgName = $('#img').attr("label");
