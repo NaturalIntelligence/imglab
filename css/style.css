@@ -46,7 +46,8 @@
 
 #tooltip-span {
     background-color: black;
-    color: white;
+	color: white;
+	z-index: 1000;
 }
 
 #h_line{
