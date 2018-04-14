@@ -167,8 +167,7 @@ function drawPoint(coordinates,el,lbl){
         displayPointWidget($(e.el));
     },
     stop: function(e){
-        //TODO: update point information in global object
-        //displayPointWidget($(e.el));
+        updateFeaturePoint(e.el);
     }
   });
 
