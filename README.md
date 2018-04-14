@@ -11,12 +11,11 @@ You can either import a file from a URL or from your computer. You can plot the 
 [![ImgLab Tutorial](https://img.youtube.com/vi/4yLL21weN8w/0.jpg)](https://www.youtube.com/watch?v=4yLL21weN8w)
 
 # TO DO
-* load points from a file
 * Image scalling
 * API compatible landmark label
 * Show dlib, face++ specific point schemes
 * show face++ labeles instead of automatic number
-* show warning when use try to load images if there is any labelled image already loaded.
+* show warning when user tries to load images if there is any labelled image already loaded.
 * 
 * filter for (un)labelled images
 * Tool to draw points in straight line (eg nose, chin, eyebrows' center)
