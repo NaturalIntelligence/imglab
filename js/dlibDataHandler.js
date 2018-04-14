@@ -35,10 +35,12 @@ function toDlib(imgs){
                 imgXMLStr += "\t\t\t<label>"+b_keys[box_i]+"</label>\n";
                 //Add points information
                 var points = box.points;
-                var p_keys = Object.keys(points);
-                for(var point_i in p_keys){
-                    var point = points [ p_keys[point_i] ];
-                    imgXMLStr += "\t\t\t<part name='"+p_keys[point_i]+"' x='"+(point.x + l)+"' y='"+(point.y + t)+"'/>\n";
+                if(points){
+                    var p_keys = Object.keys(points);
+                    for(var point_i in p_keys){
+                        var point = points [ p_keys[point_i] ];
+                        imgXMLStr += "\t\t\t<part name='"+p_keys[point_i]+"' x='"+(point.x + l)+"' y='"+(point.y + t)+"'/>\n";
+                    }
                 }
                 imgXMLStr += "\t\t</box>\n"
             }
