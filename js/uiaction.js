@@ -136,7 +136,7 @@ $(document).on('mousedown', '.facebox', function(ev){
         if($(ev.target).is('div.facebox')){
             var cordinates = getCordinates(ev,ev.target);
             var point = drawPoint(cordinates,ev.target);
-            updateFeaturePoint($('#img').attr("label"),ev.target,point);
+            updateFeaturePoint(point);
             //TODO: save point informtion
             select(point);
         }
@@ -295,8 +295,11 @@ $("#boxtxtbox").on("input",function(ev){
 })
 
 $("#lbltxtbox").on("input",function(ev){
-    $(".ptn.selected").attr("label",$("#lbltxtbox").val());
-    //TODO: update point label
+    var oldLabel = $(".ptn.selected").attr("label");
+    var newLabel = $("#lbltxtbox").val();
+
+    $(".ptn.selected").attr("label",newLabel);
+    updateFeaturePointLabel($(".ptn.selected"),oldLabel,newLabel);
 })
 
 $(".deleteBtn").click(function(){
@@ -308,7 +311,6 @@ $(".deleteBtn").click(function(){
         throw Error("Select a Label box or feature point to delete.");
     }
     $(".selected").remove();
-    //TODO: update detail
     hideWidgets();
 });
 

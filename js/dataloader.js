@@ -47,8 +47,11 @@ function updateLabelBox(box_el){
         throw Error("All the label boxes must be labelled");
     }else{
         if(!images[imgName]){
-            images[imgName] = {}
-            images[imgName].boxes = {}
+            images[imgName] = {
+                boxes = {
+                    points = {}
+                }
+            }
         }
         images[imgName].boxes[boxlbl] = { 
             left: $(box_el).position().left,
@@ -78,18 +81,43 @@ function updateLabelBoxLabel(oldLabel,newLabel){
 }
 
 //add or update a feature point
-function updateFeaturePoint(imgName,box_el,point_el){
+function updateFeaturePoint(point_el){
     console.log(arguments)
-    var boxlbl = $(box_el).attr("label");
+    var imgName = $('#img').attr("label");
+    var boxlbl = $(point_el).parent().attr("label");
     var pointlbl = $(point_el).attr("label");
     if(!pointlbl || pointlbl === ""){
         throw Error("All the feature points must be labelled");
     }else{
+        //Considering that label box has already been created
+        if(! images[imgName].boxes[boxlbl].points){
+            images[imgName].boxes[boxlbl].points = {}
+        }
         images[imgName].boxes[boxlbl].points[pointlbl] = {
             label: $(point_el).attr("label"),
             x: $(point_el).position().left,
             y: $(point_el).position().top,
         }
+    }
+}
+
+function deleteFeaturePoint(point_el){
+    var imgName = $('#img').attr("label");
+    var boxlbl = $(point_el).parent().attr("label");
+    var pointlbl = $(point_el).attr("label");
+
+    delete images[imgName].boxes[boxlbl].points[pointlbl] ;
+}
+
+function updateFeaturePointLabel(point_el,oldLabel,newLabel){
+    var imgName = $('#img').attr("label");
+    var boxLabel = $(point_el).parent().attr("label");
+    if(!images[imgName] || !images[imgName].boxes || !images[imgName].boxes[boxLabel]
+        || !images[imgName].boxes[boxLabel].points || !images[imgName].boxes[boxLabel].points[oldLabel]){
+        console.log("Feature point is not created yet");
+    }else{
+        images[imgName].boxes[boxLabel].points[newLabel] = images[imgName].boxes[boxLabel].points[oldLabel] ;
+        delete images[imgName].boxes[boxLabel].points[oldLabel] ;
     }
 }
 
