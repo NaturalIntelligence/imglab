@@ -48,9 +48,7 @@ function updateLabelBox(box_el){
     }else{
         if(!images[imgName]){
             images[imgName] = {
-                boxes = {
-                    points = {}
-                }
+                boxes : {}
             }
         }
         images[imgName].boxes[boxlbl] = { 
@@ -80,9 +78,19 @@ function updateLabelBoxLabel(oldLabel,newLabel){
     }
 }
 
+function deleteLabelBoxPoints(box_el){
+    var imgName = $('#img').attr("label");
+    var boxlbl = $(box_el).attr("label");
+    images[imgName].boxes[boxlbl].points = {} ;
+}
+
+function deleteLabels(){
+    var imgName = $('#img').attr("label");
+    images[imgName].boxes = {} ;
+}
+
 //add or update a feature point
 function updateFeaturePoint(point_el){
-    console.log(arguments)
     var imgName = $('#img').attr("label");
     var boxlbl = $(point_el).parent().attr("label");
     var pointlbl = $(point_el).attr("label");

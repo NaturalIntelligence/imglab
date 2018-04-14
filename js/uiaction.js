@@ -10,8 +10,9 @@ $('#imgUrlBtn').on('click', function() {
 });
 
 $('#clrPointsBtn').on('click', function() {
-    deleteAll();
+    clearAll();
     deselectAll();
+    deleteLabels();
 });
 
 //plot points from point data file
@@ -46,7 +47,7 @@ $('#loadDataFileBtn').on('click', function() {
 
 //plot points from textbox
 $('#plotActualBtn').on('click', function() {
-	deleteAll();
+	clearAll();
     actualData = JSON.parse($("#actualData").val());
     alteredData = JSON.parse($("#actualData").val());
     plotWith(actualData);
@@ -55,7 +56,7 @@ $('#plotActualBtn').on('click', function() {
 //When an image clicked/selected in slider, loads in center/working area
 $('#img').on('load',function(){
     //Clear previously loaded image and and all labelling information
-    deleteAll();
+    clearAll();
     var imageName = $(this).attr('label');
     images[imageName] && drawAllBoxData(images[imageName].boxes);
     deselectAll();
@@ -137,7 +138,6 @@ $(document).on('mousedown', '.facebox', function(ev){
             var cordinates = getCordinates(ev,ev.target);
             var point = drawPoint(cordinates,ev.target);
             updateFeaturePoint(point);
-            //TODO: save point informtion
             select(point);
         }
     }else{
@@ -234,7 +234,7 @@ function readFiles(input) {
     if (input.files && input.files[0]) {
         emptySlider();
         hideWidgets();
-        deleteAll();
+        clearAll();
         $('#img').attr("src", "");
         //images = {}; //create an empty list
         imagesData = {};
@@ -266,7 +266,7 @@ function readPointsFile(input) {
     if (input.files && input.files[0]) {
         var pointFile = input.files[0];
         console.log(pointFile);
-        deleteAll();
+        clearAll();
         deselectAll();
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -316,12 +316,12 @@ $(".deleteBtn").click(function(){
 
 $("#emptyBox").click(function(){
     $(".selected").empty();
-    //TODO: update detail
+    deleteLabelBoxPoints($(".selected.facebox"));
 });
 
-var deleteAll= function(){
+var clearAll= function(){
     $("#img_overlay").empty();
-    //TODO: update detail
+    
 }
 
 $("#exportBtn").click(function(){
