@@ -10,7 +10,7 @@ $('#imgUrlBtn').on('click', function() {
 });
 
 $('#clrPointsBtn').on('click', function() {
-    clearAll();
+    clearCanvas();
     deselectAll();
     deleteLabels();
 });
@@ -47,7 +47,7 @@ $('#loadDataFileBtn').on('click', function() {
 
 //plot points from textbox
 $('#plotActualBtn').on('click', function() {
-	clearAll();
+	clearCanvas();
     actualData = JSON.parse($("#actualData").val());
     alteredData = JSON.parse($("#actualData").val());
     plotWith(actualData);
@@ -56,7 +56,7 @@ $('#plotActualBtn').on('click', function() {
 //When an image clicked/selected in slider, loads in center/working area
 $('#img').on('load',function(){
     //Clear previously loaded image and and all labelling information
-    clearAll();
+    clearCanvas();
     var imageName = $(this).attr('label');
     images[imageName] && drawAllBoxData(images[imageName].boxes);
     deselectAll();
@@ -234,7 +234,7 @@ function readFiles(input) {
     if (input.files && input.files[0]) {
         emptySlider();
         hideWidgets();
-        clearAll();
+        clearCanvas();
         $('#img').attr("src", "");
         //images = {}; //create an empty list
         imagesData = {};
@@ -265,8 +265,7 @@ function readFile(f){
 function readPointsFile(input) {
     if (input.files && input.files[0]) {
         var pointFile = input.files[0];
-        console.log(pointFile);
-        clearAll();
+        emptyCanvas();
         deselectAll();
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -319,9 +318,15 @@ $("#emptyBox").click(function(){
     deleteLabelBoxPoints($(".selected.facebox"));
 });
 
-var clearAll= function(){
+//remove labeled boxes and points from canvas
+var clearCanvas= function(){
     $("#img_overlay").empty();
-    
+}
+
+//Unload any image from canvas and clear it
+var emptyCanvas= function(){
+    $("#img").attr("src", "");
+    clearCanvas();
 }
 
 $("#exportBtn").click(function(){
