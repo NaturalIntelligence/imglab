@@ -12,7 +12,8 @@ function readImageFiles(input) {
         emptySlider();
         hideWidgets();
         emptyCanvas();
-        //imagesData = {};
+        images = {};//remove previous data
+        imagesData = {};
         for(i=0;i<input.files.length;i++){
             readImageFile(input.files[i]);
         }

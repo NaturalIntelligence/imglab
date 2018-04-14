@@ -1,4 +1,5 @@
-function populateSlider(imgs){
+/* function populateSlider(imgs){
+    //images = {};
     var photolist = $('.photolist');
 
     var thumbnails = [];
@@ -9,7 +10,7 @@ function populateSlider(imgs){
         thumbnails.push(img);
     }
     photolist.append(thumbnails);
-}
+} */
 
 
 function addToSlider(imgData){
