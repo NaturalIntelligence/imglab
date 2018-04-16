@@ -20,6 +20,13 @@ function updateLabelBox(box_el){
     }
 }
 
+function deleteAllLableBoxes(){
+    var imgName = $('#img').attr("label");
+    if(images[imgName]){
+        images[imgName].boxes = {};
+    }
+}
+
 function deleteLabelBox(box_el){
     var imgName = $('#img').attr("label");
     var boxlbl = $(box_el).attr("label");

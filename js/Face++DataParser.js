@@ -39,7 +39,8 @@ function fetch(){
             //alteredData = data;
             //$('#actualData').text(JSON.stringify(data));
             //$('#alteredData').text(JSON.stringify(data));
-            deleteAll();
+			//deleteAll();
+			deleteAllLableBoxes();
             plotWith(data);
 	    },
 	    error: function(err) {
