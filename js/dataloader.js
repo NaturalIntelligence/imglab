@@ -97,6 +97,11 @@ function updateFeaturePointLabel(point_el,oldLabel,newLabel){
 }
 
 function drawAllBoxData(boxes){
+    if(!boxes){
+        var imgName = $('#img').attr("label");
+        boxes = images[imgName].boxes;
+    }
+
     if(boxes){
         for (var boxlbl in boxes) {
             if (boxes.hasOwnProperty(boxlbl)) {

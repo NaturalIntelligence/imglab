@@ -39,9 +39,9 @@ function fetch(){
             //alteredData = data;
             //$('#actualData').text(JSON.stringify(data));
             //$('#alteredData').text(JSON.stringify(data));
-			//deleteAll();
 			deleteAllLableBoxes();
-            plotWith(data);
+			fppToImgLabObject(data);
+			drawAllBoxData();
 	    },
 	    error: function(err) {
 	    	$("#info").text("Error in connecting face++ API. Check console for more deetail");
@@ -50,27 +50,39 @@ function fetch(){
 	});
 }
 
-function plotWith(jsonData){
-	if(jsonData.faces.length > 0){
-		jsonData.faces.forEach(function(face,index){
-			//drawRectangle(face.face_rectangle,face.attributes.gender.value);
-			var box = appendBox(face.face_rectangle);
-			drawPoints(box,face.landmark);
-			//jsPlumb.draggable($(".ptn"));
-		});
-		$("#info").text(jsonData.faces.length + " face(s) detected!!");
-	}else{
-		$("#info").text("No face detected!!");
+function fppToImgLabObject(fppResponse){
+	var imgName = $('#img').attr("label");
+	if(!images[imgName]){
+		images[imgName] = {
+			boxes : {}
+		};
+	}else if(!images[imgName].boxes){
+		images[imgName].boxes = {}
+	}
+	for(var face_i in fppResponse.faces){
+		var face = fppResponse.faces[face_i];
+		var faceLable = face_i+1;
+		images[imgName].boxes[faceLable] = {};
+
+		images[imgName].boxes[faceLable].left = face.face_rectangle.left;
+		images[imgName].boxes[faceLable].top = face.face_rectangle.top;
+		images[imgName].boxes[faceLable].width = face.face_rectangle.width;
+		images[imgName].boxes[faceLable].height = face.face_rectangle.height;
+		images[imgName].boxes[faceLable].attributes = face.attributes;
+
+		//save points
+		var points = images[imgName].boxes[faceLable].points;
+		if(!points){
+			images[imgName].boxes[faceLable].points = {};
+			points = images[imgName].boxes[faceLable].points;
+		}
+		var pointLabels = Object.keys(face.landmark);
+		for(var point_i =0; point_i < pointLabels.length; point_i++){
+			points [ pointLabels [point_i] ] = {
+				x : face.landmark [ pointLabels [point_i] ].x - face.face_rectangle.left,
+				y : face.landmark [ pointLabels [point_i] ].y - face.face_rectangle.top
+			}
+		}
+
 	}
 }
-
-var drawPoints = function(el,landmark){
-	var l = el.position().left, t = el.position().top; 
-
-	labels.forEach(function(property,index){
-		drawPoint({x: landmark[property].x - l,
-				   y: landmark[property].y - t},el,property);
-	});
-	
-}
-
