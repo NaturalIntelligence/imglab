@@ -17,3 +17,5 @@ Here is the check list to publish any change
   * please check alternate available options
 
 Note that publishing changes or accepting any PR may take time. So please keep patience.
+
+**First Time Contributers**? Check this [helpguide](https://github.com/NaturalIntelligence/imglab/blob/master/.github/First_Time_Contributors.md)
