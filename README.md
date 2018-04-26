@@ -5,25 +5,15 @@ Web based tool to label images for object. So that they can be used to train dli
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KQJAX48SPUKNC"> <img src="https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_92x26.png" alt="Stubmatic donate button"/></a>
 <a href="https://liberapay.com/amitgupta/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
-# How to use
+## How to use
 You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which gets automatically plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to correct location.
 
 [![ImgLab Tutorial](https://img.youtube.com/vi/4yLL21weN8w/0.jpg)](https://www.youtube.com/watch?v=4yLL21weN8w)
 
-# TO DO
-* Image scalling
-* API compatible landmark label
-* Show dlib, face++ specific point schemes
-* show face++ labeles instead of automatic number
-* show warning when user tries to load images if there is any labelled image already loaded.
-* 
-* filter for (un)labelled images
-* Tool to draw points in straight line (eg nose, chin, eyebrows' center)
-* draw the line between landmark points
-* Highlight empty button when there is any point in box
-* Resizable box
+## Link your work
+Using this library if you build some open database which can help others or just to showcase, please raise an issue or PR.
 
-### Worth to mention
+## Worth to mention
 
 - **[निम्न (NIMN)](https://github.com/nimndata/spec)** : Schema aware object compression. 60% more compressed than JSON. 40% more compressed than msgpack.
 - **[imglab](https://github.com/NaturalIntelligence/imglab)** : Web based tool to label images for object. So that they can be used to train dlib or other object detectors. You can integrate 3rd party libraries for fast labeling.
