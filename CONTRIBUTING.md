@@ -16,6 +16,11 @@ Here is the check list to publish any change
   * please check the performance and size of package
   * please check alternate available options
 
+### Pointes to remember
+* While implementing a functionality, negative cases should also be considered.
+* Previous functionality should not be broken.
+
+
 Note that publishing changes or accepting any PR may take time. So please keep patience.
 
 **First Time Contributers**? Check this [helpguide](https://github.com/NaturalIntelligence/imglab/blob/master/.github/First_Time_Contributors.md)
