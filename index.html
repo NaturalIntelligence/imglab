@@ -19,10 +19,10 @@
 	<script src="js/thirdparty/FileSaver.min.js"></script>
 	<script src="js/thirdparty/fxp.js"></script>
 
-	
-	
 
-	
+
+
+
 </head>
 <body>
             <a href="https://github.com/NaturalIntelligence/imglab"><img class="bring-up" style="position: absolute; top: 0; left: 0; border: 0;" src="img/githubribon.png" alt="Fork me on GitHub"></a>
@@ -63,7 +63,7 @@
 
 <div class="alert" id="info"></div>
 
-<div class="container">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-2" style="background-color: #e1e6ea">
 			<div id="ptnDtl" class="widget">
@@ -92,7 +92,7 @@
 				<input type="button" class="btn btn-outline-danger btn-sm" id="emptyBox" value="Empty">
 				<hr>
 			</div>
-			
+
 			<span id="imgdimentions"></span>
 		</div>
 		<div class="col-sm-8" >
@@ -106,8 +106,8 @@
 					<div id="v_line"></div>
 					<div id="h_line"></div>
 				</div>
-				
-				
+
+
 			</div>
 		</div>
 		<div class="col-sm-2" >
@@ -119,11 +119,11 @@
 			<br>
 			<input class="btn btn-success" type="button" name="faceppBtn" id="faceppBtn" value="Face++" />
 
-			
+
 			<hr>
 			<small>Select a file to read landmarks and face box position. (xml, json)</small><br>
 			<label id="loadDataFileBtn" class="btn-bs-file btn btn-outline-info">Browse
-		        
+
 			</label>
 			<input type="file" id="loadDataFileInput" style="display:none" value="Browse data file" accept=".fpp,.xml,.json" onchange="readPointsFile(this)" />
 
