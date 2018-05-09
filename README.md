@@ -1,4 +1,4 @@
-# imglab
+# [imglab](https://naturalintelligence.github.io/imglab/)
 Web based tool to label images for object. So that they can be used to train dlib or other object detectors.
 
 [![Open Source Helpers](https://www.codetriage.com/naturalintelligence/imglab/badges/users.svg)](https://www.codetriage.com/naturalintelligence/imglab)
@@ -7,6 +7,8 @@ Web based tool to label images for object. So that they can be used to train dli
 <a href="https://www.patreon.com/bePatron?u=9531404" data-patreon-widget-type="become-patron-button"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patron!" width="200" /></a>
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KQJAX48SPUKNC"> <img src="https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_92x26.png" alt="Stubmatic donate button"/></a>
 <a href="https://liberapay.com/amitgupta/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
+
+> This project is looking for **contributors**. If you have a feature you'd like to see implemented or a bug you'd liked fixed, the best and fastest way to make that happen is to implement it and submit a PR. Basic knowledge of HTML, CSS and JS is sufficient to start with. Feel free to ask for any guidance.
 
 ## How to use
 You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which gets automatically plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to correct location.
