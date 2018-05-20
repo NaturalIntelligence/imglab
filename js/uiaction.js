@@ -245,6 +245,8 @@ $("#lbltxtbox").on("input",function(ev){
     updateFeaturePointLabel($(".ptn.selected"),oldLabel,newLabel);
 })
 
+
+// Delete selection on click from button
 $(".deleteBtn").click(function(){
     if ( isLabelBox( $(".selected") ) ){
         deleteLabelBox($(".selected"));
@@ -257,12 +259,29 @@ $(".deleteBtn").click(function(){
     hideWidgets();
 });
 
+// Delete using delete key or backspace key from keyboard- modified above code using keydown / keycode
+$('html').keydown(function(e) {
+    if ( isLabelBox( $(".selected") ) ){
+        deleteLabelBox($(".selected"));
+    }else if( isFeaturePoint ( $(".selected") ) ){
+        deleteFeaturePoint($(".selected"));
+    }else{
+        throw Error("Select a Label box or feature point to delete.");
+    }
+
+    if(e.keyCode == 46 || e.keyCode == 8) { 
+        $(".selected").remove();
+        hideWidgets();
+    }
+});
+
+// Empty 
 $("#emptyBox").click(function(){
     $(".selected").empty();
     deleteLabelBoxPoints($(".selected.facebox"));
 });
 
-//remove labeled boxes and points from canvas
+// Remove labeled boxes and points from canvas
 var clearCanvas= function(){
     $("#img_overlay").empty();
 }
