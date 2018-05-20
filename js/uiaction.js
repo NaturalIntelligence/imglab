@@ -196,12 +196,14 @@ $("#img_overlay").mousedown(function (ev) {
     
 });
 
-//decide if box or point should be dragged
+//decide if box or point should be dragged and if empty button is visible
 $("#plotType").on("switchChange.bootstrapSwitch",function(ev){
     if(document.getElementById('plotType').checked){
         jsPlumb.setDraggable($(".facebox"),true);
+		$("#emptyBox").slideDown(100);
     }else{
         jsPlumb.setDraggable($(".facebox"),false);
+		$("#emptyBox").slideUp(200);
     }
 });
 
@@ -256,6 +258,7 @@ $(".deleteBtn").click(function(){
     $(".selected").remove();
     hideWidgets();
 });
+
 
 $("#emptyBox").click(function(){
     $(".selected").empty();
