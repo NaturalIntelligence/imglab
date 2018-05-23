@@ -130,7 +130,7 @@ $("#img_overlay").mouseout(function(event) {
 $(document).on('mousedown', '.facebox', function(ev){
     //ev.stopPropagation()
 
-    if(!document.getElementById('plotType').checked) {
+    if(currentTool == "#toolPoints") {
         //Create a point
 
         if($(ev.target).is('div.facebox')){
@@ -139,32 +139,30 @@ $(document).on('mousedown', '.facebox', function(ev){
             updateFeaturePoint(point);
             select(point);
         }
-    }else{
-        //Select the box to change box settings
     }
-
+    //Select the box to change box settings
 });
 
 //select facebox
 $(document).on('click', '.facebox', function(ev){
     //ev.stopPropagation()
 
-    if(!document.getElementById('plotType').checked) {
-    }else{
+    if(currentTool == "#toolPoints") {
+        // do nothing
+    }else if(currentTool == "#toolBox"){
         select($(ev.target));
         //Select the box to change box settings
         //$(ev.el).addClass("selected");
     }
-
 });
 
 //select feature point / or landmark
 $(document).on('click', '.ptn', function(ev){
     //ev.stopPropagation()
 
-    if(!document.getElementById('plotType').checked) {
+    if(currentTool == "#toolPoints") {
         toggleSelect(ev.target);
-    }else{
+    }else if(currentTool == "#toolBox"){
         //Select the box to change box settings
         $(ev.el).addClass("selected");
     }
@@ -176,8 +174,8 @@ var tmpBox = "";
 //start creating label box
 $("#img_overlay").mousedown(function (ev) {
     deselectAll();
-    if(document.getElementById('plotType').checked) { //Box operation
-
+    if(currentTool == "#toolBox") { //Box operation
+        console.log(currentTool);
         if ($(ev.target).is('div.facebox')){ // select the box
              //ev.stopPropagation();
              toggleSelect($(ev.target));
@@ -197,15 +195,16 @@ $("#img_overlay").mousedown(function (ev) {
 });
 
 //decide if box or point should be dragged and if empty button is visible
-$("#plotType").on("switchChange.bootstrapSwitch",function(ev){
-    if(document.getElementById('plotType').checked){
-        jsPlumb.setDraggable($(".facebox"),true);
-		$("#emptyBox").slideDown(100);
-    }else{
-        jsPlumb.setDraggable($(".facebox"),false);
-		$("#emptyBox").slideUp(200);
-    }
-});
+// $("#plotType").on("switchChange.bootstrapSwitch",function(ev){
+//     if(document.getElementById('plotType').checked){
+//         jsPlumb.setDraggable($(".facebox"),true);
+// 		$("#emptyBox").slideDown(100);
+//     }else{
+//         jsPlumb.setDraggable($(".facebox"),false);
+// 		$("#emptyBox").slideUp(200);
+//     }
+// });
+// Malfple: I'm moving the whole thing to toolbox.js for now, can change later
 
 
 $("#plotApiBtn").click(function(){
