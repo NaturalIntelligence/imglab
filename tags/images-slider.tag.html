@@ -1,15 +1,17 @@
 <images-slider>
-        <div class="float-left outline" style="width: 50px; height: 100%;">
-                <label class="btn-bs-file"><img src="#">Files
+        <div class="float-left" style="width: 50px; height: 100%; text-align: center; padding: 10px; border-left: 1px solid grey;">
+                <label class="btn-bs-file">
+                    <img class="file-input-icon" src="img/icons/files-white.png">
                     <input type="file" class="filebutton" accept="image/*"  onchange= { readImageFiles }  multiple/>
                 </label>
 
-                <label class="btn-bs-file"><img src="img/icons/open.svg" style="stroke: white;" width="40px">Folder
+                <label class="btn-bs-file">
+                    <img class="file-input-icon" src="img/icons/open.png">
                     <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)" >
                 </label>
         </div>
-        <div class="float-left left-paddle outline" style="width: 50px; height: 100%;" onclick={ slideleft }></div>
-        <div class="float-left photolist-wrapper outline" style="width: calc(100% - 160px); height: 100%;">
+        <div class="float-left left-paddle " style="width: 50px; height: 100%;" onclick={ slideleft }></div>
+        <div class="float-left photolist-wrapper " style="width: calc(100% - 160px); height: 100%;">
             <div name="photolist" class="photolist">
                     <!-- <span each={ this.thumbnails } class="d-inline-block">
                         <span class="delete" onclick={ deleteThumbnail }></span> -->
@@ -17,7 +19,7 @@
                     <!-- </span> -->
             </div>
         </div>
-        <div class="right-paddle outline" style="width: 50px; height: 100%;" onclick ={ slideright }></div>
+        <div class="right-paddle" style="width: 50px; height: 100%;" onclick ={ slideright }></div>
     
     
     <script>

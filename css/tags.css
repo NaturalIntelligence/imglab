@@ -31,3 +31,12 @@
 .outline{
     outline: 1px solid red;
 }
+.file-input-icon{
+    width: 30px;
+    margin: auto;
+    cursor: pointer;
+}
+
+.file-input-icon:hover{
+    background-color: grey;
+}
