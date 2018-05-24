@@ -14,7 +14,7 @@
 	<title>ImgLab</title>
 
 	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/slider.css">
+	<link rel="stylesheet" href="css/slider.1.css">
 	<link rel="stylesheet" href="css/tags.css">
 	<link rel="stylesheet" href="css/jquery-confirm.min.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -49,8 +49,12 @@
 				<toolbox tools="labelling"></toolbox>
 				<toolbox class="mt-auto toolbox-border-top" tools="canvas"></toolbox>
 			</div>
-			<div id="workarea" class="p-2 base-color" style="width: 100vw">
-				<workarea></workarea>
+			<div id="workarea" class="d-flex flex-row base-color align-items-end" style="width: 100vw">
+				<!-- <workarea></workarea> -->
+				<div class="top-bar"></div>
+				<div class="botton-bar grey-border" style="height: 100px; width: 100%; margin: 0px 2px;">
+						<images-slider thumbnail_width="90px" class="mt-auto grey-border"></images-slider>
+				</div>
 			</div>
 			<div id="sidebar" class="p-2 overlay-color" style="width: 300px; border: 1px solid grey;">
 				<sidebar></sidebar>

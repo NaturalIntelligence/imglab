@@ -23,3 +23,11 @@
 .toolbox-border-botton{
     border-botton: 1px solid grey;
 }
+
+.grey-border{
+    border: 1px solid grey;
+}
+
+.outline{
+    outline: 1px solid red;
+}

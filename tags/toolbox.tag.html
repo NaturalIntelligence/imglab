@@ -3,9 +3,10 @@
         .tool-button{
             text-align: center;
             margin: 14px 0px;
+            font-size: 0.9em;
         }
         .tool-icon{
-            width: 40px;
+            width: 40%;
             margin: 3px 0px;
         }
         .tool-selected{
@@ -30,7 +31,7 @@
             //TODO: should it unseect all the tools or tools in current toolbox
             $(".tool-selected").removeClass("tool-selected");
             $(e.currentTarget).addClass("tool-selected");
-            riot.trigger("tool-selected",e.item.tool);
+            //riot.trigger("tool-selected",e.item.tool);
         }
     </script>
 </toolbox>
