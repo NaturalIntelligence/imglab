@@ -43,9 +43,12 @@
     vertical-align: top;
     background: #F6F6F6;
     border: 1px solid #666;
+    opacity: 0.3;
+    transition: .5s ease;
 }
 .photolist-wrapper .photolist  img:hover {
     opacity: 1.0;
+    transition: .5s ease;
 }
 
 .delete {
