@@ -1,0 +1,25 @@
+.selection-color{
+    background-color: #B3B3B3;
+}
+
+.overlay-color{
+    background-color: #666666;
+    color: white;
+}
+
+.base-color{
+    background-color: #4D4D4D;
+    color: white;
+}
+
+.line{
+    height: 1px;
+    background-color: grey;
+}
+
+.toolbox-border-top{
+    border-top: 1px solid grey;
+}
+.toolbox-border-botton{
+    border-botton: 1px solid grey;
+}

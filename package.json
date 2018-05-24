@@ -1,0 +1,30 @@
+{
+  "name": "imglab",
+  "version": "1.0.0",
+  "description": "label images for machine learning",
+  "main": "index.js",
+  "scripts": {
+    "compile": "riot -w tags/ tags/tags.js --ext html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NaturalIntelligence/imglab.git"
+  },
+  "keywords": [
+    "label",
+    "point",
+    "boundary",
+    "box",
+    "plugins",
+    "faceplusplus"
+  ],
+  "author": "Amit Gupta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NaturalIntelligence/imglab/issues"
+  },
+  "homepage": "https://github.com/NaturalIntelligence/imglab#readme",
+  "dependencies": {
+    "riot": "^3.10.1"
+  }
+}

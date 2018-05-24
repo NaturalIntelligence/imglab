@@ -1,0 +1,36 @@
+<toolbox>
+    <style>
+        .tool-button{
+            text-align: center;
+            margin: 14px 0px;
+        }
+        .tool-icon{
+            width: 40px;
+            margin: 3px 0px;
+        }
+        .tool-selected{
+            background: coral;
+        }
+        .tool-button:not(.tool-selected):hover{
+            background: grey;
+        }
+    </style>
+
+    <div each={tool in tools[opts.tools]} id={ tool.id } class="tool-button" onclick={ selectme }>
+        <img class="tool-icon" src="img/icons/{tool.icon}">
+        <div>{ tool.title }</div>
+    </div>
+    
+    <script>
+        //this.toolsData = tools[opts.tools];
+        var tag = this;
+        tag.selectme = selectme;
+
+        function selectme(e){
+            //TODO: should it unseect all the tools or tools in current toolbox
+            $(".tool-selected").removeClass("tool-selected");
+            $(e.currentTarget).addClass("tool-selected");
+            riot.trigger("tool-selected",e.item.tool);
+        }
+    </script>
+</toolbox>

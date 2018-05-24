@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119603824-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-119603824-1'); -->
+	</script>
+
+	<title>ImgLab</title>
+
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/slider.css">
+	<link rel="stylesheet" href="css/tags.css">
+	<link rel="stylesheet" href="css/jquery-confirm.min.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-switch.min.css">
+	<!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
+
+	<script src="js/thirdparty/jquery.min.js" ></script>
+	<script src="js/thirdparty/bootstrap-switch.min.js"></script>
+	<script src="js/thirdparty/jsplumb.min.js"></script>
+	<script src="js/thirdparty/jquery-confirm.min.js"></script>
+	<script src="js/thirdparty/bootstrap.min.js"></script>
+	<script src="js/thirdparty/riot.min.js"></script>
+	<script src="js/thirdparty/Blob.js"></script>
+	<script src="js/thirdparty/FileSaver.min.js"></script>
+	<script src="js/thirdparty/fxp.js"></script>
+	
+
+</head>
+<body>
+	<div class="flex-row">
+		<div id="menubar" class="d-flex flex-row overlay-color" style="height: 50px;">
+			<!-- <div class="p-2">
+				<menu></menu>
+			</div> -->
+			<div class="p-2 ">
+				<actionbar></actionbar>
+			</div>
+		</div><!-- End of Menubar -->
+
+		<div class="d-flex flex-row" style="height: calc(100vh - 50px);">
+			<div id="toolbar" class="d-flex flex-column overlay-color align-items-end" style="border: 1px solid grey;">
+				<toolbox tools="labelling"></toolbox>
+				<toolbox class="mt-auto toolbox-border-top" tools="canvas"></toolbox>
+			</div>
+			<div id="workarea" class="p-2 base-color" style="width: 100vw">
+				<workarea></workarea>
+			</div>
+			<div id="sidebar" class="p-2 overlay-color" style="width: 300px; border: 1px solid grey;">
+				<sidebar></sidebar>
+			</div>
+		</div>
+
+		<!-- <div class="d-flex flex-row">
+			<div id="statusbar" class="p-2"></div>
+		</div> -->
+	</div>
+
+
+	
+
+	<script src="js/config.js"></script>
+	<script src="js/fileOperation.js"></script>
+	<script src="js/uiaction.js"></script>
+	<script src="js/widget.js"></script>
+	<script src="js/FaceBox.js"></script>
+	<script src="js/labels.js"></script>
+	<script src="js/labelFileLoader.js"></script>
+	<script src="js/dataloader.js"></script>
+	<script src="js/slider.js"></script>
+	<script src="js/Face++DataParser.js"></script>
+	<script src="js/dlibDataHandler.js"></script>
+	<script src="tags/tags.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			riot.mount("*");
+		});
+	</script>
+</body>
+</html>
