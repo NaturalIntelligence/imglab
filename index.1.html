@@ -49,10 +49,11 @@
 				<toolbox tools="labelling"></toolbox>
 				<toolbox class="mt-auto toolbox-border-top" tools="canvas"></toolbox>
 			</div>
-			<div id="workarea" class="d-flex flex-row base-color align-items-end" style="width: 100vw">
-				<!-- <workarea></workarea> -->
-				<div class="top-bar"></div>
-				<div class="botton-bar grey-border" style="height: 100px; width: 100%; margin: 0px 2px;">
+			<div class="d-flex flex-column base-color" style="width: 100vw">
+				<div>
+					<workarea></workarea>
+				</div>
+				<div class="grey-border mt-auto" style="height: 100px; width: 100%; margin: 0px 2px;">
 						<images-slider thumbnail_width="90px" class="mt-auto grey-border"></images-slider>
 				</div>
 			</div>
@@ -70,20 +71,21 @@
 	
 
 	<script src="js/config.js"></script>
-	<script src="js/fileOperation.js"></script>
+	<!-- <script src="js/fileOperation.js"></script>
 	<script src="js/uiaction.js"></script>
 	<script src="js/widget.js"></script>
 	<script src="js/FaceBox.js"></script>
 	<script src="js/labels.js"></script>
 	<script src="js/labelFileLoader.js"></script>
 	<script src="js/dataloader.js"></script>
-	<script src="js/slider.js"></script>
-	<script src="js/Face++DataParser.js"></script>
-	<script src="js/dlibDataHandler.js"></script>
+	<script src="js/slider.js"></script> -->
+	<!-- <script src="js/Face++DataParser.js"></script>
+	<script src="js/dlibDataHandler.js"></script> -->
 	<script src="tags/tags.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			riot.mount("*");
+			riot.mount("toolbox");
+			riot.mount("images-slider");
 		});
 	</script>
 </body>

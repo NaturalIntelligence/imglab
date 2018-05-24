@@ -2,13 +2,14 @@ riot.tag2('actionbar', '', '', '', function(opts) {
 });
 riot.tag2('facepp', '', '', '', function(opts) {
 });
-riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 100%; text-align: center; padding: 10px; border-left: 1px solid grey;"> <label class="btn-bs-file"> <img class="file-input-icon" src="img/icons/files-white.png"> <input type="file" class="filebutton" accept="image/*" onchange="{readImageFiles}" multiple> </label> <label class="btn-bs-file"> <img class="file-input-icon" src="img/icons/open.png"> <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)"> </label> </div> <div class="float-left left-paddle " style="width: 50px; height: 100%;" onclick="{slideleft}"></div> <div class="float-left photolist-wrapper " style="width: calc(100% - 160px); height: 100%;"> <div name="photolist" class="photolist"> <img each="{this.thumbnails}" riot-src="{src}" label="{name}" title="{name}" width="{this.thumbnailWidth}"> </div> </div> <div class="right-paddle" style="width: 50px; height: 100%;" onclick="{slideright}"></div>', '', '', function(opts) {
+riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 100%; text-align: center; padding: 10px; border-left: 1px solid grey;"> <label class="btn-bs-file"> <img class="file-input-icon" src="img/icons/files-white.png"> <input type="file" class="filebutton" accept="image/*" onchange="{readImageFiles}" multiple> </label> <label class="btn-bs-file"> <img class="file-input-icon" src="img/icons/open.png"> <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)"> </label> </div> <div class="float-left left-paddle " style="width: 50px; height: 100%;" onclick="{slideleft}"></div> <div class="float-left photolist-wrapper " style="width: calc(100% - 160px); height: 100%;"> <div name="photolist" class="photolist"> <img each="{this.thumbnails}" riot-src="{src}" label="{name}" title="{name}" width="{this.thumbnailWidth}" onclick="{loadIntoWorkArea}"> </div> </div> <div class="right-paddle" style="width: 50px; height: 100%;" onclick="{slideright}"></div>', '', '', function(opts) {
         tag = this;
         tag.readImageFiles = readImageFiles;
         tag.readImageFile = readImageFile;
         tag.slideleft = slideleft;
         tag.slideright = slideright;
         tag.deleteThumbnail = deleteThumbnail;
+        tag.loadIntoWorkArea = loadIntoWorkArea;
 
         function readImageFiles(e) {
             var input = e.srcElement;
@@ -28,6 +29,7 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
                         name : f.name,
                         src: e.target.result
                     };
+                    updateDimentions(e.target.result,imgData);
                     this.thumbnails.push(imgData);
                     this.trigger("uploadimages");
                 }
@@ -36,6 +38,17 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
                 }
                 reader.readAsDataURL(f);
             }
+        }
+
+        function updateDimentions(imgFileSrc, imageDataObject){
+            var img = new Image();
+            img.onload = function() {
+                imageDataObject.size = {
+                    width : this.width,
+                    height : this.height
+                }
+            };
+            img.src = imgFileSrc;
         }
 
         this.sliding = false;
@@ -73,6 +86,10 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
             }
             this.update();
         }
+
+        function loadIntoWorkArea(e){
+            riot.mount("workarea",{ img : e.item});
+        }
 });
 riot.tag2('menu', '', '', '', function(opts) {
 });
@@ -91,5 +108,5 @@ riot.tag2('toolbox', '<div each="{tool in tools[opts.tools]}" id="{tool.id}" cla
         }
 });
 
-riot.tag2('workarea', '', '', '', function(opts) {
+riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts.img.src}" width="{opts.img.size.width}" height="{opts.img.size.height}"> <canvas id="work-canvas" width="{opts.img.size.width}" height="{opts.img.size.height}"></canvas> <span id="tooltip-span"></span> <div id="v_line"></div> <div id="h_line"></div> </div>', 'workarea #work-canvas,[data-is="workarea"] #work-canvas{ position: absolute; z-index: 1; } workarea #canvas-container,[data-is="workarea"] #canvas-container{ height: calc(100vh - 150px); display: block; overflow: auto; position: relative; }', '', function(opts) {
 });

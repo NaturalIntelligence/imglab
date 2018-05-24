@@ -1,0 +1,27 @@
+<workarea>
+    <style>
+        #work-canvas{
+            position: absolute;
+	        z-index: 1;
+        }
+        #canvas-container{
+            height: calc(100vh - 150px);
+            display: block;
+            overflow: auto;
+            position: relative;
+        }
+    </style>
+
+    <div id="canvas-container">
+        <img id="img" src={ opts.img.src } width="{ opts.img.size.width }" height="{ opts.img.size.height }"/>
+        <canvas id="work-canvas" width="{ opts.img.size.width }" height="{ opts.img.size.height }"></canvas>
+        <!-- <div id="img_overlay"></div> -->
+        <span id="tooltip-span"></span>
+        <div id="v_line"></div>
+        <div id="h_line"></div>
+    </div>
+
+    <script>
+
+    </script>
+</workarea>

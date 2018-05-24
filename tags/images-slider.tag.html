@@ -15,7 +15,7 @@
             <div name="photolist" class="photolist">
                     <!-- <span each={ this.thumbnails } class="d-inline-block">
                         <span class="delete" onclick={ deleteThumbnail }></span> -->
-                        <img each={ this.thumbnails } src={ src } label ={ name } title={ name } width={this.thumbnailWidth}>
+                        <img each={ this.thumbnails } src={ src } label ={ name } title={ name } width={this.thumbnailWidth} onclick={ loadIntoWorkArea}>
                     <!-- </span> -->
             </div>
         </div>
@@ -29,6 +29,7 @@
         tag.slideleft = slideleft;
         tag.slideright = slideright;
         tag.deleteThumbnail = deleteThumbnail;
+        tag.loadIntoWorkArea = loadIntoWorkArea;
 
         function readImageFiles(e) {
             var input = e.srcElement;
@@ -48,6 +49,7 @@
                         name : f.name,
                         src: e.target.result
                     };
+                    updateDimentions(e.target.result,imgData);
                     this.thumbnails.push(imgData);
                     this.trigger("uploadimages");
                 }
@@ -56,6 +58,17 @@
                 }
                 reader.readAsDataURL(f);
             }
+        }
+
+        function updateDimentions(imgFileSrc, imageDataObject){
+            var img = new Image();
+            img.onload = function() {
+                imageDataObject.size = {
+                    width : this.width,
+                    height : this.height
+                }
+            };
+            img.src = imgFileSrc;
         }
 
         this.sliding = false;
@@ -92,6 +105,10 @@
                 }
             }
             this.update();
+        }
+
+        function loadIntoWorkArea(e){
+            riot.mount("workarea",{ img : e.item});
         }
     </script>
 </images-slider>
