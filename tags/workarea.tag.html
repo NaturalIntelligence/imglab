@@ -40,6 +40,8 @@
                     el.remove();
                 }); */
             }
+
+            //if a label element is selected then on arrow key with combination of ctrl, alt, and shift whould move the element
         });
         
         this.on('mount',function() {
@@ -57,7 +59,7 @@
                                 el.selectize(false);
                             });
                         }
-                        tool.selectize();
+                        tool.selectize({ rotationPoint: false});
                         selectedLabels.push(tool);
                         e.stopPropagation();
                     });

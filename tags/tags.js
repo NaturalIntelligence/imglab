@@ -125,6 +125,7 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
             }else if(e.keyCode == 65){
 
             }
+
         });
 
         this.on('mount',function() {
@@ -142,7 +143,7 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                                 el.selectize(false);
                             });
                         }
-                        tool.selectize();
+                        tool.selectize({ rotationPoint: false});
                         selectedLabels.push(tool);
                         e.stopPropagation();
                     });
