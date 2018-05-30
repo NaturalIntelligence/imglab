@@ -140,42 +140,50 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                     el.selectize(false);
                 });
                 selectedLabels = [];
-                if(selectedTool && selectedTool.type !== "point"){
-                    var tool = selectedTool.create(event,myCanvas);
-                    tool.on("click", function(e) {
-                        if(selectedTool.type === "point"){
-                            var point = selectedTool.create(e,myCanvas);
-                            point.attr({
-                                for: tool.node.id
-                            })
-                            point.on("click", function(e) {
-                                if(!e.ctrlKey){
+                if(selectedTool && selectedTool.type !== "point" && !alreadyDrawing){
+                    var currentTool = selectedTool.create(event,myCanvas);
+                    currentTool.on('drawstart', function(){
+                        alreadyDrawing = true;
+                    });
+                    currentTool.on('drawstop', function(){
+                        alreadyDrawing = false;
+                        console.log("drawing is stopped")
+                        currentTool.on("click", function(e) {
+                            if(selectedTool.type === "point"){
+                                var point = selectedTool.create(e,myCanvas);
+                                point.attr({
+                                    for: currentTool.node.id
+                                })
+                                point.on("click", function(e) {
+                                    if(!e.ctrlKey){
 
-                                        selectedLabels.forEach(el => {
-                                            el.selectize(false);
-                                        });
-                                    }
-                                    point.selectize({ rotationPoint: false});
-                                    selectedLabels.push(point);
-                                    e.stopPropagation();
+                                            selectedLabels.forEach(el => {
+                                                el.selectize(false);
+                                            });
+                                        }
+                                        point.selectize({ rotationPoint: false});
+                                        selectedLabels.push(point);
+                                        e.stopPropagation();
+                                    });
+                            }else if(!e.ctrlKey){
+
+                                selectedLabels.forEach(el => {
+                                    el.selectize(false);
                                 });
-                        }else if(!e.ctrlKey){
-
-                            selectedLabels.forEach(el => {
-                                el.selectize(false);
-                            });
-                        }
-                        tool.selectize({ rotationPoint: false});
-                        selectedLabels.push(tool);
-                        e.stopPropagation();
+                            }
+                            currentTool.selectize({ rotationPoint: false});
+                            selectedLabels.push(currentTool);
+                            e.stopPropagation();
+                        });
                     });
 
                     if(selectedTool.resizable){
-                        tool.draw(event);
-                        selectedElement = tool;
+                        currentTool.draw(event);
+                        selectedElement = currentTool;
                     }
 
                 }
+
             });
             myCanvas.on('mouseup', function(event){
                 if(selectedTool && selectedElement)   selectedElement.draw(event);

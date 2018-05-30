@@ -40,7 +40,22 @@ var tools = {
             type: "poly",
             title  : "Polygon",
             desp : "Create a concave polygon",
-            icon : "polygon.svg"
+            icon : "polygon.svg",
+            create : function(){
+                var poly =  myCanvas.polygon().addClass('labelbox').draw();
+                poly.draggable().resize();
+
+                poly.on('drawstart', function(e){
+                    document.addEventListener('keydown', function(e){
+                        if(e.keyCode == 13){
+                            poly.draw('done');
+                            poly.off('drawstart');
+                        }
+                    });
+                });
+
+                return poly;
+            }
         }
     },
     canvas : {
@@ -69,3 +84,4 @@ var tools = {
 
 var selectedLabels = [];
 var selectedTool = null, selectedElement = null;
+var alreadyDrawing = false;
