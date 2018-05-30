@@ -14,7 +14,7 @@
 
     <div id="canvas-container">
         <img id="img" src={ opts.img.src } width="{ opts.img.size.width }" height="{ opts.img.size.height }"/>
-        <canvas id="work-canvas" width="{ opts.img.size.width }" height="{ opts.img.size.height }"></canvas>
+        <div id="work-canvas" width="{ opts.img.size.width }" height="{ opts.img.size.height }"></div>
         <!-- <div id="img_overlay"></div> -->
         <span id="tooltip-span"></span>
         <div id="v_line"></div>
@@ -22,6 +22,28 @@
     </div>
 
     <script>
+        this.on('mount',function() {
+            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
 
+            //var rect = myCanvas.rect(45,300).select();
+
+            //var rect = myCanvas.rect().addClass('labelbox').draw();
+            //rect.draggable();
+            myCanvas.on('mousedown', function(event){
+                if(selectedTool){
+                    currentToolElement = selectedTool.create();
+                    currentToolElement.draw(event);
+                }
+            });
+            myCanvas.on('mouseup', function(event){
+                if(selectedTool && currentToolElement)   currentToolElement.draw(event);
+            });
+            
+            /* console.log(rect.node.id);
+            rect.on("click", function() {
+                //rect.select().resize();
+                //rect.draggable();
+            }); */
+        } );
     </script>
 </workarea>

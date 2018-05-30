@@ -17,7 +17,7 @@
         }
     </style>
 
-    <div each={tool in tools[opts.tools]} id={ tool.id } class="tool-button" onclick={ selectme }>
+    <div each={tool,toolid in tools[opts.tools]} id={ toolid } class="tool-button" onclick={ selectme }>
         <img class="tool-icon" src="img/icons/{tool.icon}">
         <div>{ tool.title }</div>
     </div>
@@ -25,13 +25,13 @@
     <script>
         //this.toolsData = tools[opts.tools];
         var tag = this;
-        tag.selectme = selectme;
 
-        function selectme(e){
+        tag.selectme = function (e){
             //TODO: should it unseect all the tools or tools in current toolbox
             $(".tool-selected").removeClass("tool-selected");
             $(e.currentTarget).addClass("tool-selected");
-            //riot.trigger("tool-selected",e.item.tool);
+            selectedTool = tools[opts.tools][e.item.toolid];
+            
         }
     </script>
 </toolbox>
