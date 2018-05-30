@@ -115,6 +115,18 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
             });
         });
 
+        $(document).keyup(function(e){
+            console.log(e.keyCode);
+            if(e.keyCode == 46){
+                selectedLabels.forEach(el => {
+                    el.selectize(false).remove();
+                });
+
+            }else if(e.keyCode == 65){
+
+            }
+        });
+
         this.on('mount',function() {
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
 
@@ -129,12 +141,14 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                                 el.selectize(false);
                             });
                         }
-                        tool.selectize().resize();
+                        tool.selectize();
                         selectedLabels.push(tool);
                         e.stopPropagation();
                     });
 
-                    tool.draw(event);
+                    if(selectedTool.resizable){
+                        tool.draw(event);
+                    }
 
                     selectedElement = tool;
                 }

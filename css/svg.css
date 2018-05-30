@@ -1,8 +1,11 @@
-.labelbox{
+.labelcircle, .labelbox{
     fill: yellow;
     stroke: green;
     stroke-width: 2px;
     fill-opacity: 0.1;
+}
+.labelpoint{
+    fill: red;
 }
 .svg_select_points{
     fill: black;

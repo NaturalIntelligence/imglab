@@ -27,6 +27,20 @@
                 el.selectize(false);
             });
         });
+
+        $(document).keyup(function(e){
+            console.log(e.keyCode);
+            if(e.keyCode == 46){
+                selectedLabels.forEach(el => {
+                    el.selectize(false).remove();
+                });
+                //show snakebar to inform
+            }else if(e.keyCode == 65){
+                /* allLabels.forEach(el => {
+                    el.remove();
+                }); */
+            }
+        });
         
         this.on('mount',function() {
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
@@ -46,12 +60,14 @@
                                 el.selectize(false);
                             });
                         }
-                        tool.selectize().resize();
+                        tool.selectize();
                         selectedLabels.push(tool);
                         e.stopPropagation();
                     });
                     
-                    tool.draw(event);
+                    if(selectedTool.resizable){
+                        tool.draw(event);
+                    }
 
                     selectedElement = tool;
                 }
