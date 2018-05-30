@@ -26,14 +26,17 @@
             selectedLabels.forEach(el => {
                 el.selectize(false);
             });
+            selectedLabels = [];
         });
 
         $(document).keyup(function(e){
-            console.log(e.keyCode);
             if(e.keyCode == 46){
                 selectedLabels.forEach(el => {
+                    $("[for="+ el.node.id+"]").remove();
                     el.selectize(false).remove();
                 });
+                selectedLabels = [];
+                //delete all the points related to a polygon
                 //show snakebar to inform
             }else if(e.keyCode == 65){
                 /* allLabels.forEach(el => {
@@ -50,10 +53,30 @@
 
             myCanvas.on('mousedown', function(event){
                 //unselect all the labels
-                if(selectedTool){
+                selectedLabels.forEach(el => {
+                    el.selectize(false);
+                });
+                selectedLabels = [];
+                if(selectedTool && selectedTool.type !== "point"){
                     var tool = selectedTool.create(event,myCanvas);
                     tool.on("click", function(e) {
-                        if(!e.ctrlKey){
+                        if(selectedTool.type === "point"){
+                            var point = selectedTool.create(e,myCanvas);
+                            point.attr({
+                                for: tool.node.id
+                            })
+                            point.on("click", function(e) {
+                                if(!e.ctrlKey){
+                                        //unselect all the points
+                                        selectedLabels.forEach(el => {
+                                            el.selectize(false);
+                                        });
+                                    }
+                                    point.selectize({ rotationPoint: false});
+                                    selectedLabels.push(point);
+                                    e.stopPropagation();
+                                });
+                        }else if(!e.ctrlKey){
                             //unselect all the labels
                             selectedLabels.forEach(el => {
                                 el.selectize(false);

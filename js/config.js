@@ -1,6 +1,7 @@
 var tools = {
     labelling : {
         "tool-point" : {
+            type: "point",
             title  : "Point",
             desp : "Create a feature point inside the concave polygon or boundary box",
             icon : "point.svg",
@@ -12,6 +13,7 @@ var tools = {
             }
         },
         "tool-circle" : {
+            type: "circle",
             title  : "Circle",
             desp : "Create a circle",
             icon : "point.svg",
@@ -23,6 +25,7 @@ var tools = {
             }
         },
         "tool-rectangle" : {
+            type: "rect",
             title  : "Rectangle",
             desp : "Create a Boundary boxrectangle",
             icon : "rectangle.svg",
@@ -34,6 +37,7 @@ var tools = {
             }
         },
         "tool-polygon" : {
+            type: "poly",
             title  : "Polygon",
             desp : "Create a concave polygon",
             icon : "polygon.svg"

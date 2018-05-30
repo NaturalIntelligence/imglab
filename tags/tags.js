@@ -113,14 +113,16 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
             selectedLabels.forEach(el => {
                 el.selectize(false);
             });
+            selectedLabels = [];
         });
 
         $(document).keyup(function(e){
-            console.log(e.keyCode);
             if(e.keyCode == 46){
                 selectedLabels.forEach(el => {
+                    $("[for="+ el.node.id+"]").remove();
                     el.selectize(false).remove();
                 });
+                selectedLabels = [];
 
             }else if(e.keyCode == 65){
 
@@ -134,10 +136,30 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
 
             myCanvas.on('mousedown', function(event){
 
-                if(selectedTool){
+                selectedLabels.forEach(el => {
+                    el.selectize(false);
+                });
+                selectedLabels = [];
+                if(selectedTool && selectedTool.type !== "point"){
                     var tool = selectedTool.create(event,myCanvas);
                     tool.on("click", function(e) {
-                        if(!e.ctrlKey){
+                        if(selectedTool.type === "point"){
+                            var point = selectedTool.create(e,myCanvas);
+                            point.attr({
+                                for: tool.node.id
+                            })
+                            point.on("click", function(e) {
+                                if(!e.ctrlKey){
+
+                                        selectedLabels.forEach(el => {
+                                            el.selectize(false);
+                                        });
+                                    }
+                                    point.selectize({ rotationPoint: false});
+                                    selectedLabels.push(point);
+                                    e.stopPropagation();
+                                });
+                        }else if(!e.ctrlKey){
 
                             selectedLabels.forEach(el => {
                                 el.selectize(false);
