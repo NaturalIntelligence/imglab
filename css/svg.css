@@ -2,5 +2,10 @@
     fill: yellow;
     stroke: green;
     stroke-width: 2px;
-    opacity: 0.1;
+    fill-opacity: 0.1;
+}
+.svg_select_points{
+    fill: black;
+    fill-opacity: 0.1;
+    stroke: grey;
 }

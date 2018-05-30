@@ -22,6 +22,12 @@
     </div>
 
     <script>
+        $(document).on('click', function(event){
+            selectedLabels.forEach(el => {
+                el.selectize(false);
+            });
+        });
+        
         this.on('mount',function() {
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
 
@@ -30,20 +36,30 @@
             //var rect = myCanvas.rect().addClass('labelbox').draw();
             //rect.draggable();
             myCanvas.on('mousedown', function(event){
+                //unselect all the labels
                 if(selectedTool){
-                    currentToolElement = selectedTool.create();
-                    currentToolElement.draw(event);
+                    var tool = selectedTool.create();
+                    tool.on("click", function(e) {
+                        if(!e.ctrlKey){
+                            //unselect all the labels
+                            selectedLabels.forEach(el => {
+                                el.selectize(false);
+                            });
+                        }
+                        tool.selectize().resize();
+                        selectedLabels.push(tool);
+                        e.stopPropagation();
+                    });
+                    
+                    tool.draw(event);
+
+                    selectedElement = tool;
                 }
             });
             myCanvas.on('mouseup', function(event){
-                if(selectedTool && currentToolElement)   currentToolElement.draw(event);
+                if(selectedTool && selectedElement)   selectedElement.draw(event);
             });
             
-            /* console.log(rect.node.id);
-            rect.on("click", function() {
-                //rect.select().resize();
-                //rect.draggable();
-            }); */
         } );
     </script>
 </workarea>

@@ -109,17 +109,38 @@ riot.tag2('toolbox', '<div each="{tool,toolid in tools[opts.tools]}" id="{toolid
 });
 
 riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts.img.src}" width="{opts.img.size.width}" height="{opts.img.size.height}"> <div id="work-canvas" width="{opts.img.size.width}" height="{opts.img.size.height}"></div> <span id="tooltip-span"></span> <div id="v_line"></div> <div id="h_line"></div> </div>', 'workarea #work-canvas,[data-is="workarea"] #work-canvas{ position: absolute; z-index: 1; } workarea #canvas-container,[data-is="workarea"] #canvas-container{ height: calc(100vh - 150px); display: block; overflow: auto; position: relative; }', '', function(opts) {
+        $(document).on('click', function(event){
+            selectedLabels.forEach(el => {
+                el.selectize(false);
+            });
+        });
+
         this.on('mount',function() {
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
 
             myCanvas.on('mousedown', function(event){
+
                 if(selectedTool){
-                    currentToolElement = selectedTool.create();
-                    currentToolElement.draw(event);
+                    var tool = selectedTool.create();
+                    tool.on("click", function(e) {
+                        if(!e.ctrlKey){
+
+                            selectedLabels.forEach(el => {
+                                el.selectize(false);
+                            });
+                        }
+                        tool.selectize().resize();
+                        selectedLabels.push(tool);
+                        e.stopPropagation();
+                    });
+
+                    tool.draw(event);
+
+                    selectedElement = tool;
                 }
             });
             myCanvas.on('mouseup', function(event){
-                if(selectedTool && currentToolElement)   currentToolElement.draw(event);
+                if(selectedTool && selectedElement)   selectedElement.draw(event);
             });
 
         } );

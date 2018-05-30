@@ -43,4 +43,6 @@ var tools = {
             icon : "lightbulb.svg"
         }
     }
-}
+};
+
+var selectedLabels = [];
