@@ -21,10 +21,10 @@ $('#loadDataFileBtn').on('click', function() {
         title: 'Read me carefully',
         content: '<p>Due to the security reasons, browser doesn\'t allow me to load the images.'
             + ' So please load the images manually.</p>'
-            + '<br> If you are ready click to \'open\' otherwise cancel.' 
+            + '<br> If you are ready click to \'open\' otherwise cancel.'
         ,
         type: 'red',
-        buttons: {   
+        buttons: {
             ok: {
                 text: "open!",
                 btnClass: 'btn-red',
@@ -59,7 +59,7 @@ $('#img').on('load',function(){
     var imageName = $(this).attr('label');
     images[imageName] && drawAllBoxData(images[imageName].boxes);
     deselectAll();
-    
+
     //update widget
     $("#imgdimentions").text("w:" + $('#img').width() + ", h:" + $('#img').height());
 
@@ -93,7 +93,7 @@ function drawFaceBox(cordinates){
 
     if (cordinates.y < startingPosition.top) {
         top = cordinates.y;
-    } 
+    }
 
     $(tmpBox).css({
         top: top,
@@ -116,7 +116,7 @@ $("#img_overlay").mouseup(function(event) {
         }
     }
     tmpBox = "";
-    
+
 });
 
 $("#img_overlay").mouseout(function(event) {
@@ -187,13 +187,13 @@ $("#img_overlay").mousedown(function (ev) {
             var cordinates = getCordinates(ev,this);
             tmpBox = appendBox({ top : cordinates.y,
                                 left : cordinates.x});
-            
+
             startingPosition = tmpBox.position();
         }
     } else {
         //do nothing
     }
-    
+
 });
 
 //decide if box or point should be dragged and if empty button is visible
@@ -276,8 +276,40 @@ var emptyCanvas= function(){
     clearCanvas();
 }
 
+//make sure nimn is included
+var nimn = require("nimnjs");
+//Common Schema
+var schema = [{
+    "imagename": "string",
+    "boxes": [{
+        "left": "number",
+        "top": "number",
+        "width": "number",
+        "height": "number",
+        "attributes": [{
+            "gender": {
+                "value": "string"
+            },
+            "age": {
+                "value": "number"
+            },
+            "headpose": [{
+                "label": "number"
+            }]
+        }]
+        "points": [{
+            "label": "string",
+            "x": "number",
+            "y": "number"
+        }]
+    }]
+}];
+
 $("#exportBtn").click(function(){
-    download(JSON.stringify(images),"labelled.json","text/plain");
+    var instance = new nimn();
+    nimn.addSchema(schema);
+    var result = instance.encode(JSON.stringify(images)); //result should be the converted json
+    download(result,"labelled.nimn","text/plain");
 })
 
 $("#exportDlibBtn").click(function(){
