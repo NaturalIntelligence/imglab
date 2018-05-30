@@ -128,12 +128,13 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
         });
 
         this.on('mount',function() {
+
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
 
             myCanvas.on('mousedown', function(event){
 
                 if(selectedTool){
-                    var tool = selectedTool.create();
+                    var tool = selectedTool.create(event,myCanvas);
                     tool.on("click", function(e) {
                         if(!e.ctrlKey){
 
@@ -148,9 +149,9 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
 
                     if(selectedTool.resizable){
                         tool.draw(event);
+                        selectedElement = tool;
                     }
 
-                    selectedElement = tool;
                 }
             });
             myCanvas.on('mouseup', function(event){

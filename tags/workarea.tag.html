@@ -43,16 +43,13 @@
         });
         
         this.on('mount',function() {
+
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
 
-            //var rect = myCanvas.rect(45,300).select();
-
-            //var rect = myCanvas.rect().addClass('labelbox').draw();
-            //rect.draggable();
             myCanvas.on('mousedown', function(event){
                 //unselect all the labels
                 if(selectedTool){
-                    var tool = selectedTool.create();
+                    var tool = selectedTool.create(event,myCanvas);
                     tool.on("click", function(e) {
                         if(!e.ctrlKey){
                             //unselect all the labels
@@ -67,9 +64,9 @@
                     
                     if(selectedTool.resizable){
                         tool.draw(event);
+                        selectedElement = tool;
                     }
 
-                    selectedElement = tool;
                 }
             });
             myCanvas.on('mouseup', function(event){

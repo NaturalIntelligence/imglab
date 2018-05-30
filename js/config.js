@@ -4,8 +4,9 @@ var tools = {
             title  : "Point",
             desp : "Create a feature point inside the concave polygon or boundary box",
             icon : "point.svg",
-            create : function(){
-                var point =  myCanvas.circle().radius(3).addClass('labelpoint');
+            create : function(e,container){
+                var offset = container.node.getBoundingClientRect();
+                var point =  myCanvas.circle().radius(3).attr({ cx: e.x - offset.left, cy: e.y - offset.top}).addClass('labelpoint');
                 point.draggable();
                 return point/* .draw('stop') */;
             }
