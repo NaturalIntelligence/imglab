@@ -23,9 +23,7 @@
 
     <script>
         $(document).on('click', function(event){
-            selectedLabels.forEach(el => {
-                el.selectize(false);
-            });
+            deselectAll();
             selectedLabels = [];
         });
 
@@ -33,7 +31,7 @@
             if(e.keyCode == 46){
                 selectedLabels.forEach(el => {
                     $("[for="+ el.node.id+"]").remove();
-                    el.selectize(false).remove();
+                    el.selectize(false, {deepSelect:true}).remove();
                 });
                 selectedLabels = [];
                 //delete all the points related to a polygon
@@ -52,19 +50,16 @@
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
 
             myCanvas.on('mousedown', function(event){
-                //unselect all the labels
-                selectedLabels.forEach(el => {
-                    el.selectize(false);
-                });
-                selectedLabels = [];
-                if(selectedTool && selectedTool.type !== "point" && !alreadyDrawing){
+                deselectAll();
+                if(selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable){
                     var currentTool = selectedTool.create(event,myCanvas);
+
                     currentTool.on('drawstart', function(){
                         alreadyDrawing = true;
                     });
+
                     currentTool.on('drawstop', function(){
                         alreadyDrawing = false;
-                        console.log("drawing is stopped")
                         currentTool.on("click", function(e) {
                             if(selectedTool.type === "point"){
                                 var point = selectedTool.create(e,myCanvas);
@@ -73,23 +68,24 @@
                                 })
                                 point.on("click", function(e) {
                                     if(!e.ctrlKey){
-                                            //unselect all the points
-                                            selectedLabels.forEach(el => {
-                                                el.selectize(false);
-                                            });
-                                        }
-                                        point.selectize({ rotationPoint: false});
-                                        selectedLabels.push(point);
-                                        e.stopPropagation();
-                                    });
-                            }else if(!e.ctrlKey){
-                                //unselect all the labels
-                                selectedLabels.forEach(el => {
-                                    el.selectize(false);
+                                        deselectAll();
+                                    }
+                                    point.selectize({ rotationPoint: false});
+                                    selectedLabels.push(point);
+                                    e.stopPropagation();
                                 });
+                            }else if(e.altKey){
+                                    deselectAll();
+                                    currentTool.selectize({ rotationPoint: false, deepSelect:true});
+                                    selectedLabels.push(currentTool);    
+                            }else{
+                                if(!e.ctrlKey){
+                                    deselectAll();
+                                }
+                                //select currnt element
+                                currentTool.selectize({ rotationPoint: false});
+                                selectedLabels.push(currentTool);
                             }
-                            currentTool.selectize({ rotationPoint: false});
-                            selectedLabels.push(currentTool);
                             e.stopPropagation();
                         });
                     });
@@ -98,16 +94,20 @@
                         currentTool.draw(event);
                         selectedElement = currentTool;
                     }
-
                 }
-
-            
-                // remove listener
             });
             myCanvas.on('mouseup', function(event){
                 if(selectedTool && selectedElement)   selectedElement.draw(event);
             });
             
         } );
+
+        function deselectAll(){
+            selectedLabels.forEach(el => {
+                el.selectize(false, {deepSelect:true});
+                el.selectize(false);
+            });
+            selectedLabels = [];
+        }
     </script>
 </workarea>

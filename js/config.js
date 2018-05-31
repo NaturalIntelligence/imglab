@@ -5,11 +5,12 @@ var tools = {
             title  : "Point",
             desp : "Create a feature point inside the concave polygon or boundary box",
             icon : "point.svg",
+            drawable : true,
             create : function(e,container){
                 var offset = container.node.getBoundingClientRect();
                 var point =  myCanvas.circle().radius(3).attr({ cx: e.x - offset.left, cy: e.y - offset.top}).addClass('labelpoint');
                 point.draggable();
-                return point/* .draw('stop') */;
+                return point;
             }
         },
         "tool-circle" : {
@@ -17,6 +18,7 @@ var tools = {
             title  : "Circle",
             desp : "Create a circle",
             icon : "point.svg",
+            drawable : true,
             resizable: true,
             create : function(){
                 var circle =  myCanvas.circle().radius().addClass('labelcircle').draw();
@@ -29,6 +31,7 @@ var tools = {
             title  : "Rectangle",
             desp : "Create a Boundary boxrectangle",
             icon : "rectangle.svg",
+            drawable : true,
             resizable: true,
             create : function(){
                 var rect =  myCanvas.rect().addClass('labelbox').draw();
@@ -41,6 +44,7 @@ var tools = {
             title  : "Polygon",
             desp : "Create a concave polygon",
             icon : "polygon.svg",
+            drawable : true,
             create : function(){
                 var poly =  myCanvas.polygon().addClass('labelbox').draw();
                 poly.draggable().resize();
