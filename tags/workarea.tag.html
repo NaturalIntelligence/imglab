@@ -36,6 +36,9 @@
                 selectedLabels = [];
                 //delete all the points related to a polygon
                 //show snakebar to inform
+            }else if(e.keyCode == 65 && e.shiftKey){
+                //Select all the labels
+                selectAll();
             }else if(e.keyCode == 65){
                 /* allLabels.forEach(el => {
                     el.remove();
@@ -108,6 +111,16 @@
                 el.selectize(false);
             });
             selectedLabels = [];
+        }
+
+        //TODO: select only drawable elements
+        function selectAll(){
+            myCanvas.each(function(i,shapeEl){
+                shapeEl.forEach(function(el){
+                    el.selectize({rotationPoint: false});
+                    selectedLabels.push(el);
+                })
+            });
         }
     </script>
 </workarea>

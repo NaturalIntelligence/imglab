@@ -122,6 +122,9 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                 });
                 selectedLabels = [];
 
+            }else if(e.keyCode == 65 && e.shiftKey){
+
+                selectAll();
             }else if(e.keyCode == 65){
 
             }
@@ -191,5 +194,14 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                 el.selectize(false);
             });
             selectedLabels = [];
+        }
+
+        function selectAll(){
+            myCanvas.each(function(i,shapeEl){
+                shapeEl.forEach(function(el){
+                    el.selectize({rotationPoint: false});
+                    selectedLabels.push(el);
+                })
+            });
         }
 });
