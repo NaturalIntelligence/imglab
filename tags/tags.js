@@ -118,8 +118,11 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
             if(e.keyCode == 46){
                 selectedLabels.forEach(el => {
                     $("[for="+ el.node.id+"]").remove();
-                    el.selectize(false, {deepSelect:true}).remove();
+                    el.selectize(false, {deepSelect:true})
+                    el.parent().remove();
+                    el.remove();
                 });
+
                 selectedLabels = [];
 
             }else if(e.keyCode == 65 && e.shiftKey){
@@ -144,14 +147,18 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                         alreadyDrawing = true;
                     });
 
+                    currentTool.on('drawcancel', function(){
+                        console.log("canceled")
+                    });
                     currentTool.on('drawstop', function(){
                         alreadyDrawing = false;
                         if( !selectedTool.validate(currentTool)){
+                            currentTool.parent().remove();
                             currentTool.remove();
                         }else{
-                            currentTool.on("click", function(e) {
+                            currentTool.parent().on("click", function(e) {
                                 if(selectedTool.type === "point"){
-                                    var point = selectedTool.create(e,myCanvas);
+                                    var point = selectedTool.create(e,currentTool);
                                     point.attr({
                                         for: currentTool.node.id
                                     })

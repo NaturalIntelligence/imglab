@@ -31,8 +31,11 @@
             if(e.keyCode == 46){
                 selectedLabels.forEach(el => {
                     $("[for="+ el.node.id+"]").remove();
-                    el.selectize(false, {deepSelect:true}).remove();
+                    el.selectize(false, {deepSelect:true})
+                    el.parent().remove();
+                    el.remove();
                 });
+                
                 selectedLabels = [];
                 //delete all the points related to a polygon
                 //show snakebar to inform
@@ -61,14 +64,18 @@
                         alreadyDrawing = true;
                     });
 
+                    currentTool.on('drawcancel', function(){
+                        console.log("canceled")
+                    });
                     currentTool.on('drawstop', function(){
                         alreadyDrawing = false;
                         if( !selectedTool.validate(currentTool)){//Don't draw an element on accidentle click
+                            currentTool.parent().remove();
                             currentTool.remove();
                         }else{
-                            currentTool.on("click", function(e) {
+                            currentTool.parent().on("click", function(e) {
                                 if(selectedTool.type === "point"){
-                                    var point = selectedTool.create(e,myCanvas);
+                                    var point = selectedTool.create(e,currentTool);
                                     point.attr({
                                         for: currentTool.node.id
                                     })

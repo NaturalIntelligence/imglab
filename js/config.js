@@ -7,8 +7,13 @@ var tools = {
             icon : "point.svg",
             drawable : true,
             create : function(e,container){
-                var offset = container.node.getBoundingClientRect();
-                var point =  myCanvas.circle().radius(3).attr({ cx: e.x - offset.left, cy: e.y - offset.top}).addClass('labelpoint');
+                var canvasOffset = myCanvas.node.getBoundingClientRect();
+                containerOffset = {
+                    x: container.parent().attr("x"),
+                    y :container.parent().attr("y")
+                }
+
+                var point =  container.parent().circle().radius(3).attr({ cx: e.x - canvasOffset.x - containerOffset.x, cy: e.y - canvasOffset.y - containerOffset.y}).addClass('labelpoint');
                 point.draggable();
                 return point;
             },
@@ -23,8 +28,9 @@ var tools = {
             icon : "point.svg",
             drawable : true,
             create : function(){
-                var circle =  myCanvas.circle().radius().addClass('labelcircle').draw();
-                circle.draggable().resize();
+                var circle =  myCanvas.nested().circle().radius().addClass('labelcircle').draw();
+                circle.resize();
+                circle.parent().draggable();
                 return circle;
             },
             validate: function(el){
@@ -38,8 +44,9 @@ var tools = {
             icon : "rectangle.svg",
             drawable : true,
             create : function(){
-                var rect =  myCanvas.rect().addClass('labelbox').draw();
-                rect.draggable().resize();
+                var rect =  myCanvas.nested().rect().addClass('labelbox').draw();
+                rect.resize();
+                rect.parent().draggable();
                 return rect;
             },
             validate: function(el){
@@ -53,7 +60,7 @@ var tools = {
             icon : "polygon.svg",
             drawable : true,
             create : function(){
-                var poly =  myCanvas.polygon().addClass('labelbox').draw();
+                var poly =  myCanvas.nested().polygon().addClass('labelbox').draw();
                 poly.draggable().resize();
 
                 poly.on('drawstart', function(e){
