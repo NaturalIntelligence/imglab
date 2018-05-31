@@ -83,7 +83,7 @@
                                         if(!e.ctrlKey){
                                             deselectAll();
                                         }
-                                        point.selectize({ rotationPoint: false});
+                                        point.selectize({ rotationPoint: false, points: []});
                                         selectedLabels.push(point);
                                         e.stopPropagation();
                                     });

@@ -40,3 +40,7 @@
 .file-input-icon:hover{
     background-color: grey;
 }
+
+.svg_select_boundingRect{
+    stroke-dasharray: initial !important;
+}

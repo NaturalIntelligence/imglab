@@ -166,7 +166,7 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                                         if(!e.ctrlKey){
                                             deselectAll();
                                         }
-                                        point.selectize({ rotationPoint: false});
+                                        point.selectize({ rotationPoint: false, points: []});
                                         selectedLabels.push(point);
                                         e.stopPropagation();
                                     });
