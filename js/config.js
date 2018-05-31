@@ -11,6 +11,9 @@ var tools = {
                 var point =  myCanvas.circle().radius(3).attr({ cx: e.x - offset.left, cy: e.y - offset.top}).addClass('labelpoint');
                 point.draggable();
                 return point;
+            },
+            validate: function(el){
+                return true;
             }
         },
         "tool-circle" : {
@@ -19,11 +22,13 @@ var tools = {
             desp : "Create a circle",
             icon : "point.svg",
             drawable : true,
-            resizable: true,
             create : function(){
                 var circle =  myCanvas.circle().radius().addClass('labelcircle').draw();
                 circle.draggable().resize();
                 return circle;
+            },
+            validate: function(el){
+                return Number.parseInt(el.attr("r")) > 3;
             }
         },
         "tool-rectangle" : {
@@ -32,11 +37,13 @@ var tools = {
             desp : "Create a Boundary boxrectangle",
             icon : "rectangle.svg",
             drawable : true,
-            resizable: true,
             create : function(){
                 var rect =  myCanvas.rect().addClass('labelbox').draw();
                 rect.draggable().resize();
                 return rect;
+            },
+            validate: function(el){
+                return Number.parseInt(el.attr("width")) > 3;
             }
         },
         "tool-polygon" : {
@@ -59,6 +66,9 @@ var tools = {
                 });
 
                 return poly;
+            },
+            validate: function(el){
+                return true;
             }
         }
     },

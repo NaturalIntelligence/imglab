@@ -146,40 +146,42 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
 
                     currentTool.on('drawstop', function(){
                         alreadyDrawing = false;
-                        currentTool.on("click", function(e) {
-                            if(selectedTool.type === "point"){
-                                var point = selectedTool.create(e,myCanvas);
-                                point.attr({
-                                    for: currentTool.node.id
-                                })
-                                point.on("click", function(e) {
+                        if( !selectedTool.validate(currentTool)){
+                            currentTool.remove();
+                        }else{
+                            currentTool.on("click", function(e) {
+                                if(selectedTool.type === "point"){
+                                    var point = selectedTool.create(e,myCanvas);
+                                    point.attr({
+                                        for: currentTool.node.id
+                                    })
+                                    point.on("click", function(e) {
+                                        if(!e.ctrlKey){
+                                            deselectAll();
+                                        }
+                                        point.selectize({ rotationPoint: false});
+                                        selectedLabels.push(point);
+                                        e.stopPropagation();
+                                    });
+                                }else if(e.altKey){
+                                        deselectAll();
+                                        currentTool.selectize({ rotationPoint: false, deepSelect:true});
+                                        selectedLabels.push(currentTool);
+                                }else{
                                     if(!e.ctrlKey){
                                         deselectAll();
                                     }
-                                    point.selectize({ rotationPoint: false});
-                                    selectedLabels.push(point);
-                                    e.stopPropagation();
-                                });
-                            }else if(e.altKey){
-                                    deselectAll();
-                                    currentTool.selectize({ rotationPoint: false, deepSelect:true});
-                                    selectedLabels.push(currentTool);
-                            }else{
-                                if(!e.ctrlKey){
-                                    deselectAll();
-                                }
 
-                                currentTool.selectize({ rotationPoint: false});
-                                selectedLabels.push(currentTool);
-                            }
-                            e.stopPropagation();
-                        });
+                                    currentTool.selectize({ rotationPoint: false});
+                                    selectedLabels.push(currentTool);
+                                }
+                                e.stopPropagation();
+                            });
+                        }
                     });
 
-                    if(selectedTool.resizable){
-                        currentTool.draw(event);
-                        selectedElement = currentTool;
-                    }
+                    currentTool.draw(event);
+                    selectedElement = currentTool;
                 }
             });
             myCanvas.on('mouseup', function(event){

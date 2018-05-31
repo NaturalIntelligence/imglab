@@ -63,40 +63,42 @@
 
                     currentTool.on('drawstop', function(){
                         alreadyDrawing = false;
-                        currentTool.on("click", function(e) {
-                            if(selectedTool.type === "point"){
-                                var point = selectedTool.create(e,myCanvas);
-                                point.attr({
-                                    for: currentTool.node.id
-                                })
-                                point.on("click", function(e) {
+                        if( !selectedTool.validate(currentTool)){//Don't draw an element on accidentle click
+                            currentTool.remove();
+                        }else{
+                            currentTool.on("click", function(e) {
+                                if(selectedTool.type === "point"){
+                                    var point = selectedTool.create(e,myCanvas);
+                                    point.attr({
+                                        for: currentTool.node.id
+                                    })
+                                    point.on("click", function(e) {
+                                        if(!e.ctrlKey){
+                                            deselectAll();
+                                        }
+                                        point.selectize({ rotationPoint: false});
+                                        selectedLabels.push(point);
+                                        e.stopPropagation();
+                                    });
+                                }else if(e.altKey){
+                                        deselectAll();
+                                        currentTool.selectize({ rotationPoint: false, deepSelect:true});
+                                        selectedLabels.push(currentTool);    
+                                }else{
                                     if(!e.ctrlKey){
                                         deselectAll();
                                     }
-                                    point.selectize({ rotationPoint: false});
-                                    selectedLabels.push(point);
-                                    e.stopPropagation();
-                                });
-                            }else if(e.altKey){
-                                    deselectAll();
-                                    currentTool.selectize({ rotationPoint: false, deepSelect:true});
-                                    selectedLabels.push(currentTool);    
-                            }else{
-                                if(!e.ctrlKey){
-                                    deselectAll();
+                                    //select currnt element
+                                    currentTool.selectize({ rotationPoint: false});
+                                    selectedLabels.push(currentTool);
                                 }
-                                //select currnt element
-                                currentTool.selectize({ rotationPoint: false});
-                                selectedLabels.push(currentTool);
-                            }
-                            e.stopPropagation();
-                        });
-                    });
-                    
-                    if(selectedTool.resizable){
-                        currentTool.draw(event);
-                        selectedElement = currentTool;
-                    }
+                                e.stopPropagation();
+                            });
+                        }
+                    });//draw stop ends
+                        
+                    currentTool.draw(event);
+                    selectedElement = currentTool;
                 }
             });
             myCanvas.on('mouseup', function(event){
@@ -114,6 +116,8 @@
         }
 
         //TODO: select only drawable elements
+        //TODO: rename selectedLabels to selectedElements
+        //TODO: 
         function selectAll(){
             myCanvas.each(function(i,shapeEl){
                 shapeEl.forEach(function(el){
