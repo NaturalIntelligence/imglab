@@ -24,23 +24,24 @@
     <script>
         $(document).on('click', function(event){
             deselectAll();
-            selectedLabels = [];
+            selectedElements = [];
         });
 
         $(document).keyup(function(e){
             if(e.keyCode == 46){
-                selectedLabels.forEach(el => {
+                selectedElements.forEach(el => {
                     $("[for="+ el.node.id+"]").remove();
                     el.selectize(false, {deepSelect:true})
                     el.parent().remove();
                     el.remove();
                 });
                 
-                selectedLabels = [];
+                selectedElements = [];
                 //delete all the points related to a polygon
                 //show snakebar to inform
             }else if(e.keyCode == 65 && e.shiftKey){
                 //Select all the labels
+                console.log("selecting all")
                 selectAll();
             }else if(e.keyCode == 65){
                 /* allLabels.forEach(el => {
@@ -84,20 +85,20 @@
                                             deselectAll();
                                         }
                                         point.selectize({ rotationPoint: false, points: []});
-                                        selectedLabels.push(point);
+                                        selectedElements.push(point);
                                         e.stopPropagation();
                                     });
                                 }else if(e.altKey){
                                         deselectAll();
                                         currentTool.selectize({ rotationPoint: false, deepSelect:true});
-                                        selectedLabels.push(currentTool);    
+                                        selectedElements.push(currentTool);    
                                 }else{
                                     if(!e.ctrlKey){
                                         deselectAll();
                                     }
                                     //select currnt element
                                     currentTool.selectize({ rotationPoint: false});
-                                    selectedLabels.push(currentTool);
+                                    selectedElements.push(currentTool);
                                 }
                                 e.stopPropagation();
                             });
@@ -115,23 +116,28 @@
         } );
 
         function deselectAll(){
-            selectedLabels.forEach(el => {
+            selectedElements.forEach(el => {
                 el.selectize(false, {deepSelect:true});
                 el.selectize(false);
             });
-            selectedLabels = [];
+            selectedElements = [];
         }
 
-        //TODO: select only drawable elements
-        //TODO: rename selectedLabels to selectedElements
-        //TODO: 
         function selectAll(){
             myCanvas.each(function(i,shapeEl){
                 shapeEl.forEach(function(el){
-                    el.selectize({rotationPoint: false});
-                    selectedLabels.push(el);
+                    if(el.node.tagName = 'svg' ){
+                        el.selectize({rotationPoint: false});
+                        selectedElements.push(el);
+                    }
                 })
             });
         }
+
+        function deleteData(shape){
+        }
+        function updateData(shape){//update data with shape detail
+        }
+
     </script>
 </workarea>

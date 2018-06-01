@@ -111,22 +111,23 @@ riot.tag2('toolbox', '<div each="{tool,toolid in tools[opts.tools]}" id="{toolid
 riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts.img.src}" width="{opts.img.size.width}" height="{opts.img.size.height}"> <div id="work-canvas" width="{opts.img.size.width}" height="{opts.img.size.height}"></div> <span id="tooltip-span"></span> <div id="v_line"></div> <div id="h_line"></div> </div>', 'workarea #work-canvas,[data-is="workarea"] #work-canvas{ position: absolute; z-index: 1; } workarea #canvas-container,[data-is="workarea"] #canvas-container{ height: calc(100vh - 150px); display: block; overflow: auto; position: relative; }', '', function(opts) {
         $(document).on('click', function(event){
             deselectAll();
-            selectedLabels = [];
+            selectedElements = [];
         });
 
         $(document).keyup(function(e){
             if(e.keyCode == 46){
-                selectedLabels.forEach(el => {
+                selectedElements.forEach(el => {
                     $("[for="+ el.node.id+"]").remove();
                     el.selectize(false, {deepSelect:true})
                     el.parent().remove();
                     el.remove();
                 });
 
-                selectedLabels = [];
+                selectedElements = [];
 
             }else if(e.keyCode == 65 && e.shiftKey){
 
+                console.log("selecting all")
                 selectAll();
             }else if(e.keyCode == 65){
 
@@ -167,20 +168,20 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                                             deselectAll();
                                         }
                                         point.selectize({ rotationPoint: false, points: []});
-                                        selectedLabels.push(point);
+                                        selectedElements.push(point);
                                         e.stopPropagation();
                                     });
                                 }else if(e.altKey){
                                         deselectAll();
                                         currentTool.selectize({ rotationPoint: false, deepSelect:true});
-                                        selectedLabels.push(currentTool);
+                                        selectedElements.push(currentTool);
                                 }else{
                                     if(!e.ctrlKey){
                                         deselectAll();
                                     }
 
                                     currentTool.selectize({ rotationPoint: false});
-                                    selectedLabels.push(currentTool);
+                                    selectedElements.push(currentTool);
                                 }
                                 e.stopPropagation();
                             });
@@ -198,19 +199,30 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
         } );
 
         function deselectAll(){
-            selectedLabels.forEach(el => {
+            selectedElements.forEach(el => {
                 el.selectize(false, {deepSelect:true});
                 el.selectize(false);
             });
-            selectedLabels = [];
+            selectedElements = [];
         }
 
         function selectAll(){
             myCanvas.each(function(i,shapeEl){
                 shapeEl.forEach(function(el){
-                    el.selectize({rotationPoint: false});
-                    selectedLabels.push(el);
+                    if(el.node.tagName = 'svg' ){
+                        el.selectize({rotationPoint: false});
+                        selectedElements.push(el);
+                    }
                 })
             });
         }
+
+        var shapes = [];
+
+        function deleteData(shape){
+        }
+        function updateData(shape){
+        }
+
+        shapes
 });
