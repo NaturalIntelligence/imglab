@@ -86,3 +86,21 @@
 	background-color: rgba(18,189,220,0.3)
 }
 
+.chip {
+    display: inline-block;
+    padding: 0 25px;
+    height: 39px;
+    font-size: 20px;
+    line-height: 35px;
+    border-radius: 25px;
+    border: 1px solid;
+    font-weight: bolder;
+}
+
+.chip img {
+    float: left;
+    margin: 0 10px 0 -26px;
+    height: 39px;
+    width: 39px;
+    border-radius: 50%;
+}
