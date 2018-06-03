@@ -70,7 +70,7 @@ function findInArray(arr, property, val){
 }
 
 function attachPointToShape(shapeId , pointid, position){
-    labellingData[imgSelected].shapes[shapeId].points[pointid] = {
+    labellingData[imgSelected].shapes[shapeId].featurePoints[pointid] = {
         "x": position.cx,
         "y": position.cy,
         "label" : generateLabel("point")
@@ -82,13 +82,13 @@ function detachShape(shapeId){
 }
 
 function detachPoint(shapeId, pointid){
-    delete labellingData[imgSelected].shapes[shapeId].points[pointid];
+    delete labellingData[imgSelected].shapes[shapeId].featurePoints[pointid];
 }
 function attachShapeToImg(id, type, bbox, points){
     labellingData[imgSelected].shapes[id] = {
         "label" : generateLabel(type),
         "type" : type,
-        "points": {},
+        "points": points,
         "bbox" : bbox || {
             "x": 0,
             "y": 0,
