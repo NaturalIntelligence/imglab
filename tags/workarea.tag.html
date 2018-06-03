@@ -17,8 +17,6 @@
         <div id="work-canvas" width="{ opts.img.size.width }" height="{ opts.img.size.height }"></div>
         <!-- <div id="img_overlay"></div> -->
         <span id="tooltip-span"></span>
-        <div id="v_line"></div>
-        <div id="h_line"></div>
     </div>
 
     <script>
@@ -30,10 +28,15 @@
         $(document).keyup(function(e){
             if(e.keyCode == 46){
                 selectedElements.forEach(el => {
-                    $("[for="+ el.node.id+"]").remove();
-                    el.selectize(false, {deepSelect:true})
-                    el.parent().remove();
-                    el.remove();
+                    /* $("[for="+ el.node.id+"]").remove(); */
+                    el.selectize(false, {deepSelect:true})//unselect first
+                    if(el.typ === 'point'){
+                        detachPoint(el.attr("for") ,el.node.id);//delete it from store
+                        el.remove();//remove parent svg node
+                    }else{
+                        detachShape(el.node.id);//delete it from store
+                        el.parent().remove();//remove parent svg node
+                    }
                 });
                 
                 selectedElements = [];
@@ -48,13 +51,11 @@
                     el.remove();
                 }); */
             }
-
-            //if a label element is selected then on arrow key with combination of ctrl, alt, and shift whould move the element
         });
         
         this.on('mount',function() {
 
-            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
+            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height)/* .panZoom() */;
 
             myCanvas.on('mousedown', function(event){
                 deselectAll();
@@ -74,26 +75,30 @@
                             currentTool.parent().remove();
                             currentTool.remove();
                         }else{
+                            //updateData(currentTool);
+                            attachShapeData(currentTool);
                             currentTool.parent().on("click", function(e) {
                                 if(selectedTool.type === "point"){
                                     var point = selectedTool.create(e,currentTool);
+                                    point.typ = 'point';
                                     point.attr({
                                         for: currentTool.node.id
                                     })
+                                    attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));
                                     point.on("click", function(e) {
-                                        if(!e.ctrlKey){
+                                        if(!e.ctrlKey){//deselect rest selected elements
                                             deselectAll();
                                         }
                                         point.selectize({ rotationPoint: false, points: []});
                                         selectedElements.push(point);
                                         e.stopPropagation();
                                     });
-                                }else if(e.altKey){
+                                }else if(e.altKey){//deep select. Helpful in case of polygon
                                         deselectAll();
                                         currentTool.selectize({ rotationPoint: false, deepSelect:true});
                                         selectedElements.push(currentTool);    
                                 }else{
-                                    if(!e.ctrlKey){
+                                    if(!e.ctrlKey){//deselect rest selected elements
                                         deselectAll();
                                     }
                                     //select currnt element
@@ -134,10 +139,44 @@
             });
         }
 
-        function deleteData(shape){
+    //When create, move, resize, delete
+    function attachShapeData(shape){//update data with shape detail
+
+        var points;
+
+        switch(shape.type){
+            case "rect":
+                var box = shape.rbox(myCanvas);
+                points = [box.x, box.y, box.w, box.h];
+                break;
+            case "circle":
+                var box = shape.rbox(myCanvas);
+                points = [box.cx, box.cy, box.r];
+                break;
+            case "eclipse":
+                var box = shape.rbox(myCanvas);
+                points = [box.cx, box.cy, box.rx, box.ry];
+                break;
+            case "polygon":
+                console.log(shape)
+                console.log(shape.rbox(myCanvas))
+                console.log(shape.array())
+                console.log(shape.array().settle())
+                console.log(shape.array().value)
+                points = [];
+                break;
+            case "line":
+                console.log(shape.array())
+                points = [];
+                break;
+            case "path":
+                console.log(shape.array())
+                points = [];
+                break;
         }
-        function updateData(shape){//update data with shape detail
-        }
+        attachShapeToImg(shape.node.id ,shape.type, shape.rbox(myCanvas), points);
+
+    }
 
     </script>
 </workarea>

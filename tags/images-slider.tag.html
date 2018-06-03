@@ -51,6 +51,7 @@
                     };
                     updateDimentions(e.target.result,imgData);
                     this.thumbnails.push(imgData);
+                    
                     this.trigger("uploadimages");
                 }
                 reader.onloadend = e => {
@@ -67,6 +68,7 @@
                     width : this.width,
                     height : this.height
                 }
+                addImgToStore(imageDataObject.name, imageDataObject.size);
             };
             img.src = imgFileSrc;
         }
@@ -108,6 +110,7 @@
         }
 
         function loadIntoWorkArea(e){
+            imgSelected = e.item.name;
             riot.mount("workarea",{ img : e.item});
         }
     </script>

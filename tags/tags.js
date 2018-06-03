@@ -31,6 +31,7 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
                     };
                     updateDimentions(e.target.result,imgData);
                     this.thumbnails.push(imgData);
+
                     this.trigger("uploadimages");
                 }
                 reader.onloadend = e => {
@@ -47,6 +48,7 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
                     width : this.width,
                     height : this.height
                 }
+                addImgToStore(imageDataObject.name, imageDataObject.size);
             };
             img.src = imgFileSrc;
         }
@@ -88,6 +90,7 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
         }
 
         function loadIntoWorkArea(e){
+            imgSelected = e.item.name;
             riot.mount("workarea",{ img : e.item});
         }
 });
@@ -108,7 +111,7 @@ riot.tag2('toolbox', '<div each="{tool,toolid in tools[opts.tools]}" id="{toolid
         }
 });
 
-riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts.img.src}" width="{opts.img.size.width}" height="{opts.img.size.height}"> <div id="work-canvas" width="{opts.img.size.width}" height="{opts.img.size.height}"></div> <span id="tooltip-span"></span> <div id="v_line"></div> <div id="h_line"></div> </div>', 'workarea #work-canvas,[data-is="workarea"] #work-canvas{ position: absolute; z-index: 1; } workarea #canvas-container,[data-is="workarea"] #canvas-container{ height: calc(100vh - 150px); display: block; overflow: auto; position: relative; }', '', function(opts) {
+riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts.img.src}" width="{opts.img.size.width}" height="{opts.img.size.height}"> <div id="work-canvas" width="{opts.img.size.width}" height="{opts.img.size.height}"></div> <span id="tooltip-span"></span> </div>', 'workarea #work-canvas,[data-is="workarea"] #work-canvas{ position: absolute; z-index: 1; } workarea #canvas-container,[data-is="workarea"] #canvas-container{ height: calc(100vh - 150px); display: block; overflow: auto; position: relative; }', '', function(opts) {
         $(document).on('click', function(event){
             deselectAll();
             selectedElements = [];
@@ -117,10 +120,15 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
         $(document).keyup(function(e){
             if(e.keyCode == 46){
                 selectedElements.forEach(el => {
-                    $("[for="+ el.node.id+"]").remove();
+
                     el.selectize(false, {deepSelect:true})
-                    el.parent().remove();
-                    el.remove();
+                    if(el.typ === 'point'){
+                        detachPoint(el.attr("for") ,el.node.id);
+                        el.remove();
+                    }else{
+                        detachShape(el.node.id);
+                        el.parent().remove();
+                    }
                 });
 
                 selectedElements = [];
@@ -132,12 +140,11 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
             }else if(e.keyCode == 65){
 
             }
-
         });
 
         this.on('mount',function() {
 
-            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height);
+            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height) ;
 
             myCanvas.on('mousedown', function(event){
                 deselectAll();
@@ -157,12 +164,16 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                             currentTool.parent().remove();
                             currentTool.remove();
                         }else{
+
+                            attachShapeData(currentTool);
                             currentTool.parent().on("click", function(e) {
                                 if(selectedTool.type === "point"){
                                     var point = selectedTool.create(e,currentTool);
+                                    point.typ = 'point';
                                     point.attr({
                                         for: currentTool.node.id
                                     })
+                                    attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));
                                     point.on("click", function(e) {
                                         if(!e.ctrlKey){
                                             deselectAll();
@@ -217,12 +228,42 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
             });
         }
 
-        var shapes = [];
+    function attachShapeData(shape){
 
-        function deleteData(shape){
-        }
-        function updateData(shape){
-        }
+        var points;
 
-        shapes
+        switch(shape.type){
+            case "rect":
+                var box = shape.rbox(myCanvas);
+                points = [box.x, box.y, box.w, box.h];
+                break;
+            case "circle":
+                var box = shape.rbox(myCanvas);
+                points = [box.cx, box.cy, box.r];
+                break;
+            case "eclipse":
+                var box = shape.rbox(myCanvas);
+                points = [box.cx, box.cy, box.rx, box.ry];
+                break;
+            case "polygon":
+                console.log(shape)
+                console.log(shape.rbox(myCanvas))
+                console.log(shape.array())
+                console.log(shape.array().settle())
+                console.log(shape.array().value)
+                points = [];
+                break;
+            case "line":
+                console.log(shape.array())
+                points = [];
+                break;
+            case "path":
+                console.log(shape.array())
+                points = [];
+                break;
+        }
+        attachShapeToImg(shape.node.id ,shape.type, shape.rbox(myCanvas), points);
+
+    }
+
 });
