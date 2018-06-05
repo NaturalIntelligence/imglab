@@ -69,6 +69,16 @@ function findInArray(arr, property, val){
     })
 }
 
+function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
+    if(position){
+        labellingData[imgSelected].shapes[shapeId].featurePoints[pointid].x = position.cx;
+        labellingData[imgSelected].shapes[shapeId].featurePoints[pointid].y = position.cy;
+    }
+
+    if(newLabel){
+        labellingData[imgSelected].shapes[shapeId].featurePoints[pointid].label = newLabel    
+    }
+}
 function attachPointToShape(shapeId , pointid, position){
     labellingData[imgSelected].shapes[shapeId].featurePoints[pointid] = {
         "x": position.cx,
@@ -83,6 +93,10 @@ function detachShape(shapeId){
 
 function detachPoint(shapeId, pointid){
     delete labellingData[imgSelected].shapes[shapeId].featurePoints[pointid];
+}
+function updateShapeDetailInStore(id, bbox, points){
+    bbox && (labellingData[imgSelected].shapes[id].bbox = bbox);
+    points && (labellingData[imgSelected].shapes[id].points = points);
 }
 function attachShapeToImg(id, type, bbox, points){
     labellingData[imgSelected].shapes[id] = {

@@ -8,7 +8,7 @@ var tools = {
             drawable : true,
             create : function(e,container){
                 var canvasOffset = myCanvas.node.getBoundingClientRect();
-                containerOffset = {
+                var containerOffset = {
                     x: container.parent().attr("x"),
                     y :container.parent().attr("y")
                 }
