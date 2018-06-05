@@ -69,6 +69,9 @@
                     currentTool.on('drawcancel', function(){
                         console.log("canceled")
                     });
+                    currentTool.on('resizedone', function(){
+                        updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(currentTool));
+                    });
                     currentTool.on('drawstop', function(){
                         alreadyDrawing = false;
                         if( !selectedTool.validate(currentTool)){//Don't draw an element on accidentle click

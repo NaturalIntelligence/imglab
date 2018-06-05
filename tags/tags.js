@@ -158,6 +158,9 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                     currentTool.on('drawcancel', function(){
                         console.log("canceled")
                     });
+                    currentTool.on('resizedone', function(){
+                        updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(currentTool));
+                    });
                     currentTool.on('drawstop', function(){
                         alreadyDrawing = false;
                         if( !selectedTool.validate(currentTool)){
