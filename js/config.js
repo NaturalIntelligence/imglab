@@ -8,14 +8,7 @@ var tools = {
             drawable : true,
             create : function(e,container){
                 var canvasOffset = myCanvas.node.getBoundingClientRect();
-                var containerOffset = {
-                    x: container.parent().attr("x"),
-                    y :container.parent().attr("y")
-                }
-                //TODO : extract code to calculate point position
-                var point =  container.parent().circle().radius(3).attr({ cx: e.x - canvasOffset.x - containerOffset.x, cy: e.y - canvasOffset.y - containerOffset.y}).addClass('labelpoint');
-                point.draggable();
-                return point;
+                return getPointToDraw(e,container,canvasOffset);
             },
             validate: function(el){
                 return true;
@@ -59,8 +52,8 @@ var tools = {
             desp : "Create a concave polygon",
             icon : "polygon.svg",
             drawable : true,
-            create : function(){
-                var poly =  myCanvas.nested().polygon().addClass('labelbox shape').draw();
+            create : function(){//TODO: bug: creating duplicate points
+                var poly =  myCanvas.nested().polygon().addClass('labelpolygon shape').draw();
                 poly.resize();
                 poly.parent().draggable();
 
@@ -105,6 +98,15 @@ var tools = {
     }
 };
 
+function getPointToDraw(position,container,canvasOffset){
+    var containerOffset = {
+        x: container.parent().attr("x"),
+        y :container.parent().attr("y")
+    }
+    var point =  container.parent().circle().radius(3).attr({ cx: position.x - canvasOffset.x - containerOffset.x, cy: position.y - canvasOffset.y - containerOffset.y}).addClass('labelpoint');
+    point.draggable();
+    return point;
+}
 var imgSelected = "";
 var selectedElements = [];
 var selectedTool = null, selectedElement = null;

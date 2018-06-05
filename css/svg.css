@@ -1,4 +1,4 @@
-.labelcircle, .labelbox{
+.labelpolygon, .labelcircle, .labelbox{
     fill: yellow;
     stroke: green;
     stroke-width: 2px;

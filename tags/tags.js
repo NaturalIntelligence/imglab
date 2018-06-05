@@ -146,6 +146,8 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
 
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height) ;
 
+            drawOnCanvas();
+
             myCanvas.on('mousedown', function(event){
                 deselectAll();
                 if(selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable){
@@ -156,8 +158,8 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                     });
 
                     currentTool.on('drawcancel', function(){
-                        console.log("canceled")
                     });
+
                     currentTool.on('resizedone', function(){
                         updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(currentTool));
                     });
@@ -167,51 +169,9 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                             currentTool.parent().remove();
                             currentTool.remove();
                         }else{
-
                             attachShapeData(currentTool);
 
-                            onMouse( currentTool.parent(),function(e){
-                                if(currentTool.node.id === e.target.id){
-                                    updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(currentTool));
-                                    updateFeaturePoints(currentTool);
-                                }
-                            });
-                            currentTool.parent().on('click',function(e) {
-                                    if(selectedTool.type === "point"){
-                                        var point = selectedTool.create(e,currentTool);
-                                        point.typ = 'point';
-                                        point.attr({
-                                            for: currentTool.node.id
-                                        })
-                                        attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));
-
-                                        onMouse( point,function(e){
-                                            updateFeaturePointPosition(point);
-                                        });
-
-                                        point.on('click', function(e) {
-                                            if(!e.ctrlKey){
-                                                deselectAll();
-                                            }
-                                            point.selectize({ rotationPoint: false, points: []});
-                                            selectedElements.push(point);
-                                            e.stopPropagation();
-                                        });
-                                    }else if(e.altKey){
-                                            deselectAll();
-                                            currentTool.selectize({ rotationPoint: false, deepSelect:true});
-                                            selectedElements.push(currentTool);
-                                    }else{
-                                        if(!e.ctrlKey){
-                                            deselectAll();
-                                        }
-
-                                        currentTool.selectize({ rotationPoint: false});
-                                        selectedElements.push(currentTool);
-                                    }
-                                    e.stopPropagation();
-                                }
-                            );
+                            attachEvents(currentTool)
                         }
                     });
 
@@ -224,6 +184,56 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
             });
 
         } );
+
+        function attachEvents(currentTool){
+
+            onMouse( currentTool.parent(),function(e){
+                if(currentTool.node.id === e.target.id){
+                    updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(currentTool));
+                    updateFeaturePoints(currentTool);
+                }
+            });
+            currentTool.parent().on('click',function(e) {
+                    if(selectedTool.type === "point"){
+                        var point = selectedTool.create(e,currentTool);
+                        attachEventsToFeaturePoint(point,currentTool);
+                    }else if(e.altKey){
+                            deselectAll();
+                            currentTool.selectize({ rotationPoint: false, deepSelect:true});
+                            selectedElements.push(currentTool);
+                    }else{
+                        if(!e.ctrlKey){
+                            deselectAll();
+                        }
+
+                        currentTool.selectize({ rotationPoint: false});
+                        selectedElements.push(currentTool);
+                    }
+                    e.stopPropagation();
+                }
+            );
+        }
+
+        function attachEventsToFeaturePoint(f_point, parent){
+            f_point.typ = 'point';
+            f_point.attr({
+                for: parent.node.id
+            })
+            attachPointToShape(parent.node.id, f_point.node.id, f_point.rbox(myCanvas));
+
+            onMouse( f_point,function(e){
+                updateFeaturePointPosition(f_point);
+            });
+
+            f_point.on('click', function(e) {
+                if(!e.ctrlKey){
+                    deselectAll();
+                }
+                f_point.selectize({ rotationPoint: false, points: []});
+                selectedElements.push(f_point);
+                e.stopPropagation();
+            });
+        }
 
         function onMouse(shape, dragCB){
             var mousestate = 0;
@@ -288,14 +298,74 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                 return [box.cx, box.cy, shape.attr("r")];
 
             case "polygon":
-                console.log(shape)
-                console.log(shape.rbox(myCanvas))
-                console.log(shape.array())
-                console.log(shape.array().settle())
-                console.log(shape.array().value)
-                points = [];
-                break;
 
+                var calculatedPoints = [];
+                var vector = {
+                    x: shape.parent().attr("x"),
+                    y: shape.parent().attr("y")
+                }
+                shape.array().value.forEach(ponitArr => {
+                    calculatedPoints.push([ ponitArr[0] + vector.x,  ponitArr[1] + vector.y]);
+                });
+                return calculatedPoints;
+
+        }
+    }
+
+    function drawOnCanvas(){
+        for( var shapeId in labellingData[imgSelected].shapes){
+            var shape = labellingData[imgSelected].shapes[ shapeId ];
+            var currentShape;
+            switch(shape.type){
+                case "rect":
+                    var rect = myCanvas.nested()
+                        .rect(shape.points[2], shape.points[3])
+                        .move(shape.points[0],shape.points[1])
+                        .addClass('labelbox shape')
+                        .id(shapeId)
+                        .resize();
+                    rect.parent().draggable();
+
+                    currentShape = rect;
+
+                    break;
+                case "circle":
+                    var circle = myCanvas.nested()
+                        .circle().radius(shape.points[2])
+                        .attr("cx",shape.points[0])
+                        .attr("cy",shape.points[1])
+                        .addClass('labelcircle shape')
+                        .id(shapeId)
+                        .resize();
+                    circle.parent().draggable();
+
+                    currentShape = circle;
+                    break;
+
+                case "polygon":
+                    var poly = myCanvas.nested()
+                        .polygon(shape.points)
+
+                        .addClass('labelpolygon shape')
+                        .id(shapeId)
+                        .resize();
+                    poly.parent().draggable();
+
+                    currentShape = poly;
+                    break;
+            }
+
+            attachEvents(currentShape);
+            drawAllFeaturePoints(shape.featurePoints, currentShape);
+
+        }
+    }
+
+    function drawAllFeaturePoints(fPoints, parent){
+        for(var fPointId in fPoints){
+            var fPoint = getPointToDraw(fPoints[fPointId], parent, {x: 0, y: 0});
+            fPoint.id(fPointId);
+            attachEventsToFeaturePoint(fPoint,parent);
         }
     }
 
