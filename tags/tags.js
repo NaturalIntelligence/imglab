@@ -1,6 +1,6 @@
 riot.tag2('actionbar', '<div id="actionbar"> </div>', 'actionbar #actionbar,[data-is="actionbar"] #actionbar{ height: 40px; width: 100%; border: 1px solid grey; }', '', function(opts) {
 });
-riot.tag2('facepp', '', '', '', function(opts) {
+riot.tag2('facepp', '<h1>Hellow</h1>', '', '', function(opts) {
 });
 riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 100%; text-align: center; padding: 10px; border-left: 1px solid grey;"> <label class="btn-bs-file"> <img class="file-input-icon" src="img/icons/files-white.png"> <input type="file" class="filebutton" accept="image/*" onchange="{readImageFiles}" multiple> </label> <label class="btn-bs-file"> <img class="file-input-icon" src="img/icons/open.png"> <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)"> </label> </div> <div class="float-left left-paddle " style="width: 50px; height: 100%;" onclick="{slideleft}"></div> <div class="float-left photolist-wrapper " style="width: calc(100% - 160px); height: 100%;"> <div name="photolist" class="photolist"> <img each="{this.thumbnails}" riot-src="{src}" label="{name}" title="{name}" width="{this.thumbnailWidth}" onclick="{loadIntoWorkArea}"> </div> </div> <div class="right-paddle" style="width: 50px; height: 100%;" onclick="{slideright}"></div>', '', '', function(opts) {
         tag = this;
@@ -94,7 +94,7 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
             riot.mount("workarea",{ img : e.item});
         }
 });
-riot.tag2('menu', '<div class="dropdown"> <div class="dropbtn"><img src="img/menu.svg"></div> <div class="dropdown-content"> <a href="#">Link 1</a> <a href="#"> <label class="btn-bs-file">Open <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange="{openFile}"> </label> </a> <a href="#" onclick="{saveFile}">Save</a> </div> </div>', 'menu .dropbtn,[data-is="menu"] .dropbtn{ color: white; padding: 16px; font-size: 16px; border: none; } menu .dropdown,[data-is="menu"] .dropdown{ position: relative; display: inline-block; } menu .dropdown-content,[data-is="menu"] .dropdown-content{ display: none; position: absolute; background-color: #f1f1f1; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; } menu .dropdown-content a,[data-is="menu"] .dropdown-content a{ color: black; padding: 12px 16px; text-decoration: none; display: block; } menu .dropdown-content a:hover,[data-is="menu"] .dropdown-content a:hover{background-color: #ddd} menu .dropdown:hover .dropdown-content,[data-is="menu"] .dropdown:hover .dropdown-content{ display: block; } menu .dropdown:hover .dropbtn,[data-is="menu"] .dropdown:hover .dropbtn{ background-color: #17a2b8; }', '', function(opts) {
+riot.tag2('menu', '<div class="dropdown"> <div class="dropbtn"><img src="img/menu.svg"></div> <div class="dropdown-content"> <a href="#"> <label class="btn-bs-file">Open <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange="{openFile}"> </label> </a> <a href="#" onclick="{saveFile}">Save</a> </div> </div>', '', '', function(opts) {
         this.openFile = function(e){
             readDataFile(e);
 
@@ -102,6 +102,64 @@ riot.tag2('menu', '<div class="dropdown"> <div class="dropbtn"><img src="img/men
 
         this.saveFile = function(){
             selectFileTypeToSave();
+        }
+});
+riot.tag2('plugin-window', '<div id="plugin-window"> <div id="plugin-titlebar"> <span>{opts.plugin.title}</span> <button type="button" class="close" aria-label="Close" onclick="{closeme}"> <span aria-hidden="true" style="color: white;">&times;</span> </button> </div> <div id="plugin-content"></div> </div>', 'plugin-window #plugin-titlebar,[data-is="plugin-window"] #plugin-titlebar{ background: grey; color: white; text-align: center; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } plugin-window #plugin-window,[data-is="plugin-window"] #plugin-window{ border: 2px solid grey; top: 200px; left: 40vw; position: absolute; min-width: 200px; background: #c3bfbf; z-index: 10; }', '', function(opts) {
+        this.on('mount',function(){
+            $("#plugin-content").append(`<${opts.plugin.tagName}></${opts.plugin.tagName}>`)
+            riot.mount(this.opts.plugin.tagName);
+            dragElement(
+                document.getElementById("plugin-window"),
+                document.getElementById("plugin-titlebar"),
+            );
+        });
+
+        this.closeme= function(e){
+            $("#plugin-window").hide();
+        }
+
+        function dragElement(elmnt,titlebar) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            if (titlebar) {
+
+                titlebar.onmousedown = dragMouseDown;
+            } else {
+
+                elmnt.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+});
+riot.tag2('plugins-menu', '<div class="dropdown" style="float:right;"> <div class="dropbtn"><img src="img/clock.svg"></div> <div class="dropdown-content"> <a href="#" each="{plugin in plugins}" onclick="{loadPlugin}">{plugin.title}</a> </div> </div>', '', '', function(opts) {
+        this.loadPlugin = function(e){
+            riot.mount('plugin-window',e.item);
         }
 });
 riot.tag2('statusbar', '', '', '', function(opts) {

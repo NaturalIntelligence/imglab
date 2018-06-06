@@ -112,3 +112,9 @@ var selectedElements = [];
 var selectedTool = null, selectedElement = null;
 var alreadyDrawing = false;
 
+var plugins = {
+    "facepp" : {
+        title: "Face Plus Plus",
+        tagName: 'facepp'
+    }
+}
