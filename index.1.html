@@ -20,7 +20,7 @@
 	<link rel="stylesheet" href="css/svg.css">
 	<link rel="stylesheet" href="css/jquery-confirm.min.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
+	<link rel="stylesheet" href="css/snackbar.css">
 
 	<script src="js/thirdparty/jquery.min.js" ></script>
 	<script src="js/thirdparty/jquery-confirm.min.js"></script>
@@ -35,7 +35,10 @@
 <body>
 	<div class="flex-row">
 		<div id="menubar" class="row overlay-color align-items-center" style="height: 50px;">
-			<div class="p-2 col-11">
+			<div class="p-2 col-1">
+				<menu></menu>
+			</div>
+			<div class="p-2 col-10 text-center">
 				<a href="https://github.com/NaturalIntelligence/imglab"><img src="img/imglab_logo.png" height="48px"  style="margin-bottom: 2px" ></a>
 				<span style="font-size: 2em">Img Lab</span>
 			</div>
@@ -63,9 +66,7 @@
 			</div>
 		</div>
 
-		<!-- <div class="d-flex flex-row">
-			<div id="statusbar" class="p-2"></div>
-		</div> -->
+		<div id="snackbar"></div>
 	</div>
 
 
@@ -84,6 +85,7 @@
 	<script src="js/dlibDataHandler.js"></script> -->
 	<script src="tags/tags.js"></script>
 	<script type="text/javascript">
+		riot.mount("menu");
 		riot.mount("toolbox");
 		riot.mount("images-slider");
 	</script>
@@ -94,5 +96,9 @@
 	<script src="js/thirdparty/svg.draggable.min.js"></script>
 	<!-- <script src="js/thirdparty/svg.panzoom.min.js"></script> -->
 	<script src="js/store.js"></script>
+	<script src="js/savefile.js"></script>
+	<script src="js/openfile.js"></script>
+	<script src="js/dlib.js"></script>
+	<script src="js/app.js"></script>
 </body>
 </html>

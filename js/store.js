@@ -110,7 +110,7 @@ function attachShapeToImg(id, type, bbox, points){
             "h": 0        },
         "attributes": [],
         "tags": [],
-        "featurePoints": []
+        "featurePoints": {}
     };
 }
 function addImgToStore(imgname, size) {

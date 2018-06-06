@@ -44,3 +44,16 @@
 .svg_select_boundingRect{
     stroke-dasharray: initial !important;
 }
+
+.draw-mode{
+    cursor: crosshair;
+}
+
+.select-mode{
+    cursor: move;
+}
+
+.savebtn {
+    margin: 10px;
+    width: 150px;
+}

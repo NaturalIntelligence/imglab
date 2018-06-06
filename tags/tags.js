@@ -94,7 +94,15 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
             riot.mount("workarea",{ img : e.item});
         }
 });
-riot.tag2('menu', '', '', '', function(opts) {
+riot.tag2('menu', '<div class="dropdown"> <div class="dropbtn"><img src="img/menu.svg"></div> <div class="dropdown-content"> <a href="#">Link 1</a> <a href="#"> <label class="btn-bs-file">Open <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange="{openFile}"> </label> </a> <a href="#" onclick="{saveFile}">Save</a> </div> </div>', 'menu .dropbtn,[data-is="menu"] .dropbtn{ color: white; padding: 16px; font-size: 16px; border: none; } menu .dropdown,[data-is="menu"] .dropdown{ position: relative; display: inline-block; } menu .dropdown-content,[data-is="menu"] .dropdown-content{ display: none; position: absolute; background-color: #f1f1f1; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; } menu .dropdown-content a,[data-is="menu"] .dropdown-content a{ color: black; padding: 12px 16px; text-decoration: none; display: block; } menu .dropdown-content a:hover,[data-is="menu"] .dropdown-content a:hover{background-color: #ddd} menu .dropdown:hover .dropdown-content,[data-is="menu"] .dropdown:hover .dropdown-content{ display: block; } menu .dropdown:hover .dropbtn,[data-is="menu"] .dropdown:hover .dropbtn{ background-color: #17a2b8; }', '', function(opts) {
+        this.openFile = function(e){
+            readDataFile(e);
+
+        }
+
+        this.saveFile = function(){
+            selectFileTypeToSave();
+        }
 });
 riot.tag2('statusbar', '', '', '', function(opts) {
 });
@@ -105,8 +113,13 @@ riot.tag2('toolbox', '<div each="{tool,toolid in tools[opts.tools]}" id="{toolid
         tag.selectme = function (e){
 
             $(".tool-selected").removeClass("tool-selected");
-            $(e.currentTarget).addClass("tool-selected");
-            selectedTool = tools[opts.tools][e.item.toolid];
+            var toolDetail = tools[opts.tools][e.item.toolid];
+            if(toolDetail.selectAction){
+                toolDetail.selectAction();
+            }else{
+                selectedTool = toolDetail;
+                $(e.currentTarget).addClass("tool-selected");
+            }
 
         }
 });

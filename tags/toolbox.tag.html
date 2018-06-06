@@ -29,8 +29,13 @@
         tag.selectme = function (e){
             //TODO: should it unseect all the tools or tools in current toolbox
             $(".tool-selected").removeClass("tool-selected");
-            $(e.currentTarget).addClass("tool-selected");
-            selectedTool = tools[opts.tools][e.item.toolid];
+            var toolDetail = tools[opts.tools][e.item.toolid];
+            if(toolDetail.selectAction){
+                toolDetail.selectAction();
+            }else{
+                selectedTool = toolDetail;
+                $(e.currentTarget).addClass("tool-selected");
+            }
             
         }
     </script>

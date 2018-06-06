@@ -111,3 +111,4 @@ var imgSelected = "";
 var selectedElements = [];
 var selectedTool = null, selectedElement = null;
 var alreadyDrawing = false;
+
