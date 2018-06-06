@@ -1,4 +1,4 @@
-riot.tag2('actionbar', '', '', '', function(opts) {
+riot.tag2('actionbar', '<div id="actionbar"> </div>', 'actionbar #actionbar,[data-is="actionbar"] #actionbar{ height: 40px; width: 100%; border: 1px solid grey; }', '', function(opts) {
 });
 riot.tag2('facepp', '', '', '', function(opts) {
 });
@@ -124,7 +124,7 @@ riot.tag2('toolbox', '<div each="{tool,toolid in tools[opts.tools]}" id="{toolid
         }
 });
 
-riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts.img.src}" width="{opts.img.size.width}" height="{opts.img.size.height}"> <div id="work-canvas" width="{opts.img.size.width}" height="{opts.img.size.height}"></div> <span id="tooltip-span"></span> </div>', 'workarea #work-canvas,[data-is="workarea"] #work-canvas{ position: absolute; z-index: 1; } workarea #canvas-container,[data-is="workarea"] #canvas-container{ height: calc(100vh - 150px); display: block; overflow: auto; position: relative; }', '', function(opts) {
+riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts.img.src}" width="{opts.img.size.width}" height="{opts.img.size.height}"> <div id="work-canvas" width="{opts.img.size.width}" height="{opts.img.size.height}"></div> <span id="tooltip-span"></span> </div>', 'workarea #work-canvas,[data-is="workarea"] #work-canvas{ position: absolute; z-index: 1; } workarea #canvas-container,[data-is="workarea"] #canvas-container{ height: calc(100vh - 190px); display: block; overflow: auto; position: relative; }', '', function(opts) {
         $(document).on('click', function(event){
             deselectAll();
             selectedElements = [];
