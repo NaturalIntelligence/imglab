@@ -236,8 +236,8 @@
 
 
     function drawOnCanvas(){
-        for( var shapeId in labellingData[imgSelected].shapes){
-            var shape = labellingData[imgSelected].shapes[ shapeId ];
+        for( var shapeId in labellingData[ imgSelected.name ].shapes){
+            var shape = labellingData[ imgSelected.name ].shapes[ shapeId ];
             var currentShape;
             switch(shape.type){
                 case "rect":

@@ -27,6 +27,11 @@ var data_schema = {
                     "value": ["string"]
                 }],
                 "tags": ["string"],
+                "angle" : ["number"], //[x,y,z]
+                "direction": {
+                    "facing" : [["number"]],// [ [x,y,z],[x,y,z] ] -> to top [ [0,0,0], [0,0,1] ], to bottom: [ [0,0,-1], [0,0,0] ]
+                    "moving": [["number"]]
+                },
                 "featurePoints": [{
                     "x": "number",
                     "y": "number",
@@ -59,7 +64,7 @@ function createAttribute(label , val){
 }
 
 function updateLabel(oldLabel,newLabel){
-    var shape = findInArray(labellingData[imgSelected].shapes, "label", oldLabel);
+    var shape = findInArray(labellingData[ imgSelected.name ].shapes, "label", oldLabel);
     shape.label = newLabel;
 }
 
@@ -71,16 +76,16 @@ function findInArray(arr, property, val){
 
 function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
     if(position){
-        labellingData[imgSelected].shapes[shapeId].featurePoints[pointid].x = position.cx;
-        labellingData[imgSelected].shapes[shapeId].featurePoints[pointid].y = position.cy;
+        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].x = position.cx;
+        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].y = position.cy;
     }
 
     if(newLabel){
-        labellingData[imgSelected].shapes[shapeId].featurePoints[pointid].label = newLabel    
+        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].label = newLabel    
     }
 }
 function attachPointToShape(shapeId , pointid, position){
-    labellingData[imgSelected].shapes[shapeId].featurePoints[pointid] = {
+    labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid] = {
         "x": position.cx,
         "y": position.cy,
         "label" : generateLabel("point")
@@ -88,18 +93,18 @@ function attachPointToShape(shapeId , pointid, position){
 }
 
 function detachShape(shapeId){
-    delete labellingData[imgSelected].shapes[shapeId];
+    delete labellingData[ imgSelected.name ].shapes[shapeId];
 }
 
 function detachPoint(shapeId, pointid){
-    delete labellingData[imgSelected].shapes[shapeId].featurePoints[pointid];
+    delete labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid];
 }
 function updateShapeDetailInStore(id, bbox, points){
-    bbox && (labellingData[imgSelected].shapes[id].bbox = bbox);
-    points && (labellingData[imgSelected].shapes[id].points = points);
+    bbox && (labellingData[ imgSelected.name ].shapes[id].bbox = bbox);
+    points && (labellingData[ imgSelected.name ].shapes[id].points = points);
 }
 function attachShapeToImg(id, type, bbox, points){
-    labellingData[imgSelected].shapes[id] = {
+    labellingData[ imgSelected.name ].shapes[id] = {
         "label" : generateLabel(type),
         "type" : type,
         "points": points,

@@ -1,6 +1,113 @@
 riot.tag2('actionbar', '<div id="actionbar"> </div>', 'actionbar #actionbar,[data-is="actionbar"] #actionbar{ height: 40px; width: 100%; border: 1px solid grey; }', '', function(opts) {
 });
-riot.tag2('facepp', '<h1>Hellow</h1>', '', '', function(opts) {
+riot.tag2('facepp', '<input onchange="{saveKey}" class="form-control" type="text" name="api_key" id="fpp_api_key" placeholder="api_key" riot-value="{pluginsStore.facepp.key}"> <input onchange="{saveSecret}" class="form-control" type="text" name="api_secret" id="fpp_api_secret" placeholder="api_secret" riot-value="{pluginsStore.facepp.secret}"> <br> <input onclick="{fetchFpp}" class="btn fppBtn" type="button" name="faceppBtn" id="faceppBtn" value="Plot with Face++">', 'facepp .fppBtn,[data-is="facepp"] .fppBtn{ background: #17a2b8; width: 100%;color: white; }', '', function(opts) {
+        this.saveKey = function(e){
+            pluginsStore.facepp.key = e.target.value;
+        }
+
+        this.saveSecret = function(e){
+            pluginsStore.facepp.secret = e.target.value;
+        }
+
+        this.fetchFpp = function(){
+            if(!imgSelected.src || !pluginsStore.facepp.key || !pluginsStore.facepp.key){
+                showSnackBar("You need to load an image in workarea and input Face++ credential above .");
+            }else{
+                fetchFromFpp(prepareFormData(null,imgSelected.src) , function(data){
+                    fppToImgLabObject(data);
+                    riot.mount('workarea',{ img : imgSelected});
+                });
+            }
+
+        }
+
+        function prepareFormData(url,imgdata){
+            var formData = new FormData();
+
+            formData.append('api_key', pluginsStore.facepp.key );
+            formData.append('api_secret', pluginsStore.facepp.secret );
+            formData.append('return_landmark', 1);
+
+            formData.append('return_attributes', "gender,age,headpose");
+            if(url){
+                console.log(url)
+                formData.append('image_url', url);
+            }else{
+
+                formData.append('image_base64', imgdata.substr( imgdata.indexOf(";base64,")+8));
+            }
+
+            return formData;
+        }
+
+        function fetchFromFpp(formData, fn){
+            $.ajax({
+                url: 'https://api-us.faceplusplus.com/facepp/v3/detect',
+                data: formData,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                success: fn,
+                error: function(err) {
+                    $("#info").text("Error in connecting face++ API. Check console for more deetail");
+                    console.error("Error in connecting face++ API", err);
+                }
+            });
+        }
+
+        function fppToImgLabObject(fppResponse){
+            var imgName = imgSelected.name;
+
+            for(var face_i in fppResponse.faces){
+                var face = fppResponse.faces[ face_i ];
+                var faceLable = "fppface" + face_i;
+                labellingData[ imgName ].shapes[ faceLable ] = {
+                    label: faceLable,
+                    type: "rect",
+                    bbox : {
+                        x : face.face_rectangle.left,
+                        y : face.face_rectangle.top,
+                        w : face.face_rectangle.width,
+                        h : face.face_rectangle.height,
+                    },
+                    points : [
+                        face.face_rectangle.left,
+                        face.face_rectangle.top,
+                        face.face_rectangle.width,
+                        face.face_rectangle.height
+                    ],
+                    angle: [
+                        face.attributes.headpose.roll_angle,
+                        face.attributes.headpose.yaw_angle,
+                        face.attributes.headpose.pitch_angle
+                    ],
+                    attributes : [],
+                    featurePoints: {}
+                };
+
+                var attributes = Object.keys(face.attributes);
+                for(var a_i in attributes){
+                    var attribute = face.attributes[ attributes[ a_i ] ];
+                    if(attribute.value){
+                        labellingData[ imgName ]
+                            .shapes[ faceLable ]
+                                .attributes[ attributes[ a_i ] ] = attribute.value;
+                    }
+                }
+
+                var fPoints = labellingData[ imgName ].shapes[ faceLable ].featurePoints;
+
+                var fPointLabels = Object.keys(face.landmark);
+                for(var fPoint_i =0; fPoint_i < fPointLabels.length; fPoint_i++){
+                    var label = fPointLabels [fPoint_i];
+                    fPoints [ label ] = {
+                        x : face.landmark [ label ].x,
+                        y : face.landmark [ label ].y,
+                        label: label
+                    }
+                }
+            }
+        }
 });
 riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 100%; text-align: center; padding: 10px; border-left: 1px solid grey;"> <label class="btn-bs-file"> <img class="file-input-icon" src="img/icons/files-white.png"> <input type="file" class="filebutton" accept="image/*" onchange="{readImageFiles}" multiple> </label> <label class="btn-bs-file"> <img class="file-input-icon" src="img/icons/open.png"> <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)"> </label> </div> <div class="float-left left-paddle " style="width: 50px; height: 100%;" onclick="{slideleft}"></div> <div class="float-left photolist-wrapper " style="width: calc(100% - 160px); height: 100%;"> <div name="photolist" class="photolist"> <img each="{this.thumbnails}" riot-src="{src}" label="{name}" title="{name}" width="{this.thumbnailWidth}" onclick="{loadIntoWorkArea}"> </div> </div> <div class="right-paddle" style="width: 50px; height: 100%;" onclick="{slideright}"></div>', '', '', function(opts) {
         tag = this;
@@ -90,7 +197,7 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
         }
 
         function loadIntoWorkArea(e){
-            imgSelected = e.item.name;
+            imgSelected = e.item;
             riot.mount("workarea",{ img : e.item});
         }
 });
@@ -104,7 +211,7 @@ riot.tag2('menu', '<div class="dropdown"> <div class="dropbtn"><img src="img/men
             selectFileTypeToSave();
         }
 });
-riot.tag2('plugin-window', '<div id="plugin-window"> <div id="plugin-titlebar"> <span>{opts.plugin.title}</span> <button type="button" class="close" aria-label="Close" onclick="{closeme}"> <span aria-hidden="true" style="color: white;">&times;</span> </button> </div> <div id="plugin-content"></div> </div>', 'plugin-window #plugin-titlebar,[data-is="plugin-window"] #plugin-titlebar{ background: grey; color: white; text-align: center; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } plugin-window #plugin-window,[data-is="plugin-window"] #plugin-window{ border: 2px solid grey; top: 200px; left: 40vw; position: absolute; min-width: 200px; background: #c3bfbf; z-index: 10; }', '', function(opts) {
+riot.tag2('plugin-window', '<div id="plugin-window"> <div id="plugin-titlebar"> <span>{opts.plugin.title}</span> <button type="button" class="close" aria-label="Close" onclick="{closeme}"> <span aria-hidden="true" style="color: white;">&times;</span> </button> </div> <div id="plugin-content"></div> </div>', 'plugin-window #plugin-titlebar,[data-is="plugin-window"] #plugin-titlebar{ background: grey; color: white; text-align: center; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } plugin-window #plugin-window,[data-is="plugin-window"] #plugin-window{ border: 2px solid grey; top: 200px; left: 40vw; position: absolute; min-width: 200px; background: #c3bfbf; z-index: 10; } plugin-window #plugin-content,[data-is="plugin-window"] #plugin-content{ padding: 10px; }', '', function(opts) {
         this.on('mount',function(){
             $("#plugin-content").append(`<${opts.plugin.tagName}></${opts.plugin.tagName}>`)
             riot.mount(this.opts.plugin.tagName);
@@ -384,8 +491,8 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
     }
 
     function drawOnCanvas(){
-        for( var shapeId in labellingData[imgSelected].shapes){
-            var shape = labellingData[imgSelected].shapes[ shapeId ];
+        for( var shapeId in labellingData[ imgSelected.name ].shapes){
+            var shape = labellingData[ imgSelected.name ].shapes[ shapeId ];
             var currentShape;
             switch(shape.type){
                 case "rect":

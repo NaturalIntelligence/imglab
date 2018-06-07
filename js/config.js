@@ -118,3 +118,7 @@ var plugins = {
         tagName: 'facepp'
     }
 }
+var pluginsStore = {
+    "facepp" : {
+    }
+}
