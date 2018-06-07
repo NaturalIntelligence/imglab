@@ -23,7 +23,6 @@ function selectFileTypeToSave(){
 function saveAsNimn(){
     //TODO : change it after change in nimnjs
     askFileName("Untitled_imglab.json", function(fileName){
-        console.log(labellingData);
         download( JSON.stringify(labellingData), fileName, "application/json");
     });
 }

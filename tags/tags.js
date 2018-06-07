@@ -201,7 +201,7 @@ riot.tag2('images-slider', '<div class="float-left" style="width: 50px; height: 
             riot.mount("workarea",{ img : e.item});
         }
 });
-riot.tag2('menu', '<div class="dropdown"> <div class="dropbtn"><img src="img/menu.svg"></div> <div class="dropdown-content"> <a href="#"> <label class="btn-bs-file">Open <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange="{openFile}"> </label> </a> <a href="#" onclick="{saveFile}">Save</a> </div> </div>', '', '', function(opts) {
+riot.tag2('menu', '<div class="dropdown" style="left: -50px"> <div class="dropbtn"><img src="img/icons/menu.svg" width="40px"></div> <div class="dropdown-content"> <a href="#"> <label class="btn-bs-file">Open <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange="{openFile}"> </label> </a> <a href="#" onclick="{saveFile}">Save</a> </div> </div>', '', '', function(opts) {
         this.openFile = function(e){
             readDataFile(e);
 
@@ -264,9 +264,25 @@ riot.tag2('plugin-window', '<div id="plugin-window"> <div id="plugin-titlebar"> 
             }
         }
 });
-riot.tag2('plugins-menu', '<div class="dropdown" style="float:right;"> <div class="dropbtn"><img src="img/clock.svg"></div> <div class="dropdown-content"> <a href="#" each="{plugin in plugins}" onclick="{loadPlugin}">{plugin.title}</a> </div> </div>', '', '', function(opts) {
+riot.tag2('plugins-menu', '<div class="dropdown" style="float:right;"> <div class="dropbtn"><img src="img/icons/clock.svg" width="35px"></div> <div class="dropdown-content"> <a href="#" each="{plugin in plugins}" onclick="{loadPlugin}">{plugin.title}</a> </div> </div>', '', '', function(opts) {
         this.loadPlugin = function(e){
             riot.mount('plugin-window',e.item);
+        }
+});
+riot.tag2('shortcuts', '<img src="img/icons/keyboard.svg" width="35px" onclick="{showkeymaps}">', '', '', function(opts) {
+        this.showkeymaps = function(){
+            $.dialog({
+                title: 'Keymap',
+                content: `
+                <table>
+                    <tr><td><kbd>del</kbd></td><td> : Delete selected shapes or feature points.<td></tr>
+                    <tr><td><kbd>Shift</kbd> + <kbd>a</kbd></td><td> : Select all shapes..<td></tr>
+                </table>
+                `,
+                escapeKey: true,
+                backgroundDismiss: true,
+                columnClass: 'col-md-8 col-md-offset-4 col-xs-4 col-xs-offset-8',
+            });
         }
 });
 riot.tag2('statusbar', '', '', '', function(opts) {

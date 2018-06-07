@@ -34,7 +34,7 @@
 
 </head>
 <body>
-	<div class="flex-row">
+	<div class="container-fluid">
 		<div id="menubar" class="row overlay-color align-items-center" style="height: 50px;">
 			<div class="p-2 col-1">
 				<menu></menu>
@@ -45,15 +45,17 @@
 			</div>
 			<div class="p-2  col-1">
 				<plugins-menu></plugins-menu>
+				<shortcuts></shortcuts>
 			</div>
 			<div class="p-2  col-1">
 				<div><a class="btn btn-info" onclick="javascript:displayDonationPrompt()">Donate</a></div>
 			</div>
 			
 		</div><!-- End of Menubar -->
-
+	</div>
+	<div class="flex-row">
 		<div class="d-flex flex-row" style="height: calc(100vh - 50px);">
-			<div id="toolbar" class="d-flex flex-column overlay-color align-items-end" style="border: 1px solid grey;">
+			<div id="toolbar" class="d-flex flex-column overlay-color align-items-end grey-border">
 				<toolbox tools="labelling"></toolbox>
 				<toolbox class="mt-auto toolbox-border-top" tools="canvas"></toolbox>
 			</div>
@@ -65,10 +67,10 @@
 					<workarea></workarea>
 				</div>
 				<div class="grey-border mt-auto" style="height: 100px; width: 100%; margin: 0px 2px;">
-						<images-slider thumbnail_width="90px" class="mt-auto grey-border"></images-slider>
+						<images-slider thumbnail_width="90px" class="mt-auto"></images-slider>
 				</div>
 			</div>
-			<div id="sidebar" class="p-2 overlay-color" style="width: 300px; border: 1px solid grey;">
+			<div id="sidebar" class="p-2 overlay-color grey-border" style="width: 300px;">
 				<sidebar></sidebar>
 			</div>
 		</div>
@@ -93,7 +95,7 @@
 	<script src="js/dlibDataHandler.js"></script> -->
 	<script src="tags/tags.js"></script>
 	<script type="text/javascript">
-		riot.mount("menu, plugins-menu");
+		riot.mount("menu, plugins-menu, shortcuts");
 		riot.mount("actionbar");
 		riot.mount("toolbox");
 		riot.mount("images-slider");

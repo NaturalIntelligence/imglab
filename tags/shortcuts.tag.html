@@ -1,0 +1,19 @@
+<shortcuts>
+    <img src="img/icons/keyboard.svg" width="35px" onclick={showkeymaps}>
+    <script>
+        this.showkeymaps = function(){
+            $.dialog({
+                title: 'Keymap',
+                content: `
+                <table>
+                    <tr><td><kbd>del</kbd></td><td> : Delete selected shapes or feature points.<td></tr>
+                    <tr><td><kbd>Shift</kbd> + <kbd>a</kbd></td><td> : Select all shapes..<td></tr>
+                </table>
+                `,
+                escapeKey: true,
+                backgroundDismiss: true,
+                columnClass: 'col-md-8 col-md-offset-4 col-xs-4 col-xs-offset-8',
+            });
+        }
+    </script>
+</shortcuts>
