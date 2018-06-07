@@ -2,13 +2,13 @@
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119603824-1"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119603824-1"></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
 	  function gtag(){dataLayer.push(arguments);}
 	  gtag('js', new Date());
 
-	  gtag('config', 'UA-119603824-1'); -->
+	  gtag('config', 'UA-119603824-1');
 	</script>
 
 	<title>ImgLab</title>
@@ -27,6 +27,7 @@
 	<script src="js/thirdparty/jquery-confirm.min.js"></script>
 	<script src="js/thirdparty/bootstrap.min.js"></script>
 	<script src="js/thirdparty/riot.min.js"></script>
+	
 	<script src="js/thirdparty/Blob.js"></script>
 	<script src="js/thirdparty/FileSaver.min.js"></script>
 	<script src="js/thirdparty/fxp.js"></script>
@@ -83,22 +84,22 @@
 	
 	<script src="js/prompt.js"></script>
 	<script src="js/config.js"></script>
-	<!-- <script src="js/fileOperation.js"></script>
-	<script src="js/uiaction.js"></script>
-	<script src="js/widget.js"></script>
-	<script src="js/FaceBox.js"></script>
-	<script src="js/labels.js"></script>
-	<script src="js/labelFileLoader.js"></script>
-	<script src="js/dataloader.js"></script>
-	<script src="js/slider.js"></script> -->
-	<!-- <script src="js/Face++DataParser.js"></script>
-	<script src="js/dlibDataHandler.js"></script> -->
-	<script src="tags/tags.js"></script>
+	<!-- <script src="tags/tags.js"></script> -->
+	<script src="tags/images-slider.tag.html" type="riot/tag"></script>
+	<script src="tags/menu.tag.html" type="riot/tag"></script>
+	<script src="tags/pluginsMenu.tag.html" type="riot/tag"></script>
+	<script src="tags/shortcuts.tag.html" type="riot/tag"></script>
+	<script src="tags/toolbox.tag.html" type="riot/tag"></script>
+	<script src="tags/workarea.tag.html" type="riot/tag"></script>
+	<script src="tags/pluginWindow.tag.html" type="riot/tag"></script>
+	<script src="tags/facepp.tag.html" type="riot/tag"></script> 
+	<script src="tags/actionbar.tag.html" type="riot/tag"></script> 
+	<script src="js/thirdparty/riot+compiler.min.js"></script>
 	<script type="text/javascript">
 		riot.mount("menu, plugins-menu, shortcuts");
 		riot.mount("actionbar");
 		riot.mount("toolbox");
-		riot.mount("images-slider");
+		riot.mount("images-slider"); 
 	</script>
 	<script src="js/thirdparty/svg.min.js"></script>
 	<script src="js/thirdparty/svg.draw.min.js"></script>
