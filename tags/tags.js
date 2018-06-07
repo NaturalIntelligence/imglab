@@ -313,7 +313,6 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
 
             }else if(e.keyCode == 65 && e.shiftKey){
 
-                console.log("selecting all")
                 selectAll();
             }else if(e.keyCode == 65){
 
@@ -372,7 +371,7 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                 }
             });
             currentTool.parent().on('click',function(e) {
-                    if(selectedTool.type === "point"){
+                    if(selectedTool && selectedTool.type === "point"){
                         var point = selectedTool.create(e,currentTool);
                         attachEventsToFeaturePoint(point,currentTool);
                     }else if(e.altKey){
@@ -439,14 +438,11 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
         }
 
         function selectAll(){
-            myCanvas.each(function(i,shapeEl){
-                shapeEl.forEach(function(el){
-                    if(el.node.tagName = 'svg' ){
-                        el.selectize({rotationPoint: false});
-                        selectedElements.push(el);
-                    }
-                })
-            });
+            for(var shapeId in labellingData[ imgSelected.name ].shapes){
+                var el = SVG.get(shapeId)
+                el.selectize({rotationPoint: false});
+                selectedElements.push(el);
+            };
         }
 
     function attachShapeData(shape){
