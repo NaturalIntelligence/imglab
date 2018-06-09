@@ -368,7 +368,7 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
                         }
                     });
 
-                    currentTool.draw(event);
+                    if(currentTool.type !== 'polygon') currentTool.draw(event);
                     selectedElement = currentTool;
                 }
             });

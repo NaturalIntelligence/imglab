@@ -85,7 +85,7 @@
                         }
                     });
 
-                    currentTool.draw(event);
+                    if(currentTool.type !== 'polygon') currentTool.draw(event);
                     selectedElement = currentTool;
                 }
             });
