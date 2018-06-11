@@ -1,25 +1,38 @@
-<images-slider>
-        <div class="float-left" style="width: 50px; height: 100%; text-align: center; padding: 10px; border-left: 1px solid grey;">
+<images-slider class="form-inline">
+    <style>
+        input[type='file'] {
+            display: none;
+        }
+    </style>
+        <div style="width: 50px; height: 90px; text-align: center; padding: 10px; border-left: 1px solid grey;">
                 <label class="btn-bs-file">
-                    <img class="file-input-icon" src="img/icons/files-white.png">
+                    <i class="icon-picture" style="font-size: 1.5em"></i>
                     <input type="file" class="filebutton" accept="image/*"  onchange= { readImageFiles }  multiple/>
                 </label>
 
                 <label class="btn-bs-file">
-                    <img class="file-input-icon" src="img/icons/open.png">
+                    <i class="icon-folder-open-empty" style="font-size: 1.5em"></i>
                     <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)" >
                 </label>
         </div>
-        <div class="float-left left-paddle " style="width: 50px; height: 100%;" onclick={ slideleft }></div>
-        <div class="float-left photolist-wrapper " style="width: calc(100% - 160px); height: 100%;">
-            <div name="photolist" class="photolist">
+        <div id="leftpaddle" class="align-middle"  style="height: 100%;">
+            <span style="width: 50px; height: 90px;">
+                <i class="icon-left-open" style="font-size: 1.5em"></i>
+            </span>
+        </div>
+        <div class="photolist-wrapper " style="width: calc(100% - 160px); height: 90px;">
+            <div id="photolist" class="photolist">
                     <!-- <span each={ this.thumbnails } class="d-inline-block">
                         <span class="delete" onclick={ deleteThumbnail }></span> -->
                         <img each={ this.thumbnails } src={ src } label ={ name } title={ name } width={this.thumbnailWidth} onclick={ loadIntoWorkArea}>
                     <!-- </span> -->
             </div>
         </div>
-        <div class="right-paddle" style="width: 50px; height: 100%;" onclick ={ slideright }></div>
+        <div id="rightpaddle" class="align-middle"  style="height: 100%;">
+            <span style="width: 50px; height: 90px;">
+                <i class="icon-right-open" style="font-size: 1.5em"></i>
+            </span>
+        </div>
     
     
     <script>
@@ -31,6 +44,16 @@
         tag.deleteThumbnail = deleteThumbnail;
         tag.loadIntoWorkArea = loadIntoWorkArea;
 
+        this.on('mount', function(){
+
+            $("#leftpaddle").click(function(e){
+                tag.slideleft(e);
+            })
+
+            $("#rightpaddle").click(function(e){
+                tag.slideright(e);
+            })
+        })
         function readImageFiles(e) {
             var input = e.srcElement;
             if (input.files && input.files[0]) {
@@ -76,7 +99,7 @@
         this.sliding = false;
         this.sliderMove = "80px";
         function slideleft(e) {
-            var photolist = $(e.target.nextElementSibling.children[0]);
+            var photolist = $("#photolist");
             if (this.sliding === false) {
                 this.sliding = true;
                 photolist.css({ left: "-"+this.sliderMove })
@@ -87,7 +110,7 @@
             }
         };
         function slideright(e) {
-            var photolist = $(e.target.previousElementSibling.children[0]);
+            var photolist = $("#photolist");
             if (this.sliding === false) {
                 this.sliding = true;
                 photolist.animate({ left: "-"+this.sliderMove }, 200, 'linear', () => {

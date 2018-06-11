@@ -80,20 +80,15 @@ var tools = {
             icon : "move.svg",
             type : "move",
         },
-        "tool-zoom-in" : {
+        "tool-zoom" : {
             title  : "Zoom In",
             desp : "Enlarge the workarea",
-            icon : "zoomin.svg",
-        },
-        "tool-zoom-out" : {
-            title  : "Zoom Out",
-            desp : "Create a concave polygon",
-            icon : "zoomout.svg",
+            icon_font : "icon-zoom-in",
         },
         "tool-labels-only" : {
-            title  : "Labels only",
-            desp : "Hide the image",
-            icon : "lightbulb.svg",
+            title  : "Light",
+            desp : "Highlight the labels",
+            icon_font : "icon-lightbulb",
         }
     }
 };
