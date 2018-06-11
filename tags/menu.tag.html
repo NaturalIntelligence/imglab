@@ -7,7 +7,7 @@
                     <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange={openFile}  />
                 </label>
             </a>
-            <a href="#" onclick={saveFile}>Save</a>
+            <a href="#" id="save" onclick={saveFile}>Save</a>
         </div>
     </div>
     <script>
@@ -19,5 +19,17 @@
         this.saveFile = function(){
             selectFileTypeToSave();
         }
+
+        this.on('mount', function(){
+
+            document.addEventListener('keydown', e => {
+                if (e.key == 'O' || e.key == 'o'){
+                    document.getElementsByClassName('filebutton')[1].click();
+                }
+                if (e.key == 's' || e.key == 'S'){
+                    document.getElementById('save').click();
+                }
+            })
+        });
     </script>
 </menu>
