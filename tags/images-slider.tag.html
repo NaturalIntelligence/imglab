@@ -45,15 +45,38 @@
         tag.loadIntoWorkArea = loadIntoWorkArea;
 
         this.on('mount', function(){
+                
+                $("#leftpaddle").click(function(e){
+                    tag.slideleft(e);
+                })
 
-            $("#leftpaddle").click(function(e){
-                tag.slideleft(e);
-            })
+                $("#rightpaddle").click(function(e){
+                    tag.slideright(e);
+                })
 
-            $("#rightpaddle").click(function(e){
-                tag.slideright(e);
-            })
+                document.addEventListener('keydown', e => {
+                    
+                    if (e.key == 'ArrowLeft'){
+                        tag.slideleft(e);
+                    }
+                    if (e.key == 'ArrowRight'){
+                        tag.slideright(e);
+                    }
+                    if (e.key == 'O' && e.shiftKey){
+                        e.preventDefault();
+                        document.getElementsByClassName('filebutton')[1].click();
+                    }
+                    if (e.key == 'Ø' && e.altKey){
+                        e.preventDefault();
+                        document.getElementById('image_folder').click();
+                    }
+                })
+        });
+
+        this.on('updated', () => {
+            riot.mount("workarea",{ img : this.thumbnails[0]} );
         })
+
         function readImageFiles(e) {
             var input = e.srcElement;
             if (input.files && input.files[0]) {
@@ -62,8 +85,11 @@
                 }
             }
         }
+
         this.thumbnails = [];
-        this.thumbnailWidth= this.opts.thumbnail_width || "80px"
+        this.currentIndex = 0;
+        this.thumbnailWidth= this.opts.thumbnail_width || "80px";
+
         function readImageFile(f) {
             if(f.type.startsWith("image")){
                 var reader = new FileReader();
@@ -84,16 +110,16 @@
             }
         }
 
-        function updateDimentions(imgFileSrc, imageDataObject){
+        function updateDimentions(imgFileSrc, imageDataObject) {
             var img = new Image();
             img.onload = function() {
                 imageDataObject.size = {
                     width : this.width,
                     height : this.height
                 }
-                addImgToStore(imageDataObject.name, imageDataObject.size);
-            };
+            addImgToStore(imageDataObject.name, imageDataObject.size);
             img.src = imgFileSrc;
+            }
         }
 
         this.sliding = false;
@@ -107,6 +133,9 @@
                     .animate({ left: 0 }, 200, 'linear', () => {
                         this.sliding = false;
                     });
+                const index = this.currentIndex-1 > -1 ? this.currentIndex-1 : this.thumbnails.length-1;
+                this.currentIndex=index;
+                riot.mount("workarea",{ img : this.thumbnails[index]} );
             }
         };
         function slideright(e) {
@@ -118,6 +147,9 @@
                         .append(photolist.children('img:first-child'));
                     this.sliding = false;
                 });
+                const index = this.currentIndex+1 < this.thumbnails.length ? this.currentIndex+1 : 0;
+                this.currentIndex=index;
+                riot.mount("workarea",{ img : this.thumbnails[index]} );
             }
         };
 
@@ -134,7 +166,7 @@
 
         function loadIntoWorkArea(e){
             imgSelected = e.item;
-            riot.mount("workarea",{ img : e.item});
+            riot.mount("workarea",{ img : e.item });
         }
     </script>
 </images-slider>
