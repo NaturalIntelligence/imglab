@@ -15,7 +15,7 @@ Please mention the type of PR
 
 [ ] Documentation
 
-[x] Other : | Align center IMGLAB text |
+[ ] Other : | Please specify |
 
 
 **Note** : Please ensure that you've read contribution [guidelines](CONTRIBUTING.md) before raising this PR.
