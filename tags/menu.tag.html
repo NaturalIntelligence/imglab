@@ -23,8 +23,8 @@
         this.on('mount', function(){
 
             document.addEventListener('keydown', e => {
-                if (e.key == 'O' || e.key == 'o'){
-                    document.getElementsByClassName('filebutton')[1].click();
+                if ( (e.key == 'O' || e.key == 'o') && !e.shiftKey && !e.altKey ){
+                    document.getElementById('browse').click();
                 }
                 if (e.key == 's' || e.key == 'S'){
                     document.getElementById('save').click();

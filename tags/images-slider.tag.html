@@ -7,7 +7,7 @@
         <div style="width: 50px;  text-align: center; padding: 10px;">
                 <label class="btn-bs-file">
                     <i class="icon-picture" style="font-size: 1.5em"></i>
-                    <input type="file" class="filebutton" accept="image/*"  onchange= { readImageFiles }  multiple/>
+                    <input id="browseImages" type="file" class="filebutton" accept="image/*"  onchange= { readImageFiles }  multiple/>
                 </label>
 
                 <label class="btn-bs-file">
@@ -63,12 +63,14 @@
                         tag.slideright(e);
                     }
                     if (e.key == 'O' && e.shiftKey){
+                        document.getElementById('browseImages').click();
                         e.preventDefault();
-                        document.getElementsByClassName('filebutton')[1].click();
+                        e.stopPropagation();
                     }
-                    if (e.key == 'Ø' && e.altKey){
-                        e.preventDefault();
+                    if (e.key == 'o' && e.altKey){
                         document.getElementById('image_folder').click();
+                        e.preventDefault();
+                        e.stopPropagation();
                     }
                 })
         });
