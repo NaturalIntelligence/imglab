@@ -1,5 +1,5 @@
 # Purpose / Goal
-Please specify here what you're planning to achieve by this pull request and how it can help in regard of this work-space. 
+Please specify here what you're planning to achieve by this pull request and how it can help in regard of this work-space.
 
 Please mention the issue number, if exists.
 
@@ -15,7 +15,7 @@ Please mention the type of PR
 
 [ ] Documentation
 
-[ ] Other : | Please Specify |
+[x] Other : | Align center IMGLAB text |
 
 
 **Note** : Please ensure that you've read contribution [guidelines](CONTRIBUTING.md) before raising this PR.
