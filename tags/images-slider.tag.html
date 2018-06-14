@@ -22,9 +22,9 @@
         </div>
         <div class="photolist-wrapper " style="width: calc(100% - 160px); height: 90px;">
             <div id="photolist" class="photolist">
-                    <!-- <span each={ this.thumbnails } class="d-inline-block">
+                    <!-- <span each={ thumbnails } class="d-inline-block">
                         <span class="delete" onclick={ deleteThumbnail }></span> -->
-                        <img each={ this.thumbnails } src={ src } label ={ name } title={ name } width={this.thumbnailWidth} onclick={ loadIntoWorkArea}>
+                        <img id="thumbnail_{index}" each={ thumbnail,index in thumbnails } src={ thumbnail.src } label ={ thumbnail.name } title={ thumbnail.name } width={thumbnailWidth} onclick={ loadIntoWorkArea}>
                     <!-- </span> -->
             </div>
         </div>
@@ -36,7 +36,7 @@
     
     
     <script>
-        tag = this;
+        var tag = this;
         tag.readImageFiles = readImageFiles;
         tag.readImageFile = readImageFile;
         tag.slideleft = slideleft;
@@ -57,10 +57,12 @@
                 document.addEventListener('keydown', e => {
                     
                     if (e.key == 'ArrowLeft'){
-                        tag.slideleft(e);
+                        //$("#leftpaddle").click();
+                        if(tag.currentIndex > 0 ) $("#thumbnail_" + --tag.currentIndex).click();
                     }
                     if (e.key == 'ArrowRight'){
-                        tag.slideright(e);
+                        //$("#rightpaddle").click();
+                        if(tag.currentIndex < tag.thumbnails.length - 1 ) $("#thumbnail_"+ ++tag.currentIndex).click();
                     }
                     if (e.key == 'O' && e.shiftKey){
                         document.getElementById('browseImages').click();
@@ -76,7 +78,7 @@
         });
 
         this.on('updated', () => {
-            riot.mount("workarea",{ img : this.thumbnails[0]} );
+            //$("#thumbnail_0").click(); as this triggers before images are uploaded it cuase issue. Load it with an interval
         })
 
         function readImageFiles(e) {
@@ -88,8 +90,8 @@
             }
         }
 
-        this.thumbnails = [];
-        this.currentIndex = 0;
+        tag.thumbnails = [];
+        tag.currentIndex = 0;
         this.thumbnailWidth= this.opts.thumbnail_width || "80px";
 
         function readImageFile(f) {
@@ -100,8 +102,8 @@
                         name : f.name,
                         src: e.target.result
                     };
-                    updateDimentions(e.target.result,imgData);
-                    this.thumbnails.push(imgData);
+                    updateDimentions(e.target.result, imgData);
+                    tag.thumbnails.push(imgData);
                     
                     this.trigger("uploadimages");
                 }
@@ -119,9 +121,9 @@
                     width : this.width,
                     height : this.height
                 }
-            addImgToStore(imageDataObject.name, imageDataObject.size);
-            img.src = imgFileSrc;
+                addImgToStore(imageDataObject.name, imageDataObject.size);
             }
+            img.src = imgFileSrc;
         }
 
         this.sliding = false;
@@ -135,9 +137,6 @@
                     .animate({ left: 0 }, 200, 'linear', () => {
                         this.sliding = false;
                     });
-                const index = this.currentIndex-1 > -1 ? this.currentIndex-1 : this.thumbnails.length-1;
-                this.currentIndex=index;
-                riot.mount("workarea",{ img : this.thumbnails[index]} );
             }
         };
         function slideright(e) {
@@ -149,17 +148,14 @@
                         .append(photolist.children('img:first-child'));
                     this.sliding = false;
                 });
-                const index = this.currentIndex+1 < this.thumbnails.length ? this.currentIndex+1 : 0;
-                this.currentIndex=index;
-                riot.mount("workarea",{ img : this.thumbnails[index]} );
             }
         };
 
         function deleteThumbnail(e){
             var thumbnail = $(e.target.nextElementSibling);
-            for(var thumbnail_i in this.thumbnails){
-                if(this.thumbnails[thumbnail_i].name === $(thumbnail[0]).attr("title")){
-                    this.thumbnails.splice(thumbnail_i,1);
+            for(var thumbnail_i in tag.thumbnails){
+                if(tag.thumbnails[thumbnail_i].name === $(thumbnail[0]).attr("title")){
+                    tag.thumbnails.splice(thumbnail_i,1);
                     break;
                 }
             }
@@ -167,8 +163,8 @@
         }
 
         function loadIntoWorkArea(e){
-            imgSelected = e.item;
-            riot.mount("workarea",{ img : e.item });
+            imgSelected = tag.thumbnails[e.item.index];
+            riot.mount("workarea",{ img : imgSelected });
         }
     </script>
 </images-slider>
