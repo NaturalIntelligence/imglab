@@ -1,10 +1,11 @@
 <workarea>
     <style>
-        #work-canvas{
+        #work-canvas {
             position: absolute;
-	        z-index: 1;
+            z-index: 1;
         }
-        #canvas-container{
+
+        #canvas-container {
             height: calc(100vh - 190px);
             display: block;
             overflow: auto;
@@ -13,148 +14,196 @@
     </style>
 
     <div id="canvas-container">
-        <img id="img" src={ opts.img.src } width="{ opts.img.size.width }" height="{ opts.img.size.height }"/>
+        <img id="img" src={ opts.img.src } width="{ opts.img.size.width }" height="{ opts.img.size.height }" />
         <div id="work-canvas" width="{ opts.img.size.width }" height="{ opts.img.size.height }"></div>
         <!-- <div id="img_overlay"></div> -->
         <span id="tooltip-span"></span>
+        <div id="v_line"></div>
+        <div id="h_line"></div>
     </div>
 
     <script>
-        $(document).on('click', function(event){
+        $(document).on('click', function (event) {
             deselectAll();
             selectedElements = [];
         });
 
-        $(document).keyup(function(e){
-            if(e.keyCode == 46){
+        $(document).keyup(function (e) {
+            if (e.keyCode == 46) {
                 selectedElements.forEach(el => {
                     /* $("[for="+ el.node.id+"]").remove(); */
-                    el.selectize(false, {deepSelect:true})//unselect first
-                    if(el.typ === 'point'){
-                        detachPoint(el.attr("for") ,el.node.id);//delete it from store
-                        el.remove();//remove parent svg node
-                    }else{
-                        detachShape(el.node.id);//delete it from store
-                        el.parent().remove();//remove parent svg node
+                    el.selectize(false, {
+                        deepSelect: true
+                    }) //unselect first
+                    if (el.typ === 'point') {
+                        detachPoint(el.attr("for"), el.node.id); //delete it from store
+                        el.remove(); //remove parent svg node
+                    } else {
+                        detachShape(el.node.id); //delete it from store
+                        el.parent().remove(); //remove parent svg node
                     }
                 });
-                
+
                 selectedElements = [];
                 //delete all the points related to a polygon
                 //show snakebar to inform
-            }else if(e.keyCode == 65 && e.shiftKey){
+            } else if (e.keyCode == 65 && e.shiftKey) {
                 //Select all the labels
                 selectAll();
-            }else if(e.keyCode == 65){
+            } else if (e.keyCode == 65) {
                 /* allLabels.forEach(el => {
                     el.remove();
                 }); */
             }
         });
-        
-        this.on('mount',function() {
 
-            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height)/* .panZoom() */;
-            
+        this.on('mount', function () {
+
+            canvas = document.getElementById('work-canvas');
+            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height) /* .panZoom() */ ;
+
             drawOnCanvas();
+            myCanvas.mousemove(function (event) {
+                $("#tooltip-span").show();
+                $("#h_line").show();
+                $("#v_line").show();
+                var cordinates = getCordinates(event, canvas);
+                $("#tooltip-span").css({
+                    "left": cordinates.x + 15 + "px",
+                    "top": cordinates.y + 15 + "px"
+                });
+                $("#tooltip-span").html("x:" + cordinates.x + "<br> y:" + cordinates.y);
+                $("#h_line").css({
+                    top: cordinates.y
+                });
+                $("#v_line").css({
+                    left: cordinates.x
+                });
+            });
 
-            myCanvas.on('mousedown', function(event){
+            myCanvas.mouseout(function (event) {
+                $("#tooltip-span").hide();
+                $("#h_line").hide();
+                $("#v_line").hide();
+            });
+
+            //get mouse cordinates on image
+            function getCordinates(event, element) {
+                var rect = element.getBoundingClientRect();
+                var x = event.pageX - rect.left;
+                var y = event.pageY - rect.top;
+                return {
+                    x: x,
+                    y: y
+                };
+            }
+
+            myCanvas.on('mousedown', function (event) {
                 deselectAll();
-                if(selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable){
-                    var currentTool = selectedTool.create(event,myCanvas);
-                    
-                    currentTool.on('drawstart', function(){
+                if (selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable) {
+                    var currentTool = selectedTool.create(event, myCanvas);
+
+                    currentTool.on('drawstart', function () {
                         alreadyDrawing = true;
                     });
 
-                    currentTool.on('drawcancel', function(){
-                    });
+                    currentTool.on('drawcancel', function () {});
 
-                    currentTool.on('resizedone', function(){
-                        updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(currentTool));
+                    currentTool.on('resizedone', function () {
+                        updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas),
+                            getPoints(currentTool));
                     });
-                    currentTool.on('drawstop', function(){
+                    currentTool.on('drawstop', function () {
                         alreadyDrawing = false;
-                        if( !selectedTool.validate(currentTool)){//Don't draw an element on accidentle click
+                        if (!selectedTool.validate(currentTool)) { //Don't draw an element on accidentle click
                             currentTool.parent().remove();
                             currentTool.remove();
-                        }else{
+                        } else {
                             attachShapeData(currentTool);
 
                             attachEvents(currentTool)
                         }
                     });
 
-                    if(currentTool.type !== 'polygon') currentTool.draw(event);
+                    if (currentTool.type !== 'polygon') currentTool.draw(event);
                     selectedElement = currentTool;
                 }
             });
-            myCanvas.on('mouseup', function(event){
-                if(selectedTool && selectedElement)   selectedElement.draw(event);
+            myCanvas.on('mouseup', function (event) {
+                if (selectedTool && selectedElement) selectedElement.draw(event);
             });
-            
-        } );
 
-        function attachEvents(currentTool){
-            
-            onMouse( currentTool.parent(),function(e){//drag callback : doesn't fire on click
-                if(currentTool.node.id === e.target.id){
-                    updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(currentTool));
+        });
+
+        function attachEvents(currentTool) {
+
+            onMouse(currentTool.parent(), function (e) { //drag callback : doesn't fire on click
+                if (currentTool.node.id === e.target.id) {
+                    updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(
+                        currentTool));
                     updateFeaturePoints(currentTool);
                 }
             });
-            currentTool.parent().on('click',function(e) {
-                    if(selectedTool && selectedTool.type === "point"){
-                        var point = selectedTool.create(e,currentTool);
-                        attachEventsToFeaturePoint(point,currentTool);
-                    }else if(e.altKey){//deep select. Helpful in case of polygon
-                            deselectAll();
-                            currentTool.selectize({ rotationPoint: false, deepSelect:true});
-                            selectedElements.push(currentTool);    
-                    }else{
-                        if(!e.ctrlKey){//deselect rest selected elements
+            currentTool.parent().on('click', function (e) {
+                    if (selectedTool && selectedTool.type === "point") {
+                        var point = selectedTool.create(e, currentTool);
+                        attachEventsToFeaturePoint(point, currentTool);
+                    } else if (e.altKey) { //deep select. Helpful in case of polygon
+                        deselectAll();
+                        currentTool.selectize({
+                            rotationPoint: false,
+                            deepSelect: true
+                        });
+                        selectedElements.push(currentTool);
+                    } else {
+                        if (!e.ctrlKey) { //deselect rest selected elements
                             deselectAll();
                         }
                         //select currnt element
-                        currentTool.selectize({ rotationPoint: false});
+                        currentTool.selectize({
+                            rotationPoint: false
+                        });
                         selectedElements.push(currentTool);
                     }
                     e.stopPropagation();
-                }//click call back
+                } //click call back
             );
         }
 
-        function attachEventsToFeaturePoint(f_point, parent){
+        function attachEventsToFeaturePoint(f_point, parent) {
             f_point.typ = 'point';
             f_point.attr({
                 for: parent.node.id
             })
             attachPointToShape(parent.node.id, f_point.node.id, f_point.rbox(myCanvas));
-            
-            onMouse( f_point,function(e){//drag callback: doesn't fire on click
+
+            onMouse(f_point, function (e) { //drag callback: doesn't fire on click
                 updateFeaturePointPosition(f_point);
             });
 
-            f_point.on('click', function(e) {
-                if(!e.ctrlKey){//deselect rest selected elements
+            f_point.on('click', function (e) {
+                if (!e.ctrlKey) { //deselect rest selected elements
                     deselectAll();
                 }
-                f_point.selectize({ rotationPoint: false, points: []});
+                f_point.selectize({
+                    rotationPoint: false,
+                    points: []
+                });
                 selectedElements.push(f_point);
                 e.stopPropagation();
             });
         }
 
         //This is a workaround of dragend event. This way it stops firing click event
-        function onMouse(shape, dragCB){
+        function onMouse(shape, dragCB) {
             var mousestate = 0;
-            shape.on( 'mousedown', function(e) {
+            shape.on('mousedown', function (e) {
                 mousestate = 1;
-                shape.on( 'mousemove', function(e) {
+                shape.on('mousemove', function (e) {
                     mousestate = 2;
                 });
-                shape.on( 'mouseup', function(e) {
-                    if(mousestate === 2) {
+                shape.on('mouseup', function (e) {
+                    if (mousestate === 2) {
                         dragCB && dragCB(e);
                     }
                     mousestate = 0;
@@ -163,139 +212,145 @@
             });
         }
 
-        function deselectAll(){
+        function deselectAll() {
             selectedElements.forEach(el => {
-                el.selectize(false, {deepSelect:true});
+                el.selectize(false, {
+                    deepSelect: true
+                });
                 el.selectize(false);
             });
             selectedElements = [];
         }
 
-        function selectAll(){
-            for(var shapeId in labellingData[ imgSelected.name ].shapes){
+        function selectAll() {
+            for (var shapeId in labellingData[imgSelected.name].shapes) {
                 var el = SVG.get(shapeId)
-                el.selectize({rotationPoint: false});
+                el.selectize({
+                    rotationPoint: false
+                });
                 selectedElements.push(el);
             };
         }
 
-    //When create, move, resize, delete
-    function attachShapeData(shape){//update data with shape detail
-        var points = getPoints(shape);
-        attachShapeToImg(shape.node.id ,shape.type, shape.rbox(myCanvas), points);
-    }
-
-    function updateFeaturePoints(shape){
-        $("[for="+ shape.node.id+"]").each( (i,pointEl) => {
-            updateFeaturePointPosition(SVG.get(pointEl.id));
-        });
-    }
-
-    function updateFeaturePointPosition(pointEl){
-        updateFeaturePointInStore(pointEl.attr("for") , pointEl.node.id, pointEl.rbox(myCanvas));
-    }
-
-    function getPoints(shape){
-        var points;
-
-        switch(shape.type){
-            case "rect":
-                var box = shape.rbox(myCanvas);
-                return [box.x, box.y, box.w, box.h];
-            case "circle":
-                var box = shape.rbox(myCanvas);
-                return [box.cx, box.cy, shape.attr("r")];
-            /* case "ellipse":
-                var box = shape.rbox(myCanvas);
-                return [box.cx, box.cy, box.rx, box.ry]; */
-            case "polygon":
-                //Polygon points are relative to it's container SVG
-                var calculatedPoints = [];
-                var vector = {
-                    x: shape.parent().attr("x"),
-                    y: shape.parent().attr("y")
-                }
-                shape.array().value.forEach(ponitArr => {
-                    calculatedPoints.push([ ponitArr[0] + vector.x,  ponitArr[1] + vector.y]);
-                });
-                return calculatedPoints;
-            /* case "line":
-                console.log(shape.array())
-                points = [];
-                break;
-            case "path":
-                console.log(shape.array())
-                points = [];
-                break; */
+        //When create, move, resize, delete
+        function attachShapeData(shape) { //update data with shape detail
+            var points = getPoints(shape);
+            attachShapeToImg(shape.node.id, shape.type, shape.rbox(myCanvas), points);
         }
-    }
 
+        function updateFeaturePoints(shape) {
+            $("[for=" + shape.node.id + "]").each((i, pointEl) => {
+                updateFeaturePointPosition(SVG.get(pointEl.id));
+            });
+        }
 
-    function drawOnCanvas(){
-        for( var shapeId in labellingData[ imgSelected.name ].shapes){
-            var shape = labellingData[ imgSelected.name ].shapes[ shapeId ];
-            var currentShape;
-            switch(shape.type){
+        function updateFeaturePointPosition(pointEl) {
+            updateFeaturePointInStore(pointEl.attr("for"), pointEl.node.id, pointEl.rbox(myCanvas));
+        }
+
+        function getPoints(shape) {
+            var points;
+
+            switch (shape.type) {
                 case "rect":
-                    var rect = myCanvas.nested()
-                        .rect(shape.points[2], shape.points[3])
-                        .move(shape.points[0],shape.points[1])
-                        .addClass('labelbox shape')
-                        .id(shapeId)
-                        .resize();
-                    rect.parent().draggable();
-                    //Add feature points
-                    currentShape = rect;
-                    
-                    break;
+                    var box = shape.rbox(myCanvas);
+                    return [box.x, box.y, box.w, box.h];
                 case "circle":
-                    var circle = myCanvas.nested()
-                        .circle().radius(shape.points[2])
-                        .attr("cx",shape.points[0])
-                        .attr("cy",shape.points[1])
-                        .addClass('labelcircle shape')
-                        .id(shapeId)
-                        .resize();
-                    circle.parent().draggable();
-                    //Add feature points
-                    currentShape = circle;
-                    break;
-                /* case "ellipse":
-                    var ellipse = myCanvas.nested()
-                        .ellipse().radius(shape.points[2], shape.points[3])
-                        .move(shape.points[0],shape.points[1])
-                        .addClass('labelellipse shape')
-                        .resize();
-                    ellipse.parent().draggable();
-                    attachEvents(ellipse);
-                    //Add feature points */
+                    var box = shape.rbox(myCanvas);
+                    return [box.cx, box.cy, shape.attr("r")];
+                    /* case "ellipse":
+                        var box = shape.rbox(myCanvas);
+                        return [box.cx, box.cy, box.rx, box.ry]; */
                 case "polygon":
-                    var poly = myCanvas.nested()
-                        .polygon(shape.points)
-                        //.move(shape.points[0],shape.points[1])
-                        .addClass('labelpolygon shape')
-                        .id(shapeId)
-                        .resize();
-                    poly.parent().draggable();
-                    //Add feature points
-                    currentShape = poly;
-                    break;
+                    //Polygon points are relative to it's container SVG
+                    var calculatedPoints = [];
+                    var vector = {
+                        x: shape.parent().attr("x"),
+                        y: shape.parent().attr("y")
+                    }
+                    shape.array().value.forEach(ponitArr => {
+                        calculatedPoints.push([ponitArr[0] + vector.x, ponitArr[1] + vector.y]);
+                    });
+                    return calculatedPoints;
+                    /* case "line":
+                        console.log(shape.array())
+                        points = [];
+                        break;
+                    case "path":
+                        console.log(shape.array())
+                        points = [];
+                        break; */
             }
-            
-            attachEvents(currentShape);
-            drawAllFeaturePoints(shape.featurePoints, currentShape);
-
-            //attachEvents(currentShape);
         }
-    }
 
-    function drawAllFeaturePoints(fPoints, parent){
-        for(var fPointId in fPoints){
-            var fPoint = getPointToDraw(fPoints[fPointId], parent, {x: 0, y: 0});
-            fPoint.id(fPointId);
-            attachEventsToFeaturePoint(fPoint,parent);
+
+        function drawOnCanvas() {
+            for (var shapeId in labellingData[imgSelected.name].shapes) {
+                var shape = labellingData[imgSelected.name].shapes[shapeId];
+                var currentShape;
+                switch (shape.type) {
+                    case "rect":
+                        var rect = myCanvas.nested()
+                            .rect(shape.points[2], shape.points[3])
+                            .move(shape.points[0], shape.points[1])
+                            .addClass('labelbox shape')
+                            .id(shapeId)
+                            .resize();
+                        rect.parent().draggable();
+                        //Add feature points
+                        currentShape = rect;
+
+                        break;
+                    case "circle":
+                        var circle = myCanvas.nested()
+                            .circle().radius(shape.points[2])
+                            .attr("cx", shape.points[0])
+                            .attr("cy", shape.points[1])
+                            .addClass('labelcircle shape')
+                            .id(shapeId)
+                            .resize();
+                        circle.parent().draggable();
+                        //Add feature points
+                        currentShape = circle;
+                        break;
+                        /* case "ellipse":
+                            var ellipse = myCanvas.nested()
+                                .ellipse().radius(shape.points[2], shape.points[3])
+                                .move(shape.points[0],shape.points[1])
+                                .addClass('labelellipse shape')
+                                .resize();
+                            ellipse.parent().draggable();
+                            attachEvents(ellipse);
+                            //Add feature points */
+                    case "polygon":
+                        var poly = myCanvas.nested()
+                            .polygon(shape.points)
+                            //.move(shape.points[0],shape.points[1])
+                            .addClass('labelpolygon shape')
+                            .id(shapeId)
+                            .resize();
+                        poly.parent().draggable();
+                        //Add feature points
+                        currentShape = poly;
+                        break;
+                }
+
+                attachEvents(currentShape);
+                drawAllFeaturePoints(shape.featurePoints, currentShape);
+
+                //attachEvents(currentShape);
+            }
         }
-    }
 
+        function drawAllFeaturePoints(fPoints, parent) {
+            for (var fPointId in fPoints) {
+                var fPoint = getPointToDraw(fPoints[fPointId], parent, {
+                    x: 0,
+                    y: 0
+                });
+                fPoint.id(fPointId);
+                attachEventsToFeaturePoint(fPoint, parent);
+            }
+        }
     </script>
 </workarea>
