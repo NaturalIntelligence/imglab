@@ -18,7 +18,7 @@ var tools = {
             type: "circle",
             title  : "Circle",
             desp : "Create a circle",
-            icon : "point.svg",
+            icon : "circle.svg",
             drawable : true,
             create : function(){
                 var circle =  myCanvas.nested().circle().radius().addClass('labelcircle shape')/* .draw() */;
