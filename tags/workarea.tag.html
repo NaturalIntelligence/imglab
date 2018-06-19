@@ -44,7 +44,6 @@
                 //show snakebar to inform
             }else if(e.keyCode == 65 && e.shiftKey){
                 //Select all the labels
-                console.log("selecting all")
                 selectAll();
             }else if(e.keyCode == 65){
                 /* allLabels.forEach(el => {
@@ -86,7 +85,7 @@
                         }
                     });
 
-                    currentTool.draw(event);
+                    if(currentTool.type !== 'polygon') currentTool.draw(event);
                     selectedElement = currentTool;
                 }
             });
@@ -105,7 +104,7 @@
                 }
             });
             currentTool.parent().on('click',function(e) {
-                    if(selectedTool.type === "point"){
+                    if(selectedTool && selectedTool.type === "point"){
                         var point = selectedTool.create(e,currentTool);
                         attachEventsToFeaturePoint(point,currentTool);
                     }else if(e.altKey){//deep select. Helpful in case of polygon
@@ -173,14 +172,11 @@
         }
 
         function selectAll(){
-            myCanvas.each(function(i,shapeEl){
-                shapeEl.forEach(function(el){
-                    if(el.node.tagName = 'svg' ){
-                        el.selectize({rotationPoint: false});
-                        selectedElements.push(el);
-                    }
-                })
-            });
+            for(var shapeId in labellingData[ imgSelected.name ].shapes){
+                var el = SVG.get(shapeId)
+                el.selectize({rotationPoint: false});
+                selectedElements.push(el);
+            };
         }
 
     //When create, move, resize, delete
@@ -236,8 +232,8 @@
 
 
     function drawOnCanvas(){
-        for( var shapeId in labellingData[imgSelected].shapes){
-            var shape = labellingData[imgSelected].shapes[ shapeId ];
+        for( var shapeId in labellingData[ imgSelected.name ].shapes){
+            var shape = labellingData[ imgSelected.name ].shapes[ shapeId ];
             var currentShape;
             switch(shape.type){
                 case "rect":

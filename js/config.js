@@ -18,10 +18,10 @@ var tools = {
             type: "circle",
             title  : "Circle",
             desp : "Create a circle",
-            icon : "point.svg",
+            icon : "circle.svg",
             drawable : true,
             create : function(){
-                var circle =  myCanvas.nested().circle().radius().addClass('labelcircle shape').draw();
+                var circle =  myCanvas.nested().circle().radius().addClass('labelcircle shape')/* .draw() */;
                 circle.resize();
                 circle.parent().draggable();
                 return circle;
@@ -37,7 +37,7 @@ var tools = {
             icon : "rectangle.svg",
             drawable : true,
             create : function(){
-                var rect =  myCanvas.nested().rect().addClass('labelbox shape').draw();
+                var rect =  myCanvas.nested().rect().addClass('labelbox shape')/* .draw() */;
                 rect.resize();
                 rect.parent().draggable();
                 return rect;
@@ -53,7 +53,7 @@ var tools = {
             icon : "polygon.svg",
             drawable : true,
             create : function(){//TODO: bug: creating duplicate points
-                var poly =  myCanvas.nested().polygon().addClass('labelpolygon shape').draw();
+                var poly =  myCanvas.nested().polygon().addClass('labelpolygon shape')/* .draw() */;
                 poly.resize();
                 poly.parent().draggable();
 
@@ -80,20 +80,15 @@ var tools = {
             icon : "move.svg",
             type : "move",
         },
-        "tool-zoom-in" : {
+        "tool-zoom" : {
             title  : "Zoom In",
             desp : "Enlarge the workarea",
-            icon : "zoomin.svg",
-        },
-        "tool-zoom-out" : {
-            title  : "Zoom Out",
-            desp : "Create a concave polygon",
-            icon : "zoomout.svg",
+            icon_font : "icon-zoom-in",
         },
         "tool-labels-only" : {
-            title  : "Labels only",
-            desp : "Hide the image",
-            icon : "lightbulb.svg",
+            title  : "Light",
+            desp : "Highlight the labels",
+            icon_font : "icon-lightbulb",
         }
     }
 };
@@ -116,5 +111,9 @@ var plugins = {
     "facepp" : {
         title: "Face Plus Plus",
         tagName: 'facepp'
+    }
+}
+var pluginsStore = {
+    "facepp" : {
     }
 }

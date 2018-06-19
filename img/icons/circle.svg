@@ -5,4 +5,4 @@
                 <feDistantLight elevation="60" azimuth="225"/>
             </feSpecularLighting>
             <feComposite operator="atop" in2="result0"/>
-        </filter></defs><g class="currentLayer" style=""><title>Layer 1</title><g id="svg_1" class="selected" filter="" stroke="none" fill="#ffffff" fill-opacity="1"><ellipse cx="3.0180723567340113" cy="3.0582329636190737" rx="1.5361445229844042" ry="1.576305133525006" fill="#ffffff" stroke="none" pointer-events="none" id="svg_2" filter="" stroke-opacity="1" fill-opacity="1"/></g></g></svg>
+        </filter></defs><g class="currentLayer" style=""><title>Layer 1</title><g id="svg_1" class="selected" filter="" stroke="#ffffff" stroke-opacity="1"><ellipse cx="2.9377510845661163" cy="2.9377510398626328" rx="2.3393574357032776" ry="2.3393574357032776" fill="none" stroke="#ffffff" pointer-events="none" id="svg_2" filter="" stroke-opacity="1"/></g></g></svg>

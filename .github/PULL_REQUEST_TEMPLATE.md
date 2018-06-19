@@ -7,15 +7,11 @@ Please mention the issue number, if exists.
 Please mention the type of PR
 
 
-[ ] Bug Fix
-
-[ ] Refactoring / Technology upgrade
-
-[ ] New Feature
-
-[ ] Documentation
-
-[ ] Other : | Please Specify |
+* [ ] Bug Fix
+* [ ] Refactoring / Technology upgrade
+* [ ] New Feature
+* [ ] Documentation
+* [ ] Other : | Please Specify |
 
 
 **Note** : Please ensure that you've read contribution [guidelines](CONTRIBUTING.md) before raising this PR.

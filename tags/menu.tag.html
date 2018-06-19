@@ -1,13 +1,13 @@
 <menu>
-    <div class="dropdown">
-        <div class="dropbtn"><img src="img/menu.svg"></div>
+    <div class="dropdown" style="left: -50px">
+        <div class="dropbtn"><i class="icon-menu" ></i></div>
         <div class="dropdown-content">
             <a href="#" >
                 <label class="btn-bs-file">Open
                     <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange={openFile}  />
                 </label>
             </a>
-            <a href="#" onclick={saveFile}>Save</a>
+            <a href="#" id="save" onclick={saveFile}>Save</a>
         </div>
     </div>
     <script>
@@ -19,5 +19,17 @@
         this.saveFile = function(){
             selectFileTypeToSave();
         }
+
+        this.on('mount', function(){
+
+            document.addEventListener('keydown', e => {
+                if ( (e.key == 'O' || e.key == 'o') && !e.shiftKey && !e.altKey ){
+                    document.getElementById('browse').click();
+                }
+                if (e.key == 's' || e.key == 'S'){
+                    document.getElementById('save').click();
+                }
+            })
+        });
     </script>
 </menu>

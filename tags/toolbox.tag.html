@@ -8,6 +8,7 @@
         .tool-icon{
             width: 40%;
             margin: 3px 0px;
+            font-size: 1.5em;
         }
         .tool-selected{
             background: coral;
@@ -18,7 +19,8 @@
     </style>
 
     <div each={tool,toolid in tools[opts.tools]} id={ toolid } class="tool-button" onclick={ selectme }>
-        <img class="tool-icon" src="img/icons/{tool.icon}">
+        <img if={tool.icon} class="tool-icon" src="img/icons/{tool.icon}">
+        <i if={tool.icon_font} class="tool-icon {tool.icon_font}" />
         <div>{ tool.title }</div>
     </div>
     

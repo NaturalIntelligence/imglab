@@ -24,3 +24,6 @@ Here is the check list to publish any change
 Note that publishing changes or accepting any PR may take time. So please keep patience.
 
 **First Time Contributers**? Check this [helpguide](https://github.com/NaturalIntelligence/imglab/blob/master/.github/First_Time_Contributors.md)
+
+
+**Collaborators** : If you want to be the part of this project, please let me know. The only prerequisite is that you must have completed 2-3 PRs, and participated in other issues to help users.

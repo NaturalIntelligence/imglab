@@ -1,35 +1,85 @@
-<images-slider>
-        <div class="float-left" style="width: 50px; height: 100%; text-align: center; padding: 10px; border-left: 1px solid grey;">
+<images-slider class="form-inline">
+    <style>
+        input[type='file'] {
+            display: none;
+        }
+    </style>
+        <div style="width: 50px;  text-align: center; padding: 10px;">
                 <label class="btn-bs-file">
-                    <img class="file-input-icon" src="img/icons/files-white.png">
-                    <input type="file" class="filebutton" accept="image/*"  onchange= { readImageFiles }  multiple/>
+                    <i class="icon-picture" style="font-size: 1.5em"></i>
+                    <input id="browseImages" type="file" class="filebutton" accept="image/*"  onchange= { readImageFiles }  multiple/>
                 </label>
 
                 <label class="btn-bs-file">
-                    <img class="file-input-icon" src="img/icons/open.png">
+                    <i class="icon-folder-open-empty" style="font-size: 1.5em"></i>
                     <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)" >
                 </label>
         </div>
-        <div class="float-left left-paddle " style="width: 50px; height: 100%;" onclick={ slideleft }></div>
-        <div class="float-left photolist-wrapper " style="width: calc(100% - 160px); height: 100%;">
-            <div name="photolist" class="photolist">
-                    <!-- <span each={ this.thumbnails } class="d-inline-block">
+        <div id="leftpaddle" class="align-middle"  style="height: 100%;">
+            <span style="width: 50px; height: 90px;">
+                <i class="icon-left-open" style="font-size: 1.5em"></i>
+            </span>
+        </div>
+        <div class="photolist-wrapper " style="width: calc(100% - 160px); height: 90px;">
+            <div id="photolist" class="photolist">
+                    <!-- <span each={ thumbnails } class="d-inline-block">
                         <span class="delete" onclick={ deleteThumbnail }></span> -->
-                        <img each={ this.thumbnails } src={ src } label ={ name } title={ name } width={this.thumbnailWidth} onclick={ loadIntoWorkArea}>
+                        <img id="thumbnail_{index}" each={ thumbnail,index in thumbnails } src={ thumbnail.src } label ={ thumbnail.name } title={ thumbnail.name } width={thumbnailWidth} onclick={ loadIntoWorkArea}>
                     <!-- </span> -->
             </div>
         </div>
-        <div class="right-paddle" style="width: 50px; height: 100%;" onclick ={ slideright }></div>
+        <div id="rightpaddle" class="align-middle"  style="height: 100%;">
+            <span style="width: 50px; height: 90px;">
+                <i class="icon-right-open" style="font-size: 1.5em"></i>
+            </span>
+        </div>
     
     
     <script>
-        tag = this;
+        var tag = this;
         tag.readImageFiles = readImageFiles;
         tag.readImageFile = readImageFile;
         tag.slideleft = slideleft;
         tag.slideright = slideright;
         tag.deleteThumbnail = deleteThumbnail;
         tag.loadIntoWorkArea = loadIntoWorkArea;
+
+        this.on('mount', function(){
+                
+                $("#leftpaddle").click(function(e){
+                    tag.slideleft(e);
+                })
+
+                $("#rightpaddle").click(function(e){
+                    tag.slideright(e);
+                })
+
+                document.addEventListener('keydown', e => {
+                    
+                    if (e.key == 'ArrowLeft'){
+                        //$("#leftpaddle").click();
+                        if(tag.currentIndex > 0 ) $("#thumbnail_" + --tag.currentIndex).click();
+                    }
+                    if (e.key == 'ArrowRight'){
+                        //$("#rightpaddle").click();
+                        if(tag.currentIndex < tag.thumbnails.length - 1 ) $("#thumbnail_"+ ++tag.currentIndex).click();
+                    }
+                    if (e.key == 'O' && e.shiftKey){
+                        document.getElementById('browseImages').click();
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                    if (e.key == 'o' && e.altKey){
+                        document.getElementById('image_folder').click();
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                })
+        });
+
+        this.on('updated', () => {
+            //$("#thumbnail_0").click(); as this triggers before images are uploaded it cuase issue. Load it with an interval
+        })
 
         function readImageFiles(e) {
             var input = e.srcElement;
@@ -39,8 +89,11 @@
                 }
             }
         }
-        this.thumbnails = [];
-        this.thumbnailWidth= this.opts.thumbnail_width || "80px"
+
+        tag.thumbnails = [];
+        tag.currentIndex = 0;
+        this.thumbnailWidth= this.opts.thumbnail_width || "80px";
+
         function readImageFile(f) {
             if(f.type.startsWith("image")){
                 var reader = new FileReader();
@@ -49,8 +102,8 @@
                         name : f.name,
                         src: e.target.result
                     };
-                    updateDimentions(e.target.result,imgData);
-                    this.thumbnails.push(imgData);
+                    updateDimentions(e.target.result, imgData);
+                    tag.thumbnails.push(imgData);
                     
                     this.trigger("uploadimages");
                 }
@@ -61,7 +114,7 @@
             }
         }
 
-        function updateDimentions(imgFileSrc, imageDataObject){
+        function updateDimentions(imgFileSrc, imageDataObject) {
             var img = new Image();
             img.onload = function() {
                 imageDataObject.size = {
@@ -69,14 +122,14 @@
                     height : this.height
                 }
                 addImgToStore(imageDataObject.name, imageDataObject.size);
-            };
+            }
             img.src = imgFileSrc;
         }
 
         this.sliding = false;
         this.sliderMove = "80px";
         function slideleft(e) {
-            var photolist = $(e.target.nextElementSibling.children[0]);
+            var photolist = $("#photolist");
             if (this.sliding === false) {
                 this.sliding = true;
                 photolist.css({ left: "-"+this.sliderMove })
@@ -87,7 +140,7 @@
             }
         };
         function slideright(e) {
-            var photolist = $(e.target.previousElementSibling.children[0]);
+            var photolist = $("#photolist");
             if (this.sliding === false) {
                 this.sliding = true;
                 photolist.animate({ left: "-"+this.sliderMove }, 200, 'linear', () => {
@@ -100,9 +153,9 @@
 
         function deleteThumbnail(e){
             var thumbnail = $(e.target.nextElementSibling);
-            for(var thumbnail_i in this.thumbnails){
-                if(this.thumbnails[thumbnail_i].name === $(thumbnail[0]).attr("title")){
-                    this.thumbnails.splice(thumbnail_i,1);
+            for(var thumbnail_i in tag.thumbnails){
+                if(tag.thumbnails[thumbnail_i].name === $(thumbnail[0]).attr("title")){
+                    tag.thumbnails.splice(thumbnail_i,1);
                     break;
                 }
             }
@@ -110,8 +163,8 @@
         }
 
         function loadIntoWorkArea(e){
-            imgSelected = e.item.name;
-            riot.mount("workarea",{ img : e.item});
+            imgSelected = tag.thumbnails[e.item.index];
+            riot.mount("workarea",{ img : imgSelected });
         }
     </script>
 </images-slider>
