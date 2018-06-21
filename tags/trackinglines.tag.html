@@ -15,8 +15,9 @@
         var canvas = $('#work-canvas');
         this.on('mount', function () {
             var canvas = $('#work-canvas');
-            $(tag.refs["h_line"]).width(opts.width);
-            $(tag.refs["v_line"]).height(opts.height);
+            var canvasContainer = $("#canvas-container");
+            $(tag.refs["h_line"]).width(opts.width > canvasContainer.width() ? opts.width : canvasContainer.width() );
+            $(tag.refs["v_line"]).height(opts.height > canvasContainer.height() ? opts.height : canvasContainer.height() );
 
             canvas.mousemove(function (event) {
 
