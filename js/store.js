@@ -119,20 +119,24 @@ function attachShapeToImg(id, type, bbox, points){
     };
 }
 function addImgToStore(imgname, size) {
-    labellingData[imgname] = {
-        //"path" : "",
-        "imagename": imgname,
-        "attributes": [],
-        "tags": [],
-        "size" : {
-            "width": size.width,
-            "height": size.height
-        },
-        "shapes": {}
+    //If we already have this image data in localstorage, 
+    //don't initialize its properties
+    if(!labellingData[imgname]){
+        labellingData[imgname] = {
+            //"path" : "",
+            "imagename": imgname,
+            "attributes": [],
+            "tags": [],
+            "size" : {
+                "width": size.width,
+                "height": size.height
+            },
+            "shapes": {}
+        }
     }
 }
 
-var labellingData = {};
+var labellingData = getLabellingDataFromLocalStorage();
 // circle: schema.data[n].shapes[n].points = [cx, cy, r]
 // eclipse: schema.data[n].shapes[n].points = [cx, cy, rx, ry]
 // line: schema.data[n].shapes[n].points = [x1, y1, x2, y2]
