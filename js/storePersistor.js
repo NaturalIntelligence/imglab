@@ -16,6 +16,6 @@ function getLabellingDataFromLocalStorage(){
 var synchToBrowser = function() {
     localStorage.setItem("labellingData", JSON.stringify(labellingData));
 };
-window.setInterval( synchToBrowser , 5000);
+window.setInterval( synchToBrowser , appConfig.autosave.syncingInterval);
 
 

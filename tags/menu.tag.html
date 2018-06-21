@@ -8,6 +8,7 @@
                 </label>
             </a>
             <a href="#" id="save" onclick={saveFile}>Save</a>
+            <a href="#" onclick={openSettings}>Settings</a>
         </div>
     </div>
     <script>
@@ -18,6 +19,10 @@
 
         this.saveFile = function(){
             selectFileTypeToSave();
+        }
+
+        this.openSettings = function(){
+            displaySettingsModal();
         }
 
         this.on('mount', function(){
