@@ -89,6 +89,7 @@ var tools = {
             title  : "Light",
             desp : "Highlight the labels",
             icon_font : "icon-lightbulb",
+            actions : ["lightbulb"]
         }
     }
 };

@@ -3,10 +3,17 @@
         #actionbar{
             height: 40px;
             width: 100%;
-            border: 1px solid grey;
+            outline: 1px solid grey;
+            padding: 1px 5px;
         }
     </style>
-    <div id="actionbar">
-        
-    </div>
+    <div id="actionbar" class="form-inline"></div>
+    <script>
+        this.on('mount',function(){
+            for(var a_i in this.opts.actions){
+                $("#actionbar").append(`<action-${this.opts.actions[a_i]}></action-${this.opts.actions[a_i]}>`)
+                riot.mount("action-"+this.opts.actions[a_i]);
+            }
+        });
+    </script>
 </actionbar>
