@@ -7,9 +7,13 @@
 function getLabellingDataFromLocalStorage(){
     var localStorageData = localStorage.getItem("labellingData");
     if(localStorageData){
-        return JSON.parse(localStorageData)
+        try{
+            var localStorageData = JSON.parse(localStorageData)
+        }catch(e){
+            return {};
+        }
     }
-    return {}
+    return {};
 }
 
 //Every 5 seconds, save the current data in localStorage
