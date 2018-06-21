@@ -104,3 +104,7 @@
     width: 39px;
     border-radius: 50%;
 }
+
+.no-pl{
+    padding-left: 0px!important;
+}
