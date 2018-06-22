@@ -4,7 +4,8 @@
   "description": "label images for machine learning",
   "main": "index.js",
   "scripts": {
-    "compile": "riot -w tags/ tags/tags.js --ext html"
+    "compile": "riot -w tags/ tags/tags.js --ext html",
+    "updateContributors": "node js/contributors.js"
   },
   "repository": {
     "type": "git",
