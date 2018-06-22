@@ -1,9 +1,51 @@
 <settings-window>
-    <div>
+    <style>
+        #settings-wrapper{
+            min-height: 500px;
+            /* min-width: 400px; */
+        }
+    </style>
+    <div id="settings-wrapper">
         <h3>Auto Save</h3>
-        <small>This application saves data to browser cache automatically. Here you can control it's settings.</small>
-        Syncing Interval <input type="text" value={ appconfig.autosave.syncingInterval }>
+        <small>We auto save labeling data in browser cache.</small>
+        <br>
+        <div class="row">
+            <div class="col-6"> 
+                Syncing Interval 
+                <small><i class="icon-attention-circled small" data-toggle="tooltip" title="Change how early the data should be saved in browser cache.  Set 0 to disable. Minimum value is 4 sec."></i></small>
+            </div>
+            <div class="col-6 float-right">
+                <input  type="text" value={ appConfig.autosave.syncingInterval / 1000} size=4 onchange={changeInterval}> <small></small> seconds
+            </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-6"> 
+                Keep after export
+                <small><i class="icon-attention-circled small" data-toggle="tooltip" title="If this option is unchecked, browser cahche will be cleared once you export the data."></i></small>
+            </div>
+            <div class="col-6"> 
+                <input  type="checkbox" value={ appConfig.autosave.syncingInterval / 1000} size=4>
+            </div>
+        </div> -->
+        <br>
+        <div>
+            <button class="btn btn-theme" onclick={clearCache}>Clear cache</button>
+        </div>
     </div>
     <script>
+        this.changeInterval = function(e){
+            if(e.target.value === 0){
+                appConfig.autosave.enable = false;
+            }else if(e.target.value < 4) {
+                appConfig.autosave.enable = true;
+                appConfig.autosave.syncingInterval = 4 * 1000;
+                this.update();
+            }else{
+                appConfig.autosave.enable = true;
+                appConfig.autosave.syncingInterval = e.target.value * 1000;
+            }
+        }
+
+        
     </script>
 </settings-window>

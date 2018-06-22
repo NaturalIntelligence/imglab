@@ -136,7 +136,7 @@ function addImgToStore(imgname, size) {
     }
 }
 
-var labellingData = getLabellingDataFromLocalStorage();
+var labellingData = {};
 // circle: schema.data[n].shapes[n].points = [cx, cy, r]
 // eclipse: schema.data[n].shapes[n].points = [cx, cy, rx, ry]
 // line: schema.data[n].shapes[n].points = [x1, y1, x2, y2]
