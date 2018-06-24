@@ -19,6 +19,9 @@ You can either import a file from a URL or from your computer. You can plot the 
 
 [![ImgLab Tutorial](https://img.youtube.com/vi/4yLL21weN8w/0.jpg)](https://www.youtube.com/watch?v=4yLL21weN8w)
 
+## Version 2
+we are working on version 2. We'll be replacing version 1 with version 2 as soon as the primary features are completed. If you want to try it early, check this link : https://naturalintelligence.github.io/imglab/v2.html
+
 ## Link your work
 
 Using this library if you build some open database which can help others or just to showcase, please raise an issue or PR.
