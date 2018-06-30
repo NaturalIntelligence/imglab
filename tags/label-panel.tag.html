@@ -21,7 +21,7 @@
     </div>
     <div id="feature-points-list">
         <ul id="fpoints-list">
-            <li class="li-fpoints grey-border form-inline" each={fPoint in targetShape.featurePoints}>
+            <li class="li-fpoints grey-border form-inline" each={fPoint,fid in targetShape.featurePoints}>
                 <div class="drag-handler"></div>
                 <input type="text" class="form-text" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
             </li>
@@ -30,7 +30,11 @@
     <script>
         this.targetShape = labellingData[ imgSelected.name ].shapes[ opts.id ] ;
         this.updateLabel = function(e){
-            this.targetShape = e.target.value;
+            this.targetShape.label = e.target.value;
+        }
+
+        this.updateFPointLabel = function(e){
+            this.targetShape.featurePoints[e.item.fid].label = e.target.value;
         }
 
         this.on('mount',function(){
