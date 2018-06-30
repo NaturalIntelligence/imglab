@@ -64,7 +64,7 @@ function createAttribute(label , val){
 }
 
 function updateLabel(oldLabel,newLabel){
-    var shape = findInArray(labellingData[ imgSelected.name ].shapes, "label", oldLabel);
+    var shape = findInArray(labellingData[ imgSelected.index ].shapes, "label", oldLabel);
     shape.label = newLabel;
 }
 
@@ -76,16 +76,16 @@ function findInArray(arr, property, val){
 
 function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
     if(position){
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].x = position.cx;
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].y = position.cy;
+        labellingData[ imgSelected.index ].shapes[shapeId].featurePoints[pointid].x = position.cx;
+        labellingData[ imgSelected.index ].shapes[shapeId].featurePoints[pointid].y = position.cy;
     }
 
     if(newLabel){
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].label = newLabel    
+        labellingData[ imgSelected.index ].shapes[shapeId].featurePoints[pointid].label = newLabel    
     }
 }
 function attachPointToShape(shapeId , pointid, position){
-    labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid] = {
+    labellingData[ imgSelected.index ].shapes[shapeId].featurePoints[pointid] = {
         "x": position.cx,
         "y": position.cy,
         "label" : generateLabel("point")
@@ -93,18 +93,18 @@ function attachPointToShape(shapeId , pointid, position){
 }
 
 function detachShape(shapeId){
-    delete labellingData[ imgSelected.name ].shapes[shapeId];
+    delete labellingData[ imgSelected.index ].shapes[shapeId];
 }
 
 function detachPoint(shapeId, pointid){
-    delete labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid];
+    delete labellingData[ imgSelected.index ].shapes[shapeId].featurePoints[pointid];
 }
 function updateShapeDetailInStore(id, bbox, points){
-    bbox && (labellingData[ imgSelected.name ].shapes[id].bbox = bbox);
-    points && (labellingData[ imgSelected.name ].shapes[id].points = points);
+    bbox && (labellingData[ imgSelected.index ].shapes[id].bbox = bbox);
+    points && (labellingData[ imgSelected.index ].shapes[id].points = points);
 }
 function attachShapeToImg(id, type, bbox, points){
-    labellingData[ imgSelected.name ].shapes[id] = {
+    labellingData[ imgSelected.index ].shapes[id] = {
         "label" : generateLabel(type),
         "type" : type,
         "points": points,
@@ -118,11 +118,11 @@ function attachShapeToImg(id, type, bbox, points){
         "featurePoints": {}
     };
 }
-function addImgToStore(imgname, size) {
+function addImgToStore(index, imgname, size) {
     //If we already have this image data in localstorage, 
     //don't initialize its properties
-    if(!labellingData[imgname]){
-        labellingData[imgname] = {
+    if(!labellingData[index]){
+        labellingData[index] = {
             //"path" : "",
             "imagename": imgname,
             "attributes": [],
@@ -136,7 +136,7 @@ function addImgToStore(imgname, size) {
     }
 }
 
-var labellingData = {};
+var labellingData = [];
 // circle: schema.data[n].shapes[n].points = [cx, cy, r]
 // eclipse: schema.data[n].shapes[n].points = [cx, cy, rx, ry]
 // line: schema.data[n].shapes[n].points = [x1, y1, x2, y2]

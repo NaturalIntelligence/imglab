@@ -185,7 +185,7 @@
         }
 
         function selectAll() {
-            for (var shapeId in labellingData[imgSelected.name].shapes) {
+            for (var shapeId in labellingData[imgSelected.index].shapes) {
                 var el = SVG.get(shapeId)
                 el.selectize({
                     rotationPoint: false
@@ -247,8 +247,8 @@
 
 
         function drawOnCanvas() {
-            for (var shapeId in labellingData[imgSelected.name].shapes) {
-                var shape = labellingData[imgSelected.name].shapes[shapeId];
+            for (var shapeId in labellingData[imgSelected.index].shapes) {
+                var shape = labellingData[imgSelected.index].shapes[shapeId];
                 var currentShape;
                 switch (shape.type) {
                     case "rect":
