@@ -1,9 +1,30 @@
 <label-panel>
+    <style>
+        .li-fpoints{
+            margin: 5px;
+            border-radius: 6px;
+            width: 100%;
+            list-style: none;
+            padding: 2px;
+        }    
+        .drag-handler{
+            width : 10px;
+            display: inline-block;
+            height: 100%;
+        }
+        #fpoints-list { list-style-type: none; margin: 0; padding: 0; margin-bottom: 10px; }
 
-    <input type="text" class="form-text" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
+    </style>
+    <div ref="label-data">
+        Label Name
+        <input type="text" class="form-text w-100" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
+    </div>
     <div id="feature-points-list">
-        <ul>
-            <li each={fPoint in targetShape.featurePoints}></li>
+        <ul id="fpoints-list">
+            <li class="li-fpoints grey-border form-inline" each={fPoint in targetShape.featurePoints}>
+                <div class="drag-handler"></div>
+                <input type="text" class="form-text" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
+            </li>
         </ul>
     </div>
     <script>
@@ -11,5 +32,9 @@
         this.updateLabel = function(e){
             this.targetShape = e.target.value;
         }
+
+        this.on('mount',function(){
+            $( "#fpoints-list" ).sortable();
+        })
     </script>
 </label-panel>
