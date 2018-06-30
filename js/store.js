@@ -75,21 +75,31 @@ function findInArray(arr, property, val){
 }
 
 function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
+    var index = getPointIndex(shapeId , pointid);
+    
     if(position){
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].x = position.cx;
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].y = position.cy;
+        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[index].x = position.cx;
+        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[index].y = position.cy;
     }
 
     if(newLabel){
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid].label = newLabel    
+        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[index].label = newLabel    
     }
 }
 function attachPointToShape(shapeId , pointid, position){
-    labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid] = {
+    labellingData[ imgSelected.name ].shapes[shapeId].featurePoints.push( {
         "x": position.cx,
         "y": position.cy,
-        "label" : generateLabel("point")
-    };
+        "label" : generateLabel("point"),
+        "id" : pointid
+    });
+}
+
+function getPointIndex(shapeId , pointid){
+    var fPoints = labellingData[ imgSelected.name ].shapes[shapeId].featurePoints;
+    for(var i=0; i<fPoints.length; i++){
+        if(fPoints[i].id === pointid) return i;
+    }
 }
 
 function detachShape(shapeId){
@@ -115,7 +125,7 @@ function attachShapeToImg(id, type, bbox, points){
             "h": 0        },
         "attributes": [],
         "tags": [],
-        "featurePoints": {}
+        "featurePoints": []
     };
 }
 function addImgToStore(imgname, size) {
