@@ -24,21 +24,46 @@
             <li class="li-fpoints grey-border form-inline" each={fPoint,fid in targetShape.featurePoints}>
                 <div class="drag-handler"></div>
                 <input type="text" class="form-text" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
+                <i class="icon icon-trash-empty small"></i>
             </li>
         </ul>
     </div>
     <script>
-        this.targetShape = labellingData[ imgSelected.name ].shapes[ opts.id ] ;
-        this.updateLabel = function(e){
-            this.targetShape.label = e.target.value;
+        var tag = this;
+        tag.targetShape = labellingData[ imgSelected.name ].shapes[ opts.id ] ;
+        tag.updateLabel = function(e){
+            tag.targetShape.label = e.target.value;
         }
 
-        this.updateFPointLabel = function(e){
-            this.targetShape.featurePoints[e.item.fid].label = e.target.value;
+        tag.updateFPointLabel = function(e){
+            tag.targetShape.featurePoints[e.item.fid].label = e.target.value;
         }
 
-        this.on('mount',function(){
-            $( "#fpoints-list" ).sortable();
+        tag.on('mount',function(){
+            $( "#fpoints-list" ).sortable({
+                update : function(event,ui){
+                    var newIndex = ui.item.index();
+                    var oldIndex = ui.item[0]._tag.fid;
+                    array_move(tag.targetShape.featurePoints,oldIndex,newIndex);
+                    tag.update();
+                }
+            });
         })
+
+        function array_move(arr, old_index, new_index) {
+            if(old_index > new_index){
+                var temp = arr[old_index];
+                for(;old_index > new_index; old_index--){
+                    arr[old_index] = arr[old_index - 1];
+                }
+                arr[new_index] = temp;
+            }else{
+                var temp = arr[old_index];
+                for(;old_index < new_index; old_index++){
+                    arr[old_index] = arr[old_index + 1];
+                }
+                arr[new_index] = temp;
+            }
+        };
     </script>
 </label-panel>
