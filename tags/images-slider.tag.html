@@ -85,7 +85,7 @@
             var input = e.srcElement;
             if (input.files && input.files[0]) {
                 for(i=0;i<input.files.length;i++){
-                    this.readImageFile(input.files[i], i);
+                    this.readImageFile(input.files[i]);
                 }
             }
         }
@@ -94,7 +94,7 @@
         tag.currentIndex = 0;
         this.thumbnailWidth= this.opts.thumbnail_width || "80px";
 
-        function readImageFile(f, index) {
+        function readImageFile(f) {
             if(f.type.startsWith("image")){
                 var reader = new FileReader();
                 reader.onload = e => {
@@ -102,8 +102,7 @@
                         name : f.name,
                         src: e.target.result
                     };
-                    updateDimentions(e.target.result, imgData, index);
-                    imgData.index = index;
+                    updateDimentions(e.target.result, imgData);
                     tag.thumbnails.push(imgData);
                     
                     this.trigger("uploadimages");
@@ -115,14 +114,14 @@
             }
         }
 
-        function updateDimentions(imgFileSrc, imageDataObject, index) {
+        function updateDimentions(imgFileSrc, imageDataObject) {
             var img = new Image();
             img.onload = function() {
                 imageDataObject.size = {
                     width : this.width,
                     height : this.height
                 }
-                addImgToStore(index, imageDataObject.name, imageDataObject.size);
+                addImgToStore(imageDataObject.name, imageDataObject.size);
             }
             img.src = imgFileSrc;
         }
