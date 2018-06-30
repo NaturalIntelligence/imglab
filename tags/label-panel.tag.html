@@ -1,0 +1,15 @@
+<label-panel>
+
+    <input type="text" class="form-text" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
+    <div id="feature-points-list">
+        <ul>
+            <li each={fPoint in targetShape.featurePoints}></li>
+        </ul>
+    </div>
+    <script>
+        this.targetShape = labellingData[ imgSelected.name ].shapes[ opts.id ] ;
+        this.updateLabel = function(e){
+            this.targetShape = e.target.value;
+        }
+    </script>
+</label-panel>

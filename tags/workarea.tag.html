@@ -120,6 +120,7 @@
                     } else {
                         if (!e.ctrlKey) { //deselect rest selected elements
                             deselectAll();
+                            riot.mount('label-panel', { id : currentTool.node.id })
                         }
                         //select currnt element
                         currentTool.selectize({
