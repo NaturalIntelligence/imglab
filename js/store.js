@@ -1,18 +1,3 @@
-var counter = 0;
-
-function generateLabel(hint){
-    var label = hint || "label";
-    return label + counter ++;
-}
-
-function createFeaturePoint(label , x,y){
-    return {
-        "x": x,
-        "y": y,
-        "label" : generateLabel(type)
-    }
-}
-
 function createAttribute(label , val){
     return {
         "label" : label,
@@ -47,7 +32,7 @@ function attachPointToShape(shapeId , pointid, position){
     shape.featurePoints.push( {
         "x": position.cx,
         "y": position.cy,
-        "label" : generateLabel("point"),
+        "label" : shape.featurePoints.length,
         "id" : pointid
     });
 }
@@ -74,7 +59,7 @@ function updateShapeDetailInStore(shapeId, bbox, points){
 function attachShapeToImg(id, type, bbox, points){
     labellingData[ imgSelected.name ].shapes.push( {
         "id" : id,
-        "label" : generateLabel(type),
+        "label" : type,
         "type" : type,
         "points": points,
         "bbox" : bbox || {

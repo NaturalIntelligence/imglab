@@ -19,7 +19,8 @@
         Label Name
         <input type="text" class="form-text w-100" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
     </div>
-    <div id="feature-points-list">
+    <div id="feature-points-list" >
+        Feature Points
         <ul id="fpoints-list">
             <li class="li-fpoints grey-border form-inline" each={fPoint,fid in targetShape.featurePoints}>
                 <div class="drag-handler"></div>
