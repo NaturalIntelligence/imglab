@@ -30,7 +30,7 @@
     </div>
     <script>
         var tag = this;
-        tag.targetShape = labellingData[ imgSelected.name ].shapes[ opts.id ] ;
+        tag.targetShape = getShape(opts.id) ;
         tag.updateLabel = function(e){
             tag.targetShape.label = e.target.value;
         }

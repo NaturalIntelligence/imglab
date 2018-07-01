@@ -68,14 +68,9 @@ function updateLabel(oldLabel,newLabel){
     shape.label = newLabel;
 }
 
-function findInArray(arr, property, val){
-    arr.forEach( item => {
-        if(item[property] === val) return item;
-    })
-}
-
 function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
-    var featurePoints = labellingData[ imgSelected.name ].shapes[shapeId].featurePoints;
+    var shape = getShape(shapeId);
+    var featurePoints = shape.featurePoints;
     var index = indexOf(featurePoints, pointid);
 
     if(position){
@@ -87,8 +82,12 @@ function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
         featurePoints[index].label = newLabel    
     }
 }
+function getShape(shapeId){
+    return findInArray(labellingData[ imgSelected.name ].shapes, "id", shapeId);
+}
 function attachPointToShape(shapeId , pointid, position){
-    labellingData[ imgSelected.name ].shapes[shapeId].featurePoints.push( {
+    var shape = getShape(shapeId);
+    shape.featurePoints.push( {
         "x": position.cx,
         "y": position.cy,
         "label" : generateLabel("point"),
@@ -96,27 +95,28 @@ function attachPointToShape(shapeId , pointid, position){
     });
 }
 
-function indexOf(arr, itemId){
-    for(var i=0; i<arr.length; i++){
-        if(arr[i].id === itemId) return i;
-    }
-}
-
 function detachShape(shapeId){
-    delete labellingData[ imgSelected.name ].shapes[shapeId];
+    var shapes = labellingData[ imgSelected.name ].shapes;
+    var index = indexOf(shapes, shapeId);
+    shapes.splice(index,1);
 }
 
 function detachPoint(shapeId, pointid){
-    var featurePoints = labellingData[ imgSelected.name ].shapes[shapeId].featurePoints;
+    var shape = getShape(shapeId);
+    var featurePoints = shape.featurePoints;
     var index = indexOf(featurePoints, pointid);
-    delete featurePoints.splice(index, 1);
+    featurePoints.splice(index, 1);
 }
-function updateShapeDetailInStore(id, bbox, points){
-    bbox && (labellingData[ imgSelected.name ].shapes[id].bbox = bbox);
-    points && (labellingData[ imgSelected.name ].shapes[id].points = points);
+function updateShapeDetailInStore(shapeId, bbox, points){
+    var shapes = labellingData[ imgSelected.name ].shapes;
+    var index = indexOf(shapes, shapeId);
+
+    bbox && (shapes[index].bbox = bbox);
+    points && (shapes[index].points = points);
 }
 function attachShapeToImg(id, type, bbox, points){
-    labellingData[ imgSelected.name ].shapes[id] = {
+    labellingData[ imgSelected.name ].shapes.push( {
+        "id" : id,
         "label" : generateLabel(type),
         "type" : type,
         "points": points,
@@ -128,7 +128,7 @@ function attachShapeToImg(id, type, bbox, points){
         "attributes": [],
         "tags": [],
         "featurePoints": []
-    };
+    } );
 }
 function addImgToStore(imgname, size) {
     //If we already have this image data in localstorage, 
@@ -143,7 +143,7 @@ function addImgToStore(imgname, size) {
                 "width": size.width,
                 "height": size.height
             },
-            "shapes": {}
+            "shapes": []
         }
     }
 }

@@ -20,3 +20,25 @@ function getCordinates(event, element) {
         y: y
     };
 }
+
+/**
+ * Search an item in array based on id property
+ * @param {Array} arr 
+ * @param {string} itemId 
+ */
+function indexOf(arr, itemId){
+    for(var i=0; i<arr.length; i++){
+        if(arr[i].id === itemId) return i;
+    }
+}
+
+/**
+ * Search an item in array based on given property
+ * @param {Array} arr 
+ * @param {string} itemId 
+ */
+function findInArray(arr, property, val){
+    for(var i=0; i<arr.length; i++){
+        if(arr[i][property] === val) return arr[i];
+    }
+}
