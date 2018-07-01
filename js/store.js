@@ -75,15 +75,16 @@ function findInArray(arr, property, val){
 }
 
 function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
-    var index = getPointIndex(shapeId , pointid);
-    
+    var featurePoints = labellingData[ imgSelected.name ].shapes[shapeId].featurePoints;
+    var index = indexOf(featurePoints, pointid);
+
     if(position){
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[index].x = position.cx;
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[index].y = position.cy;
+        featurePoints[index].x = position.cx;
+        featurePoints[index].y = position.cy;
     }
 
     if(newLabel){
-        labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[index].label = newLabel    
+        featurePoints[index].label = newLabel    
     }
 }
 function attachPointToShape(shapeId , pointid, position){
@@ -95,10 +96,9 @@ function attachPointToShape(shapeId , pointid, position){
     });
 }
 
-function getPointIndex(shapeId , pointid){
-    var fPoints = labellingData[ imgSelected.name ].shapes[shapeId].featurePoints;
-    for(var i=0; i<fPoints.length; i++){
-        if(fPoints[i].id === pointid) return i;
+function indexOf(arr, itemId){
+    for(var i=0; i<arr.length; i++){
+        if(arr[i].id === itemId) return i;
     }
 }
 
@@ -107,7 +107,9 @@ function detachShape(shapeId){
 }
 
 function detachPoint(shapeId, pointid){
-    delete labellingData[ imgSelected.name ].shapes[shapeId].featurePoints[pointid];
+    var featurePoints = labellingData[ imgSelected.name ].shapes[shapeId].featurePoints;
+    var index = indexOf(featurePoints, pointid);
+    delete featurePoints.splice(index, 1);
 }
 function updateShapeDetailInStore(id, bbox, points){
     bbox && (labellingData[ imgSelected.name ].shapes[id].bbox = bbox);
