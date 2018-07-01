@@ -22,8 +22,10 @@ function selectFileTypeToSave(){
  */
 function saveAsNimn(){
     //TODO : change it after change in nimnjs
-    askFileName("Untitled_imglab.json", function(fileName){
-        download( JSON.stringify(labellingData), fileName, "application/json");
+    askFileName("Untitled_imglab.nimn", function(fileName){
+
+        download( nimn.stringify(nimnSchema, labellingData), fileName, "application/nimn");
+        //download( JSON.stringify(labellingData), fileName, "application/json");
     });
 }
 

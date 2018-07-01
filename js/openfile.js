@@ -27,7 +27,9 @@ function readDataFile(e){
         reader.onload = function (e) {
             /* if(pointFile.name.endsWith(".pts")){
                 loadPts(e.target.result);
-            }else */ if(dataFile.name.endsWith(".json")){
+            }else if(dataFile.name.endsWith(".json")){
+                loadJSONFile(e.target.result);
+            }else*/ if(dataFile.name.endsWith(".nimn")){
                 loadProjectFile(e.target.result);
             }else if(dataFile.name.endsWith(".fpp")){
                 loadFpp(e.target.result);
@@ -44,7 +46,8 @@ function readDataFile(e){
 }
 
 var loadProjectFile = function(data){
-    labellingData =  JSON.parse(data);
+    labellingData = nimn.parse(nimnSchema, data);
+    //labellingData =  JSON.parse(data);
 }
 var loadDlibXml = function(data){
     var obj = parser.parse(data,{
