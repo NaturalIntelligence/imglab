@@ -248,8 +248,8 @@
 
 
         function drawOnCanvas() {
-            for (var shapeId in labellingData[imgSelected.name].shapes) {
-                var shape = labellingData[imgSelected.name].shapes[shapeId];
+            for (var shapeIndex in labellingData[imgSelected.name].shapes) {
+                var shape = labellingData[imgSelected.name].shapes[shapeIndex];
                 var currentShape;
                 switch (shape.type) {
                     case "rect":
@@ -257,7 +257,7 @@
                             .rect(shape.points[2], shape.points[3])
                             .move(shape.points[0], shape.points[1])
                             .addClass('labelbox shape')
-                            .id(shapeId)
+                            .id(shape.id)
                             .resize();
                         rect.parent().draggable();
                         //Add feature points
@@ -270,7 +270,7 @@
                             .attr("cx", shape.points[0])
                             .attr("cy", shape.points[1])
                             .addClass('labelcircle shape')
-                            .id(shapeId)
+                            .id(shape.id)
                             .resize();
                         circle.parent().draggable();
                         //Add feature points
@@ -290,7 +290,7 @@
                             .polygon(shape.points)
                             //.move(shape.points[0],shape.points[1])
                             .addClass('labelpolygon shape')
-                            .id(shapeId)
+                            .id(shape.id)
                             .resize();
                         poly.parent().draggable();
                         //Add feature points
@@ -306,12 +306,12 @@
         }
 
         function drawAllFeaturePoints(fPoints, parent) {
-            for (var fPointId in fPoints) {
-                var fPoint = getPointToDraw(fPoints[fPointId], parent, {
+            for (var fPointIndex in fPoints) {
+                var fPoint = getPointToDraw(fPoints[fPointIndex], parent, {
                     x: 0,
                     y: 0
                 });
-                fPoint.id(fPointId);
+                fPoint.id(fPoint.id);
                 attachEventsToFeaturePoint(fPoint, parent);
             }
         }
