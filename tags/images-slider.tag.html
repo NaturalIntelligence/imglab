@@ -54,17 +54,17 @@
                     tag.slideright(e);
                 })
 
+                //Map keyboard keys
                 document.addEventListener('keydown', e => {
                     
-                    if (e.key == 'ArrowLeft'){
-                        //$("#leftpaddle").click();
+                    if (e.key == 'ArrowLeft'  && e.altKey){
                         if(tag.currentIndex > 0 ) $("#thumbnail_" + --tag.currentIndex).click();
                     }
-                    if (e.key == 'ArrowRight'){
-                        //$("#rightpaddle").click();
+                    if (e.key == 'ArrowRight'  && e.altKey){
                         if(tag.currentIndex < tag.thumbnails.length - 1 ) $("#thumbnail_"+ ++tag.currentIndex).click();
                     }
-                    if (e.key == 'O' && e.shiftKey){
+
+                    if ( e.key == 'o' && e.ctrl){
                         document.getElementById('browseImages').click();
                         e.preventDefault();
                         e.stopPropagation();

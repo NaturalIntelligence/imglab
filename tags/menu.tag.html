@@ -30,15 +30,21 @@
             displaySettingsModal();
         }
 
+        //Mapping Keyboard keys 
         this.on('mount', function(){
 
-            document.addEventListener('keydown', e => {
-                if ( (e.key == 'O' || e.key == 'o') && !e.shiftKey && !e.altKey ){
+            document.addEventListener('keydown', e => {//import
+                if ( (e.key == 'I' || e.key == 'i') && !e.shiftKey && !e.altKey && e.ctrlKey ){
                     document.getElementById('browse').click();
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
-                if (e.key == 's' || e.key == 'S'){
+                if ( (e.key == 'E' || e.key == 'e') && !e.shiftKey && !e.altKey && e.ctrlKey ){//export
                     document.getElementById('save').click();
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
+                
             })
         });
     </script>
