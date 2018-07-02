@@ -5,12 +5,11 @@
             border-radius: 6px;
             width: 100%;
             list-style: none;
-            padding: 2px;
         }    
         .drag-handler{
-            width : 10px;
-            display: inline-block;
-            height: 100%;
+            width : 20%;
+            background-color: lightgray;
+            cursor: move;
         }
         #fpoints-list { list-style-type: none; margin: 0; padding: 0; margin-bottom: 10px; }
         #feature-points-list {
@@ -27,10 +26,14 @@
         <div id="feature-points-list" >
             Feature Points
             <ul id="fpoints-list">
-                <li class="li-fpoints grey-border form-inline" each={fPoint,fid in targetShape.featurePoints}>
-                    <div class="drag-handler"></div>
-                    <input type="text" class="form-text" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
-                    <i class="icon icon-trash-empty small"></i>
+                <li class="li-fpoints grey-border" each={fPoint,fid in targetShape.featurePoints}>
+                    <div class="input-group small">
+                        <span class="input-group-addon drag-handler"></span>
+                        <input type="text" class="form-control" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
+                        <div class="input-group-btn">
+                            <i class="icon icon-trash-empty"></i>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
