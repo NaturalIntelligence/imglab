@@ -11,7 +11,22 @@ Web based tool to label images for object. So that they can be used to train dli
 
 <div align="center"><img src="img/imglab_logo.png"  width="300px"></div>
 
-> This project is looking for **contributors**. If you have a feature you'd like to see implemented or a bug you'd liked fixed, the best and fastest way to make that happen is to implement it and submit a PR. Basic knowledge of HTML, CSS and JS is sufficient to start with. Feel free to ask for any guidance.
+
+> If you're using the old version of imglab please use this [link](https://naturalintelligence.github.io/imglab/old.html)
+
+## Features
+
+ImgLab is platform independent, runs directly from browser, and no prerequisite is needed. It requires very less CPU and memory.
+
+The best thing is that you can use 3rd party libraries to **fast annotation process** which eventually saves your effort and time both.
+
+**Other features are**:
+
+* Designed specially for dlib users. You can easily adjust the order of parts / landmarks/ featurepoints.
+* Opensource and free forever.
+* You can draw feature points, shapes (circle, rectangle, polygon). Other shapes like ellipse, line, curves will be added in future. 
+* Small project file so it can be shared over the mail.
+* Import / Export data in multiple formats (Currently dlib XML, and pts format is supported)
 
 ## How to use
 
