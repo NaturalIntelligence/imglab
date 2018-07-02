@@ -49,16 +49,16 @@ function saveAsDlibPts(){
         return;
     }else if(selectedElements.length === 1){
         //TODO: bug element gets unselected when select any tool
-        ptsData = toDlibPts( labellingData[ imgSelected ].shapes[ selectedElements[0].id ] );
-    }else if(Object.keys(labellingData[imgSelected].shapes).length == 1){
-        var shapeId = Object.keys(labellingData[imgSelected].shapes)[0];
-        ptsData = toDlibPts( labellingData[imgSelected].shapes[ shapeId ] );
+        getShape(selectedElements[0].id)
+        ptsData = toDlibPts( getShape(selectedElements[0].id) );
+    }else if(labellingData[imgSelected.name].shapes.length === 1){
+        ptsData = toDlibPts( labellingData[imgSelected.name].shapes[ 0 ] );
     }else{
-        showSnackBar("Please create or select one label.");
+        showSnackBar("Please create or select one shape.");
         return;
     }
 
-    askFileName(imgSelected+ "_imglab.pts", function(fileName){
+    askFileName(imgSelected.name + "_imglab.pts", function(fileName){
         download(ptsData, fileName, "text/plain");
     });
 }
