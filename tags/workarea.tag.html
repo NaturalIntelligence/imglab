@@ -55,15 +55,31 @@
         });
 
         this.on('mount', function () {
-
+            let createdShapes = [];
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height) /* .panZoom() */ ;
 
             drawOnCanvas();
 
             myCanvas.on('mousedown', function (event) {
+
+                // If point, dont drag other shapes
+                if (selectedTool && selectedTool.type === "point") {
+                    console.log("hello");
+                    for (let i = 0; i < createdShapes.length; i++) {
+                        createdShapes[i].parent().draggable(false);
+                    }
+                } else {
+                    for (let i = 0; i < createdShapes.length; i++) {
+                        createdShapes[i].parent().draggable();
+                    }
+                }
+
                 deselectAll();
                 if (selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable) {
                     var currentTool = selectedTool.create(event, myCanvas);
+
+                    // store these shapes
+                    createdShapes.push(currentTool);
 
                     currentTool.on('drawstart', function () {
                         alreadyDrawing = true;
@@ -109,7 +125,7 @@
             currentTool.parent().on('click', function (e) {
                     if (selectedTool && selectedTool.type === "point") {
                         var point = selectedTool.create(e, currentTool);
-                        attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));//in store
+                        attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas)); //in store
                         attachEventsToFeaturePoint(point, currentTool);
                     } else if (e.altKey) { //deep select. Helpful in case of polygon
                         deselectAll();
@@ -121,7 +137,9 @@
                     } else {
                         if (!e.ctrlKey) { //deselect rest selected elements
                             deselectAll();
-                            riot.mount('label-panel', { id : currentTool.node.id })
+                            riot.mount('label-panel', {
+                                id: currentTool.node.id
+                            })
                         }
                         //select currnt element
                         currentTool.selectize({
@@ -139,7 +157,7 @@
             f_point.attr({
                 for: parent.node.id
             })
-            
+
             onMouse(f_point, function (e) { //drag callback: doesn't fire on click
                 updateFeaturePointPosition(f_point);
             });
