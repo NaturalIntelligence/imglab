@@ -109,6 +109,7 @@
             currentTool.parent().on('click', function (e) {
                     if (selectedTool && selectedTool.type === "point") {
                         var point = selectedTool.create(e, currentTool);
+                        attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));//in store
                         attachEventsToFeaturePoint(point, currentTool);
                     } else if (e.altKey) { //deep select. Helpful in case of polygon
                         deselectAll();
@@ -138,8 +139,7 @@
             f_point.attr({
                 for: parent.node.id
             })
-            attachPointToShape(parent.node.id, f_point.node.id, f_point.rbox(myCanvas));
-
+            
             onMouse(f_point, function (e) { //drag callback: doesn't fire on click
                 updateFeaturePointPosition(f_point);
             });
@@ -245,7 +245,6 @@
                         break; */
             }
         }
-
 
         function drawOnCanvas() {
             for (var shapeIndex in labellingData[imgSelected.name].shapes) {
