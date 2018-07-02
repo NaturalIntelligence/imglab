@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119603824-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-119603824-1');
+	</script>
+
+	<title>ImgLab</title>
+
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/slider.css">
+	<link rel="stylesheet" href="css/jquery-confirm.min.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-switch.min.css">
+	<!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
+
+	<script src="js/thirdparty/jquery.min.js" ></script>
+	<script src="js/thirdparty/bootstrap-switch.min.js"></script>
+	<script src="js/thirdparty/jsplumb.min.js"></script>
+	<script src="js/thirdparty/jquery-confirm.min.js"></script>
+	<script src="js/thirdparty/bootstrap.min.js"></script>
+	<script src="js/thirdparty/Blob.js"></script>
+	<script src="js/thirdparty/FileSaver.min.js"></script>
+	<script src="js/thirdparty/fxp.js"></script>
+
+
+
+
+
+</head>
+<body>
+            <a href="https://github.com/NaturalIntelligence/imglab"><img class="bring-up" style="position: absolute; top: 0; left: 0; border: 0;" src="img/githubribon.png" alt="Fork me on GitHub"></a>
+<h1 style="text-align: center;"> ImgLab</h1>
+<p style="text-align: center;">This is the webbased tool to label images with boxes and landmarks. You can also use Face++ API to prepopulate the points and then adjust them to improve the position by dragging them.</p>
+
+<div class="container">
+	<div class="row">
+	    <div class="col-sm-8">
+
+		    <div class="input-group">
+				<input class="form-control" type="text" id="image_url" name="image_url" placeholder="Image URL">
+		      <span class="input-group-btn">
+		        <button class="btn btn-outline-info" type="button" id="imgUrlBtn">Show</button>
+		      </span>
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<label class="btn-bs-file btn btn-outline-info">Browse Image files
+		        <input type="file" id="image_file" accept="image/*"  onchange="readImageFiles(this)"  multiple/>
+		    </label>
+	    </div>
+	    <div class="col-sm-2">
+			<label class="btn-bs-file btn btn-outline-info">Browse Image folder
+				<input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange="readImageFiles(this)" >
+		    </label>
+	    </div>
+    </div>
+</div>
+
+<div class="input-bar clearfix">
+	<div class="left-paddle"></div>
+    <div class="photolist-wrapper">
+        <div class="photolist"></div>
+    </div>
+    <div class="right-paddle"></div>
+</div>
+
+<div class="alert" id="info"></div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-2" style="background-color: #e1e6ea">
+			<div id="ptnDtl" class="widget">
+				<h5>Point Detail</h5>
+				<input class="form-control form-control-sm" type="text" id="lbltxtbox" placeholder="Label">
+				<div class="row">
+					<div class="col">x: <span id="div_x"></span></div>
+					<div class="col">y: <span id="div_y"></span></div>
+				</div>
+				<input class="form-control form-control-sm" disabled type="text" id="ptnboxlbl" placeholder="Box Label">
+				
+				<hr>
+			</div>
+			<div id="boxDtl"  class="widget">
+				<h5>Box Detail</h5>
+				<input class="form-control form-control-sm" type="text" id="boxtxtbox" placeholder="Label">
+				<div class="row">
+					<div class="col">t: <span id="div_t"></span></div>
+					<div class="col">l: <span id="div_l"></span></div>
+				</div>
+				<div class="row">
+					<div class="col">w: <span id="div_w"></span></div>
+					<div class="col">h: <span id="div_h"></span></div>
+				</div>
+				<hr>
+			</div>
+
+			<span id="imgdimentions"></span>
+		</div>
+		<div class="col-sm-8" >
+			<input type="checkbox" name="plotType" id="plotType" checked data-on-text="Box" data-off-text="Points">
+			<input type="button" class="btn btn-outline-danger btn-sm deleteBtn" value="Delete">
+			<input type="button" class="btn btn-outline-danger btn-sm" id="emptyBox" value="Empty">
+			<div style="height: 600px">
+				<div id="img_home">
+					<img id="img"/>
+					<!-- <canvas id="canvas"></canvas> -->
+					<div id="img_overlay"></div>
+					<span id="tooltip-span"></span>
+					<div id="v_line"></div>
+					<div id="h_line"></div>
+				</div>
+
+
+			</div>
+		</div>
+		<div class="col-sm-2" >
+			<h5>Time Saver </h5>
+			<small>Plot points using following methods and adjust them to improve the accuracy.</small>
+			<hr>
+			<input class="form-control" type="text" name="api_key" id="api_key" placeholder="api_key" />
+			<input class="form-control" type="text" name="api_secret" id="api_secret" placeholder="api_secret" />
+			<br>
+			<input class="btn btn-success" type="button" name="faceppBtn" id="faceppBtn" value="Face++" />
+
+
+			<hr>
+			<small>Select a file to read landmarks and face box position. (xml, json)</small><br>
+			<label id="loadDataFileBtn" class="btn-bs-file btn btn-outline-info">Browse
+
+			</label>
+			<input type="file" id="loadDataFileInput" style="display:none" value="Browse data file" accept=".fpp,.xml,.json" onchange="readPointsFile(this)" />
+
+			<hr>
+			<div class="sidebar">
+				<textarea id="actualData" ></textarea>
+				<input type="button" id="plotActualBtn" value="Plot on Image" />
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-danger" type="button" id="clrPointsBtn" value="Clear all" />
+		</div>
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-outline-primary" type="button" id="exportBtn" value="Save" />
+		</div>
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-outline-primary" type="button" id="exportDlibBtn" value="Save as dlib format" />
+		</div>
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-outline-primary" type="button" id="exportPtsBtn" value="Save PTS file" />
+		</div>
+		<div class="col-sm-2 text-center">
+			<br><input class="btn btn-outline-primary" disabled type="button" id="" value="placeholder" />
+		</div>
+	</div>
+</div>
+
+	<script src="js/fileOperation.js"></script>
+	<script src="js/uiaction.js"></script>
+	<script src="js/widget.js"></script>
+	<script src="js/FaceBox.js"></script>
+	<script src="js/labels.js"></script>
+	<script src="js/labelFileLoader.js"></script>
+	<script src="js/dataloader.js"></script>
+	<script src="js/slider.js"></script>
+	<script src="js/Face++DataParser.js"></script>
+	<script src="js/dlibDataHandler.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("[name='plotType']").bootstrapSwitch();
+			setTimeout(function(){
+                $.dialog({
+                    title: '',
+                    content: '<p>If you like my work, plz give me a '
+                    + '<a href="https://github.com/NaturalIntelligence/imglab/stargazers">star</a>'
+                    + ' on GitHub.</p>'
+                });
+            }, 10);
+		})
+
+	</script>
+</body>
+</html>
