@@ -37,7 +37,7 @@ function toDlibXML(imgs){
             for(var fPoint_i in fPoints){
                 var fPoint = fPoints [ fPoint_i ];
                 //TODO: pad fPoint_i
-                imgXMLStr += "\t\t\t<part name='"+ fPoint_i +"' x='"+ fPoint.x+"' y='"+ fPoint.y +"'/>\n";
+                imgXMLStr += "\t\t\t<part name='"+ fPoint_i +"' x='"+ Math.floor(fPoint.x)+"' y='"+ Math.floor(fPoint.y) +"'/>\n";
             }
             imgXMLStr += "\t\t</box>\n"
         }
@@ -54,7 +54,7 @@ function toDlibPts(shape){
             +"{\n";
     var l = shape.bbox.x, t = shape.bbox.y;
     for(var fp_id=0; fp_id < shape.featurePoints.length; fp_id++){
-        data += shape.featurePoints[ fp_id ].x + " " + shape.featurePoints[ fp_id ].y + "\n";
+        data += Math.floor(shape.featurePoints[ fp_id ].x) + " " + Math.floor(shape.featurePoints[ fp_id ].y) + "\n";
     }
 
     data += "}";
