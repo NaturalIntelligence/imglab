@@ -1,7 +1,7 @@
 <label-panel>
     <style>
         .li-fpoints{
-            margin: 5px;
+            margin: 5px 0px;
             border-radius: 6px;
             width: 100%;
             list-style: none;
@@ -13,21 +13,27 @@
             height: 100%;
         }
         #fpoints-list { list-style-type: none; margin: 0; padding: 0; margin-bottom: 10px; }
-
+        #feature-points-list {
+            margin-top: 10px;
+            /* overflow-y: scroll; */
+            overflow-x: hidden;
+        }
     </style>
-    <div ref="label-data">
-        Label Name
-        <input type="text" class="form-text w-100" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
-    </div>
-    <div id="feature-points-list" >
-        Feature Points
-        <ul id="fpoints-list">
-            <li class="li-fpoints grey-border form-inline" each={fPoint,fid in targetShape.featurePoints}>
-                <div class="drag-handler"></div>
-                <input type="text" class="form-text" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
-                <i class="icon icon-trash-empty small"></i>
-            </li>
-        </ul>
+    <div class="d-flex flex-column" style="height: 100%;">
+        <div ref="label-data">
+            Label Name
+            <input type="text" class="form-text w-100" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
+        </div>
+        <div id="feature-points-list" >
+            Feature Points
+            <ul id="fpoints-list">
+                <li class="li-fpoints grey-border form-inline" each={fPoint,fid in targetShape.featurePoints}>
+                    <div class="drag-handler"></div>
+                    <input type="text" class="form-text" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
+                    <i class="icon icon-trash-empty small"></i>
+                </li>
+            </ul>
+        </div>
     </div>
     <script>
         var tag = this;
