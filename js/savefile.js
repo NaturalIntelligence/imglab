@@ -21,12 +21,38 @@ function selectFileTypeToSave(){
  * Save project file in Nimn format
  */
 function saveAsNimn(){
-    //TODO : change it after change in nimnjs
     askFileName("Untitled_imglab.nimn", function(fileName){
-
+        analytics_reportExportType("nimn");
+        report_UniqueCategories();
         download( nimn.stringify(nimnSchema, labellingData), fileName, "application/nimn");
         //download( JSON.stringify(labellingData), fileName, "application/json");
     });
+}
+
+function report_UniqueCategories(){
+    var imgNames = Object.keys(labellingData);
+    var setData = new Set();
+    for(var i=0; i< imgNames.length; i++){
+        var image = labellingData[ imgNames[i] ];
+        for(var shape_i=0; shape_i < image.shapes.length; shape_i++){
+            setData.add( (image.shapes[ shape_i ].category || 'X') + "|" + (image.shapes[ shape_i ].label || 'X') );
+        }
+    }
+
+    try{
+        setData.forEach(labelData => {
+            var reportData = labelData.split(/\|(.+)/);
+
+            gtag('event', 'click', {
+                'event_category': 'labeling',
+                'event_label': reportData[0], // category
+                'value' : reportData[1] //label
+            });
+        });
+
+    }catch(e){
+
+    }
 }
 
 /**
@@ -35,6 +61,7 @@ function saveAsNimn(){
 function saveAsDlibXML(){
     var dlibXMLData = toDlibXML(labellingData);
     askFileName(Object.keys(labellingData).length + "_imglab.xml", function(fileName){
+        analytics_reportExportType("dlib_xml");
         download(dlibXMLData, fileName, "text/xml", "iso-8859-1");
     });
 }
@@ -43,22 +70,23 @@ function saveAsDlibXML(){
  * Save feature point detail of selected label as DLIB supported point file (pts).
  */
 function saveAsDlibPts(){
-    var ptsData;
+    var ptsData,shape;
     if(!imgSelected){
         showSnackBar("This option is applicable on the image loaded in workarea.");
         return;
     }else if(selectedElements.length === 1){
         //TODO: bug element gets unselected when select any tool
-        getShape(selectedElements[0].id)
-        ptsData = toDlibPts( getShape(selectedElements[0].id) );
+        shape  = getShape(selectedElements[0].id);
     }else if(labellingData[imgSelected.name].shapes.length === 1){
-        ptsData = toDlibPts( labellingData[imgSelected.name].shapes[ 0 ] );
+        shape  = labellingData[imgSelected.name].shapes[ 0 ];
     }else{
         showSnackBar("Please create or select one shape.");
         return;
     }
 
+    ptsData = toDlibPts( shape );
     askFileName(imgSelected.name + "_imglab.pts", function(fileName){
+        analytics_reportExportType("dlib_pts", shape.featurePoints.length );
         download(ptsData, fileName, "text/plain");
     });
 }
@@ -103,4 +131,17 @@ function askFileName(suggestedName, cb){
             },
         }//buttons
     })
+}
+
+function analytics_reportExportType(type, len){
+    try{
+        gtag('event', 'click', {
+            'event_category': 'save_as',
+            'event_label': type,
+            'value' : len || Object.keys(labellingData).length
+        });
+    }catch(e){
+
+    }
+
 }
