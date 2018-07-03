@@ -24,6 +24,12 @@
             color: black;
         }
 
+        .selectedPoint{
+            width : 20%;
+            background-color: #17a2b8;
+            cursor: move;
+        }
+
     </style>
     <div class="d-flex flex-column" style="height: 100%;">
         <div ref="label-data">
@@ -35,7 +41,7 @@
             <ul id="fpoints-list">
                 <li class="li-fpoints grey-border" each={fPoint,fid in targetShape.featurePoints}>
                     <div class="input-group small">
-                        <span class="input-group-addon drag-handler"></span>
+                        <span class={selectedPoint: fPoint.id === this.opts.pointId, input-group-addon: true, drag-handler: fPoint.id !== this.opts.pointId}></span>
                         <input type="text" class="form-control" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
                         <div class="input-group-btn" onclick={deleteMe}>
                             <i class="icon icon-trash-empty"></i>
@@ -47,7 +53,7 @@
     </div>
     <script>
         var tag = this;
-        tag.targetShape = getShape(opts.id) ;
+        tag.targetShape = getShape(this.opts.id) ;
         tag.updateLabel = function(e){
             tag.targetShape.label = e.target.value;
         }
@@ -55,6 +61,7 @@
         tag.deleteMe = function(e){
             detachPointByIndex(opts.id, e.item.fid);
             this.update();
+            riot.mount('workarea',{ img : imgSelected});
         }
 
         tag.updateFPointLabel = function(e){

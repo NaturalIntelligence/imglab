@@ -147,6 +147,7 @@
             f_point.on('click', function (e) {
                 if (!e.ctrlKey) { //deselect rest selected elements
                     deselectAll();
+                    riot.mount('label-panel', { id : parent.node.id, pointId : f_point.node.id })
                 }
                 f_point.selectize({
                     rotationPoint: false,
