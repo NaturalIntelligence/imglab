@@ -17,6 +17,13 @@
             /* overflow-y: scroll; */
             overflow-x: hidden;
         }
+        .sortable-placeholder {
+            margin: 5px 0px;
+            padding:10px;
+            background:yellow;
+            color: black;
+        }
+
     </style>
     <div class="d-flex flex-column" style="height: 100%;">
         <div ref="label-data">
@@ -51,6 +58,12 @@
 
         tag.on('mount',function(){
             $( "#fpoints-list" ).sortable({
+                placeholder: 'sortable-placeholder',
+                opacity: 0.6,
+                helper: 'clone',
+                sort: function(event,ui){
+                    $(ui.placeholder).html('Drop me at position ' + Number($('#fpoints-list > li:visible').index(ui.placeholder)+1));
+                },
                 update : function(event,ui){
                     var newIndex = ui.item.index();
                     var oldIndex = ui.item[0]._tag.fid;
