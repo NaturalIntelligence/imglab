@@ -56,7 +56,7 @@
 
         this.on('mount', function () {
 
-            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height) /* .panZoom() */ ;
+            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height)/* .panZoom({zoomMin: 0.5, zoomMax: 20}) */ ;
 
             drawOnCanvas();
 

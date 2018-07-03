@@ -80,11 +80,12 @@ var tools = {
             icon : "move.svg",
             type : "move",
         },
-        "tool-zoom" : {
+        /* "tool-zoom" : {
             title  : "Zoom In",
             desp : "Enlarge the workarea",
             icon_font : "icon-zoom-in",
-        },
+            actions : ["zoom"]
+        }, */
         "tool-labels-only" : {
             title  : "Light",
             desp : "Highlight the labels",
