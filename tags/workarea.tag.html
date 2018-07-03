@@ -27,6 +27,8 @@
 
         $(document).keyup(function (e) {
             if (e.keyCode == 46) {
+                //Delete selected shape(s) with points
+                //Delete selected points
                 selectedElements.forEach(el => {
                     /* $("[for="+ el.node.id+"]").remove(); */
                     el.selectize(false, {
@@ -44,14 +46,12 @@
                 selectedElements = [];
                 //delete all the points related to a polygon
                 //show snakebar to inform
-            } else if (e.keyCode == 65 && e.shiftKey) {
+            } else if (e.keyCode == 65 && e.altKey) {//TODO change this
                 //Select all the labels
                 selectAll();
-            } else if (e.keyCode == 65) {
-                /* allLabels.forEach(el => {
-                    el.remove();
-                }); */
-            }
+            }/*  else if (e.keyCode == 65) {
+                
+            } */
         });
 
         this.on('mount', function () {

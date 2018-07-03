@@ -64,7 +64,7 @@
                         if(tag.currentIndex < tag.thumbnails.length - 1 ) $("#thumbnail_"+ ++tag.currentIndex).click();
                     }
 
-                    if ( e.key == 'o' && e.ctrl){
+                    if ( e.key == 'o' && e.altKey && e.ctrlKey){
                         document.getElementById('browseImages').click();
                         e.preventDefault();
                         e.stopPropagation();
