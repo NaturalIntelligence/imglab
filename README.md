@@ -34,22 +34,16 @@ You can either import a file from a URL or from your computer. You can plot the 
 
 [![ImgLab Tutorial](https://img.youtube.com/vi/4yLL21weN8w/0.jpg)](https://www.youtube.com/watch?v=4yLL21weN8w)
 
-## Version 2
-we are working on version 2. We'll be replacing version 1 with version 2 as soon as the primary features are completed. If you want to try it early, check this link : https://naturalintelligence.github.io/imglab/v2.html
-
-## Link your work
+## Showcase your work
 
 Using this library if you build some open database which can help others or just to showcase, please raise an issue or PR.
 
 ## Worth to mention
 
-- **[निम्न (NIMN)](https://github.com/nimndata/spec)** : Schema aware object compression. 60% more compressed than JSON. 40% more compressed than msgpack.
-- **[imglab](https://github.com/NaturalIntelligence/imglab)** : Web based tool to label images for object. So that they can be used to train dlib or other object detectors. You can integrate 3rd party libraries for fast labeling.
+- **[निम्न (NIMN)](https://github.com/nimndata/spec)** : A data format which can save up to 80% network bandwidth and speed up newtword communication.
 - [fast-lorem-ipsum](https://github.com/amitguptagwl/fast-lorem-ipsum) : Generate lorem ipsum words, sentences, paragraph very quickly.
-- [stubmatic](https://github.com/NaturalIntelligence/Stubmatic) : A stub server to mock behaviour of HTTP(s) / REST / SOAP services. You can also mock msgpack, and nimn format in easy way.
+- [Stubmatic](https://github.com/NaturalIntelligence/Stubmatic) : Create HTTP mock  services in minutes without code. You can also mock some binary data formats.
 - **[अनुमार्गक (anumargak)](https://github.com/NaturalIntelligence/anumargak)** : Amazing fast router for node web servers.
-- [fastify-xml-body-parser](https://github.com/NaturalIntelligence/fastify-xml-body-parser/) : Fastify plugin / module to parse XML payload / body into JS object using fast-xml-parser.
-- [Grapes](https://github.com/amitguptagwl/grapes) : Flexible Regular expression engine (for java) which can be applied on char stream. (under development)
 
 ## Contributors
 
