@@ -58,10 +58,10 @@ var labeledDataStructure = {
                             "type": "string",
                             "name": "id"
                         },
-                        /* {
+                        {
                             "type": "string",
                             "name": "category" //class, type
-                        }, */
+                        },
                         {
                             "type": "string",
                             "name": "label"
