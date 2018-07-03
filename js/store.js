@@ -49,6 +49,13 @@ function detachPoint(shapeId, pointid){
     var index = indexOf(featurePoints, pointid);
     featurePoints.splice(index, 1);
 }
+
+function detachPointByIndex(shapeId, pointIndex){
+    var shape = getShape(shapeId);
+    var featurePoints = shape.featurePoints;
+    featurePoints.splice(pointIndex, 1);
+}
+
 function updateShapeDetailInStore(shapeId, bbox, points){
     var shapes = labellingData[ imgSelected.name ].shapes;
     var index = indexOf(shapes, shapeId);
