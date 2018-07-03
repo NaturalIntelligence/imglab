@@ -35,7 +35,7 @@ function saveAsNimn(){
 function saveAsDlibXML(){
     var dlibXMLData = toDlibXML(labellingData);
     askFileName(Object.keys(labellingData).length + "_imglab.xml", function(fileName){
-        download(dlibXMLData, fileName, "text/xml");
+        download(dlibXMLData, fileName, "text/xml", "iso-8859-1");
     });
 }
 
@@ -69,8 +69,9 @@ function saveAsDlibPts(){
  * @param {string} filename 
  * @param {string} type : Mime type
  */
-function download(data, filename, type) {
-    var blobData = new Blob([data], {type: type + ";charset=utf-8"})
+function download(data, filename, type, encoding) {
+    encoding || (encoding = "utf-8")
+    var blobData = new Blob([data], {type: type + ";charset="+encoding})
     saveAs(blobData, filename);
 }
 
