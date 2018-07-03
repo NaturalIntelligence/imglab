@@ -8,6 +8,7 @@ var labeledDataStructure = {
                 "name": "imagename"
             },
             {
+                "name": "attributes",
                 "type": "list",
                 "detail": {
                     "type": "map",
@@ -24,17 +25,17 @@ var labeledDataStructure = {
                             "name": "values"
                         }
                     ]
-                },
-                "name": "attributes"
+                }
             },
             {
+                "name": "tags",
                 "type": "list",
                 "detail": {
                     "type": "string"
-                },
-                "name": "tags"
+                }
             },
             {
+                "name": "size", //image size
                 "type": "map",
                 "detail": [
                     {
@@ -45,10 +46,10 @@ var labeledDataStructure = {
                         "type": "number",
                         "name": "height"
                     }
-                ],
-                "name": "size"
+                ]
             },
             {
+                "name": "shapes",
                 "type": "list",
                 "detail": {
                     "type": "map",
@@ -57,6 +58,10 @@ var labeledDataStructure = {
                             "type": "string",
                             "name": "id"
                         },
+                        /* {
+                            "type": "string",
+                            "name": "category" //class, type
+                        }, */
                         {
                             "type": "string",
                             "name": "label"
@@ -66,13 +71,14 @@ var labeledDataStructure = {
                             "name": "type"
                         },
                         {
+                            "name": "points",
                             "type": "list",
                             "detail": {
                                 "type": "number"
                             },
-                            "name": "points"
                         },
                         {
+                            "name": "bbox",
                             "type": "map",
                             "detail": [
                                 {
@@ -116,9 +122,10 @@ var labeledDataStructure = {
                                     "name": "height"
                                 }
                             ],
-                            "name": "bbox"
+                            
                         },
                         {
+                            "name": "attributes",
                             "type": "list",
                             "detail": {
                                 "type": "map",
@@ -135,17 +142,18 @@ var labeledDataStructure = {
                                         "name": "values"
                                     }
                                 ]
-                            },
-                            "name": "attributes"
+                            }
+                            
                         },
                         {
+                            "name": "tags",
                             "type": "list",
                             "detail": {
                                 "type": "string"
-                            },
-                            "name": "tags"
+                            }
                         },
                         {
+                            "name": "featurePoints",
                             "type": "list",
                             "detail": {
                                 "type": "map",
@@ -168,11 +176,11 @@ var labeledDataStructure = {
                                     }
                                 ]
                             },
-                            "name": "featurePoints"
+                            
                         }
                     ]
                 },
-                "name": "shapes"
+                
             }
         ],
         "name": "amitkumargupta.work_riot.jpg"
