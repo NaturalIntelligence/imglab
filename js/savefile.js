@@ -43,10 +43,10 @@ function report_UniqueCategories(){
         setData.forEach(labelData => {
             var reportData = labelData.split(/\|(.+)/);
 
-            gtag('event', 'click', {
-                'event_category': 'labeling',
-                'event_label': reportData[0], // category
-                'value' : reportData[1] //label
+            gtag('event', 'label', {
+                'event_category': reportData[0], //Human
+                'event_label': reportData[1], //Face
+                'value' : 1
             });
         });
 
@@ -135,10 +135,10 @@ function askFileName(suggestedName, cb){
 
 function analytics_reportExportType(type, len){
     try{
-        gtag('event', 'click', {
-            'event_category': 'save_as',
-            'event_label': type,
-            'value' : len || Object.keys(labellingData).length
+        gtag('event', 'save_as', {
+            'event_category': type,
+            'event_label': len || Object.keys(labellingData).length,
+            'value' : 1
         });
     }catch(e){
 
