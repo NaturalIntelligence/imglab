@@ -120,4 +120,5 @@ var pluginsStore = {
     }
 }
 
-var suggestedCategories = []
+var suggestedCategories = [];
+var suggestedTags = [];
