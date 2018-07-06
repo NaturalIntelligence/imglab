@@ -119,3 +119,5 @@ var pluginsStore = {
     "facepp" : {
     }
 }
+
+var suggestedCategories = []

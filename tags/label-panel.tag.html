@@ -14,7 +14,6 @@
         #fpoints-list { list-style-type: none; margin: 0; padding: 0; margin-bottom: 10px; }
         #feature-points-list {
             margin-top: 10px;
-            /* overflow-y: scroll; */
             overflow-x: hidden;
         }
         .sortable-placeholder {
@@ -30,14 +29,28 @@
             cursor: move;
         }
 
+        #category-select-box{
+            background-color: white;
+            width: 100%;
+        }
+        .es-list{
+            color: #101010;
+        }
     </style>
     <div class="d-flex flex-column" style="height: 100%;">
-        <div ref="label-data">
+        <div ref="category-data" class="mb-2 mt-2">
+            Category Name
+            <select id="category-select-box" class="form-text" onchange={categoryChange}>
+                <option each={category in suggestedCategories} selected={category === targetShape.category}>{category}</option>
+            </select>
+        </div>
+        <div ref="label-data" class="mb-2 mt-2">
             Label Name
             <input type="text" class="form-text w-100" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
         </div>
+        
+        <p class="mb-2">Feature Points  <small>{ this.targetShape.featurePoints.length }</small></p>
         <div id="feature-points-list" >
-            Feature Points : { this.targetShape.featurePoints.length }
             <ul id="fpoints-list">
                 <li class="li-fpoints grey-border" each={fPoint,fid in targetShape.featurePoints}>
                     <div class="input-group small">
@@ -54,6 +67,8 @@
     <script>
         var tag = this;
         tag.targetShape = getShape(this.opts.id) ;
+        
+
         tag.updateLabel = function(e){
             tag.targetShape.label = e.target.value;
         }
@@ -84,8 +99,28 @@
                     tag.update();
                 }
             });
+
+            $("#category-select-box")
+                .editableSelect()
+                .on('select.editable-select', function (e, li) {
+                    //console.log(li.val() ,",", li.text() );
+                    //Update Caegory
+                    tag.targetShape.category = li.text().toLowerCase();
+                });
+
+            $("#category-select-box").on('keyup', function(e){
+                //Add
+                var val = $(this).val().toLowerCase();
+                if(e.keyCode === 13 && suggestedCategories.indexOf( val  ) === -1 ){
+                    $("#category-select-box").editableSelect('add', val , 0);
+                    suggestedCategories.push(val );
+                }
+            });
         })
 
+        this.categoryChange = function (e){
+            console.log("hello")
+        }
         function array_move(arr, old_index, new_index) {
             if(old_index > new_index){
                 var temp = arr[old_index];
