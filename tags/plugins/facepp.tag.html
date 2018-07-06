@@ -107,7 +107,10 @@
                 for(var a_i in attributes){
                     var attribute = face.attributes[ attributes[ a_i ] ];
                     if(attribute.value){
-                        shape.attributes[ attributes[ a_i ] ] = attribute.value;
+                        shape.attributes[  a_i ] = {
+                            label: attributes[ a_i ],
+                            value : attribute.value 
+                        }
                     }
                 }
 

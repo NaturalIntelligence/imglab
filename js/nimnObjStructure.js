@@ -18,10 +18,7 @@ var labeledDataStructure = {
                             "name": "label"
                         },
                         {
-                            "type": "list",
-                            "detail": {
-                                "type": "string"
-                            },
+                            "type": "string",
                             "name": "values"
                         }
                     ]
@@ -135,10 +132,7 @@ var labeledDataStructure = {
                                         "name": "label"
                                     },
                                     {
-                                        "type": "list",
-                                        "detail": {
-                                            "type": "string"
-                                        },
+                                        "type": "string",
                                         "name": "values"
                                     }
                                 ]
