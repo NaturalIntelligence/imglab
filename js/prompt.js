@@ -43,7 +43,7 @@ function displayDonationPrompt(){
 function tezpayment(){
     $.dialog({
         title: "Tez Payment",
-        content: "<p>Please scan the below QR code</p>" + '<img src="img/tez_qrcode.png">'
+        content: "<p>Please scan the below QR code or use UPI : amitgupta.gwl@okhdfcbank</p>" + '<img src="img/tez_qrcode.png">'
     })
     gtag('event', 'click', {
         'event_category': 'outbound',
