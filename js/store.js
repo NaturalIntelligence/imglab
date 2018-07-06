@@ -66,7 +66,7 @@ function updateShapeDetailInStore(shapeId, bbox, points){
 function attachShapeToImg(id, type, bbox, points){
     labellingData[ imgSelected.name ].shapes.push( {
         "id" : id,
-        "label" : type,
+        "label" : "unlabelled",
         "type" : type,
         "points": points,
         "bbox" : bbox || {

@@ -74,10 +74,9 @@
             
             for(var face_i in fppResponse.faces){
                 var face = fppResponse.faces[ face_i ];
-                var faceLable = "fppface" + face_i;
                 labellingData[ imgName ].shapes.push({
                     id : "face" + face_i,
-                    label: faceLable,
+                    label: "face",
                     type: "rect",
                     bbox : {
                         x : face.face_rectangle.left,
