@@ -122,13 +122,19 @@
     <div class="d-flex flex-column" style="height: 100%;">
         <div ref="category-data" class="mb-2 mt-2">
             Category Name
-            <select id="category-select-box" class="form-text" onchange={categoryChange}>
+            <select id="category-select-box" class="form-text">
                 <option each={category in suggestedCategories} selected={category === targetShape.category}>{category}</option>
             </select>
         </div>
         <div ref="label-data" class="mb-2 mt-2">
             Label Name
             <input type="text" class="form-text w-100" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
+        </div>
+        <div ref="label-data" class="mb-2 mt-2">
+            <div class="clearfix">Attributes<button class="btn btn-sm float-right" onclick={addAttributeRow}>+</button></div>
+            <div id="attributes-list">
+                <div id="attribute-row_{index}" data-is="attribute-row" each={ attribute,index in targetShape.attributes } lbl={attribute.label} val={attribute.value} index={index}></div>
+            </div>
         </div>
         <div ref="label-data" class="mb-2 mt-2">
             Tags <small>(separated by comma)</small>
@@ -141,7 +147,7 @@
                     <div class="input-group small">
                         <span class={selectedPoint: fPoint.id === this.opts.pointId, input-group-addon: true, drag-handler: fPoint.id !== this.opts.pointId}></span>
                         <input type="text" class="form-control" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
-                        <div class="input-group-btn" onclick={deleteMe}>
+                        <div class="input-group-btn" onclick={deleteTag}>
                             <i class="icon icon-trash-empty"></i>
                         </div>
                     </div>
@@ -164,7 +170,7 @@
             tag.targetShape.label = e.target.value;
         }
 
-        tag.deleteMe = function(e){
+        tag.deleteTag = function(e){
             detachPointByIndex(opts.id, e.item.fid);
             this.update();
             riot.mount('workarea',{ img : imgSelected});
@@ -244,9 +250,17 @@
             })
         })
 
-        this.categoryChange = function (e){
-            console.log("hello")
+        this.addAttributeRow = function(e){
+            var present = findInArray(tag.targetShape.attributes, "label", "unlabelled");
+            if(!present){
+                tag.targetShape.attributes.push({
+                    label : "unlabelled",
+                    value : ""
+                })
+                this.update();
+            }
         }
+
         function array_move(arr, old_index, new_index) {
             if(old_index > new_index){
                 var temp = arr[old_index];

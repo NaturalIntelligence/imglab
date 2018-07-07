@@ -13,7 +13,7 @@ function updateLabel(oldLabel,newLabel){
 function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
     var shape = getShape(shapeId);
     var featurePoints = shape.featurePoints;
-    var index = indexOf(featurePoints, pointid);
+    var index = indexOf(featurePoints, "id", pointid);
 
     if(position){
         featurePoints[index].x = position.cx;
@@ -39,14 +39,14 @@ function attachPointToShape(shapeId , pointid, position){
 
 function detachShape(shapeId){
     var shapes = labellingData[ imgSelected.name ].shapes;
-    var index = indexOf(shapes, shapeId);
+    var index = indexOf(shapes, "id", shapeId);
     shapes.splice(index,1);
 }
 
 function detachPoint(shapeId, pointid){
     var shape = getShape(shapeId);
     var featurePoints = shape.featurePoints;
-    var index = indexOf(featurePoints, pointid);
+    var index = indexOf(featurePoints, "id", pointid);
     featurePoints.splice(index, 1);
 }
 
@@ -58,7 +58,7 @@ function detachPointByIndex(shapeId, pointIndex){
 
 function updateShapeDetailInStore(shapeId, bbox, points){
     var shapes = labellingData[ imgSelected.name ].shapes;
-    var index = indexOf(shapes, shapeId);
+    var index = indexOf(shapes, "id", shapeId);
 
     bbox && (shapes[index].bbox = bbox);
     points && (shapes[index].points = points);

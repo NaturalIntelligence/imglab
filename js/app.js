@@ -22,14 +22,17 @@ function getCordinates(event, element) {
 }
 
 /**
- * Search an item in array based on id property
+ * Search an item in array based on id property.
+ * returns index of the item
  * @param {Array} arr 
  * @param {string} itemId 
  */
-function indexOf(arr, itemId){
+function indexOf(arr, property, val){
     for(var i=0; i<arr.length; i++){
-        if(arr[i].id === itemId) return i;
+        if(arr[i][property] === val) return i;
     }
+
+    return -1;//if not found
 }
 
 /**
