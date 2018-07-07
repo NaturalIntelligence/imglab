@@ -131,10 +131,7 @@
             <input type="text" class="form-text w-100" value="{ targetShape.label }" onchange={updateLabel} placeholder="Label the shape, Eg: face, clock ..">
         </div>
         <div ref="label-data" class="mb-2 mt-2">
-            <div class="clearfix">Attributes<button class="btn btn-sm float-right" onclick={addAttributeRow}>+</button></div>
-            <div id="attributes-list">
-                <div id="attribute-row_{index}" data-is="attribute-row" each={ attribute,index in targetShape.attributes } lbl={attribute.label} val={attribute.value} index={index}></div>
-            </div>
+            <attributes-list attributes={targetShape.attributes}></attributes-list>
         </div>
         <div ref="label-data" class="mb-2 mt-2">
             Tags <small>(separated by comma)</small>
@@ -249,17 +246,6 @@
                 }
             })
         })
-
-        this.addAttributeRow = function(e){
-            var present = findInArray(tag.targetShape.attributes, "label", "unlabelled");
-            if(!present){
-                tag.targetShape.attributes.push({
-                    label : "unlabelled",
-                    value : ""
-                })
-                this.update();
-            }
-        }
 
         function array_move(arr, old_index, new_index) {
             if(old_index > new_index){

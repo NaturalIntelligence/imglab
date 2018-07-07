@@ -1,0 +1,56 @@
+<attributes-list>
+    <style>
+        .attribute-name{
+            width: 30%;
+        }
+        .attribute-value{
+            width: 65%;
+        }
+        .del-attribute{
+            width: 5%;
+            cursor: pointer;
+        }
+        input[type="text"]{
+            border: 0px;
+            padding: 1px;
+        }
+    </style>
+    <div class="clearfix">Attributes<button class="btn btn-sm float-right" onclick={addAttributeRow}>+</button></div>
+    <div id="attributes-list">
+        <div id="attribute-row_{index}" class="form-inline" style="margin-top:3px;" each={ attribute,index in opts.attributes } >
+            <div class="attribute-name">
+                <input ref="attr-name" type="text" class="form-text w-100 " value="{ attribute.label }" onchange={updateAttributeName} placeholder="name" style="background: #ccc;">
+            </div>
+            <div class="attribute-value">
+                <input type="text" class="form-text w-100" value="{ attribute.value }" onchange={updateAttributeValue} placeholder="value">
+            </div>
+            <div class="del-attribute"  onclick={deleteAttribute}>
+                <i class="icon icon-trash-empty small"></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        var thisTag = this;
+        this.updateAttributeName = function(e){
+            opts.attributes[ e.item.index ].label = e.target.value;
+        }
+        this.updateAttributeValue = function(e){
+            opts.attributes[ e.item.index ].value = e.target.value;
+        }
+        this.deleteAttribute = function(e){
+            opts.attributes.splice(e.item.index, 1);
+            thisTag.update();
+        }
+
+        this.addAttributeRow = function(e){
+            var present = findInArray(opts.attributes, "label", "unlabelled");
+            if(!present){
+                opts.attributes.push({
+                    label : "unlabelled",
+                    value : ""
+                })
+                this.update();
+            }
+        }
+    </script>
+</attributes-list>
