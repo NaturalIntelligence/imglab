@@ -106,6 +106,7 @@ function getPointToDraw(position,container,canvasOffset){
 }
 var imgSelected = "";
 var selectedElements = [];
+var copiedElements;
 var selectedTool = null, selectedElement = null;
 var alreadyDrawing = false;
 

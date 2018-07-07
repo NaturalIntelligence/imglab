@@ -26,7 +26,7 @@
         });
 
         $(document).keyup(function (e) {
-            if (e.keyCode == 46) {
+            if (e.keyCode == 46) {//del key
                 //Delete selected shape(s) with points
                 //Delete selected points
                 selectedElements.forEach(el => {
@@ -46,12 +46,20 @@
                 selectedElements = [];
                 //delete all the points related to a polygon
                 //show snakebar to inform
-            } else if (e.keyCode == 65 && e.altKey) {//TODO change this
+            } else if (e.key == 'a' && e.altKey) {//TODO change this
                 //Select all the labels
                 selectAll();
-            }/*  else if (e.keyCode == 65) {
-                
-            } */
+            } else if (e.key === 'c' && e.ctrlKey) {
+                copiedElements = [];
+                //loop through selectedElements and copy all the shapes in copiedElements
+                e.preventDefault();
+                e.stopPropagation();
+            }else if (e.key === 'v' && e.ctrlKey) {
+                //loop through copiedElements and push new shapes in currently selected image
+                //use the new IDs : shapetype + shapeIndex, shapetype + shapeIndex + point + pointIndex
+                e.preventDefault();
+                e.stopPropagation();
+            }
         });
 
         this.on('mount', function () {
