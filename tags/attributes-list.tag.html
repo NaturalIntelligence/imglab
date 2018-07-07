@@ -31,8 +31,35 @@
     </div>
     <script>
         var thisTag = this;
+
+        this.on('update',function(){
+            $(".attribute-name input").autocomplete({
+                source: Object.keys( suggestedAttributes ),
+                /* appendTo: $(this).parent() ,
+                position: { at: "left bottom", of: $(this) }, */
+                messages: {
+                    noResults: '',
+                    results: function() {}
+                },
+            })
+        });
+
         this.updateAttributeName = function(e){
             opts.attributes[ e.item.index ].label = e.target.value;
+
+            if(suggestedAttributes[ e.target.value ]){
+                var targetDiv = "#attribute-row_"+e.item.index +" div:nth-child(2)"
+
+                $(targetDiv + " input").autocomplete({
+                    source : suggestedAttributes[ e.target.value ],
+                    appendTo: $(targetDiv) ,
+                    position: { at: "left bottom", of: $(targetDiv) },
+                    messages: {
+                        noResults: '',
+                        results: function() {}
+                    },
+                });
+            }
         }
         this.updateAttributeValue = function(e){
             opts.attributes[ e.item.index ].value = e.target.value;
