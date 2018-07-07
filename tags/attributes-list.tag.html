@@ -62,7 +62,6 @@
             if( !$(e.target).hasClass("ui-autocomplete-input") ){
                 var attrLbl = $(e.target).parent().prev().find("input").val();
                 if(suggestedAttributes[ attrLbl ]){
-                    console.log(suggestedAttributes[ attrLbl ]);
                     $(e.target).autocomplete({
                         source : suggestedAttributes[ attrLbl ],
                         appendTo: $(e.target).parent() ,

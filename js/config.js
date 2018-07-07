@@ -123,7 +123,6 @@ var pluginsStore = {
 var suggestedCategories = [];
 var suggestedTags = [];
 var suggestedAttributes = {
-    "gender" : ["male", "female", "other", "unknown"],
-    "color" : ["red", "green", "blue"],
-    "age group" : ["< 10", "10 - 20", "20 - 45", "45 - 60", "> 60"]
+    "gender" : ["male", "female", "other"],
+    "color" : ["red", "green", "blue", "orange", "yellow", "white", "black"],
 };
