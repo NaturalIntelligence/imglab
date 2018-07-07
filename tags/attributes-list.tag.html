@@ -19,10 +19,10 @@
     <div id="attributes-list">
         <div id="attribute-row_{index}" class="form-inline" style="margin-top:3px;" each={ attribute,index in opts.attributes } >
             <div class="attribute-name">
-                <input ref="attr-name" type="text" class="form-text w-100 " value="{ attribute.label }" onchange={updateAttributeName} placeholder="name" style="background: #ccc;">
+                <input ref="attr-name" type="text" class="form-text w-100 " value="{ attribute.label }" onfocus="{updateAttrLabelHint}" onchange={updateAttributeName} placeholder="name" style="background: #ccc;">
             </div>
             <div class="attribute-value">
-                <input type="text" class="form-text w-100" value="{ attribute.value }" onchange={updateAttributeValue} placeholder="value">
+                <input type="text" class="form-text w-100" value="{ attribute.value }" onfocus="{updateTextHint}" onchange={updateAttributeValue} placeholder="value">
             </div>
             <div class="del-attribute"  onclick={deleteAttribute}>
                 <i class="icon icon-trash-empty small"></i>
@@ -32,28 +32,19 @@
     <script>
         var thisTag = this;
 
-        this.on('update',function(){
-            $(".attribute-name input").autocomplete({
-                source: Object.keys( suggestedAttributes ),
-                /* appendTo: $(this).parent() ,
-                position: { at: "left bottom", of: $(this) }, */
-                messages: {
-                    noResults: '',
-                    results: function() {}
-                },
-            })
-        });
-
+        //can be called on oninput event
         this.updateAttributeName = function(e){
             opts.attributes[ e.item.index ].label = e.target.value;
+        }
 
-            if(suggestedAttributes[ e.target.value ]){
-                var targetDiv = "#attribute-row_"+e.item.index +" div:nth-child(2)"
-
-                $(targetDiv + " input").autocomplete({
-                    source : suggestedAttributes[ e.target.value ],
-                    appendTo: $(targetDiv) ,
-                    position: { at: "left bottom", of: $(targetDiv) },
+        this.updateAttrLabelHint = function(e){
+            if( !$(e.target).hasClass("ui-autocomplete-input") ){
+                $(e.target).autocomplete({
+                    //Here we can check what attribute has already been set
+                    //so that only remaining attributes can be displayed as hint
+                    source: Object.keys( suggestedAttributes ),
+                    appendTo: $(e.target).parent() ,
+                    position: { at: "left bottom", of: $(e.target) },
                     messages: {
                         noResults: '',
                         results: function() {}
@@ -61,9 +52,30 @@
                 });
             }
         }
+
+        //can be called on oninput event
         this.updateAttributeValue = function(e){
             opts.attributes[ e.item.index ].value = e.target.value;
         }
+
+        this.updateTextHint = function(e){
+            if( !$(e.target).hasClass("ui-autocomplete-input") ){
+                var attrLbl = $(e.target).parent().prev().find("input").val();
+                if(suggestedAttributes[ attrLbl ]){
+                    console.log(suggestedAttributes[ attrLbl ]);
+                    $(e.target).autocomplete({
+                        source : suggestedAttributes[ attrLbl ],
+                        appendTo: $(e.target).parent() ,
+                        position: { at: "left bottom", of: $(e.target) },
+                        messages: {
+                            noResults: '',
+                            results: function() {}
+                        },
+                    })
+                }
+            }
+        }
+
         this.deleteAttribute = function(e){
             opts.attributes.splice(e.item.index, 1);
             thisTag.update();

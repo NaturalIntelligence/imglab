@@ -81,6 +81,7 @@ ul.ui-menu{
     margin: 0;
     display: block;
     outline: none;
+    z-index: 100;
 }
 
 .ui-menu .ui-menu-item{
