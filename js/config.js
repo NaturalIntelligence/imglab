@@ -86,7 +86,7 @@ var tools = {
             icon_font : "icon-zoom-in",
             actions : ["zoom"]
         }, */
-        "tool-labels-only" : {
+        "tool-light" : {
             title  : "Light",
             desp : "Highlight the labels",
             icon_font : "icon-lightbulb",

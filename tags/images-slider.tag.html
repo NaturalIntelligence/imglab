@@ -59,18 +59,22 @@
                     
                     if (e.key == 'ArrowLeft'  && e.altKey){
                         if(tag.currentIndex > 0 ) $("#thumbnail_" + --tag.currentIndex).click();
+                        e.preventDefault();
+                        e.stopPropagation();
                     }
                     if (e.key == 'ArrowRight'  && e.altKey){
                         if(tag.currentIndex < tag.thumbnails.length - 1 ) $("#thumbnail_"+ ++tag.currentIndex).click();
+                        e.preventDefault();
+                        e.stopPropagation();
                     }
 
                     if ( e.key == 'o' && e.altKey && e.ctrlKey){
-                        document.getElementById('browseImages').click();
+                        document.getElementById('image_folder').click();
                         e.preventDefault();
                         e.stopPropagation();
                     }
                     if (e.key == 'o' && e.altKey){
-                        document.getElementById('image_folder').click();
+                        document.getElementById('browseImages').click();
                         e.preventDefault();
                         e.stopPropagation();
                     }

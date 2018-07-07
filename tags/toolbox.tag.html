@@ -27,6 +27,59 @@
     <script>
         //this.toolsData = tools[opts.tools];
         var tag = this;
+        this.on('mount', function(){
+            document.addEventListener('keydown', e => {
+                    
+                if (e.key == 'f'  && e.altKey){//featurepoint
+                    $("#tool-point").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                if (e.key == 'c'  && e.altKey){//circle
+                    $("#tool-circle").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                /* if (e.key == 'e'  && e.altKey){//ellipse
+                    $("#tool-ellipse").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                } */
+
+                if (e.key == 'r'  && e.altKey){//rectangle
+                    $("#tool-rectangle").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                if (e.key == 'p'  && e.altKey){//Polygon
+                    $("#tool-polygon").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                /* if (e.key == 'w'  && e.altKey){//Magic wand
+                    $("#tool-polygon").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                } */
+
+                if (e.key == 'm'  && e.altKey){//Magic wand
+                    $("#tool-move").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                if (e.key == 'l'  && e.altKey){//Magic wand
+                    $("#tool-light").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+            });
+        });
 
         tag.selectme = function (e){
             //TODO: should it unseect all the tools or tools in current toolbox
