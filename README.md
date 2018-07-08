@@ -27,6 +27,12 @@ The best thing is that you can use 3rd party libraries to **fast annotation proc
 * You can draw feature points, shapes (circle, rectangle, polygon). Other shapes like ellipse, line, curves will be added in future. 
 * Small project file so it can be shared over the mail.
 * Import / Export data in multiple formats (Currently dlib XML, and pts format is supported)
+* You can export the data in your desire format
+  * dlib XML
+  * dlib pts
+  * Pascal VOC
+  * COCO
+  * Tenserflow (in plan)
 
 ## How to use
 
