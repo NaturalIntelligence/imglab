@@ -3,13 +3,16 @@ function selectFileTypeToSave(){
         title: 'Save/Export as',
         content: `<div style="text-align:center;">
                 <div>
-                    <button class="btn btn-primary savebtn"  onclick="javascript:saveAsNimn()" id="saveAsNimn">Save project file</button>
+                    <button class="btn btn-primary savebtn"  onclick="javascript:saveAsNimn()" id="saveAsNimn">Project file</button>
                 </div>
                 <div>
-                    <button class="btn btn-primary savebtn" onclick="javascript:saveAsDlibXML()" id="saveAsNimn">Export Dlib XML</button>
+                    <button class="btn btn-primary savebtn" onclick="javascript:saveAsDlibXML()" id="saveAsNimn">Dlib XML</button>
                 </div>
                 <div>
-                    <button class="btn btn-primary savebtn" onclick="javascript:saveAsDlibPts()" id="saveAsNimn">Export Dlib pts</button>
+                    <button class="btn btn-primary savebtn" onclick="javascript:saveAsDlibPts()" id="saveAsNimn">Dlib pts</button>
+                </div>
+                <div>
+                    <button class="btn btn-primary savebtn" onclick="javascript:saveAsCOCO()" id="saveAsCOCO">COCO JSON</button>
                 </div>
             <div>`,
         escapeKey: true,
@@ -88,6 +91,18 @@ function saveAsDlibPts(){
     askFileName(imgSelected.name + "_imglab.pts", function(fileName){
         analytics_reportExportType("dlib_pts", shape.featurePoints.length );
         download(ptsData, fileName, "text/plain");
+    });
+}
+
+/**
+ * Save labelled data as COCO supported XML file. 
+ * It captures only boundary box detail and categories.
+ */
+function saveAsCOCO(){
+    var cocoData = cocoFormater.toCOCO(labellingData);
+    askFileName(Object.keys(labellingData).length + "_coco_imglab.json", function(fileName){
+        analytics_reportExportType("coco");
+        download(JSON.stringify(cocoData), fileName, "application/json", "utf-8");
     });
 }
 
