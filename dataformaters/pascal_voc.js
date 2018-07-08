@@ -1,6 +1,14 @@
 var pascalVocFormater = {
     fromPascalVOC : function(){
+        var inputData = parser.parse(data,{
+            attributeNamePrefix : "",
+        });
 
+        if (!labellingData[inputData.filename] ){
+            labellingData[inputData.filename] = {
+                shapes : []
+            }
+        }
     },
     toPascalVOC : function(){
 
