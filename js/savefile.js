@@ -14,6 +14,9 @@ function selectFileTypeToSave(){
                 <div>
                     <button class="btn btn-primary savebtn" onclick="javascript:saveAsCOCO()" id="saveAsCOCO">COCO JSON</button>
                 </div>
+                <div>
+                    <button class="btn btn-primary savebtn" onclick="javascript:saveAsPascalVOC()" id="saveAsPascalVOC">Pascal VOC XML</button>
+                </div>
             <div>`,
         escapeKey: true,
         backgroundDismiss: true,
@@ -95,7 +98,7 @@ function saveAsDlibPts(){
 }
 
 /**
- * Save labelled data as COCO supported XML file. 
+ * Save labelled data as COCO supported JSON file. 
  * It captures only boundary box detail and categories.
  */
 function saveAsCOCO(){
@@ -104,6 +107,28 @@ function saveAsCOCO(){
         analytics_reportExportType("coco");
         download(JSON.stringify(cocoData), fileName, "application/json", "utf-8");
     });
+}
+
+/**
+ * Save labelled data as Pascal VOC supported XML file. 
+ * It captures only boundary box detail of currently loaded/selected image.
+ */
+function saveAsPascalVOC(){
+
+    if(!imgSelected){
+        showSnackBar("This option is applicable on the image loaded in workarea.");
+        return;
+    }else if(labellingData[ imgSelected.name ].shapes.length === 0){
+        showSnackBar("You need to label the currently loaded image.");
+        return;
+    }else{
+        var data = pascalVocFormater.toPascalVOC();
+        askFileName(Object.keys(labellingData[ imgSelected.name ].shapes.length ).length + "_pvoc_imglab.xml", function(fileName){
+            analytics_reportExportType("pascal_voc");
+            download(data, fileName, "text/xml", "utf-8");
+        });
+    }
+
 }
 
 /**
