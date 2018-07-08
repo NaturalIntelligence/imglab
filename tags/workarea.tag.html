@@ -226,7 +226,12 @@
             switch (shape.type) {
                 case "rect":
                     var box = shape.rbox(myCanvas);
-                    return [box.x, box.y, box.w, box.h];
+                    return [
+                        box.x, box.y, 
+                        box.x+box.w, box.h, 
+                        box.x+box.w, box.h + box.y,
+                        box.x, box.h + box.y
+                    ];
                 case "circle":
                     var box = shape.rbox(myCanvas);
                     return [box.cx, box.cy, shape.attr("r")];
