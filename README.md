@@ -38,7 +38,19 @@ The best thing is that you can use 3rd party libraries to **fast annotation proc
 
 You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which gets automatically plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to correct location.
 
-[![ImgLab Tutorial](https://img.youtube.com/vi/4yLL21weN8w/0.jpg)](https://www.youtube.com/watch?v=4yLL21weN8w)
+### Auto suggestion
+
+![Auto suggestion](img/imglab-autosuggestion.gif)
+
+### Plugins
+
+![Plugins](img/imglab-fpp.gif)
+
+### Different Shapes
+
+![Plugins](img/imglab-polygon.gif)
+
+Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration for more detail.
 
 ## Showcase your work
 
