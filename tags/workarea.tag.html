@@ -212,12 +212,12 @@
 
         function updateFeaturePoints(shape) {
             $("[for=" + shape.node.id + "]").each((i, pointEl) => {
-                updateFeaturePointPosition(SVG.get(pointEl.id));
+                updateFeaturePointPosition(SVG.get($(pointEl).attr("id")));
             });
         }
 
         function updateFeaturePointPosition(pointEl) {
-            updateFeaturePointInStore(pointEl.attr("for"), pointEl.node.id, pointEl.rbox(myCanvas));
+            updateFeaturePointInStore(pointEl.attr("for"), pointEl.id(), pointEl.rbox(myCanvas));
         }
 
         function getPoints(shape) {
@@ -319,7 +319,7 @@
                     x: 0,
                     y: 0
                 });
-                fPoint.id(fPoint.id);
+                fPoint.id(fPoints[fPointIndex].id);
                 attachEventsToFeaturePoint(fPoint, parent);
             }
         }
