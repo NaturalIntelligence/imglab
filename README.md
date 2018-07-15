@@ -22,12 +22,11 @@ The best thing is that you can use 3rd party libraries to **fast annotation proc
 
 **Other features are**:
 
-* Designed specially for dlib users. You can easily adjust the order of parts / landmarks/ featurepoints.
+* Special attention for dlib users. You can easily adjust the order of parts / landmarks/ featurepoints.
 * Opensource and free forever.
-* You can draw feature points, shapes (circle, rectangle, polygon). Other shapes like ellipse, line, curves will be added in future. 
-* Small project file so it can be shared over the mail.
-* Import / Export data in multiple formats (Currently dlib XML, and pts format is supported)
-* You can export the data in your desire format
+* You can draw feature points, shapes (circle, rectangle, polygon). Other shapes like ellipse, line, curves will be added in future on demand. 
+* Small project file so it can be shared over the mail. In [निम्न (Nimn)](http://nimn.in) data format
+* Multiple formats are supported
   * dlib XML
   * dlib pts
   * Pascal VOC
