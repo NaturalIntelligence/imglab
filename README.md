@@ -32,6 +32,16 @@ The best thing is that you can use 3rd party libraries to **fast annotation proc
   * Pascal VOC
   * COCO
   * Tenserflow (in plan)
+  
+**Other silent features are**:
+
+* Drag or resize any annotation shape.
+* Select and delete any annotation shape or landmark points.
+* Arrange landmark points in specific order my dragging their label up & down, instead of creating them in a particular order.
+* Autosave in browser cache. Export to save on disk.
+* Hot keys support for easy switch between images, tools, labelling data, or to access other part of the application. Hence it is more convenient and effort saving.
+* Set image opacity to highlight annotation shapes and points.
+* Tracking lines and mouse coordinates for precise annotation.
 
 ## How to use
 
