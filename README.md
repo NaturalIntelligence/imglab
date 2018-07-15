@@ -35,7 +35,7 @@ The best thing is that you can use 3rd party libraries to **fast annotation proc
 
 ## How to use
 
-You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which gets automatically plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to correct location.
+You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which gets automatically plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to correct location. Check [Demo video](https://youtu.be/Y-bJo_ylHTw) on Youtube.
 
 ### Auto suggestion
 
