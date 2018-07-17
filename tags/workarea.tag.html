@@ -70,8 +70,11 @@
 
             myCanvas.on('mousedown', function (event) {
                 deselectAll();
+
                 if (selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable) {
                     var currentTool = selectedTool.create(event, myCanvas);
+
+                    moveOnlyOnMoveTool(currentTool);
 
                     currentTool.on('drawstart', function () {
                         alreadyDrawing = true;
@@ -107,6 +110,8 @@
 
         function attachEvents(currentTool) {
 
+            moveOnlyOnMoveTool(currentTool);
+
             onMouse(currentTool.parent(), function (e) { //drag callback : doesn't fire on click
                 if (currentTool.node.id === e.target.id) {
                     updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(
@@ -140,6 +145,15 @@
                     e.stopPropagation();
                 } //click call back
             );
+        }
+
+        function moveOnlyOnMoveTool(el){
+            el.on('mousedown', function (e) {
+                if(!selectedTool || selectedTool.type !== "move"){
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
         }
 
         function attachEventsToFeaturePoint(f_point, parent) {
