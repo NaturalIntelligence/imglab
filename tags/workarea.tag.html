@@ -59,6 +59,30 @@
                 //use the new IDs : shapetype + shapeIndex, shapetype + shapeIndex + point + pointIndex
                 e.preventDefault();
                 e.stopPropagation();
+            }else if (e.key === 'ArrowLeft' && e.ctrlKey) {
+                selectedElements.forEach(el => {
+                    el.parent().dx(-1);
+                });
+                e.preventDefault();
+                e.stopPropagation();
+            }else if (e.key === 'ArrowRight' && e.ctrlKey) {
+                selectedElements.forEach(el => {
+                    el.parent().dx(1);
+                });
+                e.preventDefault();
+                e.stopPropagation();
+            }else if (e.key === 'ArrowUp' && e.ctrlKey) {
+                selectedElements.forEach(el => {
+                    el.parent().dy(-1);
+                });
+                e.preventDefault();
+                e.stopPropagation();
+            }else if (e.key === 'ArrowDown' && e.ctrlKey) {
+                selectedElements.forEach(el => {
+                    el.parent().dy(1);
+                });
+                e.preventDefault();
+                e.stopPropagation();
             }
         });
 
