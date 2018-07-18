@@ -4,6 +4,7 @@ Web based tool to label images for object. So that they can be used to train dli
 
 [![Open Source Helpers](https://www.codetriage.com/naturalintelligence/imglab/badges/users.svg)](https://www.codetriage.com/naturalintelligence/imglab)
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](http://www.firsttimersonly.com/)
+[![Bountysource](https://img.shields.io/bountysource/team/imglab/activity.svg)](https://salt.bountysource.com/teams/imglab)
 
 <a href="https://www.patreon.com/bePatron?u=9531404" data-patreon-widget-type="become-patron-button"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patron!" width="200" /></a>
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KQJAX48SPUKNC"> <img src="https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_92x26.png" alt="Stubmatic donate button"/></a>
@@ -67,8 +68,7 @@ Using this library if you build some open database which can help others or just
 
 ## Worth to mention
 
-- **[निम्न (NIMN)](https://github.com/nimndata/spec)** : A data format which can save up to 80% network bandwidth and speed up newtword communication.
-- [fast-lorem-ipsum](https://github.com/amitguptagwl/fast-lorem-ipsum) : Generate lorem ipsum words, sentences, paragraph very quickly.
+- **[निम्न (NIMN)](https://github.com/nimndata/spec)** : A data format which can save up to 80% network bandwidth and speed up network communication.
 - [Stubmatic](https://github.com/NaturalIntelligence/Stubmatic) : Create HTTP mock  services in minutes without code. You can also mock some binary data formats.
 - **[अनुमार्गक (anumargak)](https://github.com/NaturalIntelligence/anumargak)** : Amazing fast router for node web servers.
 
