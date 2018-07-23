@@ -169,6 +169,7 @@
         function loadIntoWorkArea(e){
             imgSelected = tag.thumbnails[e.item.index];
             riot.mount("workarea",{ img : imgSelected });
+            document.getElementById("img").style.opacity = document.getElementById("input-range").value;
         }
     </script>
 </images-slider>
