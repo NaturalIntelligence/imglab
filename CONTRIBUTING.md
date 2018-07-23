@@ -16,7 +16,7 @@ Here is the check list to publish any change
   * please check the performance and size of package
   * please check alternate available options
 
-### Pointes to remember
+### Points to remember
 * While implementing a functionality, negative cases should also be considered.
 * Previous functionality should not be broken.
 
