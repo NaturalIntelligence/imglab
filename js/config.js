@@ -62,6 +62,20 @@ var tools = {
                         if(e.keyCode == 13){
                             poly.draw('done');
                             poly.off('drawstart');
+
+                            /* poly.on('mousedown', function(event){
+                                if(selectedTool.type === "poly"){
+                                    var points = myCanvas.point(event.x, event.y);
+                                    var polyArray = poly.array().value;
+                                    for(var p_i=0; p_i< polyArray.length; p_i++){
+                                        if(points.x > ( polyArray[ i] [0] - 10 ) &&  points.x < ( polyArray[ i] [0] + 10 ) 
+                                            || points.y > ( polyArray[ i] [1] - 10 ) &&  points.y < ( polyArray[ i] [1] + 10 ) ){
+                                                polyArray.splice(i+1, 0, [points] );
+                                                break;
+                                        }
+                                    }
+                                }
+                            }) */
                         }
                     });
                 });
