@@ -169,22 +169,7 @@
         function loadIntoWorkArea(e){
             imgSelected = tag.thumbnails[e.item.index];
             riot.mount("workarea",{ img : imgSelected });
-            readyToOpacity()
-        }
-
-        // Makes sure all components are loaded then sets images opacity
-        function readyToOpacity(){
-            switch (document.readyState) {            
-                case "complete":
-                    // The page is fully loaded.
-                    var opac = document.getElementById("input-range").value;
-                    document.getElementById("img").style.opacity = opac;
-                    break;
-
-                // Repeat until ready
-                default:
-                    readyToOpacity()
-            }
-        }
+       }
+       
     </script>
 </images-slider>
