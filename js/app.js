@@ -45,3 +45,6 @@ function findInArray(arr, property, val){
         if(arr[i][property] === val) return arr[i];
     }
 }
+
+// Used to check if light tool was used, to set images opacity
+var lightToolExecuted = false;
