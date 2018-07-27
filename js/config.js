@@ -66,11 +66,12 @@ var tools = {
                             /* poly.on('mousedown', function(event){
                                 if(selectedTool.type === "poly"){
                                     var points = myCanvas.point(event.x, event.y);
-                                    var polyArray = poly.array().value;
+                                    var polyArray = poly.array().valueOf();
                                     for(var p_i=0; p_i< polyArray.length; p_i++){
                                         if(points.x > ( polyArray[ i] [0] - 10 ) &&  points.x < ( polyArray[ i] [0] + 10 ) 
                                             || points.y > ( polyArray[ i] [1] - 10 ) &&  points.y < ( polyArray[ i] [1] + 10 ) ){
-                                                polyArray.splice(i+1, 0, [points] );
+                                                polyArray.splice(i+1, 0, [points.x, points.y] );
+                                                poly.plot(polyArray);
                                                 break;
                                         }
                                     }
