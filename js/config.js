@@ -63,16 +63,24 @@ var tools = {
                             poly.draw('done');
                             poly.off('drawstart');
 
-                            /* poly.on('mousedown', function(event){
+                            /* poly.on('dblclick', function(event){
                                 if(selectedTool.type === "poly"){
                                     var points = myCanvas.point(event.x, event.y);
                                     var polyArray = poly.array().valueOf();
                                     for(var p_i=0; p_i< polyArray.length; p_i++){
-                                        if(points.x > ( polyArray[ i] [0] - 10 ) &&  points.x < ( polyArray[ i] [0] + 10 ) 
-                                            || points.y > ( polyArray[ i] [1] - 10 ) &&  points.y < ( polyArray[ i] [1] + 10 ) ){
-                                                polyArray.splice(i+1, 0, [points.x, points.y] );
-                                                poly.plot(polyArray);
-                                                break;
+                                        var point1 = polyArray[ p_i];
+                                        var point2 = [];
+
+                                        if(i === length -1 ){
+                                            point2 = polyArray[ 0];
+                                        }else{
+                                            point2 = polyArray[ p_i + 1 ];
+                                        }
+                                        var distance  = pDistance(point1[0], point1[1], point2[0], point2[1], points.x, points.y);
+                                        if(distance < 11){
+                                            polyArray.splice(p_i+1, 0, [points.x, points.y] );
+                                            poly.plot(polyArray);
+                                            break;
                                         }
                                     }
                                 }
