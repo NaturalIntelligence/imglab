@@ -88,8 +88,9 @@
 
         this.on('mount', function () {
 
-            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height)/* .panZoom({zoomMin: 0.5, zoomMax: 20}) */ ;
+            $("#canvas-container img").css("opacity", appConfig.imageOpacity || 1);
 
+            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height)/* .panZoom({zoomMin: 0.5, zoomMax: 20}) */ ;
             drawOnCanvas();
 
             myCanvas.on('mousedown', function (event) {
