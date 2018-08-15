@@ -5,7 +5,7 @@
             border-radius: 6px;
             width: 100%;
             list-style: none;
-        }    
+        }
         .drag-handler{
             width : 20%;
             background-color: lightgray;
@@ -35,6 +35,42 @@
         }
         .es-list{
             color: #101010;
+        }
+
+        .animated {
+          -webkit-animation-duration: 800ms;
+          animation-duration: 800ms;
+          -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+        }
+
+        @-webkit-keyframes slideOutRight {
+          from {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); }
+          to {
+            visibility: hidden;
+            -webkit-transform: translate3d(100%, 0, 0);
+            transform: translate3d(100%, 0, 0); }
+        }
+
+        @keyframes slideOutRight {
+          from {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); }
+          to {
+            visibility: hidden;
+            -webkit-transform: translate3d(100%, 0, 0);
+            transform: translate3d(100%, 0, 0); }
+        }
+
+        .slideOutRight {
+          -webkit-animation-name: slideOutRight;
+          animation-name: slideOutRight;
+        }
+
+        .input-group-btn{
+          cursor: pointer
         }
 
     </style>
@@ -87,9 +123,13 @@
         }
 
         tag.deleteTag = function(e){
-            detachPointByIndex(opts.id, e.item.fid);
-            this.update();
-            riot.mount('workarea',{ img : imgSelected});
+          $(e.target).parents('li')
+            .addClass('animated slideOutRight')
+            .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+                detachPointByIndex(opts.id, e.item.fid);
+                tag.update();
+                riot.mount('workarea',{ img : imgSelected});
+            });
         }
 
         tag.updateFPointLabel = function(e){
@@ -138,10 +178,10 @@
                     if(suggestedTags.indexOf(tagText) === -1){
                         suggestedTags.push(tagText);
                     }
-                }, 
+                },
                 onTagRemove : function(event, tagText){
                     tag.targetShape.tags.splice( tag.targetShape.tags.indexOf(tagText) ,1);
-                }, 
+                },
             });
 
             var tagInputBoxContainer = tagInputBox.getContainer();
