@@ -2,7 +2,6 @@
 
 Web based tool to label images for object. So that they can be used to train dlib or other object detectors.
 
-[![Open Source Helpers](https://www.codetriage.com/naturalintelligence/imglab/badges/users.svg)](https://www.codetriage.com/naturalintelligence/imglab)
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](http://www.firsttimersonly.com/)
 [![Bountysource](https://img.shields.io/bountysource/team/imglab/activity.svg)](https://salt.bountysource.com/teams/imglab)
 
@@ -17,6 +16,7 @@ Web based tool to label images for object. So that they can be used to train dli
 
 
 > If you're using the old version of imglab please use this [link](https://naturalintelligence.github.io/imglab/old.html)
+> If you want to be the maintainer/colaborator of this project/organization, please let me know. There is only one condition that you need to be polite to response any user.
 
 ## Features
 
