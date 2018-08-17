@@ -8,32 +8,30 @@
         	text-align: center;
         }
 
+        .nav-item > a{
+          color: #aaaaaa;
+        }
+
     </style>
     <div id="settings-wrapper">
 
 	    <h3>Auto Save</h3>
-	    
-	    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    			<span class="navbar-toggler-icon"></span>
-  			</button>
-		   
-			<div class="collapse navbar-collapse" id="navbarNav">
-    			<ul class="navbar-nav">
-      				<li class="nav-item active">
-        				<a class="nav-link" href="#">General</a>
-      				</li>
-      				<li class="nav-item">
-        				<a class="nav-link" href="#">Data</a>
-      				</li>      
-    			</ul>
-  			</div>
-		</nav>
+
+    <ul class="nav nav-tabs" id="settingsTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">Data</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="settingsTabContent">
+      <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
         <small>We auto save labeling data in browser cache.</small>
         <br>
         <div class="row">
-            <div class="col-6"> 
-                Syncing Interval 
+            <div class="col-6">
+                Syncing Interval
                 <small><i class="icon-attention-circled small" data-toggle="tooltip" title="Change how early the data should be saved in browser cache.  Set 0 to disable. Minimum value is 4 sec."></i></small>
             </div>
             <div class="col-6 float-right">
@@ -41,18 +39,23 @@
             </div>
         </div>
         <!-- <div class="row">
-            <div class="col-6"> 
+            <div class="col-6">
                 Keep after export
                 <small><i class="icon-attention-circled small" data-toggle="tooltip" title="If this option is unchecked, browser cahche will be cleared once you export the data."></i></small>
             </div>
-            <div class="col-6"> 
+            <div class="col-6">
                 <input  type="checkbox" value={ appConfig.autosave.syncingInterval / 1000} size=4>
             </div>
         </div> -->
-        <br>
         <div>
             <button class="btn btn-theme" onclick={clearCache}>Clear cache</button>
         </div>
+      </div>
+      <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+        some data info...
+      </div>
+    </div>
+
     </div>
     <script>
         this.changeInterval = function(e){
@@ -68,6 +71,6 @@
             }
         }
 
-        
+
     </script>
 </settings-window>
