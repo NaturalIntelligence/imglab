@@ -3,6 +3,14 @@
         .dropdown-content{
             z-index: 4;
         }
+        .dropdown-content > a {
+            display: flex;
+            justify-content: space-between;
+        }
+        .dropdown-content > a > span{
+            padding: .2em .4em .4em .4em;
+            font-size: 80%;
+        }
     </style>
     <div class="dropdown" >
         <div class="dropbtn"><i class="icon-menu" ></i></div>
@@ -11,8 +19,12 @@
                 <label class="btn-bs-file">Open
                     <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange={openFile}  />
                 </label>
+                <span>Ctrl + i</span>
             </a>
-            <a href="#" id="save" onclick={saveFile}>Save</a>
+            <a href="#" id="save" onclick={saveFile}>
+              <label>Save</label>
+              <span>Ctrl + e</span>
+            </a>
             <a href="#" onclick={openSettings}>Settings</a>
         </div>
     </div>
@@ -30,7 +42,7 @@
             displaySettingsModal();
         }
 
-        //Mapping Keyboard keys 
+        //Mapping Keyboard keys
         this.on('mount', function(){
 
             document.addEventListener('keydown', e => {//import
@@ -44,7 +56,7 @@
                     e.preventDefault();
                     e.stopPropagation();
                 }
-                
+
             })
         });
     </script>
