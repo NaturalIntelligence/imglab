@@ -24,6 +24,7 @@
                 $("#tooltip-span").show();
                 $(tag.refs["h_line"]).show();
                 $(tag.refs["v_line"]).show();
+                //TODO: replace with myCanvas.point(event.x, event.y);
                 var cordinates = getCordinates(event, canvas);
                 $("#tooltip-span").css({
                     "left": cordinates.x + 15 + "px",
