@@ -1,6 +1,8 @@
-# [imglab](https://naturalintelligence.github.io/imglab/)
+# [imglab](http://imglab.ml/)
 
 Web based tool to label images for object. So that they can be used to train dlib or other object detectors.
+
+Or check [downloads](downloads) folder to download OS specific executable to run it offline.
 
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](http://www.firsttimersonly.com/)
 [![Bountysource](https://img.shields.io/bountysource/team/imglab/activity.svg)](https://salt.bountysource.com/teams/imglab)
