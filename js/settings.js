@@ -3,7 +3,8 @@ var appConfig = {
         syncingInterval : 10 * 1000,  //10 seconds
         enable : true,
         deleteIfExported: true, //Mark the data as saved when exported as nimn format, and delte the copy from browser cache.
-    }
+    },
+    featurePointSize: 3,
 };
 function displaySettingsModal(){
     $.dialog({
