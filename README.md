@@ -1,6 +1,8 @@
-# [imglab](https://naturalintelligence.github.io/imglab/)
+# [imglab](http://imglab.ml/)
 
 Web based tool to label images for object. So that they can be used to train dlib or other object detectors.
+
+Or check [downloads](downloads) folder to download OS specific executable to run it offline.
 
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](http://www.firsttimersonly.com/)
 [![Bountysource](https://img.shields.io/bountysource/team/imglab/activity.svg)](https://salt.bountysource.com/teams/imglab)
@@ -78,11 +80,5 @@ Using this library if you build some open database which can help others or just
 
 ## Contributors
 
-- <img src="https://avatars2.githubusercontent.com/u/7692328?v=4" width="20" height="20"/> [amitguptagwl](https://github.com/amitguptagwl)
-- <img src="https://avatars1.githubusercontent.com/u/18495886?v=4" width="20" height="20"/> [rohitkrishna094](https://github.com/rohitkrishna094)
-- <img src="https://avatars0.githubusercontent.com/u/29193641?v=4" width="20" height="20"/> [0sumrich](https://github.com/0sumrich)
-- <img src="https://avatars1.githubusercontent.com/u/1034200?v=4" width="20" height="20"/> [zomblake](https://github.com/zomblake)
-- <img src="https://avatars0.githubusercontent.com/u/14258486?v=4" width="20" height="20"/> [Calstream](https://github.com/Calstream)
-- <img src="https://avatars3.githubusercontent.com/u/40370810?v=4" width="20" height="20"/> [chrisperrins95](https://github.com/chrisperrins95)
-- <img src="https://avatars0.githubusercontent.com/u/26979925?v=4" width="20" height="20"/> [LandoLucas](https://github.com/LandoLucas)
-- <img src="https://avatars3.githubusercontent.com/u/25124281?v=4" width="20" height="20"/> [gsweetwood](https://github.com/gsweetwood)
+<a href="graphs/contributors"><img src="https://opencollective.com/imglab/contributors.svg?width=890&button=false" /></a>
+
