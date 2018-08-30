@@ -16,8 +16,9 @@
         this.on('mount', function () {
             var canvas = $('#work-canvas');
             var canvasContainer = $("#canvas-container");
-            $(tag.refs["h_line"]).width(opts.width > canvasContainer.width() ? opts.width : canvasContainer.width() );
-            $(tag.refs["v_line"]).height(opts.height > canvasContainer.height() ? opts.height : canvasContainer.height() );
+
+            $(tag.refs["h_line"]).width(imgSelected.size.scaledWidth > canvasContainer.width() ? imgSelected.size.scaledWidth : canvasContainer.width() );
+            $(tag.refs["v_line"]).height(imgSelected.size.scaledHeight > canvasContainer.height() ? imgSelected.size.scaledHeight : canvasContainer.height() );
 
             canvas.mousemove(function (event) {
 
@@ -48,5 +49,20 @@
 
 
         });
+
+        this.on("trackinglines_update",function(values){
+          console.log("update");
+          update_h_v_line(values);
+        })
+
+        function update_h_v_line(values){
+          console.log(values);
+          var canvasContainer = $("#canvas-container");
+          console.log(canvasContainer.width());
+          console.log(canvasContainer.height());
+          $(tag.refs["h_line"]).width(values.width > canvasContainer.width() ? values.width : canvasContainer.width() );
+          $(tag.refs["v_line"]).height(values.height > canvasContainer.height() ? values.height : canvasContainer.height() );
+        }
+
     </script>
 </trackinglines>
