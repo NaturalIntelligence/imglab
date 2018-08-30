@@ -21,7 +21,7 @@ function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
     }
 
     if(newLabel){
-        featurePoints[index].label = newLabel    
+        featurePoints[index].label = newLabel
     }
 }
 function getShape(shapeId){
@@ -76,11 +76,13 @@ function attachShapeToImg(id, type, bbox, points){
             "h": 0        },
         "attributes": [],
         "tags": [],
-        "featurePoints": []
+        "featurePoints": [],
+        "zoomScale" : 1,
+        "defaultZoomScale": 1/imgSelected.size.imageScale//this scale is in relation with the image scale
     } );
 }
 function addImgToStore(imgname, size) {
-    //If we already have this image data in localstorage, 
+    //If we already have this image data in localstorage,
     //don't initialize its properties
     if(!labellingData[imgname]){
         labellingData[imgname] = {
