@@ -16,7 +16,7 @@
     <div id="canvas-container">
         <img id="img" src={ opts.img.src } width="{ opts.img.size.width }" height="{ opts.img.size.height }" />
         <div id="work-canvas" width="{ opts.img.size.width }" height="{ opts.img.size.height }"></div>
-        <trackinglines width="{opts.img.size.width}" height="{opts.img.size.height}"></trackinglines>
+        <trackinglines></trackinglines>
     </div>
 
     <script>
@@ -88,9 +88,14 @@
 
         this.on('mount', function () {
 
-            $("#canvas-container img").css("opacity", appConfig.imageOpacity || 1);
+            $("#canvas-container img").css("opacity", appConfig.imageOpacity || 1)
+            .css({"width": opts.img.size.scaledWidth, "height": opts.img.size.scaledHeight});
 
-            myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height)/* .panZoom({zoomMin: 0.5, zoomMax: 20}) */ ;
+            //this is needed so that everytime workarea remounts the scale are correct
+            $("#work-canvas").attr({"width": opts.img.size.scaledWidth, "height": opts.img.size.scaledHeight});
+
+            myCanvas = new SVG('work-canvas').size(opts.img.size.scaledWidth, opts.img.size.scaledHeight)
+
             drawOnCanvas();
 
             myCanvas.on('mousedown', function (event) {
@@ -186,7 +191,7 @@
             f_point.attr({
                 for: parent.node.id
             })
-            
+
             onMouse(f_point, function (e) { //drag callback: doesn't fire on click
                 updateFeaturePointPosition(f_point);
             });
@@ -347,9 +352,22 @@
 
                 attachEvents(currentShape);
                 drawAllFeaturePoints(shape.featurePoints, currentShape);
-
+                setZoomLevel(shape.zoomScale, currentShape);
                 //attachEvents(currentShape);
             }
+        }
+
+        function setZoomLevel(zoomScale, currentShape){
+          var panZoomCanvas = svgPanZoom("#"+currentShape.parent().id(),{
+            panEnabled: false,
+            zoomEnabled: true,
+            zoomScaleSensitivity: 0.1,
+            minZoom: 0.1,
+            maxZoom: 10,
+            fit:false,
+            center: false
+          });
+          panZoomCanvas.zoomAtPoint(zoomScale,{x:0, y:0});
         }
 
         function drawAllFeaturePoints(fPoints, parent) {
