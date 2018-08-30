@@ -104,12 +104,12 @@ var tools = {
             icon : "move.svg",
             type : "move",
         },
-        /* "tool-zoom" : {
-            title  : "Zoom In",
+        "tool-zoom" : {
+            title  : "Zoom",
             desp : "Enlarge the workarea",
             icon_font : "icon-zoom-in",
             actions : ["zoom"]
-        }, */
+        },
         "tool-light" : {
             title  : "Light",
             desp : "Highlight the labels",
