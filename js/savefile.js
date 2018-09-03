@@ -17,6 +17,9 @@ function selectFileTypeToSave(){
                 <div>
                     <button class="btn btn-primary savebtn" onclick="javascript:saveAsPascalVOC()" id="saveAsPascalVOC">Pascal VOC XML</button>
                 </div>
+                <div>
+                    <button class="btn btn-primary savebtn" onclick="javascript:saveAsYOLO()" id="saveAsYOLO">YOLO TXT</button>
+                </div>
             <div>`,
         escapeKey: true,
         backgroundDismiss: true,
@@ -126,6 +129,28 @@ function saveAsPascalVOC(){
         askFileName(Object.keys(labellingData[ imgSelected.name ].shapes.length ).length + "_pvoc_imglab.xml", function(fileName){
             analytics_reportExportType("pascal_voc");
             download(data, fileName, "text/xml", "utf-8");
+        });
+    }
+
+}
+
+/**
+ * Save currently selected image as YOLO-formatted TXT file. 
+ * It captures only boundary box detail of currently loaded/selected image.
+ */
+function saveAsYOLO() {
+
+    if (!imgSelected) {
+        showSnackBar("This option is applicable on the image loaded in workarea.");
+        return;
+    } else if (labellingData[imgSelected.name].shapes.length === 0) {
+        showSnackBar("You need to label the currently loaded image.");
+        return;
+    } else {
+        var data = yoloFormater.toYOLO();
+        askFileName(Object.keys(labellingData[imgSelected.name].shapes.length).length + "_yolo_imglab.txt", function (fileName) {
+            analytics_reportExportType("yolo");
+            download(data, fileName, "text/plain", "utf-8");
         });
     }
 
