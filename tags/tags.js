@@ -15,7 +15,7 @@ riot.tag2('facepp', '<input onchange="{saveKey}" class="form-control" type="text
             }else{
                 fetchFromFpp(prepareFormData(null,imgSelected.src) , function(data){
                     fppToImgLabObject(data);
-                    riot.mount('workarea',{ img : imgSelected});
+                    riot.mount('workarea');
                 });
             }
 
