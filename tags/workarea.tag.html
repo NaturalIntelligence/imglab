@@ -14,8 +14,8 @@
     </style>
 
     <div id="canvas-container">
-        <img id="img" src={ opts.img.src } width="{ opts.img.size.width }" height="{ opts.img.size.height }" />
-        <div id="work-canvas" width="{ opts.img.size.width }" height="{ opts.img.size.height }"></div>
+        <img id="img" src={ imgSelected.src } width="{ imgSelected.size.width }" height="{ imgSelected.size.height }" />
+        <div id="work-canvas" width="{ imgSelected.size.width }" height="{ imgSelected.size.height }"></div>
         <trackinglines></trackinglines>
     </div>
 
@@ -89,12 +89,12 @@
         this.on('mount', function () {
 
             $("#canvas-container img").css("opacity", appConfig.imageOpacity || 1)
-            .css({"width": opts.img.size.scaledWidth, "height": opts.img.size.scaledHeight});
+            .css({"width": imgSelected.size.scaledWidth, "height": imgSelected.size.scaledHeight});
 
             //this is needed so that everytime workarea remounts the scale are correct
-            $("#work-canvas").attr({"width": opts.img.size.scaledWidth, "height": opts.img.size.scaledHeight});
+            $("#work-canvas").attr({"width": imgSelected.size.scaledWidth, "height": imgSelected.size.scaledHeight});
 
-            myCanvas = new SVG('work-canvas').size(opts.img.size.scaledWidth, opts.img.size.scaledHeight)
+            myCanvas = new SVG('work-canvas').size(imgSelected.size.scaledWidth, imgSelected.size.scaledHeight)
 
             drawOnCanvas();
 
