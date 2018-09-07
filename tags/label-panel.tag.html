@@ -128,7 +128,7 @@
             .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
                 detachPointByIndex(opts.id, e.item.fid);
                 tag.update();
-                riot.mount('workarea',{ img : imgSelected});
+                riot.mount('workarea');
             });
         }
 

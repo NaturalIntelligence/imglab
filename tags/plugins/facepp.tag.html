@@ -20,13 +20,13 @@
         this.fetchFpp = function(){
             //For testing
             /* fppToImgLabObject(mockresponse);
-            riot.mount('workarea',{ img : imgSelected}); */
+            riot.mount('workarea'); */
             if(!imgSelected.src || !pluginsStore.facepp.key || !pluginsStore.facepp.key){
                 showSnackBar("You need to load an image in workarea and input Face++ credential above .");
             }else{
                 fetchFromFpp(prepareFormData(null,imgSelected.src) , function(data){
                     fppToImgLabObject(data);
-                    riot.mount('workarea',{ img : imgSelected});
+                    riot.mount('workarea');
                 });
             }
 
@@ -34,7 +34,7 @@
 
         function prepareFormData(url,imgdata){
             var formData = new FormData();
-            
+
             formData.append('api_key', pluginsStore.facepp.key );
             formData.append('api_secret', pluginsStore.facepp.secret );
             formData.append('return_landmark', 1);
@@ -46,8 +46,8 @@
             }else{
                 //console.log(imgdata)
                 //formData.append('image_file', imgdata);
-                //formData.append('image_file', $('input[type=file]')[0].files[index]); 
-                formData.append('image_base64', imgdata.substr( imgdata.indexOf(";base64,")+8)); 
+                //formData.append('image_file', $('input[type=file]')[0].files[index]);
+                formData.append('image_base64', imgdata.substr( imgdata.indexOf(";base64,")+8));
             }
             // Attach file
 
@@ -71,7 +71,7 @@
 
         function fppToImgLabObject(fppResponse){
             var imgName = imgSelected.name;
-            
+
             for(var face_i in fppResponse.faces){
                 var face = fppResponse.faces[ face_i ];
                 labellingData[ imgName ].shapes.push({
@@ -82,17 +82,17 @@
                         x : face.face_rectangle.left,
                         y : face.face_rectangle.top,
                         w : face.face_rectangle.width,
-                        h : face.face_rectangle.height,    
+                        h : face.face_rectangle.height,
                     },
-                    points : [ 
+                    points : [
                         face.face_rectangle.left,
                         face.face_rectangle.top,
                         face.face_rectangle.width,
                         face.face_rectangle.height
                     ],
-                    angle: [ 
-                        face.attributes.headpose.roll_angle, 
-                        face.attributes.headpose.yaw_angle, 
+                    angle: [
+                        face.attributes.headpose.roll_angle,
+                        face.attributes.headpose.yaw_angle,
                         face.attributes.headpose.pitch_angle
                     ],
                     attributes : [],
@@ -109,7 +109,7 @@
                     if(attribute.value){
                         shape.attributes[  a_i ] = {
                             label: attributes[ a_i ],
-                            value : attribute.value 
+                            value : attribute.value
                         }
                     }
                 }
@@ -170,7 +170,7 @@
                 ,"right_eyebrow_lower_right_quarter"
                 ,"right_eyebrow_lower_middle"
                 ,"right_eyebrow_lower_left_quarter"
-            
+
             //nose
                 ,"nose_contour_left1"
                 ,"nose_contour_right1"
@@ -182,7 +182,7 @@
                 ,"nose_contour_lower_middle"
                 ,"nose_right"
                 ,"nose_contour_right3"
-                
+
             //left eye
                 ,"left_eye_left_corner"
                 ,"left_eye_upper_left_quarter"
@@ -206,7 +206,7 @@
                 ,"right_eye_lower_left_quarter"
                 ,"right_eye_pupil"
                 ,"right_eye_center"
-                
+
             //lips
                 ,"mouth_left_corner"
                 ,"mouth_upper_lip_left_contour1"
@@ -215,17 +215,17 @@
                 ,"mouth_upper_lip_right_contour1"
                 ,"mouth_upper_lip_right_contour2"
                 ,"mouth_right_corner"
-                
+
                 ,"mouth_lower_lip_right_contour2"
                 ,"mouth_lower_lip_right_contour3"
                 ,"mouth_lower_lip_bottom"
                 ,"mouth_lower_lip_left_contour3"
                 ,"mouth_lower_lip_left_contour2"
-                
+
                 ,"mouth_upper_lip_left_contour3"
                 ,"mouth_upper_lip_bottom"
                 ,"mouth_upper_lip_right_contour3"
-                
+
                 ,"mouth_lower_lip_right_contour1"
                 ,"mouth_lower_lip_top"
                 ,"mouth_lower_lip_left_contour1"
