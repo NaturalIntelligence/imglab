@@ -1,0 +1,148 @@
+.selection-color{
+    background-color: #B3B3B3;
+}
+
+.overlay-color{
+    background-color: #666666;
+    color: white;
+}
+
+.base-color{
+    background-color: #4D4D4D;
+    color: white;
+}
+
+.line{
+    height: 1px;
+    background-color: grey;
+}
+
+.toolbox-border-top{
+    border-top: 1px solid grey;
+}
+.toolbox-border-botton{
+    border-botton: 1px solid grey;
+}
+
+.grey-border{
+    border: 1px solid grey;
+}
+
+.outline{
+    outline: 1px solid red;
+}
+.file-input-icon{
+    width: 30px;
+    margin: auto;
+    cursor: pointer;
+}
+
+.file-input-icon:hover{
+    background-color: grey;
+}
+
+.svg_select_boundingRect{
+    stroke-dasharray: initial !important;
+}
+
+.draw-mode{
+    cursor: crosshair;
+}
+
+.select-mode{
+    cursor: move;
+}
+
+.savebtn {
+    margin: 10px;
+    width: 150px;
+}
+
+i{
+    font-size: 2em;
+}
+
+/* JQUERY autocomplete */
+
+
+ul.ui-autocomplete {
+    position: absolute;
+    /* width: 200px; */
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+ul.ui-menu{
+    list-style: none;
+    padding: 2px;
+    margin: 0;
+    display: block;
+    outline: none;
+    z-index: 100;
+}
+
+.ui-menu .ui-menu-item{
+    padding:0 .5em;
+    /* line-height:2em;
+    font-size:.8em; */
+    color: #101010;
+    margin: 0;
+    padding: 0;
+}
+
+.ui-widget-content {
+    background: #ccc;
+}
+
+.ui-menu .ui-menu-item a {
+    text-decoration: none;
+    display: block;
+    padding: 2px .4em;
+    line-height: 1.5;
+    min-height: 0;
+    font-weight: normal;
+    color: #8a8a8a;
+    cursor: pointer; 
+}
+.ui-menu .ui-menu-item a:hover {
+    /* color: #ccc; */
+    background: #ccc; 
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+    background: #ccc;
+    padding-left: 5px;
+    /* color: #ccc !important;  */
+}
+
+.ui-state-hover a,
+.ui-state-hover a:hover,
+.ui-state-hover a:link,
+.ui-state-hover a:visited {
+    color: #ccc; 
+    padding-left: 5px;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+    background: #ccc;
+    font-weight: normal;
+    color: #212121; 
+}
+
+.ui-helper-hidden-accessible {
+    display: none;
+}
+.ui-helper-hidden {
+    display: none; 
+}
+/* End JQUERY autocomplete */

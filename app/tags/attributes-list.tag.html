@@ -1,0 +1,94 @@
+<attributes-list>
+    <style>
+        .attribute-name{
+            width: 30%;
+        }
+        .attribute-value{
+            width: 65%;
+        }
+        .del-attribute{
+            width: 5%;
+            cursor: pointer;
+        }
+        input[type="text"]{
+            border: 0px;
+            padding: 1px;
+        }
+    </style>
+    <div class="clearfix">Attributes<button class="btn btn-sm float-right" onclick={addAttributeRow}>+</button></div>
+    <div id="attributes-list">
+        <div id="attribute-row_{index}" class="form-inline" style="margin-top:3px;" each={ attribute,index in opts.attributes } >
+            <div class="attribute-name">
+                <input ref="attr-name" type="text" class="form-text w-100 " value="{ attribute.label }" onfocus="{updateAttrLabelHint}" onchange={updateAttributeName} placeholder="name" style="background: #ccc;">
+            </div>
+            <div class="attribute-value">
+                <input type="text" class="form-text w-100" value="{ attribute.value }" onfocus="{updateTextHint}" onchange={updateAttributeValue} placeholder="value">
+            </div>
+            <div class="del-attribute"  onclick={deleteAttribute}>
+                <i class="icon icon-trash-empty small"></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        var thisTag = this;
+
+        //can be called on oninput event
+        this.updateAttributeName = function(e){
+            opts.attributes[ e.item.index ].label = e.target.value;
+        }
+
+        this.updateAttrLabelHint = function(e){
+            if( !$(e.target).hasClass("ui-autocomplete-input") ){
+                $(e.target).autocomplete({
+                    //Here we can check what attribute has already been set
+                    //so that only remaining attributes can be displayed as hint
+                    source: Object.keys( suggestedAttributes ),
+                    appendTo: $(e.target).parent() ,
+                    position: { at: "left bottom", of: $(e.target) },
+                    messages: {
+                        noResults: '',
+                        results: function() {}
+                    },
+                });
+            }
+        }
+
+        //can be called on oninput event
+        this.updateAttributeValue = function(e){
+            opts.attributes[ e.item.index ].value = e.target.value;
+        }
+
+        this.updateTextHint = function(e){
+            if( !$(e.target).hasClass("ui-autocomplete-input") ){
+                var attrLbl = $(e.target).parent().prev().find("input").val();
+                if(suggestedAttributes[ attrLbl ]){
+                    $(e.target).autocomplete({
+                        source : suggestedAttributes[ attrLbl ],
+                        appendTo: $(e.target).parent() ,
+                        position: { at: "left bottom", of: $(e.target) },
+                        messages: {
+                            noResults: '',
+                            results: function() {}
+                        },
+                    })
+                }
+            }
+        }
+
+        this.deleteAttribute = function(e){
+            opts.attributes.splice(e.item.index, 1);
+            thisTag.update();
+        }
+
+        this.addAttributeRow = function(e){
+            var present = findInArray(opts.attributes, "label", "unlabelled");
+            if(!present){
+                opts.attributes.push({
+                    label : "unlabelled",
+                    value : ""
+                })
+                this.update();
+            }
+        }
+    </script>
+</attributes-list>

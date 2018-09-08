@@ -1,0 +1,63 @@
+<menu-dropdown>
+    <style>
+        .dropdown-content{
+            z-index: 4;
+        }
+        .dropdown-content > a {
+            display: flex;
+            justify-content: space-between;
+        }
+        .dropdown-content > a > span{
+            padding: .2em .4em .4em .4em;
+            font-size: 80%;
+        }
+    </style>
+    <div class="dropdown" >
+        <div class="dropbtn"><i class="icon-menu" ></i></div>
+        <div class="dropdown-content">
+            <a href="#" >
+                <label class="btn-bs-file">Open
+                    <input id="browse" type="file" class="filebutton" accept=".fpp,.nimn,.xml,.json" onchange={openFile}  />
+                </label>
+                <span>Ctrl + i</span>
+            </a>
+            <a href="#" id="save" onclick={saveFile}>
+              <label>Save</label>
+              <span>Ctrl + e</span>
+            </a>
+            <a href="#" onclick={openSettings}>Settings</a>
+        </div>
+    </div>
+    <script>
+        this.openFile = function(e){
+            readDataFile(e);
+            //openDataFile()
+        }
+
+        this.saveFile = function(){
+            selectFileTypeToSave();
+        }
+
+        this.openSettings = function(){
+            displaySettingsModal();
+        }
+
+        //Mapping Keyboard keys
+        this.on('mount', function(){
+
+            document.addEventListener('keydown', e => {//import
+                if ( (e.key == 'I' || e.key == 'i') && !e.shiftKey && !e.altKey && e.ctrlKey ){
+                    document.getElementById('browse').click();
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                if ( (e.key == 'E' || e.key == 'e') && !e.shiftKey && !e.altKey && e.ctrlKey ){//export
+                    document.getElementById('save').click();
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+            })
+        });
+    </script>
+</menu-dropdown>

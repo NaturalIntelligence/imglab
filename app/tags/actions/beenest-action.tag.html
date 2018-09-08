@@ -1,0 +1,43 @@
+<action-beenest>
+    <div>
+        <input onclick={submitWork} type="button" name="submitWorkBtn" id="submitWorkBtn" value="Submit" />
+    </div>
+    <script>
+
+        this.submitWork = function(e){
+
+	        var image = labellingData[ imgSelected.name ];
+	        // for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
+	        	if (image.shapes.length !== 1) {
+	        		alert('Only one label allowed');
+	        	} else {
+		            var shape = image.shapes[ 0 ];
+		            var labelData = [
+			            {
+			            	x: shape.bbox.x,
+			            	y: shape.bbox.y
+			            },
+			            {
+			            	x: shape.bbox.x + shape.bbox.w,
+			            	y: shape.bbox.x + shape.bbox.w
+			            }
+		            ];
+
+		            const instance = axios.create({
+		                baseURL: 'http://localhost:8080/v1/',
+		                headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
+		            });
+
+		            instance.post('/works', {id: imgSelected.name, result: labelData})
+		              .then(function(response) {
+		                    console.log('submitted');
+		                    delete labellingData[ imgSelected.name ];
+		              })
+		              .catch(function (error) {
+		                console.log(error);
+		              });
+	        	}
+	        // }
+		}
+    </script>
+</action-beenest>

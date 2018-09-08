@@ -1,0 +1,101 @@
+<toolbox>
+    <style>
+        .tool-button{
+            text-align: center;
+            margin: 14px 0px;
+            font-size: 0.9em;
+        }
+        .tool-icon{
+            width: 40%;
+            margin: 3px 0px;
+            font-size: 1.5em;
+        }
+        .tool-selected{
+            background: coral;
+        }
+        .tool-button:not(.tool-selected):hover{
+            background: grey;
+        }
+    </style>
+
+    <div each={tool,toolid in tools[opts.tools]} id={ toolid } class="tool-button" onclick={ selectme }>
+        <img if={tool.icon} class="tool-icon" src="img/icons/{tool.icon}">
+        <i if={tool.icon_font} class="tool-icon {tool.icon_font}" />
+        <div>{ tool.title }</div>
+    </div>
+    
+    <script>
+        //this.toolsData = tools[opts.tools];
+        var tag = this;
+        this.on('mount', function(){
+            document.addEventListener('keydown', e => {
+                    
+                if (e.key == 'f'  && e.altKey){//featurepoint
+                    $("#tool-point").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                if (e.key == 'c'  && e.altKey){//circle
+                    $("#tool-circle").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                /* if (e.key == 'e'  && e.altKey){//ellipse
+                    $("#tool-ellipse").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                } */
+
+                if (e.key == 'r'  && e.altKey){//rectangle
+                    $("#tool-rectangle").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                if (e.key == 'p'  && e.altKey){//Polygon
+                    $("#tool-polygon").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                /* if (e.key == 'w'  && e.altKey){//Magic wand
+                    $("#tool-polygon").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                } */
+
+                if (e.key == 'm'  && e.altKey){//Magic wand
+                    $("#tool-move").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                if (e.key == 'l'  && e.altKey){//Magic wand
+                    $("#tool-light").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+            });
+        });
+
+        tag.selectme = function (e){
+            //TODO: should it unseect all the tools or tools in current toolbox
+            $(".tool-selected").removeClass("tool-selected");
+            var toolDetail = tools[opts.tools][e.item.toolid];
+            if(toolDetail.selectAction){
+                toolDetail.selectAction();
+            }else{
+                selectedTool = toolDetail;
+                $(e.currentTarget).addClass("tool-selected");
+            }
+
+            if(toolDetail.actions){
+                riot.mount('actionbar', { actions: toolDetail.actions});
+            }
+            
+        }
+    </script>
+</toolbox>

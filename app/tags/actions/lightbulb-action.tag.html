@@ -1,0 +1,11 @@
+<action-lightbulb>
+    <div class="range-slider">
+        <input class="input-range" type="range" step="0.1" value={ appConfig.imageOpacity || 1} min="0" max="1.0" onchange={changeFillOpacity}>
+    </div>
+    <script>
+        this.changeFillOpacity = function(e){
+            appConfig.imageOpacity = e.target.value;
+            $("#canvas-container img").css("opacity",e.target.value);
+        }
+    </script>
+</action-lightbulb>
