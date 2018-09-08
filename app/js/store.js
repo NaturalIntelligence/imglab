@@ -81,21 +81,23 @@ function attachShapeToImg(id, type, bbox, points){
         "defaultZoomScale": 1/imgSelected.size.imageScale//this scale is in relation with the image scale
     } );
 }
-function addImgToStore(imgname, size) {
+function addImgToStore(imageDataObject) {
     //If we already have this image data in localstorage,
     //don't initialize its properties
+    var imgname = imageDataObject.name;
     if(!labellingData[imgname]){
-        labellingData[imgname] = {
+        labellingData[imgname] = Object.assign(imageDataObject, {
             //"path" : "",
             "imagename": imgname,
             "attributes": [],
             "tags": [],
-            "size" : {
-                "width": size.width,
-                "height": size.height
-            },
+            // "size" : {
+            //     "width": size.width,
+            //     "height": size.height
+            // },
+            // "imageSrc": imageSrc,
             "shapes": []
-        }
+        });
     }
 }
 

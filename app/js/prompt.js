@@ -1,25 +1,25 @@
-$(function(){
-    $.confirm({
-        title: '',
-        content: '<img src="img/imglab_logo.png"><br>'
-        + '<p>Imglab is an open source free to use application.</p>'
-        + '<p> Please consider small donation for support.</p>'
-        + '<p> Give us a <a href="https://github.com/NaturalIntelligence/imglab/stargazers">star</a> on GitHub or <a href="https://github.com/NaturalIntelligence/imglab/blob/master/showcase.md" >showcase</a> your project as a motivation.</p>',
-        escapeKey: true,
-        backgroundDismiss: true,
-        buttons: {
-            confirm: {
-                text: "Donate",
-                action : function () {
-                    displayDonationPrompt();
-                }
-            },
-            leave : {
-                text: "Umm! may be next time."
-            }
-        }
-    });
-});
+// $(function(){
+//     $.confirm({
+//         title: '',
+//         content: '<img src="img/imglab_logo.png"><br>'
+//         + '<p>Imglab is an open source free to use application.</p>'
+//         + '<p> Please consider small donation for support.</p>'
+//         + '<p> Give us a <a href="https://github.com/NaturalIntelligence/imglab/stargazers">star</a> on GitHub or <a href="https://github.com/NaturalIntelligence/imglab/blob/master/showcase.md" >showcase</a> your project as a motivation.</p>',
+//         escapeKey: true,
+//         backgroundDismiss: true,
+//         buttons: {
+//             confirm: {
+//                 text: "Donate",
+//                 action : function () {
+//                     displayDonationPrompt();
+//                 }
+//             },
+//             leave : {
+//                 text: "Umm! may be next time."
+//             }
+//         }
+//     });
+// });
 
 function displayDonationPrompt(){
     $.dialog({

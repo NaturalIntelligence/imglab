@@ -10,6 +10,7 @@
     <script>
         this.saveToken = function(e){
             pluginsStore.beenest.token = e.target.value;
+            localStorage.setItem("beenest_api_token", e.target.value);
         }
 
     </script>

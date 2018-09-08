@@ -1,43 +1,150 @@
 <action-beenest>
     <div>
-        <input onclick={submitWork} type="button" name="submitWorkBtn" id="submitWorkBtn" value="Submit" />
+        <input onclick={fetchWorks} type="button" name="fetchWorksBtn" id="fetchWorksBtn" value="请求任务" />
+        <input onclick={submitWork} type="button" name="submitWorkBtn" id="submitWorkBtn" value="提交" />
+        <input onclick={cancelWork} type="button" name="cancelWorkBtn" id="cancelWorkBtn" value="放弃" />
     </div>
     <script>
 
+        function axiosClient() {
+        	return axios.create({
+	            baseURL: 'http://localhost:8080/v1/',
+	            headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
+        	});
+        }
+
+        function updateDimentions(imgFileSrc, imageDataObject) {
+            var img = new Image();
+            img.onload = function() {
+                imageDataObject.size = {
+                    width : this.width,
+                    height : this.height,
+                    scaledWidth: this.width,
+                    scaledHeight: this.height,
+                    imageScale: 1
+                }
+                addImgToStore(imageDataObject);
+            }
+            img.src = imgFileSrc;
+        }
+
+        function readImageBlob(fileName, b) {
+            var reader = new FileReader();
+            reader.onload = e => {
+                var imgData = {
+                    name : fileName,
+                    src: e.target.result
+                };
+                updateDimentions(e.target.result, imgData);
+            }
+            reader.onloadend = e => {
+            }
+            reader.readAsDataURL(b);
+        }
+
+        this.fetchWorks = function(e){
+            // console.log(pluginsStore.beenest.token);
+
+            if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
+
+                var postData = {
+                            type: "rect",
+                            num: 4
+                        };
+
+                  var instance = axiosClient();
+
+                  instance.post('/works/fetch', postData)
+                  .then(function(response) {
+                        var works = response.data;
+                        // console.log(works);
+                        works.forEach(function(v) {
+                            var workId = v.id;
+                            instance.get('/works/'+workId+'/file', {
+                                responseType: 'blob'
+                            }).then(function(response) {
+                                readImageBlob(workId, response.data);
+                            });
+                        });
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+
+            }
+
+        }
+
         this.submitWork = function(e){
 
-	        var image = labellingData[ imgSelected.name ];
-	        // for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
-	        	if (image.shapes.length !== 1) {
-	        		alert('Only one label allowed');
-	        	} else {
-		            var shape = image.shapes[ 0 ];
-		            var labelData = [
-			            {
-			            	x: shape.bbox.x,
-			            	y: shape.bbox.y
-			            },
-			            {
-			            	x: shape.bbox.x + shape.bbox.w,
-			            	y: shape.bbox.x + shape.bbox.w
-			            }
-		            ];
+        	if (imgSelected.name) {
 
-		            const instance = axios.create({
-		                baseURL: 'http://localhost:8080/v1/',
-		                headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
-		            });
+	        	var selectedImageName = imgSelected.name;
 
-		            instance.post('/works', {id: imgSelected.name, result: labelData})
-		              .then(function(response) {
-		                    console.log('submitted');
-		                    delete labellingData[ imgSelected.name ];
-		              })
-		              .catch(function (error) {
-		                console.log(error);
-		              });
-	        	}
-	        // }
+		        var image = labellingData[ selectedImageName ];
+		        // for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
+		        	if (image.shapes.length !== 1) {
+		        		alert('只允许提交一个目标');
+		        	} else {
+			            var shape = image.shapes[ 0 ];
+			            var labelData = [
+				            {
+				            	x: shape.bbox.x,
+				            	y: shape.bbox.y
+				            },
+				            {
+				            	x: shape.bbox.x + shape.bbox.w,
+				            	y: shape.bbox.x + shape.bbox.w
+				            }
+			            ];
+
+                  		var instance = axiosClient();
+
+			            instance.post('/works', {id: selectedImageName, result: labelData})
+			              .then(function(response) {
+			                    // console.log('submitted');
+			                    deleteAndNextImage(selectedImageName);
+			              })
+			              .catch(function (error) {
+			                console.log(error);
+			              	// if (error.response.status === 403) {
+			                    clearAllImages();
+			              		alert('提交失败');
+			              		console.log(error);
+			              	// }
+			              });
+		        	}
+		        // }
+
+        	}
+
 		}
+
+		this.cancelWork = function(e) {
+
+        	if (imgSelected.name) {
+
+	        	var selectedImageName = imgSelected.name;
+                
+                var instance = axiosClient();
+
+	            instance.delete('/works/' + selectedImageName + '/cancel')
+	              .then(function(response) {
+	                    // console.log('cancelled');
+	                    deleteAndNextImage(selectedImageName);
+	              })
+	              .catch(function (error) {
+	                console.log(error);
+	              	// if (error.response.status === 403) {
+	                    clearAllImages();
+	              		// alert('Failed to submit');
+	              		console.log(error);
+	              	// }
+	              });
+
+          }
+
+		}
+
     </script>
 </action-beenest>

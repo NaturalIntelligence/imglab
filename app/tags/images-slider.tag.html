@@ -4,13 +4,13 @@
             display: none;
         }
     </style>
-        <div style="width: 50px;  text-align: center; padding: 10px;">
+<!--         <div style="width: 50px;  text-align: center; padding: 10px;">
                 <label class="btn-bs-button">
                     <i class="icon-download" style="font-size: 1.5em"></i>
-                    <!-- <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange={ readImageFiles } > -->
+                    <input type="file" id="image_folder" webkitdirectory mozdirectory msdirectory odirectory directory onchange={ readImageFiles } >
                     <input onclick={fetchWorks} type="button" name="fetchWorkBtn" id="fetchWorkBtn" />
                 </label>
-        </div>
+        </div> -->
         <div id="leftpaddle" class="align-middle"  style="height: 100%;">
             <span style="width: 50px; height: 90px;">
                 <i class="icon-left-open" style="font-size: 1.5em"></i>
@@ -20,7 +20,7 @@
             <div id="photolist" class="photolist">
                     <!-- <span each={ thumbnails } class="d-inline-block">
                         <span class="delete" onclick={ deleteThumbnail }></span> -->
-                        <img id="thumbnail_{index}" each={ thumbnail,index in thumbnails } src={ thumbnail.src } label ={ thumbnail.name } title={ thumbnail.name } width={thumbnailWidth} onclick={ loadIntoWorkArea}>
+                        <img id="thumbnail_{index}" each={ thumbnail,index in thumbnails } src={ thumbnail.src } label ={ thumbnail.imgname } title={ thumbnail.imgname } width={thumbnailWidth} onclick={ loadIntoWorkArea}>
                     <!-- </span> -->
             </div>
         </div>
@@ -33,11 +33,11 @@
 
     <script>
         var tag = this;
-        tag.readImageFiles = readImageFiles;
-        tag.readImageFile = readImageFile;
+        // tag.readImageFiles = readImageFiles;
+        // tag.readImageFile = readImageFile;
         tag.slideleft = slideleft;
         tag.slideright = slideright;
-        tag.deleteThumbnail = deleteThumbnail;
+        // tag.deleteThumbnail = deleteThumbnail;
         tag.loadIntoWorkArea = loadIntoWorkArea;
 
         this.on('mount', function(){
@@ -51,101 +51,101 @@
                 })
 
                 //Map keyboard keys
-                document.addEventListener('keydown', e => {
+                // document.addEventListener('keydown', e => {
 
-                    if (e.key == 'ArrowLeft'  && e.altKey){
-                        if(tag.currentIndex > 0 ) $("#thumbnail_" + --tag.currentIndex).click();
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
-                    if (e.key == 'ArrowRight'  && e.altKey){
-                        if(tag.currentIndex < tag.thumbnails.length - 1 ) $("#thumbnail_"+ ++tag.currentIndex).click();
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
+                //     if (e.key == 'ArrowLeft'  && e.altKey){
+                //         if(tag.currentIndex > 0 ) $("#thumbnail_" + --tag.currentIndex).click();
+                //         e.preventDefault();
+                //         e.stopPropagation();
+                //     }
+                //     if (e.key == 'ArrowRight'  && e.altKey){
+                //         if(tag.currentIndex < tag.thumbnails.length - 1 ) $("#thumbnail_"+ ++tag.currentIndex).click();
+                //         e.preventDefault();
+                //         e.stopPropagation();
+                //     }
 
-                    if ( e.key == 'o' && e.altKey && e.ctrlKey){
-                        document.getElementById('image_folder').click();
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
-                    if (e.key == 'o' && e.altKey){
-                        document.getElementById('browseImages').click();
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
-                })
+                //     if ( e.key == 'o' && e.altKey && e.ctrlKey){
+                //         document.getElementById('image_folder').click();
+                //         e.preventDefault();
+                //         e.stopPropagation();
+                //     }
+                //     if (e.key == 'o' && e.altKey){
+                //         document.getElementById('browseImages').click();
+                //         e.preventDefault();
+                //         e.stopPropagation();
+                //     }
+                // })
         });
 
         this.on('updated', () => {
             //$("#thumbnail_0").click(); as this triggers before images are uploaded it cuase issue. Load it with an interval
         })
 
-        function readImageFiles(e) {
-            var input = e.srcElement || e.target;
-            if (input.files && input.files[0]) {
-                for(i=0;i<input.files.length;i++){
-                    this.readImageFile(input.files[i]);
-                }
-            }
-        }
+        // function readImageFiles(e) {
+        //     var input = e.srcElement || e.target;
+        //     if (input.files && input.files[0]) {
+        //         for(i=0;i<input.files.length;i++){
+        //             this.readImageFile(input.files[i]);
+        //         }
+        //     }
+        // }
 
-        tag.thumbnails = [];
-        tag.currentIndex = 0;
+        tag.thumbnails = labellingData;
+        // tag.currentIndex = 0;
         this.thumbnailWidth= this.opts.thumbnail_width || "80px";
 
-        function readImageBlob(fileName, b) {
-            var reader = new FileReader();
-            reader.onload = e => {
-                var imgData = {
-                    name : fileName,
-                    src: e.target.result
-                };
-                updateDimentions(e.target.result, imgData);
-                tag.thumbnails.push(imgData);
+        // function readImageBlob(fileName, b) {
+        //     var reader = new FileReader();
+        //     reader.onload = e => {
+        //         var imgData = {
+        //             name : fileName,
+        //             src: e.target.result
+        //         };
+        //         updateDimentions(e.target.result, imgData);
+        //         // tag.thumbnails.push(imgData);
 
-                tag.trigger("uploadimages");
-            }
-            reader.onloadend = e => {
-                tag.update();
-            }
-            reader.readAsDataURL(b);
-        }
+        //         tag.trigger("uploadimages");
+        //     }
+        //     reader.onloadend = e => {
+        //         tag.update();
+        //     }
+        //     reader.readAsDataURL(b);
+        // }
 
-        function readImageFile(f) {
-            if(f.type.startsWith("image")){
-                var reader = new FileReader();
-                reader.onload = e => {
-                    var imgData = {
-                        name : f.name,
-                        src: e.target.result
-                    };
-                    updateDimentions(e.target.result, imgData);
-                    tag.thumbnails.push(imgData);
+        // function readImageFile(f) {
+        //     if(f.type.startsWith("image")){
+        //         var reader = new FileReader();
+        //         reader.onload = e => {
+        //             var imgData = {
+        //                 name : f.name,
+        //                 src: e.target.result
+        //             };
+        //             updateDimentions(e.target.result, imgData);
+        //             tag.thumbnails.push(imgData);
 
-                    this.trigger("uploadimages");
-                }
-                reader.onloadend = e => {
-                    this.update();
-                }
-                reader.readAsDataURL(f);
-            }
-        }
+        //             this.trigger("uploadimages");
+        //         }
+        //         reader.onloadend = e => {
+        //             this.update();
+        //         }
+        //         reader.readAsDataURL(f);
+        //     }
+        // }
 
-        function updateDimentions(imgFileSrc, imageDataObject) {
-            var img = new Image();
-            img.onload = function() {
-                imageDataObject.size = {
-                    width : this.width,
-                    height : this.height,
-                    scaledWidth: this.width,
-                    scaledHeight: this.height,
-                    imageScale: 1
-                }
-                addImgToStore(imageDataObject.name, imageDataObject.size);
-            }
-            img.src = imgFileSrc;
-        }
+        // function updateDimentions(imgFileSrc, imageDataObject) {
+        //     var img = new Image();
+        //     img.onload = function() {
+        //         imageDataObject.size = {
+        //             width : this.width,
+        //             height : this.height,
+        //             scaledWidth: this.width,
+        //             scaledHeight: this.height,
+        //             imageScale: 1
+        //         }
+        //         addImgToStore(imageDataObject);
+        //     }
+        //     img.src = imgFileSrc;
+        // }
 
         this.sliding = false;
         this.sliderMove = "80px";
@@ -172,57 +172,66 @@
             }
         };
 
-        function deleteThumbnail(e){
-            var thumbnail = $(e.target.nextElementSibling);
-            for(var thumbnail_i in tag.thumbnails){
-                if(tag.thumbnails[thumbnail_i].name === $(thumbnail[0]).attr("title")){
-                    tag.thumbnails.splice(thumbnail_i,1);
-                    break;
-                }
-            }
-            this.update();
-        }
+        setInterval(function(){ 
+            tag.update();
+         }, 1000);
+
+        // function deleteThumbnail(e){
+        //     var thumbnail = $(e.target.nextElementSibling);
+        //     for(var thumbnail_i in tag.thumbnails){
+        //         if(tag.thumbnails[thumbnail_i].name === $(thumbnail[0]).attr("title")){
+        //             tag.thumbnails.splice(thumbnail_i,1);
+        //             break;
+        //         }
+        //     }
+        //     this.update();
+        // }
 
         function loadIntoWorkArea(e){
+            // var selected = tag.thumbnails[e.item.index];
             imgSelected = tag.thumbnails[e.item.index];
-            riot.mount("workarea",{ img : imgSelected });
-        }
-
-        tag.fetchWorks = function(e){
-            console.log(pluginsStore.beenest.token);
-
-            if (tag.thumbnails.length === 0) {
-
-                var postData = {
-                            type: "rect",
-                            num: 4
-                        };
-
-                    const instance = axios.create({
-                        baseURL: 'http://localhost:8080/v1/',
-                        headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
-                    });
-
-                  instance.post('/works/fetch', postData)
-                  .then(function(response) {
-                        var works = response.data;
-                        // console.log(works);
-                        works.forEach(function(v) {
-                            var workId = v.id;
-                            instance.get('/works/'+workId+'/file', {
-                                responseType: 'blob'
-                            }).then(function(response) {
-                                readImageBlob(workId, response.data);
-                            });
-                        });
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
-
+            if (imgSelected) {
+                riot.mount("workarea",{ img : imgSelected });
+            } else {
+                riot.mount("workarea");
             }
-
         }
+
+        // tag.fetchWorks = function(e){
+        //     // console.log(pluginsStore.beenest.token);
+
+        //     if (Object.keys(tag.thumbnails).length === 0 && tag.thumbnails.constructor === Object) {
+
+        //         var postData = {
+        //                     type: "rect",
+        //                     num: 4
+        //                 };
+
+        //             const instance = axios.create({
+        //                 baseURL: 'http://localhost:8080/v1/',
+        //                 headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
+        //             });
+
+        //           instance.post('/works/fetch', postData)
+        //           .then(function(response) {
+        //                 var works = response.data;
+        //                 // console.log(works);
+        //                 works.forEach(function(v) {
+        //                     var workId = v.id;
+        //                     instance.get('/works/'+workId+'/file', {
+        //                         responseType: 'blob'
+        //                     }).then(function(response) {
+        //                         readImageBlob(workId, response.data);
+        //                     });
+        //                 });
+        //           })
+        //           .catch(function (error) {
+        //             console.log(error);
+        //           });
+
+        //     }
+
+        // }
 
     </script>
 </images-slider>

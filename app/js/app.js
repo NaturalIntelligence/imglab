@@ -79,3 +79,19 @@ function pDistance( x1, y1, x2, y2, x, y) {
     var dy = y - yy;
     return Math.sqrt(dx * dx + dy * dy);
   }
+
+  function deleteAndNextImage(selectedImageName) {
+
+    delete labellingData[ selectedImageName ];
+    imgSelected = Object.keys(labellingData).length > 0 ? labellingData[Object.keys(labellingData)[0]] : {size: {}, shapes: []};
+    riot.mount('workarea');
+
+  }
+
+  function clearAllImages() {
+    imgSelected = {size: {}, shapes: []};
+    Object.keys(labellingData).forEach(function (prop) {
+        delete labellingData[prop];
+    });
+    riot.mount('workarea');
+  }
