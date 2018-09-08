@@ -155,6 +155,7 @@ var pluginsStore = {
     // "facepp" : {
     // },
     "beenest": {
+        baseURL: "http://localhost:8080/v1/"
     }
 }
 

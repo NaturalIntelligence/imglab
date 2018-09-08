@@ -8,7 +8,7 @@
 
         function axiosClient() {
         	return axios.create({
-	            baseURL: 'http://localhost:8080/v1/',
+	            baseURL: pluginsStore.beenest.baseURL,
 	            headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
         	});
         }
