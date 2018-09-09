@@ -155,7 +155,7 @@ var pluginsStore = {
     // "facepp" : {
     // },
     "beenest": {
-        baseURL: "http://localhost:8080/v1/"
+        baseURL: "http://api.todview.com:8080/v1/"
     }
 }
 

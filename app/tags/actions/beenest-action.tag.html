@@ -58,14 +58,18 @@
                   .then(function(response) {
                         var works = response.data;
                         // console.log(works);
-                        works.forEach(function(v) {
-                            var workId = v.id;
-                            instance.get('/works/'+workId+'/file', {
-                                responseType: 'blob'
-                            }).then(function(response) {
-                                readImageBlob(workId, response.data);
-                            });
-                        });
+                        if (works.length > 0) {
+                            works.forEach(function(v) {
+                                var workId = v.id;
+                                instance.get('/works/'+workId+'/file', {
+                                    responseType: 'blob'
+                                }).then(function(response) {
+                                    readImageBlob(workId, response.data);
+                                });
+                            });                            
+                        } else{
+                            alert('暂时没有任务');
+                        }
                   })
                   .catch(function (error) {
                     console.log(error);
