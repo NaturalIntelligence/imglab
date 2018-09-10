@@ -73,6 +73,7 @@
                   })
                   .catch(function (error) {
                     console.log(error);
+                        alert('请求失败，请检查令牌是否有效。');
                   });
 
             }
@@ -86,11 +87,12 @@
 	        	var selectedImageName = imgSelected.name;
 
 		        var image = labellingData[ selectedImageName ];
-		        // for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
-		        	if (image.shapes.length !== 1) {
-		        		alert('只允许提交一个目标');
-		        	} else {
-			            var shape = image.shapes[ 0 ];
+                var labels = [];
+		        for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
+		        	// if (image.shapes.length !== 1) {
+		        	// 	alert('只允许提交一个目标');
+		        	// } else {
+			            var shape = image.shapes[ shape_i ];
 			            var labelData = [
 				            {
 				            	x: shape.bbox.x,
@@ -101,24 +103,27 @@
 				            	y: shape.bbox.x + shape.bbox.w
 				            }
 			            ];
+                        labels.push(labelData);
 
-                  		var instance = axiosClient();
+		        	// }
+		        }
 
-			            instance.post('/works', {id: selectedImageName, result: labelData})
-			              .then(function(response) {
-			                    // console.log('submitted');
-			                    deleteAndNextImage(selectedImageName);
-			              })
-			              .catch(function (error) {
-			                console.log(error);
-			              	// if (error.response.status === 403) {
-			                    clearAllImages();
-			              		alert('提交失败');
-			              		console.log(error);
-			              	// }
-			              });
-		        	}
-		        // }
+                if (labels.length > 0) {
+                    var instance = axiosClient();
+                    instance.post('/works', {id: selectedImageName, result: labels})
+                      .then(function(response) {
+                            // console.log('submitted');
+                            deleteAndNextImage(selectedImageName);
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                        // if (error.response.status === 403) {
+                            clearAllImages();
+                            alert('提交失败（任务超时或格式错误）');
+                            console.log(error);
+                        // }
+                      });
+                }
 
         	}
 

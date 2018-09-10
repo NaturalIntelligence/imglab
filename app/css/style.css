@@ -121,3 +121,7 @@
 .no-pl{
     padding-left: 0px!important;
 }
+
+#toolbar{
+    width: 100px;
+}

@@ -33,7 +33,7 @@ var tools = {
         // },
         "tool-rectangle" : {
             type: "rect",
-            title  : "Rectangle",
+            title  : "方框标注",
             desp : "Create a Boundary boxrectangle",
             icon : "rectangle.svg",
             drawable : true,
@@ -100,25 +100,25 @@ var tools = {
     },
     canvas : {
         "tool-beenest": {
-            title  : "BeeNest",
+            title  : "任务面板",
             desp : "BeeNest Control Panel",
             icon : "bee.png",
             actions : ["beenest"]
         },
         "tool-move" : {
-            title  : "Move",
+            title  : "移动目标",
             desp : "Move an element or the entire workarea",
             icon : "move.svg",
             type : "move",
         },
         "tool-zoom" : {
-            title  : "Zoom",
+            title  : "缩放",
             desp : "Enlarge the workarea",
             icon_font : "icon-zoom-in",
             actions : ["zoom"]
         },
         "tool-light" : {
-            title  : "Light",
+            title  : "亮度",
             desp : "Highlight the labels",
             icon_font : "icon-lightbulb",
             actions : ["lightbulb"]
@@ -147,7 +147,7 @@ var plugins = {
     //     tagName: 'facepp'
     // },
     "beenest" : {
-        title: "Bee Nest",
+        title: "玉蜂谷设置",
         tagName: "beenest"
     }
 }
