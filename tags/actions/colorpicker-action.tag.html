@@ -1,17 +1,21 @@
 <action-colorpicker>
     <div>
-        <input id='colorpicker'>
+        <input type='color' id='colorpicker' name='colorpicker' onchange={ changeColor } oninput={ previewColor }>
     </div>
 
     <script>
-        this.on('mount', function(){
-            $("#colorpicker").spectrum({
-                color:  appConfig.featurePointColor,
-                change: function(tinycolor) {
-                  appConfig.featurePointColor = tinycolor.toHexString();
-                  $(".labelpoint").css("fill", tinycolor.toHexString());
-                }
-            });
+
+        this.previewColor = function(e) {
+            $('.labelpoint').css('fill', e.target.value);
+        }
+
+        this.changeColor = function(e) {
+            appConfig.featurePointColor = e.target.value;
+            $('.labelpoint').css('fill', appConfig.featurePointColor);
+        }
+
+        this.on('mount', function(e) {
+            $('#colorpicker').val(appConfig.featurePointColor);
         })
 
     </script>

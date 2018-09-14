@@ -6,7 +6,7 @@ var appConfig = {
     },
     featurePointSize: 3,
     zoomStepSize: 0.1,
-    featurePointColor: 'red'
+    featurePointColor: '#ee0000'
 };
 function displaySettingsModal(){
     $.dialog({
