@@ -12,7 +12,7 @@ function confirmUserToLoadBrowserCache(){
             if(Object.keys(localStorageData).length > 0){
                 $.confirm({
                     title: "Recovery",
-                    content : 'You\'ve prioously saved data. Would you like to restore that?',
+                    content : 'You\'ve previously saved data. Would you like to restore that?',
                     buttons : {
                         confirm: {
                             text : 'Yes',
