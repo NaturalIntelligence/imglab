@@ -1,0 +1,22 @@
+<action-colorpicker>
+    <div>
+        <input type='color' id='colorpicker' name='colorpicker' onchange={ changeColor } oninput={ previewColor }>
+    </div>
+
+    <script>
+
+        this.previewColor = function(e) {
+            $('.labelpoint').css('fill', e.target.value);
+        }
+
+        this.changeColor = function(e) {
+            appConfig.featurePointColor = e.target.value;
+            $('.labelpoint').css('fill', appConfig.featurePointColor);
+        }
+
+        this.on('mount', function(e) {
+            $('#colorpicker').val(appConfig.featurePointColor);
+        })
+
+    </script>
+</action-colorpicker>
