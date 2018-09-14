@@ -6,7 +6,7 @@ var tools = {
             desp : "Create a feature point inside the concave polygon or boundary box",
             icon : "point.svg",
             drawable : true,
-            actions: ["landmark"],
+            actions: ["landmark", "colorpicker"],
             create : function(e,container){
                 var canvasOffset = myCanvas.node.getBoundingClientRect();
                 return getPointToDraw(e,container,canvasOffset);
@@ -125,6 +125,7 @@ function getPointToDraw(position,container,canvasOffset){
         y :container.parent().attr("y")
     }
     var point =  container.parent().circle().radius(appConfig.featurePointSize).attr({ cx: position.x - canvasOffset.x - containerOffset.x, cy: position.y - canvasOffset.y - containerOffset.y}).addClass('labelpoint');
+    $('.labelpoint').css('fill', appConfig.featurePointColor);
     point.draggable();
     return point;
 }

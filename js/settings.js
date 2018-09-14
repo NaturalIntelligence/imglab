@@ -5,7 +5,8 @@ var appConfig = {
         deleteIfExported: true, //Mark the data as saved when exported as nimn format, and delte the copy from browser cache.
     },
     featurePointSize: 3,
-    zoomStepSize: 0.1
+    zoomStepSize: 0.1,
+    featurePointColor: 'red'
 };
 function displaySettingsModal(){
     $.dialog({

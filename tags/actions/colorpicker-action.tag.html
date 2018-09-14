@@ -1,0 +1,18 @@
+<action-colorpicker>
+    <div>
+        <input id='colorpicker'>
+    </div>
+
+    <script>
+        this.on('mount', function(){
+            $("#colorpicker").spectrum({
+                color:  appConfig.featurePointColor,
+                change: function(tinycolor) {
+                  appConfig.featurePointColor = tinycolor.toHexString();
+                  $(".labelpoint").css("fill", tinycolor.toHexString());
+                }
+            });
+        })
+
+    </script>
+</action-colorpicker>
