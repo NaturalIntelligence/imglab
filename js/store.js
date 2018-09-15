@@ -24,9 +24,11 @@ function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
         featurePoints[index].label = newLabel
     }
 }
+
 function getShape(shapeId){
     return findInArray(labellingData[ imgSelected.name ].shapes, "id", shapeId);
 }
+
 function attachPointToShape(shapeId , pointid, position){
     var shape = getShape(shapeId);
     shape.featurePoints.push( {
@@ -63,6 +65,7 @@ function updateShapeDetailInStore(shapeId, bbox, points){
     bbox && (shapes[index].bbox = bbox);
     points && (shapes[index].points = points);
 }
+
 function attachShapeToImg(id, type, bbox, points){
     labellingData[ imgSelected.name ].shapes.push( {
         "id" : id,
@@ -81,6 +84,7 @@ function attachShapeToImg(id, type, bbox, points){
         "defaultZoomScale": 1/imgSelected.size.imageScale//this scale is in relation with the image scale
     } );
 }
+
 function addImgToStore(imgname, size) {
     //If we already have this image data in localstorage,
     //don't initialize its properties

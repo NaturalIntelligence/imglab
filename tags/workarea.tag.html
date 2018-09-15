@@ -45,39 +45,96 @@
 
                 selectedElements = [];
                 //delete all the points related to a polygon
-                //show snakebar to inform
+                //show snakebar to informdd
             } else if (e.key == 'a' && e.altKey) {//TODO change this
                 //Select all the labels
                 selectAll();
             } else if (e.key === 'c' && e.ctrlKey) {
                 copiedElements = [];
+                selectedElements.forEach(el => {
+                    if (el.hasClass('shape')) {
+                        copiedElements.push(el);
+                    }
+                })
                 //loop through selectedElements and copy all the shapes in copiedElements
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'v' && e.ctrlKey) {
+            } else if (e.key === 'v' && e.ctrlKey) {
                 //loop through copiedElements and push new shapes in currently selected image
                 //use the new IDs : shapetype + shapeIndex, shapetype + shapeIndex + point + pointIndex
+                if (copiedElements) {
+                    copiedElements.forEach(el => {
+                        var shapePoints = getPoints(el);
+                        var currentShape;
+                        switch (el.type) {
+                          case "rect":
+                              var rect = myCanvas.nested()
+                                  .rect(shapePoints[2], shapePoints[3])
+                                  .move(shapePoints[0], shapePoints[1])
+                                  .addClass('labelbox shape')
+                                  .resize();
+                              rect.parent().draggable();
+                              currentShape = rect;
+                              break;
+                          case 'circle':
+                              var circle = myCanvas.nested()
+                                  .circle().radius(shapePoints[2])
+                                  .attr("cx", shapePoints[0])
+                                  .attr("cy", shapePoints[1])
+                                  .addClass('labelcircle shape')
+                                  .resize()
+                              circle.parent().draggable();
+                              currentShape = circle;
+                              break;
+                          case 'polygon':
+                              var poly = myCanvas.nested()
+                                  .polygon(shapePoints)
+                                  .addClass('labelpolygon shape')
+                                  .resize();
+                              poly.parent().draggable();
+                              currentShape = poly;
+                              break;
+                        }
+
+                        attachShapeData(currentShape);
+                        attachEvents(currentShape);
+
+                        // Only copy points in siblings
+                        var siblings = el.siblings().filter(el => el.typ == 'point');
+                        siblings.forEach(el => {
+                            var pointAttr = el.attr();
+                            var point = currentShape.parent().circle()
+                                .radius(pointAttr.r)
+                                .attr("cx", el.rbox(currentShape).cx)
+                                .attr("cy", el.rbox(currentShape).cy)
+                                .addClass('labelpoint');
+                            point.draggable();
+                            attachPointToShape(currentShape.node.id, point.node.id, point.rbox(myCanvas));
+                            attachEventsToFeaturePoint(point, currentShape);
+                        });
+                    });
+                }
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'ArrowLeft' && e.ctrlKey) {
+            } else if (e.key === 'ArrowLeft' && e.ctrlKey) {
                 selectedElements.forEach(el => {
                     el.parent().dx(-1);
                 });
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'ArrowRight' && e.ctrlKey) {
+            } else if (e.key === 'ArrowRight' && e.ctrlKey) {
                 selectedElements.forEach(el => {
                     el.parent().dx(1);
                 });
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'ArrowUp' && e.ctrlKey) {
+            } else if (e.key === 'ArrowUp' && e.ctrlKey) {
                 selectedElements.forEach(el => {
                     el.parent().dy(-1);
                 });
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'ArrowDown' && e.ctrlKey) {
+            } else if (e.key === 'ArrowDown' && e.ctrlKey) {
                 selectedElements.forEach(el => {
                     el.parent().dy(1);
                 });
@@ -314,7 +371,6 @@
                         rect.parent().draggable();
                         //Add feature points
                         currentShape = rect;
-
                         break;
                     case "circle":
                         var circle = myCanvas.nested()
@@ -353,21 +409,20 @@
                 attachEvents(currentShape);
                 drawAllFeaturePoints(shape.featurePoints, currentShape);
                 setZoomLevel(shape.zoomScale, currentShape);
-                //attachEvents(currentShape);
             }
         }
 
         function setZoomLevel(zoomScale, currentShape){
-          var panZoomCanvas = svgPanZoom("#"+currentShape.parent().id(),{
-            panEnabled: false,
-            zoomEnabled: true,
-            zoomScaleSensitivity: 0.1,
-            minZoom: 0.1,
-            maxZoom: 10,
-            fit:false,
-            center: false
-          });
-          panZoomCanvas.zoomAtPoint(zoomScale,{x:0, y:0});
+            var panZoomCanvas = svgPanZoom("#"+currentShape.parent().id(),{
+                panEnabled: false,
+                zoomEnabled: true,
+                zoomScaleSensitivity: 0.1,
+                minZoom: 0.1,
+                maxZoom: 10,
+                fit:false,
+                center: false
+            });
+            panZoomCanvas.zoomAtPoint(zoomScale,{x:0, y:0});
         }
 
         function drawAllFeaturePoints(fPoints, parent) {
