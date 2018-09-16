@@ -225,7 +225,15 @@
             });
             currentTool.parent().on('click', function(e) {
                     if (selectedTool && selectedTool.type === "point") {
+                        /**
+                         * Note:
+                         * The position of currentTool is relative to its parent <svg> tag
+                         * The position of point is also relative to the  parent <svg> tag
+                         * Point needs to be updated to be relative to the canvas tag
+                         * so that its position is correct when redrawn;
+                         */
                         var point = getPointToDraw(e, currentTool, myCanvas.node.getBoundingClientRect());
+                        updateFeaturePointPosition(point);
                         attachPointToShape(currentTool.node.id, point.node.id, point.rbox(currentTool));//ina store
                         attachEventsToFeaturePoint(point, currentTool);
                     } else if (e.altKey) { //deep select. Helpful in case of polygon
