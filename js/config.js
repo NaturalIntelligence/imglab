@@ -127,9 +127,11 @@ var tools = {
  * @returns {SVGElement} SVGElement of featurePoint
  */
 function getPointToDraw(position, container, canvasOffset) {
+    // Get the parent svg element that surrounds the container
+    var parentSvg = $('#'+container.node.id).closest('svg');
     var containerOffset = {
-        x: container.parent().parent().attr("x"),
-        y :container.parent().parent().attr("y")
+        x: parentSvg.attr("x") || 0,
+        y: parentSvg.attr("y") || 0
     }
     var point =  container.parent().circle()
         .radius(appConfig.featurePointSize)
@@ -137,8 +139,6 @@ function getPointToDraw(position, container, canvasOffset) {
             cx: position.x - canvasOffset.x - containerOffset.x,
             cy: position.y - canvasOffset.y - containerOffset.y})
         .addClass('labelpoint');
-    console.log('posx', position.x, 'posY', position.y, 'canX', canvasOffset.x, 'canY', canvasOffset.y, 'conX', containerOffset.x, 'conY', containerOffset.y)
-    console.log('point.attr', point.attr());
     // Set feature point colors with appConfig.featurePointColor
     $('.labelpoint').css('fill', appConfig.featurePointColor);
     point.draggable();

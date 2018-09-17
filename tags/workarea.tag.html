@@ -170,7 +170,6 @@
 
                 if (selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable) {
                     var currentTool = selectedTool.create(event, myCanvas);
-
                     moveOnlyOnMoveTool(currentTool);
                     attachShapeListener(currentTool);
 
