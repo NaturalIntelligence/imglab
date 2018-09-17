@@ -20,12 +20,14 @@
     </div>
 
     <script>
-        $(document).on('click', function (event) {
+        var self = this;
+
+        $(document).on('click', function(event) {
             deselectAll();
             selectedElements = [];
         });
 
-        $(document).keyup(function (e) {
+        $(document).keyup(function(e) {
             if (e.keyCode == 46) {//del key
                 //Delete selected shape(s) with points
                 //Delete selected points
@@ -45,39 +47,89 @@
 
                 selectedElements = [];
                 //delete all the points related to a polygon
-                //show snakebar to inform
+                //show snakebar to informdd
             } else if (e.key == 'a' && e.altKey) {//TODO change this
                 //Select all the labels
                 selectAll();
             } else if (e.key === 'c' && e.ctrlKey) {
+                /**
+                 * Save selected shape and feature point data into copiedElements
+                 * schema looks like this:
+                 * {
+                 *   type,   // type of shape
+                 *   rbox,   // the current rbox
+                 *   points, // geometry of shape; @see getPoints
+                 *   featurePoints: [   // array of featurePoints
+                 *     {'type', 'rbox'} // featurePoint metaData
+                 *   ]
+                 * }
+                 * Allows for copy pasting in other images
+                 */
                 copiedElements = [];
-                //loop through selectedElements and copy all the shapes in copiedElements
+                selectedElements.forEach(shape => {
+                    if (shape.hasClass('shape')) {
+                        var featurePoints = [];
+                        shape.siblings()
+                            .filter(point => point.typ == 'point')
+                            .forEach(point => {
+                                featurePoints.push({
+                                  'type': point.typ,
+                                  'rbox': point.rbox(myCanvas)
+                                });
+                            });
+
+                        copiedElements.push({
+                          'type': shape.type,
+                          'rbox': shape.rbox(myCanvas),
+                          'points': getPoints(shape),
+                          'featurePoints': featurePoints
+                        });
+                    }
+                })
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'v' && e.ctrlKey) {
-                //loop through copiedElements and push new shapes in currently selected image
-                //use the new IDs : shapetype + shapeIndex, shapetype + shapeIndex + point + pointIndex
+            } else if (e.key === 'v' && e.ctrlKey) {
+                /**
+                 * loop through copiedElements and push new shapes in currently selected image
+                 * use the following format for new IDs:
+                 * shapeId = shapetype + shapeIndex
+                 * featurePointId = shapetype + shapeIndex + point + pointIndex
+                 */
+                var currentImgData = labellingData[imgSelected.name];
+                if (copiedElements) {
+                    copiedElements.forEach(shape => {
+                        // Add shape data and any points into labellingData
+                        var shapeId = shape.type + currentImgData.shapeIndex++;
+                        var shapeData = attachShapeToImg(shapeId, shape.type, shape.rbox, shape.points);
+                        shape.featurePoints.forEach(point => {
+                            var pointId = shapeId + point.type + currentImgData.pointIndex++;
+                            attachPointToShape(shapeId, pointId, point.rbox);
+                        });
+                    });
+                }
+                // Call update to redraw shapes
+                self.update();
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'ArrowLeft' && e.ctrlKey) {
+            } else if (e.key === 'ArrowLeft' && e.ctrlKey) {
                 selectedElements.forEach(el => {
                     el.parent().dx(-1);
                 });
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'ArrowRight' && e.ctrlKey) {
+            } else if (e.key === 'ArrowRight' && e.ctrlKey) {
                 selectedElements.forEach(el => {
                     el.parent().dx(1);
                 });
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'ArrowUp' && e.ctrlKey) {
+            } else if (e.key === 'ArrowUp' && e.ctrlKey) {
                 selectedElements.forEach(el => {
                     el.parent().dy(-1);
                 });
                 e.preventDefault();
                 e.stopPropagation();
-            }else if (e.key === 'ArrowDown' && e.ctrlKey) {
+            } else if (e.key === 'ArrowDown' && e.ctrlKey) {
                 selectedElements.forEach(el => {
                     el.parent().dy(1);
                 });
@@ -86,73 +138,101 @@
             }
         });
 
-        this.on('mount', function () {
+        /**
+         * Updates workarea when self.update() is called or when workarea changes
+         */
+        this.on('update', function() {
+            myCanvas.clear();
+            drawOnCanvas();
+        })
 
+        /**
+         * Removes listeners when unmounting tag to prevent multiple instances of keyup and click from firing
+         */
+        this.on('unmount', function() {
+            $(document).off('keyup');
+            $(document).off('click');
+        });
+
+        this.on('mount', function() {
             $("#canvas-container img").css("opacity", appConfig.imageOpacity || 1)
             .css({"width": imgSelected.size.scaledWidth, "height": imgSelected.size.scaledHeight});
 
-            //this is needed so that everytime workarea remounts the scale are correct
+            // this is needed so that everytime workarea remounts the scale are correct
             $("#work-canvas").attr({"width": imgSelected.size.scaledWidth, "height": imgSelected.size.scaledHeight});
 
             myCanvas = new SVG('work-canvas').size(imgSelected.size.scaledWidth, imgSelected.size.scaledHeight)
 
             drawOnCanvas();
 
-            myCanvas.on('mousedown', function (event) {
+            myCanvas.on('mousedown', function(event) {
                 deselectAll();
 
                 if (selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable) {
                     var currentTool = selectedTool.create(event, myCanvas);
 
                     moveOnlyOnMoveTool(currentTool);
-
-                    currentTool.on('drawstart', function () {
-                        alreadyDrawing = true;
-                    });
-
-                    currentTool.on('drawcancel', function () {});
-
-                    currentTool.on('resizedone', function () {
-                        updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas),
-                            getPoints(currentTool));
-                    });
-                    currentTool.on('drawstop', function () {
-                        alreadyDrawing = false;
-                        if (!selectedTool.validate(currentTool)) { //Don't draw an element on accidentle click
-                            currentTool.parent().remove();
-                            currentTool.remove();
-                        } else {
-                            attachShapeData(currentTool);
-
-                            attachEvents(currentTool)
-                        }
-                    });
+                    attachShapeListener(currentTool);
 
                     if (currentTool.type !== 'polygon') currentTool.draw(event);
                     selectedElement = currentTool;
                 }
             });
-            myCanvas.on('mouseup', function (event) {
+            myCanvas.on('mouseup', function(event) {
                 if (selectedTool && selectedElement) selectedElement.draw(event);
             });
-
         });
 
-        function attachEvents(currentTool) {
+        /**
+         * Attaches draw/resize listeners to shapes
+         * @param {SVGElement} shape - SVGElement to attach draw/resize listeners
+         */
+        function attachShapeListener(shape) {
+            shape.on('drawstart', function() {
+                alreadyDrawing = true;
+            });
 
+            shape.on('drawcancel', function() {});
+
+            shape.on('resizedone', function() {
+                updateShapeDetailInStore(shape.node.id, shape.rbox(myCanvas),
+                getPoints(shape));
+            });
+
+            shape.on('drawstop', function() {
+                alreadyDrawing = false;
+                if (!selectedTool.validate(shape)) { //Don't draw an element on accidentle click
+                    shape.parent().remove();
+                    shape.remove();
+                } else {
+                    attachShapeData(shape);
+                    attachEvents(shape);
+                    // TODO: Remove hardcorded value
+                    setZoomLevel(1, shape);
+                }
+            });
+        }
+
+        function attachEvents(currentTool) {
             moveOnlyOnMoveTool(currentTool);
 
-            onMouse(currentTool.parent(), function (e) { //drag callback : doesn't fire on click
+            onMouse(currentTool.parent(), function(e) { //drag callback : doesn't fire on click
                 if (currentTool.node.id === e.target.id) {
                     updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(
                         currentTool));
                     updateFeaturePoints(currentTool);
                 }
             });
-            currentTool.parent().on('click', function (e) {
+            currentTool.parent().on('click', function(e) {
                     if (selectedTool && selectedTool.type === "point") {
-                        var point = selectedTool.create(e, currentTool);
-                        attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));//in store
+                        /**
+                         * The position of currentTool is relative to its parent <svg> tag
+                         * The position of point is also relative to the parent <svg> tag
+                         * Point needs to be relative to the canvas
+                         * so that its position is correct when redrawn
+                         */
+                        var point = getPointToDraw(e, currentTool, myCanvas.node.getBoundingClientRect());
+                        attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));//ina store
                         attachEventsToFeaturePoint(point, currentTool);
                     } else if (e.altKey) { //deep select. Helpful in case of polygon
                         deselectAll();
@@ -177,9 +257,9 @@
             );
         }
 
-        function moveOnlyOnMoveTool(el){
-            el.on('mousedown', function (e) {
-                if(!selectedTool || selectedTool.type !== "move"){
+        function moveOnlyOnMoveTool(el) {
+            el.on('mousedown', function(e) {
+                if (!selectedTool || selectedTool.type !== "move") {
                     e.preventDefault();
                     e.stopPropagation();
                 }
@@ -192,11 +272,11 @@
                 for: parent.node.id
             })
 
-            onMouse(f_point, function (e) { //drag callback: doesn't fire on click
+            onMouse(f_point, function(e) { //drag callback: doesn't fire on click
                 updateFeaturePointPosition(f_point);
             });
 
-            f_point.on('click', function (e) {
+            f_point.on('click', function(e) {
                 if (!e.ctrlKey) { //deselect rest selected elements
                     deselectAll();
                     riot.mount('label-panel', { id : parent.node.id, pointId : f_point.node.id })
@@ -213,12 +293,13 @@
         //This is a workaround of dragend event. This way it stops firing click event
         function onMouse(shape, dragCB) {
             var mousestate = 0;
-            shape.on('mousedown', function (e) {
+            shape.on('mousedown', function(e) {
                 mousestate = 1;
-                shape.on('mousemove', function (e) {
+                // TODO: Remove
+                shape.on('mousemove', function(e) {
                     mousestate = 2;
                 });
-                shape.on('mouseup', function (e) {
+                shape.on('mouseup', function(e) {
                     if (mousestate === 2) {
                         dragCB && dragCB(e);
                     }
@@ -248,8 +329,8 @@
             };
         }
 
-        //When create, move, resize, delete
-        function attachShapeData(shape) { //update data with shape detail
+        // When create, move, resize, delete
+        function attachShapeData(shape) { // update data with shape detail'
             var points = getPoints(shape);
             attachShapeToImg(shape.node.id, shape.type, shape.rbox(myCanvas), points);
         }
@@ -264,6 +345,10 @@
             updateFeaturePointInStore(pointEl.attr("for"), pointEl.id(), pointEl.rbox(myCanvas));
         }
 
+        /**
+         * Returns the feature points stored in the shape
+         * @param {SVGElement} shape - shape SVGElement
+         */
         function getPoints(shape) {
             var points;
 
@@ -281,8 +366,8 @@
                     //Polygon points are relative to it's container SVG
                     var calculatedPoints = [];
                     var vector = {
-                        x: shape.parent().attr("x"),
-                        y: shape.parent().attr("y")
+                        x: shape.parent().parent().attr("x"),
+                        y: shape.parent().parent().attr("y")
                     }
                     shape.array().value.forEach(ponitArr => {
                         calculatedPoints.push([ponitArr[0] + vector.x, ponitArr[1] + vector.y]);
@@ -299,77 +384,101 @@
             }
         }
 
+        /**
+         * Draws all the shapes and points in the currrently selected image
+         */
         function drawOnCanvas() {
             for (var shapeIndex in labellingData[imgSelected.name].shapes) {
                 var shape = labellingData[imgSelected.name].shapes[shapeIndex];
-                var currentShape;
-                switch (shape.type) {
-                    case "rect":
-                        var rect = myCanvas.nested()
-                            .rect(shape.points[2], shape.points[3])
-                            .move(shape.points[0], shape.points[1])
-                            .addClass('labelbox shape')
-                            .id(shape.id)
-                            .resize();
-                        rect.parent().draggable();
-                        //Add feature points
-                        currentShape = rect;
-
-                        break;
-                    case "circle":
-                        var circle = myCanvas.nested()
-                            .circle().radius(shape.points[2])
-                            .attr("cx", shape.points[0])
-                            .attr("cy", shape.points[1])
-                            .addClass('labelcircle shape')
-                            .id(shape.id)
-                            .resize();
-                        circle.parent().draggable();
-                        //Add feature points
-                        currentShape = circle;
-                        break;
-                        /* case "ellipse":
-                            var ellipse = myCanvas.nested()
-                                .ellipse().radius(shape.points[2], shape.points[3])
-                                .move(shape.points[0],shape.points[1])
-                                .addClass('labelellipse shape')
-                                .resize();
-                            ellipse.parent().draggable();
-                            attachEvents(ellipse);
-                            //Add feature points */
-                    case "polygon":
-                        var poly = myCanvas.nested()
-                            .polygon(shape.points)
-                            //.move(shape.points[0],shape.points[1])
-                            .addClass('labelpolygon shape')
-                            .id(shape.id)
-                            .resize();
-                        poly.parent().draggable();
-                        //Add feature points
-                        currentShape = poly;
-                        break;
-                }
-
-                attachEvents(currentShape);
-                drawAllFeaturePoints(shape.featurePoints, currentShape);
-                setZoomLevel(shape.zoomScale, currentShape);
-                //attachEvents(currentShape);
+                drawShape(shape);
             }
         }
 
-        function setZoomLevel(zoomScale, currentShape){
-          var panZoomCanvas = svgPanZoom("#"+currentShape.parent().id(),{
-            panEnabled: false,
-            zoomEnabled: true,
-            zoomScaleSensitivity: 0.1,
-            minZoom: 0.1,
-            maxZoom: 10,
-            fit:false,
-            center: false
-          });
-          panZoomCanvas.zoomAtPoint(zoomScale,{x:0, y:0});
+        function setZoomLevel(zoomScale, currentShape) {
+            var panZoomCanvas = svgPanZoom("#" + currentShape.parent().id(), {
+                panEnabled: false,
+                zoomEnabled: true,
+                zoomScaleSensitivity: 0.1,
+                minZoom: 0.1,
+                maxZoom: 10,
+                fit: false,
+                center: false
+            });
+            panZoomCanvas.zoomAtPoint(zoomScale, {x: 0, y: 0});
         }
 
+        /**
+         * Draws a shape and all the feature points in the shape
+         * @param {Object} shape - the shape data object as stored in labellingData
+         */
+        function drawShape(shape) {
+            if (!shape) return;
+
+            var currentShape;
+            switch (shape.type) {
+                case "rect":
+                    var rect = myCanvas.nested()
+                        .rect(shape.points[2], shape.points[3])
+                        .move(shape.points[0], shape.points[1])
+                        .addClass('labelbox shape')
+                        .id(shape.id)
+                        .resize();
+                    rect.parent().draggable();
+                    //Add feature points
+                    currentShape = rect;
+                    break;
+                case "circle":
+                    var circle = myCanvas.nested()
+                        .circle().radius(shape.points[2])
+                        .attr("cx", shape.points[0])
+                        .attr("cy", shape.points[1])
+                        .addClass('labelcircle shape')
+                        .id(shape.id)
+                        .resize();
+                    circle.parent().draggable();
+                    //Add feature points
+                    currentShape = circle;
+                    break;
+                    /* case "ellipse":
+                        var ellipse = myCanvas.nested()
+                            .ellipse().radius(shape.points[2], shape.points[3])
+                            .move(shape.points[0],shape.points[1])
+                            .addClass('labelellipse shape')
+                            .resize();
+                        ellipse.parent().draggable();
+                        attachEvents(ellipse);
+                        //Add feature points */
+                case "polygon":
+                    var poly = myCanvas.nested()
+                        .polygon(shape.points)
+                        //.move(shape.points[0],shape.points[1])
+                        .addClass('labelpolygon shape')
+                        .id(shape.id)
+                        .resize();
+                    poly.parent().draggable();
+                    //Add feature points
+                    currentShape = poly;
+                    break;
+                default:
+                    console.error('shape ' + shape.type + ' does not exist');
+                    break;
+            }
+            // Sanity check, in case currentShape is empty
+            if (currentShape) {
+                moveOnlyOnMoveTool(currentShape);
+                attachEvents(currentShape);
+                attachShapeListener(currentShape);
+                drawAllFeaturePoints(shape.featurePoints, currentShape);
+                setZoomLevel(shape.zoomScale, currentShape);
+            }
+        }
+
+        /**
+         * Draws all the feature points in the shape and attachEventListeners to points
+         * @param {Array} fPoints - array of shape featurePoints
+         * @param {Object} parent - shape that contains the feature points
+         * @see getPoints
+         */
         function drawAllFeaturePoints(fPoints, parent) {
             for (var fPointIndex in fPoints) {
                 var fPoint = getPointToDraw(fPoints[fPointIndex], parent, {
