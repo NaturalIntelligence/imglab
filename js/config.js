@@ -130,8 +130,8 @@ function getPointToDraw(position, container, canvasOffset) {
     // Get the parent svg element that surrounds the container
     var parentSvg = $('#'+container.node.id).closest('svg');
     var containerOffset = {
-        x: parentSvg.attr("x") || 0,
-        y: parentSvg.attr("y") || 0
+        x: parseInt(parentSvg.attr("x"), 10) || 0,
+        y: parseInt(parentSvg.attr("y"), 10) || 0
     }
     var point =  container.parent().circle()
         .radius(appConfig.featurePointSize)

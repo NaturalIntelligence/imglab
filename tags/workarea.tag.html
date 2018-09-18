@@ -363,10 +363,11 @@
                         return [box.cx, box.cy, box.rx, box.ry]; */
                 case "polygon":
                     //Polygon points are relative to it's container SVG
+                    var parentSvg = $('#'+shape.node.id).closest('svg');
                     var calculatedPoints = [];
                     var vector = {
-                        x: shape.parent().parent().attr("x"),
-                        y: shape.parent().parent().attr("y")
+                        x: parseInt(parentSvg.attr("x"), 10) || 0,
+                        y: parseInt(parentSvg.attr("y"), 10) || 0
                     }
                     shape.array().value.forEach(ponitArr => {
                         calculatedPoints.push([ponitArr[0] + vector.x, ponitArr[1] + vector.y]);
