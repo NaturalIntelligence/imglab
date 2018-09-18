@@ -128,7 +128,7 @@
             .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
                 detachPointByIndex(opts.id, e.item.fid);
                 tag.update();
-                eventBus.trigger('removeFeaturePoint');
+                eventBus.trigger('removeWorkAreaFeaturePoint');
             });
         }
 
@@ -206,7 +206,7 @@
             })
 
             // Use event bus to listen to removeTag events
-            eventBus.on('removeTag', () => {
+            eventBus.on('removeLabelPanelTag', () => {
                 tag.targetShape = getShape(tag.opts.id);
                 // UNmount when targetShape is removed
                 if (!tag.targetShape) {
@@ -218,7 +218,7 @@
         })
 
         tag.on('unmount', function() {
-            eventBus.off('removeTag');
+            eventBus.off('removeLabelPanelTag');
         })
 
         function array_move(arr, old_index, new_index) {
