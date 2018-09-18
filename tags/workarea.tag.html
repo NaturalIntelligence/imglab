@@ -188,6 +188,9 @@
             eventBus.on('removeWorkAreaFeaturePoint', () => {
                 self.update();
             })
+
+            // Make sure label panel is initially hidden/empty
+            eventBus.trigger('unmountLabelPanel');
         });
 
         /**
@@ -251,7 +254,6 @@
                     } else {
                         if (!e.ctrlKey) { //deselect rest selected elements
                             deselectAll();
-                            console.log('mount');
                             riot.mount('label-panel', { id : currentTool.node.id })
                         }
                         //select currnt element
