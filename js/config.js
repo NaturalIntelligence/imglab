@@ -7,9 +7,9 @@ var tools = {
             icon : "point.svg",
             drawable : true,
             actions: ["landmark", "colorpicker"],
-            create : function(e,container){
+            create : function(e, container){
                 var canvasOffset = myCanvas.node.getBoundingClientRect();
-                return getPointToDraw(e,container,canvasOffset);
+                return getPointToDraw(e, container, canvasOffset);
             },
             validate: function(el){
                 return true;
@@ -119,12 +119,27 @@ var tools = {
     }
 };
 
-function getPointToDraw(position,container,canvasOffset){
+/**
+ * Draws a featurePoint on myCanvas
+ * @param {Event} position - click position
+ * @param {SVGElement} container - shape that should hold the featurePoint
+ * @param {DOMReact | Object} canvasOffset - offset due to canvas
+ * @returns {SVGElement} SVGElement of featurePoint
+ */
+function getPointToDraw(position, container, canvasOffset) {
+    // Get the parent svg element that surrounds the container
+    var parentSvg = $('#'+container.node.id).closest('svg');
     var containerOffset = {
-        x: container.parent().attr("x"),
-        y :container.parent().attr("y")
+        x: parseInt(parentSvg.attr("x"), 10) || 0,
+        y: parseInt(parentSvg.attr("y"), 10) || 0
     }
-    var point =  container.parent().circle().radius(appConfig.featurePointSize).attr({ cx: position.x - canvasOffset.x - containerOffset.x, cy: position.y - canvasOffset.y - containerOffset.y}).addClass('labelpoint');
+    var point =  container.parent().circle()
+        .radius(appConfig.featurePointSize)
+        .attr({
+            cx: position.x - canvasOffset.x - containerOffset.x,
+            cy: position.y - canvasOffset.y - containerOffset.y})
+        .addClass('labelpoint');
+    // Set feature point colors with appConfig.featurePointColor
     $('.labelpoint').css('fill', appConfig.featurePointColor);
     point.draggable();
     return point;
@@ -134,6 +149,7 @@ var selectedElements = [];
 var copiedElements;
 var selectedTool = null, selectedElement = null;
 var alreadyDrawing = false;
+var eventBus; // Event bus used to propogate changes between tags
 
 var plugins = {
     "facepp" : {
