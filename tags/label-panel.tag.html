@@ -109,7 +109,7 @@
     </div>
     <script>
         var tag = this;
-        tag.targetShape = getShape(this.opts.id) ;
+        tag.targetShape = getShape(this.opts.id);
         tag.tags = tag.targetShape.tags.join(", ");
 
         tag.updateTags = function(e){
@@ -128,7 +128,7 @@
             .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
                 detachPointByIndex(opts.id, e.item.fid);
                 tag.update();
-                riot.mount('workarea');
+                eventBus.trigger('removeWorkAreaFeaturePoint');
             });
         }
 
@@ -204,16 +204,39 @@
                     }
                 }
             })
+
+            // Make sure panel label is always empty on init of work area
+            eventBus.on('unmountLabelPanel', () => {
+                // Must pass in true to only unmount the children
+                tag.unmount(true);
+            })
+
+            // Use event bus to listen to removeTag events
+            eventBus.on('removeLabelPanelTag', () => {
+                tag.targetShape = getShape(tag.opts.id);
+                // Unmount when targetShape is removed
+                if (!tag.targetShape) {
+                    // Must pass in true to only unmount the children
+                    tag.unmount(true);
+                } else {
+                    tag.update();
+                }
+            });
+        })
+
+        tag.on('unmount', function() {
+            eventBus.off('removeLabelPanelTag');
+            eventBus.off('unmountLabelPanel');
         })
 
         function array_move(arr, old_index, new_index) {
-            if(old_index > new_index){
+            if (old_index > new_index){
                 var temp = arr[old_index];
                 for(;old_index > new_index; old_index--){
                     arr[old_index] = arr[old_index - 1];
                 }
                 arr[new_index] = temp;
-            }else{
+            } else{
                 var temp = arr[old_index];
                 for(;old_index < new_index; old_index++){
                     arr[old_index] = arr[old_index + 1];

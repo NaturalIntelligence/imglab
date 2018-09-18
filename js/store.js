@@ -1,16 +1,16 @@
-function createAttribute(label , val){
+function createAttribute(label, val){
     return {
         "label" : label,
         "value": val //Array
     }
 }
 
-function updateLabel(oldLabel,newLabel){
+function updateLabel(oldLabel, newLabel){
     var shape = findInArray(labellingData[ imgSelected.name ].shapes, "label", oldLabel);
     shape.label = newLabel;
 }
 
-function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
+function updateFeaturePointInStore(shapeId, pointid, position, newLabel){
     var shape = getShape(shapeId);
     var featurePoints = shape.featurePoints;
     var index = indexOf(featurePoints, "id", pointid);
@@ -24,10 +24,12 @@ function updateFeaturePointInStore(shapeId , pointid, position, newLabel){
         featurePoints[index].label = newLabel
     }
 }
+
 function getShape(shapeId){
     return findInArray(labellingData[ imgSelected.name ].shapes, "id", shapeId);
 }
-function attachPointToShape(shapeId , pointid, position){
+
+function attachPointToShape(shapeId, pointid, position){
     var shape = getShape(shapeId);
     shape.featurePoints.push( {
         "x": position.cx,
@@ -63,8 +65,12 @@ function updateShapeDetailInStore(shapeId, bbox, points){
     bbox && (shapes[index].bbox = bbox);
     points && (shapes[index].points = points);
 }
+
+/**
+ * Adds a shape into labelling data and returns a shape object
+ */
 function attachShapeToImg(id, type, bbox, points){
-    labellingData[ imgSelected.name ].shapes.push( {
+    var shape = {
         "id" : id,
         "label" : "unlabelled",
         "type" : type,
@@ -78,12 +84,15 @@ function attachShapeToImg(id, type, bbox, points){
         "tags": [],
         "featurePoints": [],
         "zoomScale" : 1,
-        "defaultZoomScale": 1/imgSelected.size.imageScale//this scale is in relation with the image scale
-    } );
+        "defaultZoomScale": 1/imgSelected.size.imageScale //this scale is in relation with the image scale
+    };
+    labellingData[ imgSelected.name ].shapes.push(shape);
+    return shape;
 }
+
 function addImgToStore(imgname, size) {
-    //If we already have this image data in localstorage,
-    //don't initialize its properties
+    // If we already have this image data in localstorage,
+    // don't initialize its properties
     if(!labellingData[imgname]){
         labellingData[imgname] = {
             //"path" : "",
@@ -94,7 +103,9 @@ function addImgToStore(imgname, size) {
                 "width": size.width,
                 "height": size.height
             },
-            "shapes": []
+            "shapes": [],
+            "shapeIndex": 0,   // Used to generate new ids for copy pasted shapes
+            "pointIndex": 0    // Used to generate new ids for feature points
         }
     }
 }
