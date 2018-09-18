@@ -43,7 +43,7 @@
                     } else {
                         detachShape(el.node.id); //delete it from store
                         el.parent().remove(); //remove parent svg node
-                        eventBus.trigger('removeTag')
+                        eventBus.trigger('removeLabelPanelTag')
                     }
                 });
 
