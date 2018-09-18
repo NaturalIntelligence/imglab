@@ -149,6 +149,7 @@ var selectedElements = [];
 var copiedElements;
 var selectedTool = null, selectedElement = null;
 var alreadyDrawing = false;
+var eventBus; // Event bus used to propogate changes between tags
 
 var plugins = {
     "facepp" : {

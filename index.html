@@ -142,13 +142,14 @@
 	<script src="tags/actions/colorpicker-action.tag.html" type="riot/tag"></script>
 
 	<script type="text/javascript">
+		eventBus = riot.observable();
 		riot.mount("menu-dropdown, plugins-menu, shortcuts");
 		riot.mount("actionbar");
 		riot.mount("toolbox");
 		riot.mount("images-slider");
 
 		$(function () {
-			$('[data-toggle="tooltip"]').tooltip()
+			$('[data-toggle="tooltip"]').tooltip();
 		})
 	</script>
 	<script src="js/settings.js"></script>
