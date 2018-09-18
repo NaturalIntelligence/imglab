@@ -39,9 +39,11 @@
                     if (el.typ === 'point') {
                         detachPoint(el.attr("for"), el.node.id); //delete it from store
                         el.remove(); //remove parent svg node
+                        eventBus.trigger('removeTag');
                     } else {
                         detachShape(el.node.id); //delete it from store
                         el.parent().remove(); //remove parent svg node
+                        eventBus.trigger('removeTag')
                     }
                 });
 
@@ -152,6 +154,7 @@
         this.on('unmount', function() {
             $(document).off('keyup');
             $(document).off('click');
+            eventBus.off('removeFeaturePoint');
         });
 
         this.on('mount', function() {
@@ -180,6 +183,11 @@
             myCanvas.on('mouseup', function(event) {
                 if (selectedTool && selectedElement) selectedElement.draw(event);
             });
+
+            // Listen to label point removal
+            eventBus.on('removeFeaturePoint', () => {
+                self.update();
+            })
         });
 
         /**
@@ -243,6 +251,7 @@
                     } else {
                         if (!e.ctrlKey) { //deselect rest selected elements
                             deselectAll();
+                            console.log('mount');
                             riot.mount('label-panel', { id : currentTool.node.id })
                         }
                         //select currnt element

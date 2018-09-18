@@ -74,7 +74,7 @@
         }
 
     </style>
-    <div class="d-flex flex-column" style="height: 100%;">
+    <div if={this.targetShape} class="d-flex flex-column" style="height: 100%;">
         <div ref="category-data" class="mb-2 mt-2">
             Category Name
             <select id="category-select-box" class="form-text">
@@ -109,7 +109,7 @@
     </div>
     <script>
         var tag = this;
-        tag.targetShape = getShape(this.opts.id) ;
+        tag.targetShape = getShape(this.opts.id);
         tag.tags = tag.targetShape.tags.join(", ");
 
         tag.updateTags = function(e){
@@ -128,7 +128,7 @@
             .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
                 detachPointByIndex(opts.id, e.item.fid);
                 tag.update();
-                riot.mount('workarea');
+                eventBus.trigger('removeFeaturePoint');
             });
         }
 
@@ -204,6 +204,21 @@
                     }
                 }
             })
+
+            // Use event bus to listen to removeTag events
+            eventBus.on('removeTag', () => {
+                tag.targetShape = getShape(tag.opts.id);
+                // UNmount when targetShape is removed
+                if (!tag.targetShape) {
+                    tag.update();
+                } else {
+                    tag.update();
+                }
+            });
+        })
+
+        tag.on('unmount', function() {
+            eventBus.off('removeTag');
         })
 
         function array_move(arr, old_index, new_index) {
