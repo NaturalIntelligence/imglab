@@ -43,8 +43,6 @@
         }
 
         this.fetchWorks = function(e){
-            // console.log(pluginsStore.beenest.token);
-
             if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
 
                 var postData = {
@@ -52,10 +50,10 @@
                             num: 4
                         };
 
-                  var instance = axiosClient();
+                var instance = axiosClient();
 
-                  instance.post('/works/fetch', postData)
-                  .then(function(response) {
+                instance.post('/works/fetch', postData)
+                .then(function(response) {
                         var works = response.data;
                         // console.log(works);
                         if (works.length > 0) {
@@ -70,11 +68,11 @@
                         } else{
                             alert('暂时没有任务');
                         }
-                  })
-                  .catch(function (error) {
+                })
+                .catch(function (error) {
                     console.log(error);
                         alert('请求失败，请检查令牌是否有效。');
-                  });
+                });
 
             }
 
