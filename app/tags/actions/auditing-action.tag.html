@@ -1,0 +1,18 @@
+<action-auditing>
+    <div>
+        <input type="button" onclick={fetchAudit} value="请求审核" name="fetchAuditBtn" id="fetchAuditBtn"/>
+        <input type="button" onclick={submitAudit} value="提交审核" name="submitAuditBtn" id="submitAuditBtn"/>
+    <input type="button" onclick={cancelAudit} value="放弃审核" name="cancelAuditBtn" id="cancelAuditBtn"/>
+    </div>
+    <script>
+        this.fetchAudit = function(e) {
+            console.log(e)
+        }
+        this.submitAudit = function(e) {
+            console.log(1)
+        }
+        this.cancelAudit = function(e) {
+            console.log(2)
+        }
+    </script>
+</action-auditing>

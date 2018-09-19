@@ -109,7 +109,7 @@ var tools = {
             title  : "移动目标",
             desp : "Move an element or the entire workarea",
             icon : "move.svg",
-            type : "move",
+            type : "move"
         },
         "tool-zoom" : {
             title  : "缩放",
@@ -122,6 +122,12 @@ var tools = {
             desp : "Highlight the labels",
             icon_font : "icon-lightbulb",
             actions : ["lightbulb"]
+        },
+        "tool-audition": {
+            title  : "审核面板",
+            desp : "audit panel",
+            icon : "bee.png",
+            actions : ["auditing"]
         }
     }
 };
