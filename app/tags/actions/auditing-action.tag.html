@@ -1,9 +1,9 @@
 <action-auditing>
     <div>
         <input type="button" onclick={fetchAudit} value="请求审核" name="fetchAuditBtn" id="fetchAuditBtn"/>
-        <input type="button" onclick={adoptAudit} value="通过" name="adoptAuditBtn" id="adoptAuditBtn"/>
-        <input type="button" onclick={rejectAudit} value="驳回" name="rejectAuditBtn" id="rejectAuditBtn"/>
-        <input type="button" onclick={cancelAudit} value="放弃" name="cancelAuditBtn" id="cancelAuditBtn"/>
+        <input type="button" onclick={approve} value="通过" name="adoptAuditBtn" id="adoptAuditBtn"/>
+        <input type="button" onclick={reject} value="驳回" name="rejectAuditBtn" id="rejectAuditBtn"/>
+        <input type="button" onclick={cancel} value="放弃" name="cancelAuditBtn" id="cancelAuditBtn"/>
     </div>
     <script>
 
@@ -77,7 +77,7 @@
             }
 
         }
-        this.adoptAudit = function(e){
+        this.approve = function(e){
             if (imgSelected.name) {
 
                 var selectedImageName = imgSelected.name;
@@ -97,7 +97,7 @@
 
             }
         }
-        this.rejectAudit = function(e) {
+        this.reject = function(e) {
             if (imgSelected.name) {
 
                 var selectedImageName = imgSelected.name;
@@ -117,7 +117,7 @@
 
             }
         }
-        this.cancelAudit = function(e) {
+        this.cancel = function(e) {
             if (imgSelected.name) {
 
                 var selectedImageName = imgSelected.name;
