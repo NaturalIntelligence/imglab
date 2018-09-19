@@ -1,0 +1,27 @@
+{
+  "name": "imglab",
+  "version": "1.0.0",
+  "description": "Web based tool to label images for object. So that they can be used to train dlib or other object detectors.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TodView/imglab.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TodView/imglab/issues"
+  },
+  "homepage": "https://github.com/TodView/imglab#readme",
+  "dependencies": {
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.1.4",
+    "koa2": "^2.0.0-alpha.7"
+  }
+}
