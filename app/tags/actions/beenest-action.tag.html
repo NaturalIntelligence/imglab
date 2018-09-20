@@ -51,11 +51,9 @@
                         };
 
                 var instance = axiosClient();
-
                 instance.post('/works/fetch', postData)
                 .then(function(response) {
                         var works = response.data;
-                        // console.log(works);
                         if (works.length > 0) {
                             works.forEach(function(v) {
                                 var workId = v.id;
@@ -83,8 +81,8 @@
         	if (imgSelected.name) {
 
 	        	var selectedImageName = imgSelected.name;
-
-		        var image = labellingData[ selectedImageName ];
+                console.log(imgSelected)
+                var image = labellingData[ selectedImageName ];
                 var labels = [];
 		        for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
 		        	// if (image.shapes.length !== 1) {
@@ -98,7 +96,7 @@
 				            },
 				            {
 				            	x: shape.bbox.x + shape.bbox.w,
-				            	y: shape.bbox.x + shape.bbox.w
+				            	y: shape.bbox.y + shape.bbox.h  //这边感觉写错了，应该是h
 				            }
 			            ];
                         labels.push(labelData);

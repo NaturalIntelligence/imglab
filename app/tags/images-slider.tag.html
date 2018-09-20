@@ -190,6 +190,11 @@
         function loadIntoWorkArea(e){
             // var selected = tag.thumbnails[e.item.index];
             imgSelected = tag.thumbnails[e.item.index];
+            // pluginsStore.beenest.defaultWHXY.forEach((item) => {
+            //     if(item.id === imgSelected.name){
+            //         attachShapeToImg('9999','rect',{x:item.x ,y:item.y,w:item.w,h:item.h},null);
+            //     }
+            // })
             if (imgSelected) {
                 riot.mount("workarea",{ img : imgSelected });
             } else {

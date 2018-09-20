@@ -42,12 +42,43 @@
             }
             reader.readAsDataURL(b);
         }
+
+        function setSvgBoxSize(workId ,works){
+            if(works.length != 0 && workId){
+                console.log(works)
+                works.forEach((item) => {
+                    if(item.id === workId){ //将需要审核的图片的的标注存在全局状态里面
+                        var Positions = null
+                        Positions = {
+                                id : workId,
+                                Positions_item :[]
+                        }
+                        item.work.result.forEach((item_s) => {
+                            var widths = item_s[1].x - item_s[0].x;
+                            var heights = item_s[1].y - item_s[0].y;
+                            Positions.Positions_item.push(
+                                {
+                                    x : item_s[0].x,
+                                    y : item_s[0].y,
+                                    w : widths,
+                                    h : heights
+                                }
+                            )
+                        })
+                        pluginsStore.beenest.defaultWHXY.push(Positions)
+                        console.log(pluginsStore.beenest.defaultWHXY)
+                    }
+                })
+
+            }
+        }
+        
         this.fetchAudit = function(e){
 
             if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
 
-                var postData = {
-                            type: "rect",
+                 var postData = {
+                            type: "rect", //count
                             num: 4
                         };
 
@@ -63,7 +94,10 @@
                                     responseType: 'blob'
                                 }).then(function(response) {
                                     readImageBlob(workId, response.data);
-                                });
+                                    setTimeout(function(){  //每次掉用后需要等 readImageBlob 将元素创建出来才可以获取的到
+                                        setSvgBoxSize(workId ,works)
+                                    },200)
+                                })
                             });                            
                         } else{
                             alert('暂时没有任务');
