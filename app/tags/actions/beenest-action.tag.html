@@ -23,7 +23,7 @@
                                 instance.get('/works/'+workId+'/file', {
                                     responseType: 'blob'
                                 }).then(function(response) {
-                                    readImageBlob(workId, response.data);
+                                    readImageBlob(response.data, {name: workId});
                                 });
                             });                            
                         } else{
@@ -44,7 +44,7 @@
         	if (imgSelected.name) {
 
 	        	var selectedImageName = imgSelected.name;
-                console.log(imgSelected)
+                // console.log(imgSelected)
                 var image = labellingData[ selectedImageName ];
                 var labels = [];
 		        for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
@@ -59,7 +59,7 @@
 				            },
 				            {
 				            	x: shape.bbox.x + shape.bbox.w,
-				            	y: shape.bbox.y + shape.bbox.h  //这边感觉写错了，应该是h
+				            	y: shape.bbox.y + shape.bbox.h 
 				            }
 			            ];
                         labels.push(labelData);

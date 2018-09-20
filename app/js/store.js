@@ -63,8 +63,9 @@ function updateShapeDetailInStore(shapeId, bbox, points){
     bbox && (shapes[index].bbox = bbox);
     points && (shapes[index].points = points);
 }
-function attachShapeToImg(id, type, bbox, points){
-    labellingData[ imgSelected.name ].shapes.push( {
+function attachShapeToImg(id, type, bbox, points, img){
+    var targetImg = img ? img : imgSelected;
+    labellingData[ targetImg.name ].shapes.push( {
         "id" : id,
         "label" : "unlabelled",
         "type" : type,
@@ -78,7 +79,7 @@ function attachShapeToImg(id, type, bbox, points){
         "tags": [],
         "featurePoints": [],
         "zoomScale" : 1,
-        "defaultZoomScale": 1/imgSelected.size.imageScale//this scale is in relation with the image scale
+        "defaultZoomScale": 1/targetImg.size.imageScale//this scale is in relation with the image scale
     } );
 }
 function addImgToStore(imageDataObject) {
@@ -86,7 +87,7 @@ function addImgToStore(imageDataObject) {
     //don't initialize its properties
     var imgname = imageDataObject.name;
     if(!labellingData[imgname]){
-        labellingData[imgname] = Object.assign(imageDataObject, {
+        labellingData[imgname] = Object.assign({
             //"path" : "",
             "imagename": imgname,
             "attributes": [],
@@ -97,7 +98,13 @@ function addImgToStore(imageDataObject) {
             // },
             // "imageSrc": imageSrc,
             "shapes": []
-        });
+        }, imageDataObject);
+        if (imageDataObject.preloadedShapes) {
+            for (var shapeIndex in imageDataObject.preloadedShapes) {
+                var shape = imageDataObject.preloadedShapes[shapeIndex];
+                attachShapeToImg(shape.id, shape.type, null, shape.points, labellingData[imgname]);
+            }
+        }
     }
 }
 

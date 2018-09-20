@@ -105,6 +105,12 @@ var tools = {
             icon : "bee.png",
             actions : ["beenest"]
         },
+        "tool-audition": {
+            title  : "审核面板",
+            desp : "audit panel",
+            icon : "bee.png",
+            actions : ["auditing"]
+        },
         "tool-move" : {
             title  : "移动目标",
             desp : "Move an element or the entire workarea",
@@ -122,23 +128,6 @@ var tools = {
             desp : "Highlight the labels",
             icon_font : "icon-lightbulb",
             actions : ["lightbulb"]
-        },
-        "tool-audition": {
-            title  : "审核面板",
-            desp : "audit panel",
-            icon : "bee.png",
-            actions : ["auditing"],
-            type:"audit",
-            drawable : true,
-            create : function(){
-                var rect =  myCanvas.nested().rect().addClass('labelbox shape')/* .draw() */;
-                rect.resize();
-                rect.parent().draggable();
-                return rect;
-            },
-            validate: function(el){
-                return Number.parseInt(el.attr("width")) > 3;
-            },
         }
     }
 };
@@ -172,8 +161,7 @@ var pluginsStore = {
     // "facepp" : {
     // },
     "beenest": {
-        baseURL: "https://api.todview.com:8080/v1/",
-        defaultWHXY: []
+        baseURL: "https://api.todview.com:8080/v1/"
     }
 }
 

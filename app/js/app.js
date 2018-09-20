@@ -44,48 +44,20 @@ function updateDimentions(imgFileSrc, imageDataObject) {
     img.src = imgFileSrc;
 }
 
-function readImageBlob(fileName, b) {
+function readImageBlob(blob, imgData) {
     var reader = new FileReader();
     reader.onload = e => {
-        var imgData = {
-            name : fileName,
-            src: e.target.result
-        };
+        // var imgData = {
+        //     name : fileName,
+        //     src: e.target.result
+        // };
+        imgData['src'] = e.target.result;
         updateDimentions(e.target.result, imgData);
     }
     reader.onloadend = e => {
     }
-    reader.readAsDataURL(b);
+    reader.readAsDataURL(blob);
 }
-
-function setSvgBoxSize(reviewId ,review){
-    if(review.length != 0 && reviewId){
-        review.forEach((item) => {
-            if(item.id === reviewId){ //将需要审核的图片的的标注存在全局状态里面
-                var Positions = null
-                Positions = {
-                        id : reviewId,
-                        Positions_item :[]
-                }
-                item.work.result.forEach((item_s) => {
-                    var widths = item_s[1].x - item_s[0].x;
-                    var heights = item_s[1].y - item_s[0].y;
-                    Positions.Positions_item.push(
-                        {
-                            x : item_s[0].x,
-                            y : item_s[0].y,
-                            w : widths,
-                            h : heights
-                        }
-                    )
-                })
-                pluginsStore.beenest.defaultWHXY.push(Positions)
-            }
-        })
-
-    }
-}
-
 
 
 /**

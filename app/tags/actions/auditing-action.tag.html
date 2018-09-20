@@ -26,10 +26,18 @@
                                 instance.get('/reviews/'+reviewId+'/file', {
                                     responseType: 'blob'
                                 }).then(function(response) {
-                                    readImageBlob(reviewId, response.data);
-                                    setTimeout(function(){  //每次掉用后需要等 readImageBlob 将元素创建出来才可以获取的到
-                                        setSvgBoxSize(reviewId ,review)
-                                    },200)
+                                    var preloadedShapes = [];
+                                    for (var shapeIndex in v.work.result) {
+                                        var rect = v.work.result[shapeIndex];
+                                        preloadedShapes.push({
+                                            "id" : v.id + '_' + shapeIndex,
+                                            "type" : 'rect',
+                                            "points": [rect[0].x, rect[0].y, rect[1].x - rect[0].x, rect[1].y - rect[0].y]
+                                        });
+                                    }
+
+                                    readImageBlob(response.data, {name: reviewId, preloadedShapes: preloadedShapes});
+
                                 })
                             });                            
                         } else{
@@ -80,8 +88,6 @@
                         alert('提交失败（任务超时或格式错误）');
                         console.log(error);
                 });
-
-
             }
         }
         this.cancel = function(e) {
