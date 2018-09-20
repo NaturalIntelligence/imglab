@@ -1,18 +1,109 @@
 <action-auditing>
     <div>
         <input type="button" onclick={fetchAudit} value="请求审核" name="fetchAuditBtn" id="fetchAuditBtn"/>
-        <input type="button" onclick={submitAudit} value="提交审核" name="submitAuditBtn" id="submitAuditBtn"/>
-    <input type="button" onclick={cancelAudit} value="放弃审核" name="cancelAuditBtn" id="cancelAuditBtn"/>
+        <input type="button" onclick={approve} value="通过" name="adoptAuditBtn" id="adoptAuditBtn"/>
+        <input type="button" onclick={reject} value="驳回" name="rejectAuditBtn" id="rejectAuditBtn"/>
+        <input type="button" onclick={cancel} value="放弃" name="cancelAuditBtn" id="cancelAuditBtn"/>
     </div>
     <script>
-        this.fetchAudit = function(e) {
-            console.log(e)
+        this.fetchAudit = function(e){
+
+            if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
+
+                 var postData = {
+                            type: "rect", //count
+                            num: 4
+                        };
+
+                  var instance = axiosClient();
+
+                  instance.post('/reviews/fetch', postData)
+                  .then(function(response) {
+                        var review = response.data;
+                        if (review.length > 0) {
+                            review.forEach(function(v) {
+                                var reviewId = v.id;
+                                instance.get('/reviews/'+reviewId+'/file', {
+                                    responseType: 'blob'
+                                }).then(function(response) {
+                                    readImageBlob(reviewId, response.data);
+                                    setTimeout(function(){  //每次掉用后需要等 readImageBlob 将元素创建出来才可以获取的到
+                                        setSvgBoxSize(reviewId ,review)
+                                    },200)
+                                })
+                            });                            
+                        } else{
+                            alert('暂时没有任务');
+                        }
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                        alert('请求失败，请检查令牌是否有效。');
+                  });
+
+            }
+
         }
-        this.submitAudit = function(e) {
-            console.log(1)
+        this.approve = function(e){
+            if (imgSelected.name) {
+
+                var selectedImageName = imgSelected.name;
+
+                var instance = axiosClient();
+                instance.post('/reviews', {id: selectedImageName, result: true})
+                .then(function(response) {
+                        deleteAndNextImage(selectedImageName);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                        clearAllImages();
+                        alert('提交失败（任务超时或格式错误）');
+                        console.log(error);
+                });
+                
+
+            }
         }
-        this.cancelAudit = function(e) {
-            console.log(2)
+        this.reject = function(e) {
+            if (imgSelected.name) {
+
+                var selectedImageName = imgSelected.name;
+
+                var instance = axiosClient();
+                instance.post('/reviews', {id: selectedImageName, result: false})
+                .then(function(response) {
+                        deleteAndNextImage(selectedImageName);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                        clearAllImages();
+                        alert('提交失败（任务超时或格式错误）');
+                        console.log(error);
+                });
+
+
+            }
+        }
+        this.cancel = function(e) {
+            if (imgSelected.name) {
+
+                var selectedImageName = imgSelected.name;
+
+                var instance = axiosClient();
+
+                instance.delete('/reviews/' + selectedImageName + '/cancel')
+                .then(function(response) {
+
+                        deleteAndNextImage(selectedImageName);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                        clearAllImages();
+                        console.log(error);
+                });
+
+            }
+
         }
     </script>
 </action-auditing>

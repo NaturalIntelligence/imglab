@@ -127,7 +127,18 @@ var tools = {
             title  : "审核面板",
             desp : "audit panel",
             icon : "bee.png",
-            actions : ["auditing"]
+            actions : ["auditing"],
+            type:"audit",
+            drawable : true,
+            create : function(){
+                var rect =  myCanvas.nested().rect().addClass('labelbox shape')/* .draw() */;
+                rect.resize();
+                rect.parent().draggable();
+                return rect;
+            },
+            validate: function(el){
+                return Number.parseInt(el.attr("width")) > 3;
+            },
         }
     }
 };
@@ -135,7 +146,7 @@ var tools = {
 function getPointToDraw(position,container,canvasOffset){
     var containerOffset = {
         x: container.parent().attr("x"),
-        y :container.parent().attr("y")
+        y: container.parent().attr("y")
     }
     var point =  container.parent().circle().radius(appConfig.featurePointSize).attr({ cx: position.x - canvasOffset.x - containerOffset.x, cy: position.y - canvasOffset.y - containerOffset.y}).addClass('labelpoint');
     point.draggable();
@@ -161,7 +172,8 @@ var pluginsStore = {
     // "facepp" : {
     // },
     "beenest": {
-        baseURL: "https://api.todview.com:8080/v1/"
+        baseURL: "https://api.todview.com:8080/v1/",
+        defaultWHXY: []
     }
 }
 

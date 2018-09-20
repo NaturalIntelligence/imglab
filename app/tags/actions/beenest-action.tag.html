@@ -5,46 +5,7 @@
         <input onclick={cancelWork} type="button" name="cancelWorkBtn" id="cancelWorkBtn" value="放弃" />
     </div>
     <script>
-
-        function axiosClient() {
-        	return axios.create({
-	            baseURL: pluginsStore.beenest.baseURL,
-	            headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
-        	});
-        }
-
-        function updateDimentions(imgFileSrc, imageDataObject) {
-            var img = new Image();
-            img.onload = function() {
-                imageDataObject.size = {
-                    width : this.width,
-                    height : this.height,
-                    scaledWidth: this.width,
-                    scaledHeight: this.height,
-                    imageScale: 1
-                }
-                addImgToStore(imageDataObject);
-            }
-            img.src = imgFileSrc;
-        }
-
-        function readImageBlob(fileName, b) {
-            var reader = new FileReader();
-            reader.onload = e => {
-                var imgData = {
-                    name : fileName,
-                    src: e.target.result
-                };
-                updateDimentions(e.target.result, imgData);
-            }
-            reader.onloadend = e => {
-            }
-            reader.readAsDataURL(b);
-        }
-
         this.fetchWorks = function(e){
-            // console.log(pluginsStore.beenest.token);
-
             if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
 
                 var postData = {
@@ -52,12 +13,10 @@
                             num: 4
                         };
 
-                  var instance = axiosClient();
-
-                  instance.post('/works/fetch', postData)
-                  .then(function(response) {
+                var instance = axiosClient();
+                instance.post('/works/fetch', postData)
+                .then(function(response) {
                         var works = response.data;
-                        // console.log(works);
                         if (works.length > 0) {
                             works.forEach(function(v) {
                                 var workId = v.id;
@@ -70,11 +29,11 @@
                         } else{
                             alert('暂时没有任务');
                         }
-                  })
-                  .catch(function (error) {
+                })
+                .catch(function (error) {
                     console.log(error);
                         alert('请求失败，请检查令牌是否有效。');
-                  });
+                });
 
             }
 
@@ -85,8 +44,8 @@
         	if (imgSelected.name) {
 
 	        	var selectedImageName = imgSelected.name;
-
-		        var image = labellingData[ selectedImageName ];
+                console.log(imgSelected)
+                var image = labellingData[ selectedImageName ];
                 var labels = [];
 		        for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
 		        	// if (image.shapes.length !== 1) {
@@ -100,7 +59,7 @@
 				            },
 				            {
 				            	x: shape.bbox.x + shape.bbox.w,
-				            	y: shape.bbox.x + shape.bbox.w
+				            	y: shape.bbox.y + shape.bbox.h  //这边感觉写错了，应该是h
 				            }
 			            ];
                         labels.push(labelData);
