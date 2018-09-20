@@ -338,43 +338,60 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
         this.on('mount',function() {
 
             myCanvas = new SVG('work-canvas').size(opts.img.size.width, opts.img.size.height) ;
+            
+            if(selectedTool.type === "audit"){
+                pluginsStore.beenest.defaultWHXY.forEach((item) => {
+                    if(item.id === imgSelected.name){
+                        item.Positions_item.forEach((item_s) => {  //这边将 pluginsStore.beenest.defaultWHXY 放在新的currentTool里面
+                            var currentTool = selectedTool.create(event, myCanvas);
+                            currentTool.node.style.width = item_s.w +"px";
+                            currentTool.node.style.height = item_s.h +"px";
+                            currentTool.node.style.y = item_s.y +"px";
+                            currentTool.node.style.x = item_s.x +"px";
+                        })
+                    }
+                })
+            }
+            else if(selectedTool.type !== "audit"){
+                drawOnCanvas();
+                myCanvas.on('mousedown', function (event) {
+                    deselectAll();
 
-            drawOnCanvas();
+                    if (selectedTool && selectedTool.type !== "point" && selectedTool.type !== "audit" && !alreadyDrawing && selectedTool.drawable) {
+                        var currentTool = selectedTool.create(event, myCanvas);
 
-            myCanvas.on('mousedown', function(event){
-                deselectAll();
-                if(selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable){
-                    var currentTool = selectedTool.create(event,myCanvas);
+                        moveOnlyOnMoveTool(currentTool);
 
-                    currentTool.on('drawstart', function(){
-                        alreadyDrawing = true;
-                    });
+                        currentTool.on('drawstart', function () {
+                            alreadyDrawing = true;
+                        });
 
-                    currentTool.on('drawcancel', function(){
-                    });
+                        currentTool.on('drawcancel', function () {});
 
-                    currentTool.on('resizedone', function(){
-                        updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas), getPoints(currentTool));
-                    });
-                    currentTool.on('drawstop', function(){
-                        alreadyDrawing = false;
-                        if( !selectedTool.validate(currentTool)){
-                            currentTool.parent().remove();
-                            currentTool.remove();
-                        }else{
-                            attachShapeData(currentTool);
+                        currentTool.on('resizedone', function () {
+                            updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas),
+                                getPoints(currentTool));
+                        });
+                        currentTool.on('drawstop', function () {
+                            alreadyDrawing = false;
+                            if (!selectedTool.validate(currentTool)) { //Don't draw an element on accidentle click
+                                currentTool.parent().remove();
+                                currentTool.remove();
+                            } else {
+                                attachShapeData(currentTool);
 
-                            attachEvents(currentTool)
-                        }
-                    });
+                                attachEvents(currentTool)
+                            }
+                        });
 
-                    if(currentTool.type !== 'polygon') currentTool.draw(event);
-                    selectedElement = currentTool;
-                }
-            });
-            myCanvas.on('mouseup', function(event){
-                if(selectedTool && selectedElement)   selectedElement.draw(event);
-            });
+                        if (currentTool.type !== 'polygon') currentTool.draw(event);
+                        selectedElement = currentTool;
+                    }
+                });
+                myCanvas.on('mouseup', function (event) {
+                    if (selectedTool && selectedElement) selectedElement.draw(event);
+                });
+            }
 
         } );
 

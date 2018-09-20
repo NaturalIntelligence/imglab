@@ -5,43 +5,6 @@
         <input onclick={cancelWork} type="button" name="cancelWorkBtn" id="cancelWorkBtn" value="放弃" />
     </div>
     <script>
-
-        function axiosClient() {
-        	return axios.create({
-	            baseURL: pluginsStore.beenest.baseURL,
-	            headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
-        	});
-        }
-
-        function updateDimentions(imgFileSrc, imageDataObject) {
-            var img = new Image();
-            img.onload = function() {
-                imageDataObject.size = {
-                    width : this.width,
-                    height : this.height,
-                    scaledWidth: this.width,
-                    scaledHeight: this.height,
-                    imageScale: 1
-                }
-                addImgToStore(imageDataObject);
-            }
-            img.src = imgFileSrc;
-        }
-
-        function readImageBlob(fileName, b) {
-            var reader = new FileReader();
-            reader.onload = e => {
-                var imgData = {
-                    name : fileName,
-                    src: e.target.result
-                };
-                updateDimentions(e.target.result, imgData);
-            }
-            reader.onloadend = e => {
-            }
-            reader.readAsDataURL(b);
-        }
-
         this.fetchWorks = function(e){
             if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
 

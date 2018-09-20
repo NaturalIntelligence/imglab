@@ -6,73 +6,6 @@
         <input type="button" onclick={cancel} value="放弃" name="cancelAuditBtn" id="cancelAuditBtn"/>
     </div>
     <script>
-
-        function axiosClient() {
-        	return axios.create({
-	            baseURL: pluginsStore.beenest.baseURL,
-	            headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
-        	});
-        }
-
-        function updateDimentions(imgFileSrc, imageDataObject) {
-            var img = new Image();
-            img.onload = function() {
-                imageDataObject.size = {
-                    width : this.width,
-                    height : this.height,
-                    scaledWidth: this.width,
-                    scaledHeight: this.height,
-                    imageScale: 1
-                }
-                addImgToStore(imageDataObject);
-            }
-            img.src = imgFileSrc;
-        }
-        
-        function readImageBlob(fileName, b) {
-            var reader = new FileReader();
-            reader.onload = e => {
-                var imgData = {
-                    name : fileName,
-                    src: e.target.result
-                };
-                updateDimentions(e.target.result, imgData);
-            }
-            reader.onloadend = e => {
-            }
-            reader.readAsDataURL(b);
-        }
-
-        function setSvgBoxSize(workId ,works){
-            if(works.length != 0 && workId){
-                console.log(works)
-                works.forEach((item) => {
-                    if(item.id === workId){ //将需要审核的图片的的标注存在全局状态里面
-                        var Positions = null
-                        Positions = {
-                                id : workId,
-                                Positions_item :[]
-                        }
-                        item.work.result.forEach((item_s) => {
-                            var widths = item_s[1].x - item_s[0].x;
-                            var heights = item_s[1].y - item_s[0].y;
-                            Positions.Positions_item.push(
-                                {
-                                    x : item_s[0].x,
-                                    y : item_s[0].y,
-                                    w : widths,
-                                    h : heights
-                                }
-                            )
-                        })
-                        pluginsStore.beenest.defaultWHXY.push(Positions)
-                        console.log(pluginsStore.beenest.defaultWHXY)
-                    }
-                })
-
-            }
-        }
-        
         this.fetchAudit = function(e){
 
             if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
@@ -86,16 +19,16 @@
 
                   instance.post('/reviews/fetch', postData)
                   .then(function(response) {
-                        var works = response.data;
-                        if (works.length > 0) {
-                            works.forEach(function(v) {
-                                var workId = v.id;
-                                instance.get('/reviews/'+workId+'/file', {
+                        var review = response.data;
+                        if (review.length > 0) {
+                            review.forEach(function(v) {
+                                var reviewId = v.id;
+                                instance.get('/reviews/'+reviewId+'/file', {
                                     responseType: 'blob'
                                 }).then(function(response) {
-                                    readImageBlob(workId, response.data);
+                                    readImageBlob(reviewId, response.data);
                                     setTimeout(function(){  //每次掉用后需要等 readImageBlob 将元素创建出来才可以获取的到
-                                        setSvgBoxSize(workId ,works)
+                                        setSvgBoxSize(reviewId ,review)
                                     },200)
                                 })
                             });                            

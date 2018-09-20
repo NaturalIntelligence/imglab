@@ -21,6 +21,73 @@ function getCordinates(event, element) {
     };
 }
 
+// aidition beenest publick methods
+function axiosClient() {
+    return axios.create({
+        baseURL: pluginsStore.beenest.baseURL,
+        headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
+    });
+}
+
+function updateDimentions(imgFileSrc, imageDataObject) {
+    var img = new Image();
+    img.onload = function() {
+        imageDataObject.size = {
+            width : this.width,
+            height : this.height,
+            scaledWidth: this.width,
+            scaledHeight: this.height,
+            imageScale: 1
+        }
+        addImgToStore(imageDataObject);
+    }
+    img.src = imgFileSrc;
+}
+
+function readImageBlob(fileName, b) {
+    var reader = new FileReader();
+    reader.onload = e => {
+        var imgData = {
+            name : fileName,
+            src: e.target.result
+        };
+        updateDimentions(e.target.result, imgData);
+    }
+    reader.onloadend = e => {
+    }
+    reader.readAsDataURL(b);
+}
+
+function setSvgBoxSize(reviewId ,review){
+    if(review.length != 0 && reviewId){
+        review.forEach((item) => {
+            if(item.id === reviewId){ //将需要审核的图片的的标注存在全局状态里面
+                var Positions = null
+                Positions = {
+                        id : reviewId,
+                        Positions_item :[]
+                }
+                item.work.result.forEach((item_s) => {
+                    var widths = item_s[1].x - item_s[0].x;
+                    var heights = item_s[1].y - item_s[0].y;
+                    Positions.Positions_item.push(
+                        {
+                            x : item_s[0].x,
+                            y : item_s[0].y,
+                            w : widths,
+                            h : heights
+                        }
+                    )
+                })
+                pluginsStore.beenest.defaultWHXY.push(Positions)
+            }
+        })
+
+    }
+}
+
+
+
 /**
  * Search an item in array based on id property.
  * returns index of the item
