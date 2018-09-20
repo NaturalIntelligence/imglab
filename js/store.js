@@ -12,12 +12,13 @@ function updateLabel(oldLabel, newLabel){
 
 function updateFeaturePointInStore(shapeId, pointid, position, newLabel){
     var shape = getShape(shapeId);
+    var scale = 1 / imgSelected.size.imageScale;
     var featurePoints = shape.featurePoints;
     var index = indexOf(featurePoints, "id", pointid);
 
     if(position){
-        featurePoints[index].x = position.cx;
-        featurePoints[index].y = position.cy;
+        featurePoints[index].x = position.cx * scale;
+        featurePoints[index].y = position.cy * scale;
     }
 
     if(newLabel){
@@ -31,9 +32,10 @@ function getShape(shapeId){
 
 function attachPointToShape(shapeId, pointid, position){
     var shape = getShape(shapeId);
+    var scale = 1 / imgSelected.size.imageScale;
     shape.featurePoints.push( {
-        "x": position.cx,
-        "y": position.cy,
+        "x": position.cx * scale,
+        "y": position.cy * scale,
         "label" : shape.featurePoints.length,
         "id" : pointid
     });
@@ -58,24 +60,22 @@ function detachPointByIndex(shapeId, pointIndex){
     featurePoints.splice(pointIndex, 1);
 }
 
-function updateShapeDetailInStore(shapeId, bbox, points){
-    var shapes = labellingData[ imgSelected.name ].shapes;
-    var index = indexOf(shapes, "id", shapeId);
-
-    bbox && (shapes[index].bbox = bbox);
-    points && (shapes[index].points = points);
-}
-
 /**
- * Adds a shape into labelling data and returns a shape object
+ * Scales the shape data based on scale
+ * @param {string} id - id of shape
+ * @param {string} label - label of shape
+ * @param {Object} bbox - rbox of shape
+ * @param {points[]} points - points that form the shape, e.g. 4 points of a rect
+ * @param {number} scale - scale used to rescale shape
+ * @returns {Object} scaled shape data
  */
-function attachShapeToImg(id, type, bbox, points){
-    var shape = {
+function scaleShape(id, type, bbox, points, scale) {
+    return {
         "id" : id,
         "label" : "unlabelled",
         "type" : type,
-        "points": points,
-        "bbox" : bbox || {
+        "points": scaleShapePoints(points, scale, type),
+        "bbox" : scaleBbox(bbox, scale) || {
             "x": 0,
             "y": 0,
             "w": 0,
@@ -84,8 +84,81 @@ function attachShapeToImg(id, type, bbox, points){
         "tags": [],
         "featurePoints": [],
         "zoomScale" : 1,
-        "defaultZoomScale": 1/imgSelected.size.imageScale //this scale is in relation with the image scale
-    };
+        "defaultZoomScale": 1/imgSelected.size.imageScale
+    }
+}
+
+/**
+ * Scales the points of the shape according to scale and type
+ * @param {points[] | Array[points[]]} point
+ * @param {number} scale
+ * @param {string} type - type of shape
+ * @returns {points[] | Array[points[]]} scaled points
+ */
+function scaleShapePoints(points, scale, type) {
+    if (!points) return;
+
+    if (type == "polygon") {
+      return points.map(point => {
+        return point.map(val => val * scale);
+      });
+    }
+    // Return this for other shapes
+    return points.map(point => point * scale);
+}
+
+/**
+ * Scales the rbox of shape according to scale
+ * @param {Object} bbox - rbox of shape
+ * @param {number} scale
+ * @returns {Object} scaled rbox
+ */
+function scaleBbox(bbox, scale) {
+    return {
+        'x': bbox.x * scale,
+        'y': bbox.y * scale,
+        'cx': (bbox.cx || 0) * scale,
+        'cy': (bbox.cy || 0) * scale,
+        'w': bbox.w * scale,
+        'h': bbox.h * scale,
+        'width': bbox.w * scale,
+        'height': bbox.h * scale
+    }
+}
+
+/**
+ * Scales the feature points according to scale
+ * @param {featurePoints[]} featurePoints - array of featurePoints
+ * @param {number} scale
+ * @returns {featurePoints[]} scaled featurePoints
+ */
+function scaleFeaturePoints(featurePoints, scale) {
+    if (!featurePoints) return;
+
+    return featurePoints.map(point => {
+        return {
+          "x": point.x * scale,
+          "y": point.y * scale,
+          "label" : point.label,
+          "id" : point.id
+        };
+    });
+}
+
+function updateShapeDetailInStore(shapeId, bbox, points){
+    var shapes = labellingData[ imgSelected.name ].shapes;
+    var shape = getShape(shapeId);
+    var index = indexOf(shapes, "id", shapeId);
+    var scale = 1 / imgSelected.size.imageScale;
+    bbox && (shapes[index].bbox = scaleBbox(bbox, scale));
+    points && (shapes[index].points = scaleShapePoints(points, scale, shape.type));
+}
+
+/**
+ * Adds a shape into labelling data and returns a shape object
+ */
+function attachShapeToImg(id, type, bbox, points){
+    var shape = scaleShape(id, type, bbox, points, 1 / imgSelected.size.imageScale);
     labellingData[ imgSelected.name ].shapes.push(shape);
     return shape;
 }
@@ -105,7 +178,8 @@ function addImgToStore(imgname, size) {
             },
             "shapes": [],
             "shapeIndex": 0,   // Used to generate new ids for copy pasted shapes
-            "pointIndex": 0    // Used to generate new ids for feature points
+            "pointIndex": 0,    // Used to generate new ids for feature points
+            "featurePointSize": 3 // Stores featurePointSize per image
         }
     }
 }
