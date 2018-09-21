@@ -63,13 +63,15 @@ function updateShapeDetailInStore(shapeId, bbox, points){
     bbox && (shapes[index].bbox = bbox);
     points && (shapes[index].points = points);
 }
-function attachShapeToImg(id, type, bbox, points, img){
+function attachShapeToImg(id, type, bbox, points, img, audit){
     var targetImg = img ? img : imgSelected;
+    var isAudit = audit ? audit :false;
     labellingData[ targetImg.name ].shapes.push( {
         "id" : id,
         "label" : "unlabelled",
         "type" : type,
         "points": points,
+        "audit" :isAudit,
         "bbox" : bbox || {
             "x":  0,
             "y":  0,
@@ -102,7 +104,7 @@ function addImgToStore(imageDataObject) {
         if (imageDataObject.preloadedShapes) {
             for (var shapeIndex in imageDataObject.preloadedShapes) {
                 var shape = imageDataObject.preloadedShapes[shapeIndex];
-                attachShapeToImg(shape.id, shape.type, null, shape.points, labellingData[imgname]);
+                attachShapeToImg(shape.id, shape.type, null, shape.points, labellingData[imgname], shape.audit);
             }
         }
     }
