@@ -50,9 +50,11 @@
                 selectedElements = [];
                 //delete all the points related to a polygon
                 //show snakebar to inform
-            } else if (e.key == 'a' && e.altKey) {//TODO change this
+            } else if (e.key === 'a' && e.altKey) {//TODO change this
                 //Select all the labels
                 selectAll();
+                e.preventDefault();
+                e.stopPropagation();
             } else if (e.key === 'c' && e.ctrlKey) {
                 /**
                  * Save selected shape and feature point data into copiedElements
@@ -330,13 +332,14 @@
         }
 
         function selectAll() {
-            for (var shapeId in labellingData[imgSelected.name].shapes) {
-                var el = SVG.get(shapeId)
+            labellingData[imgSelected.name].shapes.forEach(shape => {
+                let el = SVG.get(shape.id);
                 el.selectize({
                     rotationPoint: false
                 });
                 selectedElements.push(el);
-            };
+            });
+            console.log('selectedElements', selectedElements);
         }
 
         // When create, move, resize, delete
