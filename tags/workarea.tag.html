@@ -337,7 +337,6 @@
                 });
                 selectedElements.push(el);
             });
-            console.log('selectedElements', selectedElements);
         }
 
         // When create, move, resize, delete
@@ -406,18 +405,6 @@
             }
         }
 
-        function setZoomLevel(zoomScale, currentShape) {
-            var panZoomCanvas = svgPanZoom("#" + currentShape.parent().id(), {
-                panEnabled: false,
-                zoomEnabled: true,
-                zoomScaleSensitivity: 0.1,
-                minZoom: 0.1,
-                maxZoom: 10,
-                fit: false,
-                center: false
-            });
-            panZoomCanvas.zoomAtPoint(zoomScale, {x: 0, y: 0});
-        }
 
         /**
          * Draws a shape and all the feature points in the shape based on current image scale
