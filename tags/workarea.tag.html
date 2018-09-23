@@ -219,8 +219,6 @@
                 } else {
                     attachShapeData(shape);
                     attachEvents(shape);
-                    // TODO: Remove hardcorded value
-                    setZoomLevel(1, shape);
                 }
             });
         }
@@ -339,7 +337,6 @@
                 });
                 selectedElements.push(el);
             });
-            console.log('selectedElements', selectedElements);
         }
 
         // When create, move, resize, delete
@@ -408,32 +405,20 @@
             }
         }
 
-        function setZoomLevel(zoomScale, currentShape) {
-            var panZoomCanvas = svgPanZoom("#" + currentShape.parent().id(), {
-                panEnabled: false,
-                zoomEnabled: true,
-                zoomScaleSensitivity: 0.1,
-                minZoom: 0.1,
-                maxZoom: 10,
-                fit: false,
-                center: false
-            });
-            panZoomCanvas.zoomAtPoint(zoomScale, {x: 0, y: 0});
-        }
 
         /**
-         * Draws a shape and all the feature points in the shape
+         * Draws a shape and all the feature points in the shape based on current image scale
          * @param {Object} shape - the shape data object as stored in labellingData
          */
         function drawShape(shape) {
             if (!shape) return;
-
+            var scale = imgSelected.size.imageScale;
             var currentShape;
             switch (shape.type) {
                 case "rect":
                     var rect = myCanvas.nested()
-                        .rect(shape.points[2], shape.points[3])
-                        .move(shape.points[0], shape.points[1])
+                        .rect(shape.points[2] * scale, shape.points[3] * scale)
+                        .move(shape.points[0] * scale, shape.points[1] * scale)
                         .addClass('labelbox shape')
                         .id(shape.id)
                         .resize();
@@ -443,9 +428,9 @@
                     break;
                 case "circle":
                     var circle = myCanvas.nested()
-                        .circle().radius(shape.points[2])
-                        .attr("cx", shape.points[0])
-                        .attr("cy", shape.points[1])
+                        .circle().radius(shape.points[2] * scale)
+                        .attr("cx", shape.points[0] * scale)
+                        .attr("cy", shape.points[1] * scale)
                         .addClass('labelcircle shape')
                         .id(shape.id)
                         .resize();
@@ -464,7 +449,7 @@
                         //Add feature points */
                 case "polygon":
                     var poly = myCanvas.nested()
-                        .polygon(shape.points)
+                        .polygon(scaleShapePoints(shape.points, scale, shape.type))
                         //.move(shape.points[0],shape.points[1])
                         .addClass('labelpolygon shape')
                         .id(shape.id)
@@ -483,23 +468,23 @@
                 attachEvents(currentShape);
                 attachShapeListener(currentShape);
                 drawAllFeaturePoints(shape.featurePoints, currentShape);
-                setZoomLevel(shape.zoomScale, currentShape);
             }
         }
 
         /**
-         * Draws all the feature points in the shape and attachEventListeners to points
+         * Draws all the feature points in the shape according to current image scale and attachEventListeners to points
          * @param {Array} fPoints - array of shape featurePoints
          * @param {Object} parent - shape that contains the feature points
          * @see getPoints
          */
         function drawAllFeaturePoints(fPoints, parent) {
-            for (var fPointIndex in fPoints) {
-                var fPoint = getPointToDraw(fPoints[fPointIndex], parent, {
+            let scaledFPoints = scaleFeaturePoints(fPoints, imgSelected.size.imageScale);
+            for (var fPointIndex in scaledFPoints) {
+                var fPoint = getPointToDraw(scaledFPoints[fPointIndex], parent, {
                     x: 0,
                     y: 0
                 });
-                fPoint.id(fPoints[fPointIndex].id);
+                fPoint.id(scaledFPoints[fPointIndex].id);
                 attachEventsToFeaturePoint(fPoint, parent);
             }
         }
