@@ -133,10 +133,10 @@ function getPointToDraw(position, container, canvasOffset) {
         x: parseInt(parentSvg.attr("x"), 10) || 0,
         y: parseInt(parentSvg.attr("y"), 10) || 0
     }
-    // Feature point size should be based on current image scale
+    // Feature point size should be local to each image
     var featurePointSize = labellingData[imgSelected.name].featurePointSize;
     var point =  container.parent().circle()
-        .radius(Math.floor(featurePointSize * imgSelected.size.imageScale))
+        .radius(Math.floor(featurePointSize))
         .attr({
             cx: position.x - canvasOffset.x - containerOffset.x,
             cy: position.y - canvasOffset.y - containerOffset.y})
