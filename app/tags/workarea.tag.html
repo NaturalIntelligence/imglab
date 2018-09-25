@@ -183,25 +183,34 @@
                     e.stopPropagation();
                 } //click call back
             );
-            imgSelected.shapes.forEach((item) => {
-                // if(item.audit){
-                    console.log(item)
-                    $("<span></span>")
-                    .attr({
-                        class: "selectToolS"
+
+            currentTool.parent().on("mouseover",function(e){
+                if(currentTool.node.id === e.target.id){
+                    imgSelected.shapes.forEach((item) => {
+                        if(item.id === e.target.id){
+                            $("<span></span>")
+                            .attr({
+                                class: "selectToolS"
+                            })
+                            .css({
+                                background: "black",
+                                color: "#fff",
+                                position: "absolute",
+                                left: `${item.points[0]}px`,
+                                top: `${item.points[1]-28}px`
+                            })
+                            .text(`w：${item.points[2].toFixed(0)}\nh：${item.points[3].toFixed(0)}`).appendTo("#work-canvas");
+                        }
                     })
-                    .css({
-                        // width: "60px",
-                        // height: "50px",
-                        background: "black",
-                        color: "white",
-                        position: "absolute",
-                        left: `${item.points[0]+5}px`,
-                        top: `${item.points[1]-30}px`
-                    })
-                    .text(`w:${item.points[2].toFixed(0)}\nh:${item.points[3].toFixed(0)}`).appendTo("#work-canvas");
-                // }
-            })
+                }
+            });
+            
+            currentTool.parent().on("mouseout",function(e){
+                if(currentTool.node.id === e.target.id){
+                    $(".selectToolS").remove();
+                }
+            });
+          
         }
 
         function moveOnlyOnMoveTool(el){
@@ -384,6 +393,9 @@
                         setZoomLevel(shape.zoomScale, currentShape);
                     }                    
                     //attachEvents(currentShape);
+                    if (!shape.audit) {
+                        setZoomLevel(shape.zoomScale, currentShape);
+                    }    
                 }
             }
 
