@@ -164,19 +164,44 @@
                         });
                         selectedElements.push(currentTool);
                     } else {
-                        if (!e.ctrlKey) { //deselect rest selected elements
-                            deselectAll();
-                            riot.mount('label-panel', { id : currentTool.node.id })
-                        }
-                        //select currnt element
-                        currentTool.selectize({
-                            rotationPoint: false
-                        });
-                        selectedElements.push(currentTool);
+                        imgSelected.shapes.forEach((item) => {
+                            if(item.audit){
+
+                            }else{
+                                if (!e.ctrlKey) { //deselect rest selected elements
+                                    deselectAll();
+                                    riot.mount('label-panel', { id : currentTool.node.id })
+                                }
+                                //select currnt element
+                                currentTool.selectize({
+                                    rotationPoint: false
+                                });
+                                selectedElements.push(currentTool); 
+                            }
+                        })
                     }
                     e.stopPropagation();
                 } //click call back
             );
+            imgSelected.shapes.forEach((item) => {
+                if(item.audit){
+                    console.log(item)
+                    $("<div></div>")
+                    .attr({
+                        class: "selectToolS"
+                    })
+                    .css({
+                        width: "80px",
+                        height: "50px",
+                        background: "black",
+                        color: "#fff",
+                        position: "absolute",
+                        left: `${item.points[0]+item.points[2]+5}px`,
+                        top: `${item.points[1]}px`
+                    })
+                    .text(`宽：${item.points[2]}\n高：${item.points[3]}`).appendTo("#work-canvas");
+                }
+            })
         }
 
         function moveOnlyOnMoveTool(el){
@@ -353,9 +378,16 @@
                             break;
                     }
 
+                    imgSelected.shapes.forEach((item) => {
+                        if(item.audit){
+
+                        }else{
+                            setZoomLevel(shape.zoomScale, currentShape);
+                        }
+                    })
                     attachEvents(currentShape);
                     drawAllFeaturePoints(shape.featurePoints, currentShape);
-                    setZoomLevel(shape.zoomScale, currentShape);
+                    //setZoomLevel(shape.zoomScale, currentShape);
                     //attachEvents(currentShape);
                 }
             }
