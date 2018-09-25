@@ -184,23 +184,23 @@
                 } //click call back
             );
             imgSelected.shapes.forEach((item) => {
-                if(item.audit){
+                // if(item.audit){
                     console.log(item)
-                    $("<div></div>")
+                    $("<span></span>")
                     .attr({
                         class: "selectToolS"
                     })
                     .css({
-                        width: "80px",
-                        height: "50px",
+                        // width: "60px",
+                        // height: "50px",
                         background: "black",
-                        color: "#fff",
+                        color: "white",
                         position: "absolute",
                         left: `${item.points[0]+item.points[2]+5}px`,
                         top: `${item.points[1]}px`
                     })
-                    .text(`宽：${item.points[2]}\n高：${item.points[3]}`).appendTo("#work-canvas");
-                }
+                    .text(`w:${item.points[2].toFixed(0)}\nh:${item.points[3].toFixed(0)}`).appendTo("#work-canvas");
+                // }
             })
         }
 
@@ -378,16 +378,11 @@
                             break;
                     }
 
-                    imgSelected.shapes.forEach((item) => {
-                        if(item.audit){
-
-                        }else{
-                            setZoomLevel(shape.zoomScale, currentShape);
-                        }
-                    })
                     attachEvents(currentShape);
                     drawAllFeaturePoints(shape.featurePoints, currentShape);
-                    //setZoomLevel(shape.zoomScale, currentShape);
+                    if (!shape.audit) {
+                        setZoomLevel(shape.zoomScale, currentShape);
+                    }                    
                     //attachEvents(currentShape);
                 }
             }
