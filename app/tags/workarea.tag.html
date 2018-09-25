@@ -183,6 +183,7 @@
                     e.stopPropagation();
                 } //click call back
             );
+
             currentTool.parent().on("mouseover",function(e){
                 if(currentTool.node.id === e.target.id){
                     imgSelected.shapes.forEach((item) => {
@@ -202,12 +203,14 @@
                         }
                     })
                 }
-            })
+            });
+            
             currentTool.parent().on("mouseout",function(e){
                 if(currentTool.node.id === e.target.id){
                     $(".selectToolS").remove();
                 }
-            })
+            });
+          
         }
 
         function moveOnlyOnMoveTool(el){
@@ -383,9 +386,12 @@
                             currentShape = poly;
                             break;
                     }
+
                     attachEvents(currentShape);
                     drawAllFeaturePoints(shape.featurePoints, currentShape);
-                    //setZoomLevel(shape.zoomScale, currentShape);
+                    if (!shape.audit) {
+                        setZoomLevel(shape.zoomScale, currentShape);
+                    }                    
                     //attachEvents(currentShape);
                     if (!shape.audit) {
                         setZoomLevel(shape.zoomScale, currentShape);

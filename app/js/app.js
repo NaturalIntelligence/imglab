@@ -46,7 +46,7 @@ function updateDimentions(imgFileSrc, imageDataObject) {
 
 function readImageBlob(blob, imgData) {
     var reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = function(e) {
         // var imgData = {
         //     name : fileName,
         //     src: e.target.result
@@ -54,7 +54,7 @@ function readImageBlob(blob, imgData) {
         imgData['src'] = e.target.result;
         updateDimentions(e.target.result, imgData);
     }
-    reader.onloadend = e => {
+    reader.onloadend = function(e) {
     }
     reader.readAsDataURL(blob);
 }
