@@ -10,27 +10,20 @@
       :width="imageWidth"
       :height="imageHeight">
     </div>
-    <tracking-lines></tracking-lines>
+    <!-- <tracking-lines></tracking-lines> -->
   </div>
 </template>
 
 <script>
-import TrackingLines from './tracking-lines/tracking-lines'
-import { mapGetters } from 'vuex'
+// import TrackingLines from './tracking-lines/tracking-lines'
+import { mapGetters } from 'vuex';
 
 export default {
-  components: {
-    'tracking-lines': TrackingLines
-  },
-  data() {
-    return {
-      imageWidth: 0,
-      imageHeight: 0
-    }
-  },
+  // components: {
+  //   'tracking-lines': TrackingLines
+  // },
   computed: {
-    ...mapGetters('images-config', {
-      imgSelected: 'getImageSelected',
+    ...mapGetters('actions-config', {
       copiedElements: 'getCopiedElements',
       selectedTool: 'getSelectedTool',
       selectedElement: 'getSelectedElement',
@@ -38,16 +31,20 @@ export default {
       alreadyDrawing: 'getAlreadyDrawing'
     }),
 
+    ...mapGetters('image-store', {
+      imageSelected: 'getImageSelected'
+    }),
+
     imageWidth() {
-      return this.imgSelected.size.width;
+      return (this.imageSelected && this.imageSelected.size.width) || 0;
     },
 
     imageHeight() {
-      return this.imgSelected.size.height;
+      return (this.imageSelected && this.imageSelected.size.height) || 0;
     },
 
     imageSrc() {
-      return this.imgSelected.src;
+      return (this.imageSelected && this.imageSelected.src) || "";
     }
   }
 }
