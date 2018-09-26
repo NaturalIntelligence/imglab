@@ -1,5 +1,9 @@
 import { Image } from "../../models/Image";
-import { Shape } from "../../models/Shape";
+import {
+  scaleShape,
+  scaleShapePoints,
+  scaleRbox
+} from "../../utils/scale-shapes";
 
 function getShape(state, imageName, shapeID) {
   return state.images[imageName].shapes.find(shape => {
@@ -33,124 +37,84 @@ const mutations = {
   },
 
   /**
-   * Sets selected image via name
-   * @param {String} name - image name
-   */
-  setImageSelected(state, { name }) {
-    if (name) {
-      state.imageSelected = name;
-    }
-  },
-
-  /**
    * Adds a shape to image and returns a shape data object
    */
-  // attachShapeToImage(id, type, bbox, points){
-  //   var shape = scaleShape(id, type, bbox, points, 1 / imgSelected.size.imageScale);
-  //   labellingData[ imgSelected.name ].shapes.push(shape);
-  //   return shape;
-  // },
-
-  /**
-   * Update shape label
-   */
-  updateLabel(newLabel) {
-    this.label = newLabel;
+  attachShapeToImage(state, { id, type, rbox, points }) {
+    var shape = scaleShape(
+      id,
+      type,
+      rbox,
+      points,
+      1 / state.imageSelected.size.imageScale
+    );
+    state.images[state.imageSelected.name].shapes.push(shape);
+    return shape;
   },
-
-  // updateFeaturePointInStore(shapeId, pointid, position, newLabel){
-  //   var shape = getShape(shapeId);
-  //   var scale = 1 / imgSelected.size.imageScale;
-  //   var featurePoints = shape.featurePoints;
-  //   var index = indexOf(featurePoints, "id", pointid);
-  //
-  //   if (position) {
-  //     featurePoints[index].x = position.cx * scale;
-  //     featurePoints[index].y = position.cy * scale;
-  //   }
-  //
-  //   if (newLabel) {
-  //     featurePoints[index].label = newLabel
-  //   }
-  // },
-
-  /**
-   * Returns a shape if shapeID exists, else -1
-   * @param {String} shapeID
-   * @returns {Shape | Number} - returns shape if exists, else -1
-   */
-  // getShapeByID(shapeID){
-  //   return this.shapes.find(shape => {
-  //     return shape.id === shapeId;
-  //   });
-  // },
 
   /**
    * Removes shape from image
    * @param {String} shapeID
    */
-  detachShape(shapeID) {
-    var index = this.shapes.findIndex(shape => {
+  detachShapeFromImage(state, { imageName, shapeID }) {
+    let name = imageName || state.imageSelected.name;
+    var index = state.images[name].shapes.findIndex(shape => {
       return shape.id === shapeID;
     });
-    this.shapes.splice(index, 1);
+
+    if (index !== -1) {
+      this.shapes.splice(index, 1);
+    }
   },
 
   /**
-   * Scales the rbox of shape according to scale
-   * @param {Object} bbox - rbox of shape
-   * @param {number} scale
-   * @returns {Object} scaled rbox
+   * Sets selected image via name
+   * @param {String} name - image name
    */
-  scaleBbox(bbox, scale) {
-    return {
-      x: bbox.x * scale,
-      y: bbox.y * scale,
-      cx: (bbox.cx || 0) * scale,
-      cy: (bbox.cy || 0) * scale,
-      w: bbox.w * scale,
-      h: bbox.h * scale,
-      width: bbox.w * scale,
-      height: bbox.h * scale
-    };
+  setImageSelected(state, { name }) {
+    if (name) {
+      state.imageSelected = state.images[name];
+    }
   },
 
   /**
-   * Scales the feature points according to scale
-   * @param {featurePoints[]} featurePoints - array of featurePoints
-   * @param {number} scale
-   * @returns {featurePoints[]} scaled featurePoints
+   * Update shape label
    */
-  scaleFeaturePoints(featurePoints, scale) {
-    if (!featurePoints) return;
+  updateLabel(status, { shapeID, newLabel }) {
+    let shape = getShape(state, state.imageSelected.name, shapeID);
+    if (shape) {
+      shape.label = newLabel;
+    }
+  },
 
-    return featurePoints.map(point => {
-      return {
-        x: point.x * scale,
-        y: point.y * scale,
-        label: point.label,
-        id: point.id
-      };
+  updateFeaturePoints(state, { shapeID, pointID, position, newLabel }) {
+    var shape = getShape(state, state.imageSelected.name, shapeID);
+    var scale = 1 / state.imageSelected.size.imageScale;
+    var featurePoints = shape.featurePoints;
+    var index = featurePoints.findIndex(point => {
+      return point.id == pointID;
     });
+
+    if (position) {
+      featurePoints[index].x = position.cx * scale;
+      featurePoints[index].y = position.cy * scale;
+    }
+
+    if (newLabel) {
+      featurePoints[index].label = newLabel;
+    }
+  },
+
+  updateShapeDetailInStore(state, { shapeID, rbox, points }) {
+    var shapes = state.images[state.imageSelected.name].shapes;
+    var shape = getShape(state, state.imageSelected.name, shapeID);
+    var index = shapes.findIndex(shape => {
+      return shape.id === shapeID;
+    });
+    var scale = 1 / state.imageSelected.size.imageScale;
+    rbox && (shapes[index].rbox = scaleRbox(rbox, scale));
+    points &&
+      (shapes[index].points = scaleShapePoints(points, scale, shape.type));
   }
-
-  // updateShapeDetailInStore(shapeId, bbox, points){
-  //   var shapes = labellingData[ imgSelected.name ].shapes;
-  //   var shape = getShape(shapeId);
-  //   var index = indexOf(shapes, "id", shapeId);
-  //   var scale = 1 / imgSelected.size.imageScale;
-  //   bbox && (shapes[index].bbox = scaleBbox(bbox, scale));
-  //   points && (shapes[index].points = scaleShapePoints(points, scale, shape.type));
-  // },
-
-  /**
-   * Adds a shape into labelling data and returns a shape object
-   */
-  // attachShapeToImg(id, type, bbox, points){
-  //   var shape = scaleShape(id, type, bbox, points, 1 / imgSelected.size.imageScale);
-  //   labellingData[ imgSelected.name ].shapes.push(shape);
-  //   return shape;
-  // }
 };
 
 const getters = {
@@ -166,8 +130,8 @@ const getters = {
    * Returns selected image
    * @returns {Image | undefined} selected image, else undefined
    */
-  getImageSelected: (state, getters) => {
-    return getters.getImageByName(state.imageSelected);
+  getImageSelected: state => {
+    return state.imageSelected;
   },
 
   /**
@@ -183,20 +147,14 @@ const getters = {
     name => {
       return state.images[name];
     },
+
   /**
-   * Gets image property by supplying image name and image prop
-   * @returns {Function(): any} takes
+   * Gers shape by id
+   * @returns {Function(): Shape} takes a shapeID and returns a shape
    */
-  getImageProp: state =>
-    /**
-     * Returns image property
-     * @param {String} name - image names
-     * @param {String} prop - prop name
-     * @returns {any} any property type if it exists, else undefined
-     */
-    (name, prop) => {
-      return state.images[name][prop];
-    }
+  getShapeByID: state => shapeID => {
+    return getShape(state, state.imageSelected.name, shapeID);
+  }
 };
 
 export default {
