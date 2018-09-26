@@ -1,5 +1,4 @@
 const state = {
-  imgSelected: "",
   selectedElements: [],
   copiedElements: [],
   selectedTool: null,
@@ -8,14 +7,6 @@ const state = {
 };
 
 const mutations = {
-  /**
-   * Sets selected image by name
-   * @param {string} imgSelected - name of image selected
-   */
-  setImgSelected(state, { imgSelected = "" } = {}) {
-    state.imgSelected = imgSelected;
-  },
-
   /**
    * Sets the copied elements into an array
    * @param {shape[]} copiedElements - array of shape data
@@ -58,7 +49,6 @@ const mutations = {
 
   /**
    * Intialize the state of the image
-   * @param {string} imgSelected - name of the selected image
    * @param {shape[]} copiedElements - array of copied shapes
    * @param {object} selectedTool - selected tool
    * @param {SVGElement} selectedElement - selected shape, used to show label data
@@ -68,7 +58,6 @@ const mutations = {
   init(
     state,
     {
-      imgSelected = "",
       copiedElements = [],
       selectedTool = null,
       selectedElement = null,
@@ -77,7 +66,6 @@ const mutations = {
     } = {}
   ) {
     state = {
-      imgSelected,
       copiedElements,
       selectedTool,
       selectedElement,
@@ -87,15 +75,7 @@ const mutations = {
   }
 };
 
-const getter = {
-  /**
-   * Returns iamge selected
-   * @returns {string} image selected
-   */
-  getImgSelected: state => {
-    return state.imgSelected;
-  },
-
+const getters = {
   /**
    * Returns an array of copied elements
    * @returns {shape[]} array of copied elements
@@ -149,5 +129,5 @@ export default {
   namespaced: true,
   state,
   mutations,
-  getter
+  getters
 };

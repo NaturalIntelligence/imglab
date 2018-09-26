@@ -1,13 +1,15 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import appConfig from "./modules/app-config";
-import imagesConfig from "./modules/imagesconfig";
+import actionConfig from "./modules/actions-config";
+import imageStore from "./modules/image-store";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    appConfig,
-    imagesConfig
+    "app-config": appConfig,
+    "action-config": actionConfig,
+    "image-store": imageStore
   }
 });
