@@ -83,13 +83,30 @@
 
         tag.selectme = function (e){
             //TODO: should it unseect all the tools or tools in current toolbox
-            $(".tool-selected").removeClass("tool-selected");
             var toolDetail = tools[opts.tools][e.item.toolid];
             if(toolDetail.selectAction){
                 toolDetail.selectAction();
             }else{
-                selectedTool = toolDetail;
-                $(e.currentTarget).addClass("tool-selected");
+                if(pluginsStore.beenest.userInfo){
+                    if(pluginsStore.beenest.userInfo ==="rect" && toolDetail.type === "count"){
+                        alert("当前任务无法执行该操作");
+                    }else if(pluginsStore.beenest.userInfo ==="rect" && toolDetail.type !== "count"){
+                        $(".tool-selected").removeClass("tool-selected");
+                        selectedTool = toolDetail;
+                        $(e.currentTarget).addClass("tool-selected");
+                    }else if(pluginsStore.beenest.userInfo ==="count" && toolDetail.type === "rect"){
+                        alert("当前任务无法执行该操作");
+                    }else if(pluginsStore.beenest.userInfo ==="count" && toolDetail.type !== "rect"){
+                        $(".tool-selected").removeClass("tool-selected");
+                        selectedTool = toolDetail;
+                        $(e.currentTarget).addClass("tool-selected");
+                    }
+                }else{
+                    $(".tool-selected").removeClass("tool-selected");
+                    selectedTool = toolDetail;
+                    $(e.currentTarget).addClass("tool-selected");
+                }
+
             }
 
             if(toolDetail.actions){

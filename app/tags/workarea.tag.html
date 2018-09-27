@@ -141,7 +141,6 @@
         });
 
         function attachEvents(currentTool) {
-
             moveOnlyOnMoveTool(currentTool);
 
             onMouse(currentTool.parent(), function (e) { //drag callback : doesn't fire on click
@@ -153,6 +152,7 @@
             });
             currentTool.parent().on('click', function (e) {
                     if (selectedTool && selectedTool.type === "point") {
+                        
                         var point = selectedTool.create(e, currentTool);
                         attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));//in store
                         attachEventsToFeaturePoint(point, currentTool);
@@ -181,9 +181,14 @@
                         })
                     }
                     e.stopPropagation();
-                } //click call back
-            );
-
+            });
+            // $("#work-canvas").on("click", function(e){
+            //     var point = selectedTool.create(e, currentTool);
+            //     attachPointToShape(currentTool.node.id, point.node.id, point.rbox(myCanvas));//in store
+            //     attachEventsToFeaturePoint(point, currentTool);
+            //     console.log(1111)
+            // })
+            
             currentTool.parent().on("mouseover",function(e){
                 if(currentTool.node.id === e.target.id){
                     imgSelected.shapes.forEach((item) => {
@@ -340,57 +345,71 @@
                 for (var shapeIndex in imgSelected.shapes) {
                     var shape = imgSelected.shapes[shapeIndex];
                     var currentShape;
-                    switch (shape.type) {
-                        case "rect":
-                            var rect = myCanvas.nested()
-                                .rect(shape.points[2], shape.points[3])
-                                .move(shape.points[0], shape.points[1])
-                                .addClass('labelbox shape')
-                                .id(shape.id)
-                                .resize();
-                            rect.parent().draggable();
-                            //Add feature points
-                            currentShape = rect;
-
-                            break;
-                        case "circle":
-                            var circle = myCanvas.nested()
-                                .circle().radius(shape.points[2])
-                                .attr("cx", shape.points[0])
-                                .attr("cy", shape.points[1])
-                                .addClass('labelcircle shape')
-                                .id(shape.id)
-                                .resize();
-                            circle.parent().draggable();
-                            //Add feature points
-                            currentShape = circle;
-                            break;
-                            /* case "ellipse":
-                                var ellipse = myCanvas.nested()
-                                    .ellipse().radius(shape.points[2], shape.points[3])
-                                    .move(shape.points[0],shape.points[1])
-                                    .addClass('labelellipse shape')
+                    if(shape.beenrst){
+                        var rect = myCanvas.nested()
+                            .rect(shape.points[2], shape.points[3])
+                            .move(shape.points[0], shape.points[1])
+                            .addClass('labelbox shape')
+                            .id(shape.id)
+                            .resize();
+                        rect.parent().draggable();
+                        //Add feature points
+                        currentShape = rect;
+                    }else{
+                        switch (shape.type) {
+                            case "rect":
+                                var rect = myCanvas.nested()
+                                    .rect(shape.points[2], shape.points[3])
+                                    .move(shape.points[0], shape.points[1])
+                                    .addClass('labelbox shape')
+                                    .id(shape.id)
                                     .resize();
-                                ellipse.parent().draggable();
-                                attachEvents(ellipse);
-                                //Add feature points */
-                        case "polygon":
-                            var poly = myCanvas.nested()
-                                .polygon(shape.points)
-                                //.move(shape.points[0],shape.points[1])
-                                .addClass('labelpolygon shape')
-                                .id(shape.id)
-                                .resize();
-                            poly.parent().draggable();
-                            //Add feature points
-                            currentShape = poly;
-                            break;
+                                rect.parent().draggable();
+                                //Add feature points
+                                currentShape = rect;
+
+                                break;
+                            case "circle":
+                                var circle = myCanvas.nested()
+                                    .circle().radius(shape.points[2])
+                                    .attr("cx", shape.points[0])
+                                    .attr("cy", shape.points[1])
+                                    .addClass('labelcircle shape')
+                                    .id(shape.id)
+                                    .resize();
+                                circle.parent().draggable();
+                                //Add feature points
+                                currentShape = circle;
+                                break;
+                                /* case "ellipse":
+                                    var ellipse = myCanvas.nested()
+                                        .ellipse().radius(shape.points[2], shape.points[3])
+                                        .move(shape.points[0],shape.points[1])
+                                        .addClass('labelellipse shape')
+                                        .resize();
+                                    ellipse.parent().draggable();
+                                    attachEvents(ellipse);
+                                    //Add feature points */
+                            case "polygon":
+                                var poly = myCanvas.nested()
+                                    .polygon(shape.points)
+                                    //.move(shape.points[0],shape.points[1])
+                                    .addClass('labelpolygon shape')
+                                    .id(shape.id)
+                                    .resize();
+                                poly.parent().draggable();
+                                //Add feature points
+                                currentShape = poly;
+                                break;
+                        }
                     }
 
                     attachEvents(currentShape);
                     drawAllFeaturePoints(shape.featurePoints, currentShape);
                     if (!shape.audit) {
-                        setZoomLevel(shape.zoomScale, currentShape);
+                        if(!shape.beenrst){
+                            setZoomLevel(shape.zoomScale, currentShape);
+                        }
                     }
                 }
             }

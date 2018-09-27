@@ -38,6 +38,11 @@ function updateDimentions(imgFileSrc, imageDataObject) {
             scaledWidth: this.width,
             scaledHeight: this.height,
             imageScale: 1
+        }//给全局添加画框
+        if(imageDataObject.poinsGloab){
+            imageDataObject.poinsGloab.forEach((item) => {
+                item.points = [0, 0, imageDataObject.size.width, imageDataObject.size.height]
+            })
         }
         addImgToStore(imageDataObject);
     }
@@ -47,10 +52,6 @@ function updateDimentions(imgFileSrc, imageDataObject) {
 function readImageBlob(blob, imgData) {
     var reader = new FileReader();
     reader.onload = function(e) {
-        // var imgData = {
-        //     name : fileName,
-        //     src: e.target.result
-        // };
         imgData['src'] = e.target.result;
         updateDimentions(e.target.result, imgData);
     }

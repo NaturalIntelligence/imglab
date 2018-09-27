@@ -1,40 +1,76 @@
 <action-beenest>
-    <div>
-        <input onclick={fetchWorks} type="button" name="fetchWorksBtn" id="fetchWorksBtn" value="请求任务" />
+    <div> 
+        <select name="select" id="pro_areaCode">
+            <option value="count">圆点标记</option>
+            <option value="rect" selected="selected">选框标记</option>
+        </select>
+        <input onclick={fetchWorks} name="fetchWorks" id="fetchWorks" type="button" value="请求任务">
         <input onclick={submitWork} type="button" name="submitWorkBtn" id="submitWorkBtn" value="提交" />
-        <input onclick={cancelWork} type="button" name="cancelWorkBtn" id="cancelWorkBtn" value="放弃" />
+        <input onclick={cancelWork} type="button" name="cancelWorkBtn" id="cancelWorkBtn" value="放弃" />     
     </div>
     <script>
         this.fetchWorks = function(e){
             if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
-
                 var postData = {
-                            type: "rect",
-                            num: 4
-                        };
-
+                    type: $("#pro_areaCode").val(),
+                    num: 4
+                };
                 var instance = axiosClient();
-                instance.post('/works/fetch', postData)
-                .then(function(response) {
-                        var works = response.data;
-                        if (works.length > 0) {
-                            works.forEach(function(v) {
-                                var workId = v.id;
-                                instance.get('/works/'+workId+'/file', {
-                                    responseType: 'blob'
-                                }).then(function(response) {
-                                    readImageBlob(response.data, {name: workId});
-                                });
-                            });                            
-                        } else{
-                            alert('暂时没有任务');
-                        }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                        alert('请求失败，请检查令牌是否有效。');
-                });
+                if(postData.type === "rect"){
 
+                    instance.post('/works/fetch', postData)
+                    .then(function(response) {
+                            var works = response.data;
+                            if (works.length > 0) {
+                                works.forEach(function(v,index) {
+                                    var workId = v.id;
+                                    instance.get('/works/'+workId+'/file', {
+                                        responseType: 'blob'
+                                    }).then(function(response) {
+                                        readImageBlob(response.data, {name: workId});
+                                    });
+                                });
+                                pluginsStore.beenest.userInfo = postData.type;//记录用户请求的类型
+                            } else{
+                                alert('暂时没有任务');
+                            }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                            alert('请求失败，请检查令牌是否有效。');
+                    });
+
+                }else if(postData.type === "count"){
+
+                    instance.post('/works/fetch', postData)
+                    .then(function(response) {
+                            var works = response.data;
+                            if (works.length > 0) {
+                                works.forEach(function(v,index) {
+                                    var workId = v.id;
+                                    instance.get('/works/'+workId+'/file', {
+                                        responseType: 'blob'
+                                    }).then(function(response) {
+                                        var poinsGloab = []
+                                        poinsGloab.push({
+                                                "type":"rect",
+                                                "id":workId+"_"+index,
+                                                "beenrst":true
+                                        })
+                                        readImageBlob(response.data, {name: workId, poinsGloab: poinsGloab});
+                                    });
+                                });
+                                pluginsStore.beenest.userInfo = postData.type;                         
+                            } else{
+                                alert('暂时没有任务');
+                            }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                            alert('请求失败，请检查令牌是否有效。');
+                    });
+
+                }
             }
 
         }
@@ -47,26 +83,26 @@
                 // console.log(imgSelected)
                 var image = labellingData[ selectedImageName ];
                 var labels = [];
-		        for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
-		        	// if (image.shapes.length !== 1) {
-		        	// 	alert('只允许提交一个目标');
-		        	// } else {
-			            var shape = image.shapes[ shape_i ];
-			            var labelData = [
-				            {
-				            	x: shape.bbox.x,
-				            	y: shape.bbox.y
-				            },
-				            {
-				            	x: shape.bbox.x + shape.bbox.w,
-				            	y: shape.bbox.y + shape.bbox.h 
-				            }
-			            ];
+                if(pluginsStore.beenest.userInfo === "rect"){
+                    for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
+                        var shape = image.shapes[ shape_i ];
+                        var labelData = [
+                            {
+                                x: shape.bbox.x,
+                                y: shape.bbox.y
+                            },
+                            {
+                                x: shape.bbox.x + shape.bbox.w,
+                                y: shape.bbox.y + shape.bbox.h 
+                            }
+                        ];
                         labels.push(labelData);
-
-		        	// }
-		        }
-
+                    }
+                }else if(pluginsStore.beenest.userInfo === "count"){
+                    image.shapes[0].featurePoints.forEach((item) => {
+                        labels.push({x:item.x, y:item.y})
+                    })
+                }
                 if (labels.length > 0) {
                     var instance = axiosClient();
                     instance.post('/works', {id: selectedImageName, result: labels})
@@ -82,6 +118,8 @@
                             console.log(error);
                         // }
                       });
+                }else{
+                    alert("请标注对相应的信息")
                 }
 
         	}
