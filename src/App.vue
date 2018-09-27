@@ -38,8 +38,8 @@
           <div>
             <workarea></workarea>
           </div>
-          <div class="grey-border mt-auto" style="height: 100px; width: 100%; margin: 0px 2px;">
-            <image-slider thumbnail-width="90px" class="mt-auto"></image-slider>
+          <div class="grey-border" style="height: 100px; width: 100%; margin: 0px 2px;">
+            <image-slider thumbnail-width="90px"></image-slider>
           </div>
         </div>
         <div id="sidebar" class="p-2 overlay-color grey-border" style="width: 350px;">

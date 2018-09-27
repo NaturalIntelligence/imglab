@@ -1,27 +1,47 @@
 <template lang="html">
-  <div id="canvas-container">
-    <img
-      id="img"
-      :src="imageSrc"
-      :width="imageWidth"
-      :height="imageHeight" />
+  <div
+    id="canvas-container">
     <div
-      id="work-canvas"
-      :width="imageWidth"
-      :height="imageHeight">
+      class="canvas-wrapper"
+      :style="{ width: (imageWidth + 50) + 'px', height: (imageHeight + 50) + 'px' }">
+      <img
+        id="img"
+        :src="imageSrc"
+        :style="{ width: imageWidth + 'px', height: imageHeight + 'px' }"
+      />
+      <div
+        id="work-canvas"
+        ref="workcanvas"
+        :style="{ width: imageWidth + 'px', height: imageHeight + 'px' }"
+        @mouseover="showTrackingLine = true"
+        @mousemove="showPosition"
+        @mouseout="showTrackingLine = false">
+        <tracking-lines
+          :show="showTrackingLine"
+          :xPos="xPos"
+          :yPos="yPos"
+        ></tracking-lines>
+      </div>
     </div>
-    <!-- <tracking-lines></tracking-lines> -->
   </div>
 </template>
 
 <script>
-// import TrackingLines from './tracking-lines/tracking-lines'
+import TrackingLines from './tracking-lines/tracking-lines'
 import { mapGetters } from 'vuex';
+import { getCoordinates } from "../utils/app";
 
 export default {
-  // components: {
-  //   'tracking-lines': TrackingLines
-  // },
+  components: {
+    'tracking-lines': TrackingLines
+  },
+  data() {
+    return {
+      showTrackingLine: false,
+      xPos: 0,
+      yPos: 0
+    };
+  },
   computed: {
     ...mapGetters('actions-config', {
       copiedElements: 'getCopiedElements',
@@ -46,9 +66,35 @@ export default {
     imageSrc() {
       return (this.imageSelected && this.imageSelected.src) || "";
     }
+  },
+  methods: {
+    showPosition(event) {
+      let workcanvas = this.$refs.workcanvas;
+      let coordinates = getCoordinates(event, workcanvas);
+
+      this.xPos = coordinates.x;
+      this.yPos = coordinates.y;
+    }
   }
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+  #canvas-container {
+    height: calc(100vh - 190px);
+    display: block;
+    overflow: auto;
+    position: relative;
+  }
+
+  #work-canvas {
+    position: absolute;
+    z-index: 1;
+  }
+
+  #img {
+  	position: absolute;
+  	top: 0px;
+  	left: 0px;
+  }
 </style>
