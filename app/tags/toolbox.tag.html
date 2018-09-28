@@ -87,26 +87,13 @@
             if(toolDetail.selectAction){
                 toolDetail.selectAction();
             }else{
-                if(pluginsStore.beenest.userInfo){
-                    if(pluginsStore.beenest.userInfo ==="rect" && toolDetail.type === "point"){
-                        alert("当前任务无法执行该操作");
-                    }else if(pluginsStore.beenest.userInfo ==="rect" && toolDetail.type !== "point"){
-                        $(".tool-selected").removeClass("tool-selected");
-                        selectedTool = toolDetail;
-                        $(e.currentTarget).addClass("tool-selected");
-                    }else if(pluginsStore.beenest.userInfo ==="count" && toolDetail.type === "rect"){
-                        alert("当前任务无法执行该操作");
-                    }else if(pluginsStore.beenest.userInfo ==="count" && toolDetail.type !== "rect"){
-                        $(".tool-selected").removeClass("tool-selected");
-                        selectedTool = toolDetail;
-                        $(e.currentTarget).addClass("tool-selected");
-                    }
-                }else{
+                if((imgSelected.workType === 'count' && toolDetail.type === "rect") || (imgSelected.workType === 'rect' && toolDetail.type === "point")) {
+                    alert("当前任务无法执行该操作");
+                } else {
                     $(".tool-selected").removeClass("tool-selected");
                     selectedTool = toolDetail;
                     $(e.currentTarget).addClass("tool-selected");
                 }
-
             }
 
             if(toolDetail.actions){

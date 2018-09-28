@@ -33,7 +33,7 @@
                                             "id" : v.id + '_' + shapeIndex,
                                             "type" : 'rect',
                                             "points": [rect[0].x, rect[0].y, rect[1].x - rect[0].x, rect[1].y - rect[0].y],
-                                            "audit" :true
+                                            "editable": false
                                         });
                                     }
                                     readImageBlob(response.data, {name: reviewId, preloadedShapes: preloadedShapes});

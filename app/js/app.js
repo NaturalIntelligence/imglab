@@ -38,11 +38,18 @@ function updateDimentions(imgFileSrc, imageDataObject) {
             scaledWidth: this.width,
             scaledHeight: this.height,
             imageScale: 1
-        }//给全局添加画框
-        if(imageDataObject.poinsGloab){
-            imageDataObject.poinsGloab.forEach((item) => {
-                item.points = [0, 0, imageDataObject.size.width, imageDataObject.size.height]
-            })
+        }
+        //给全局添加画框
+        if(imageDataObject.workType === 'count'){
+            if (!imageDataObject.preloadedShapes) {
+                imageDataObject.preloadedShapes = [];
+            }
+            imageDataObject.preloadedShapes.push({
+                                            "id" : imageDataObject.name + '_global',
+                                            "type" : 'rect',
+                                            "points": [0, 0, imageDataObject.size.width, imageDataObject.size.height],
+                                            "editable": false
+                                        });
         }
         addImgToStore(imageDataObject);
     }
