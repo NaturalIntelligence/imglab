@@ -6,7 +6,7 @@ var tools = {
             desp : "Create a feature point inside the concave polygon or boundary box",
             icon : "point.svg",
             drawable : true,
-            actions: ["landmark"],
+            // actions: ["landmark"],
             create : function(e,container){
                 var canvasOffset = myCanvas.node.getBoundingClientRect();
                 return getPointToDraw(e,container,canvasOffset);
