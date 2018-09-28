@@ -1,8 +1,8 @@
 <action-beenest>
     <div> 
         <select onchange={onTypeChange} name="select" id="pro_areaCode">
-            <option value="count">圆点标记</option>
-            <option value="rect">选框标记</option>
+            <option value="count">数点任务</option>
+            <option value="rect">方框任务</option>
         </select>
         <input onclick={fetchWorks} name="fetchWorks" id="fetchWorks" type="button" value="请求任务">
         <input onclick={submitWork} type="button" name="submitWorkBtn" id="submitWorkBtn" value="提交" />
@@ -14,7 +14,7 @@
         tag.selectedType = 'count';
 
         this.onTypeChange = function(e) {
-            console.log(e.target.value);
+            // console.log(e.target.value);
             tag.selectedType = e.target.value;
         }
 
@@ -42,8 +42,14 @@
                         }
                 })
                 .catch(function (error) {
-                    console.log(error);
-                        alert('请求失败，请检查令牌是否有效。');
+                    // console.log(error);
+                    if (error.response.status === 403 && error.response.data.error.code === "16") {
+                        alert('尚余其它类型任务未完成，无法请求此类型新任务。');
+                    } else if (error.response.status === 401) {
+                        alert('无效令牌或已过期。');
+                    } else {
+                        alert('系统错误，请稍候重试。');
+                    }
                 });
             }
 
@@ -85,11 +91,11 @@
                             deleteAndNextImage(selectedImageName);
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        // console.log(error);
                         // if (error.response.status === 403) {
                             clearAllImages();
                             alert('提交失败（任务超时或格式错误）');
-                            console.log(error);
+                            // console.log(error);
                         // }
                       });
                 }else{

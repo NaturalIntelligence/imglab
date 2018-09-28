@@ -2,7 +2,7 @@ var tools = {
     labelling : {
         "tool-point" : {
             type: "point",
-            title  : "Point",
+            title  : "数点标注",
             desp : "Create a feature point inside the concave polygon or boundary box",
             icon : "point.svg",
             drawable : true,
