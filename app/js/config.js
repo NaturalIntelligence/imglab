@@ -1,20 +1,20 @@
 var tools = {
     labelling : {
-        // "tool-point" : {
-        //     type: "point",
-        //     title  : "Point",
-        //     desp : "Create a feature point inside the concave polygon or boundary box",
-        //     icon : "point.svg",
-        //     drawable : true,
-        //     actions: ["landmark"],
-        //     create : function(e,container){
-        //         var canvasOffset = myCanvas.node.getBoundingClientRect();
-        //         return getPointToDraw(e,container,canvasOffset);
-        //     },
-        //     validate: function(el){
-        //         return true;
-        //     }
-        // },
+        "tool-point" : {
+            type: "point",
+            title  : "Point",
+            desp : "Create a feature point inside the concave polygon or boundary box",
+            icon : "point.svg",
+            drawable : true,
+            actions: ["landmark"],
+            create : function(e,container){
+                var canvasOffset = myCanvas.node.getBoundingClientRect();
+                return getPointToDraw(e,container,canvasOffset);
+            },
+            validate: function(el){
+                return true;
+            }
+        },
         // "tool-circle" : {
         //     type: "circle",
         //     title  : "Circle",
@@ -161,8 +161,9 @@ var pluginsStore = {
     // "facepp" : {
     // },
     "beenest": {
-        baseURL: "https://api.todview.com:8080/v1/"
-    }
+        baseURL: "https://api.todview.com:8080/v1/",
+        userInfo:null
+    },
 }
 
 var suggestedCategories = ["dog", "cat", "car", "vehicle", "truck", "animal", "building", "person"];
