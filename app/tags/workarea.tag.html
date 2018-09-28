@@ -165,18 +165,18 @@
                         selectedElements.push(currentTool);
                     } else {
                         imgSelected.shapes.forEach((item) => {
-                            if(item.audit){
-
-                            }else{
-                                if (!e.ctrlKey) { //deselect rest selected elements
-                                    deselectAll();
-                                    riot.mount('label-panel', { id : currentTool.node.id })
+                            if(!item.audit){
+                                if(!item.beenrst){
+                                    if (!e.ctrlKey) { //deselect rest selected elements
+                                        deselectAll();
+                                        riot.mount('label-panel', { id : currentTool.node.id })
+                                    }
+                                    //select currnt element
+                                    currentTool.selectize({
+                                        rotationPoint: false
+                                    });
+                                    selectedElements.push(currentTool); 
                                 }
-                                //select currnt element
-                                currentTool.selectize({
-                                    rotationPoint: false
-                                });
-                                selectedElements.push(currentTool); 
                             }
                         })
                     }
@@ -349,12 +349,15 @@
                         var rect = myCanvas.nested()
                             .rect(shape.points[2], shape.points[3])
                             .move(shape.points[0], shape.points[1])
-                            .addClass('labelbox shape')
+                            // .addClass('labelbox shape')将样式换成普通的
+                            .addClass("labelboxPoint shape")
                             .id(shape.id)
                             .resize();
                         rect.parent().draggable();
                         //Add feature points
+                        // rect.addClass("labelboxPoint shape")
                         currentShape = rect;
+
                     }else{
                         switch (shape.type) {
                             case "rect":
@@ -440,4 +443,9 @@
             }
         }
     </script>
+    <style>
+        .labelboxPoint{
+            fill-opacity:0.1;
+        }
+    </style>
 </workarea>
