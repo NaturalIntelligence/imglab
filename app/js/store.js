@@ -78,7 +78,7 @@ function attachShapeToImg(id, type, bbox, points, img, editable = true, featureP
             "h":  0        },
         "attributes": [],
         "tags": [],
-        "featurePoints": featurePoints || [],
+        "featurePoints": featurePoints,
         "zoomScale" : 1,
         "defaultZoomScale": 1/targetImg.size.imageScale//this scale is in relation with the image scale
     } );
