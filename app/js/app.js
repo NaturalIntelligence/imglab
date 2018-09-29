@@ -13,8 +13,8 @@ function showSnackBar(msg) {
 //get mouse cordinates on image
 function getCordinates(event, element) {
     var rect = element[0].getBoundingClientRect();
-    var x = event.pageX - rect.left.toFixed(0);
-    var y = event.pageY - rect.top.toFixed(0);
+    var x = event.pageX - rect.left;
+    var y = event.pageY - rect.top;
     return {
         x: x,
         y: y
@@ -50,6 +50,9 @@ function updateDimentions(imgFileSrc, imageDataObject) {
                                             "points": [0, 0, imageDataObject.size.width, imageDataObject.size.height],
                                             "editable": false
                                         });
+            if(imageDataObject.point_s){
+                imageDataObject.preloadedShapes[0].featurePoints = imageDataObject.point_s;
+            }
         }
         addImgToStore(imageDataObject);
     }

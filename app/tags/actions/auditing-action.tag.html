@@ -1,17 +1,29 @@
 <action-auditing>
     <div>
+        <select onchange={onTypeChange} name="select" id="pro_areaCode">
+            <option value="count">圆点审核</option>
+            <option value="rect">选框审核</option>
+        </select>
         <input type="button" onclick={fetchAudit} value="请求审核" name="fetchAuditBtn" id="fetchAuditBtn"/>
         <input type="button" onclick={approve} value="通过" name="adoptAuditBtn" id="adoptAuditBtn"/>
         <input type="button" onclick={reject} value="驳回" name="rejectAuditBtn" id="rejectAuditBtn"/>
         <input type="button" onclick={cancel} value="放弃" name="cancelAuditBtn" id="cancelAuditBtn"/>
     </div>
     <script>
+
+        var tag = this;
+        tag.selectedType = 'count';
+
+        this.onTypeChange = function(e) {
+            tag.selectedType = e.target.value;
+        }
+
         this.fetchAudit = function(e){
 
             if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
 
                  var postData = {
-                            type: "rect", //count
+                            type: tag.selectedType,
                             num: 4
                         };
 
@@ -27,17 +39,24 @@
                                     responseType: 'blob'
                                 }).then(function(response) {
                                     var preloadedShapes = [];
-                                    for (var shapeIndex in v.work.result) {
-                                        var rect = v.work.result[shapeIndex];
-                                        preloadedShapes.push({
-                                            "id" : v.id + '_' + shapeIndex,
-                                            "type" : 'rect',
-                                            "points": [rect[0].x, rect[0].y, rect[1].x - rect[0].x, rect[1].y - rect[0].y],
-                                            "editable": false
-                                        });
+                                    if(postData.type === "rect"){
+                                        for (var shapeIndex in v.work.result) {
+                                            var rect = v.work.result[shapeIndex];
+                                            preloadedShapes.push({
+                                                "id" : v.id + '_' + shapeIndex,
+                                                "type" : 'rect',
+                                                "points": [rect[0].x, rect[0].y, rect[1].x - rect[0].x, rect[1].y - rect[0].y],
+                                                "editable": false
+                                            });
+                                        }
+                                        readImageBlob(response.data, {name: reviewId, preloadedShapes: preloadedShapes});
+                                    }else if(postData.type === "count"){
+                                        var point_s = [];
+                                        v.work.result.forEach((item) => {
+                                            point_s.push({x : item.x , y : item.y});
+                                        })
+                                        readImageBlob(response.data, {name: reviewId, workType: postData.type, point_s : point_s});
                                     }
-                                    readImageBlob(response.data, {name: reviewId, preloadedShapes: preloadedShapes});
-
                                 })
                             });                            
                         } else{

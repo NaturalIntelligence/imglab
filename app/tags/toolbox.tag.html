@@ -93,10 +93,11 @@
                     $(".tool-selected").removeClass("tool-selected");
                     selectedTool = toolDetail;
                     $(e.currentTarget).addClass("tool-selected");
-                    if(toolDetail.actions){
-                        riot.mount('actionbar', { actions: toolDetail.actions});
-                    }
                 }
+            }
+
+            if(toolDetail.actions){
+                riot.mount('actionbar', { actions: toolDetail.actions});
             }
             
         }

@@ -63,7 +63,7 @@ function updateShapeDetailInStore(shapeId, bbox, points){
     bbox && (shapes[index].bbox = bbox);
     points && (shapes[index].points = points);
 }
-function attachShapeToImg(id, type, bbox, points, img, editable){
+function attachShapeToImg(id, type, bbox, points, img, editable = true, featurePoints = []){
     var targetImg = img ? img : imgSelected;
     labellingData[ targetImg.name ].shapes.push( {
         "id" : id,
@@ -78,7 +78,7 @@ function attachShapeToImg(id, type, bbox, points, img, editable){
             "h":  0        },
         "attributes": [],
         "tags": [],
-        "featurePoints": [],
+        "featurePoints": featurePoints || [],
         "zoomScale" : 1,
         "defaultZoomScale": 1/targetImg.size.imageScale//this scale is in relation with the image scale
     } );
@@ -103,7 +103,7 @@ function addImgToStore(imageDataObject) {
         if (imageDataObject.preloadedShapes) {
             for (var shapeIndex in imageDataObject.preloadedShapes) {
                 var shape = imageDataObject.preloadedShapes[shapeIndex];
-                attachShapeToImg(shape.id, shape.type, null, shape.points, labellingData[imgname], shape.editable);   
+                attachShapeToImg(shape.id, shape.type, null, shape.points, labellingData[imgname], shape.editable, shape.featurePoints);   
             }
         }
     }
