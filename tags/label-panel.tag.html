@@ -157,16 +157,17 @@
                 .editableSelect()
                 .on('select.editable-select', function (e, li) {
                     //console.log(li.val() ,",", li.text() );
-                    //Update Caegory
+                    //Update Category
                     tag.targetShape.category = li.text().toLowerCase();
                 });
 
             $("#category-select-box").on('keyup', function(e){
                 //Add
                 var val = $(this).val().toLowerCase();
-                if(e.keyCode === 13 && suggestedCategories.indexOf( val  ) === -1 ){
+                if(e.keyCode === 13 && suggestedCategories.indexOf(val) === -1){
                     $("#category-select-box").editableSelect('add', val , 0);
-                    suggestedCategories.push(val );
+                    suggestedCategories.push(val);
+                    tag.targetShape.category = val;
                 }
             });
 
@@ -180,7 +181,7 @@
                     }
                 },
                 onTagRemove : function(event, tagText){
-                    tag.targetShape.tags.splice( tag.targetShape.tags.indexOf(tagText) ,1);
+                    tag.targetShape.tags.splice(tag.targetShape.tags.indexOf(tagText) ,1);
                 },
             });
 
