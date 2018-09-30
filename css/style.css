@@ -1,21 +1,3 @@
-#img_home{
-	height: 100%;
-	/*border: 1px solid black;*/
-	display: block;
-	overflow: scroll;
-	position: relative;
-	/*resize: both;*/
-	
-}
-
-.sidebar{
-	height: 100%;
-}
-
-#actualData, #alteredData{
-	width: 100%;
-}
-
 #facedata{
 	height: 80%;
 }
@@ -28,18 +10,6 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-}
-
-#img_overlay{
-	position: absolute;
-	z-index: 1;
-}
-
-.ptn{
-	position: absolute;
-	width: 5px;
-	height: 5px;
-	background-color: #ff0000;
 }
 
 .clear{
@@ -82,10 +52,6 @@
     height:0;
     outline: none;
     cursor: inherit;
-}
-
-#ptnDtl, #boxDtl{
-	display: none;
 }
 
 .selected{
