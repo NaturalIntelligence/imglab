@@ -161,7 +161,7 @@
                     tag.targetShape.category = li.text().toLowerCase();
                 });
 
-            $("#category-select-box").on('keydown', function(e){
+            $("#category-select-box").on('keyup', function(e){
                 //Add
                 var val = $(this).val().toLowerCase();
                 if(e.keyCode === 13 && suggestedCategories.indexOf(val) === -1){
