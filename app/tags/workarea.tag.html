@@ -167,7 +167,7 @@
                         });
                         selectedElements.push(currentTool);
                     } else {
-                        console.log(imgSelected)
+                        // console.log(imgSelected)
                         imgSelected.shapes.forEach((item) => {
                             if(item.editable){
                                 // if(item.workType !== 'count'){
@@ -346,7 +346,7 @@
 
         function drawOnCanvas() {
             if (imgSelected) {
-                console.log(imgSelected)
+                // console.log(imgSelected)
                 for (var shapeIndex in imgSelected.shapes) {
                     var shape = imgSelected.shapes[shapeIndex];
                     var currentShape;
