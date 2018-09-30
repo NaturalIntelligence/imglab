@@ -1,0 +1,148 @@
+<action-beenest>
+    <div> 
+        <select onchange={onTypeChange} name="select" id="pro_areaCode">
+            <option value="count">数点任务</option>
+            <option value="rect">方框任务</option>
+        </select>
+        <input onclick={fetchWorks} name="fetchWorks" id="fetchWorks" type="button" value="请求任务">
+        <input onclick={submitWork} type="button" name="submitWorkBtn" id="submitWorkBtn" value="提交" />
+        <input onclick={cancelWork} type="button" name="cancelWorkBtn" id="cancelWorkBtn" value="放弃" />     
+    </div>
+    <script>
+
+        var tag = this;
+        tag.selectedType = 'count';
+
+        this.onTypeChange = function(e) {
+            tag.selectedType = e.target.value;
+        }
+
+        this.fetchWorks = function(e){
+            if (Object.keys(labellingData).length === 0 && labellingData.constructor === Object) {
+                var postData = {
+                    type: tag.selectedType,
+                    num: 4
+                };
+                var instance = axiosClient();
+                instance.post('/works/fetch', postData)
+                .then(function(response) {
+                        var works = response.data;
+                        if (works.length > 0) {
+                            works.forEach(function(v,index) {
+                                var workId = v.id;
+                                instance.get('/works/'+workId+'/file', {
+                                    responseType: 'blob'
+                                }).then(function(response) {
+                                    if(v.previousWork && v.previousWork.result.length != 0){
+                                        var preloadedShapes = [];
+                                        v.previousWork.result.forEach((item,index) => {
+                                            preloadedShapes.push({
+                                                "id" : v.id + "_" +index,
+                                                "type" :"rect",
+                                                "points" : [item[0].x ,item[0].y ,item[1].x -item[0].x , item[1].y -item[0].y],
+                                                "editable": true
+                                            })
+
+                                        })
+                                    }
+                                    readImageBlob(response.data, {name: workId, preloadedShapes ,workType: postData.type});
+                                });
+                            });
+                        } else{
+                            alert('暂时没有任务');
+                        }
+                })
+                .catch(function (error) {
+                    if (error.response.status === 403 && error.response.data.error.code === "16") {
+                        alert('尚余其它类型任务未完成，无法请求此类型新任务。');
+                    } else if (error.response.status === 403) {
+                        alert('未授权操作。');
+                    } else if (error.response.status === 401) {
+                        alert('无效令牌或已过期。');
+                    } else {
+                        alert('系统错误，请稍候重试。');
+                    }
+                });
+            }
+
+        }
+
+        this.submitWork = function(e){
+
+        	if (imgSelected.name) {
+
+	        	var selectedImageName = imgSelected.name;
+                // console.log(imgSelected)
+                var image = labellingData[ selectedImageName ];
+                var labels = [];
+                if(image.workType === "rect"){
+                    for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
+                        var shape = image.shapes[ shape_i ];
+                        var labelData = [
+                            {
+                                x: shape.bbox.x,
+                                y: shape.bbox.y
+                            },
+                            {
+                                x: shape.bbox.x + shape.bbox.w,
+                                y: shape.bbox.y + shape.bbox.h 
+                            }
+                        ];
+                        labels.push(labelData);
+                    }
+                } else if(image.workType === "count"){
+                    image.shapes[0].featurePoints.forEach((item) => {
+                        labels.push({x:item.x, y:item.y})
+                    })
+                }
+                if (labels.length > 0) {
+                    var instance = axiosClient();
+                    instance.post('/works', {id: selectedImageName, result: labels})
+                      .then(function(response) {
+                            // console.log('submitted');
+                            deleteAndNextImage(selectedImageName);
+                      })
+                      .catch(function (error) {
+                        // console.log(error);
+                        // if (error.response.status === 403) {
+                            clearAllImages();
+                            alert('提交失败（任务超时或格式错误）');
+                            // console.log(error);
+                        // }
+                      });
+                }else{
+                    alert("请标注对相应的信息")
+                }
+
+        	}
+
+		}
+
+		this.cancelWork = function(e) {
+
+        	if (imgSelected.name) {
+
+	        	var selectedImageName = imgSelected.name;
+                
+                var instance = axiosClient();
+
+	            instance.delete('/works/' + selectedImageName + '/cancel')
+	              .then(function(response) {
+	                    // console.log('cancelled');
+	                    deleteAndNextImage(selectedImageName);
+	              })
+	              .catch(function (error) {
+	                console.log(error);
+	              	// if (error.response.status === 403) {
+	                    clearAllImages();
+	              		// alert('Failed to submit');
+	              		console.log(error);
+	              	// }
+	              });
+
+          }
+
+		}
+
+    </script>
+</action-beenest>
