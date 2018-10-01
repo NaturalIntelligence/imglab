@@ -33,8 +33,8 @@
                                 instance.get('/works/'+workId+'/file', {
                                     responseType: 'blob'
                                 }).then(function(response) {
+                                    var preloadedShapes = [];   
                                     if(v.previousWork && v.previousWork.result.length != 0){
-                                        var preloadedShapes = [];
                                         v.previousWork.result.forEach((item,index) => {
                                             preloadedShapes.push({
                                                 "id" : v.id + "_" +index,
@@ -42,7 +42,18 @@
                                                 "points" : [item[0].x ,item[0].y ,item[1].x -item[0].x , item[1].y -item[0].y],
                                                 "editable": true
                                             })
-
+                                        })
+                                    }
+                                    if(v.prerequisites){
+                                        v.prerequisites.forEach((item) => {
+                                            preloadedShapes.push({
+                                                "id" : '_labelPoint' ,
+                                                "type" : 'rect',
+                                                "points" : [item.result[v.meta.index].x-1, item.result[v.meta.index].y-1, 2, 2 ],
+                                                "featurePoints" : [{x : item.result[v.meta.index].x, y : item.result[v.meta.index].y}],
+                                                "editable" : true
+                                            })
+                                            item.result[v.meta.index]
                                         })
                                     }
                                     readImageBlob(response.data, {name: workId, preloadedShapes ,workType: postData.type});
@@ -77,15 +88,16 @@
                 var labels = [];
                 if(image.workType === "rect"){
                     for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
-                        var shape = image.shapes[ shape_i ];
+                        var shape = image.shapes[ 1 ];
+                        // if(image.shapes[0].featurePoints[0].x < image.shapes[ 1 ].)这边需要判断框有没有把点包裹住
                         var labelData = [
-                            {
-                                x: shape.bbox.x,
-                                y: shape.bbox.y
+                            {//这边修改为points的坐标是因为，如果是驳回的框，一开始是没有bbox
+                                x: shape.points[0],
+                                y: shape.points[1]
                             },
                             {
-                                x: shape.bbox.x + shape.bbox.w,
-                                y: shape.bbox.y + shape.bbox.h 
+                                x: shape.points[2] + shape.points[0],
+                                y: shape.points[3] + shape.points[1]
                             }
                         ];
                         labels.push(labelData);

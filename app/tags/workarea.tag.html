@@ -106,7 +106,8 @@
             myCanvas.on('mousedown', function (event) {
                 deselectAll();
 
-                if (selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable) {
+                if (selectedTool && selectedTool.type !== "point" && !alreadyDrawing && selectedTool.drawable && (labellingData[imgSelected.name].shapes.length <= 1) ) {
+                    //增加判断是因为一次只能提交一个框的信息
                     var currentTool = selectedTool.create(event, myCanvas);
 
                     moveOnlyOnMoveTool(currentTool);
