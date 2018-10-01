@@ -53,24 +53,36 @@ export default {
     }
   },
   computed: {
+    /**
+     * Map getters from image-store
+     */
     ...mapGetters('image-store', {
       imageSelected: 'getImageSelected'
     }),
 
+    /**
+     * Gets the current image width
+     */
     width() {
       return (this.imageSelected && this.imageSelected.size.scaledWidth) || 0;
     },
 
+    /**
+     * Gets the current image height
+     */
     height() {
       return (this.imageSelected && this.imageSelected.size.scaledHeight) || 0;
     },
 
+    /**
+     * Set the tooltip location based on mouse position\
+     */
     tooltipStyle() {
       if (this.showTrackingLine) {
         let tooltip = this.$refs["tooltip"];
         let tpWidth = this.prevTpWidth = Math.max(tooltip.offsetWidth, this.prevTpWidth);
         let tpHeight = this.prevTpHeight = Math.max(tooltip.offsetHeight, this.prevTpHeight);
-        console.log('tooltip', tpWidth, tpHeight)
+
         return {
           "left": (this.xPos + 15 + tpWidth < this.width) ?
             (this.xPos + 15) + "px" : (this.xPos - tpWidth) + "px",
@@ -80,29 +92,13 @@ export default {
       }
     }
   },
-  methods: {
-    showPosition(event) {
-      if (this.showTrackingLine) {
-        console.log('event', event);
-        // let cordinates = getCoordinates(event, canvas);
-        // $("#tooltip-span").css({
-        //     "left": cordinates.x + 15 + "px",
-        //     "top": cordinates.y + 15 + "px"
-        // });
-        // $("#tooltip-span").html("x:" + cordinates.x + "<br> y:" + cordinates.y);
-        // $(tag.refs["h_line"]).css({
-        //     top: cordinates.y
-        // });
-        // $(tag.refs["v_line"]).css({
-        //     left: cordinates.x
-        // });
-      }
-    }
-  },
   watch: {
+    /**
+     * Watch for changes to the 'show' prop and sets showTrackingLine
+     * @param {Boolean} val - true if mouse is over canvas, false otherwise
+     */
     show: function(val) {
       this.showTrackingLine = val;
-      console.log('showTrackingLine', this.showTrackingLine)
     }
   }
 }

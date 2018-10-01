@@ -1,6 +1,12 @@
 export class Image {
   constructor({
-    size,
+    size = {
+      width: 0,
+      height: 0,
+      scaledWidth: 0,
+      scaledHeight: 0,
+      imageScale: 1
+    },
     name = "",
     src = "",
     attributes = [],
@@ -14,13 +20,7 @@ export class Image {
     this.src = src;
     this.attributes = attributes;
     this.tags = tags;
-    this.size = {
-      width: size.width,
-      height: size.height,
-      scaledWidth: size.scaledWidth || size.width,
-      scaledHeight: size.scaledHeight || size.height,
-      imageScale: size.imageScale || 1
-    };
+    this.size = size;
     this.shapes = shapes;
     this.shapeIndex = shapeIndex; // Used to generate new ids for copy pasted shapes
     this.pointIndex = pointIndex; // Used to generate new ids for feature points

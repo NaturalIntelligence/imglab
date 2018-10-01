@@ -38,12 +38,6 @@
       <div class="col-9">
         <div class="photolist-wrapper" style="width: 100%; overflow: hidden;">
           <div id="photolist" class="photolist d-flex align-items-center" ref="photolist">
-            <!-- <transition-group
-              name="list"
-              :css="false"
-              @before-enter="beforeEnter"
-              @enter="enter"
-              @leave="leave"> -->
               <img
                 class="thumbnail"
                 v-for="(thumbnail, index) in thumbnails"
@@ -55,7 +49,6 @@
                 :width="thumbnailWidth"
                 :data-index="index"
                 @click="loadIntoWorkArea(index)">
-            <!-- </transition-group> -->
           </div>
         </div>
       </div>
@@ -72,6 +65,7 @@
 
 <script>
 import { mapMutations } from 'vuex';
+import { Image as Img } from '../../models/Image';
 import Velocity from 'velocity-animate'
 
 export default {
@@ -89,32 +83,22 @@ export default {
     }
   },
   methods: {
+    // Map mutations from image-store
     ...mapMutations('image-store', [
       'setImageSelected' // Map this.setImgSelected to this.$store.setImgSelected
     ]),
 
-    readImageFile(f) {
-      if (f.type.startsWith("image")) {
-        let reader = new FileReader();
-        reader.onload = e => {
-          let imageData = {
-            name : f.name,
-            src: e.target.result
-          };
-
-          this.loadImage(e.target.result, imageData);
-          this.thumbnails.push(imageData);
-        }
-
-        reader.readAsDataURL(f);
-      }
-    },
-
-    loadImage(src, imageData) {
+    /**
+     * Loads the image dynamically and stores it in the image store
+     * @param { Img } imageData - an Image object from models/Image
+     */
+    loadImage(imageData) {
       let self = this;
       let image = new Image();
-      image.src = src;
-
+      /**
+       * note: we are generating the image dynamically, hence we have to set the
+       * onload property before the src.
+       */
       image.onload = function() {
         let imageSize = {
           width : this.width,
@@ -125,14 +109,38 @@ export default {
         };
 
         self.$store.commit('image-store/addImageToStore', {
-          src,
+          src: imageData.src,
           name: imageData.name,
           size: imageSize});
       }
+
+      image.src = imageData.src;
     },
 
+    /**
+     * Reads file data, loads the image, and stores the image detail in the
+     * list of thumbnails
+     * @param {File} - native file interface
+     */
+    readImageFile(file) {
+      if (file.type.startsWith("image")) {
+        let reader = new FileReader();
+        reader.onload = e => {
+          let image = new Img({name: file.name, src: e.target.result});
+          this.loadImage(image);
+          this.thumbnails.push(image);
+        }
+        reader.readAsDataURL(file);
+      }
+    },
+
+    /**
+     * Reads a list of files
+     * @param {Event} e - native Event interface
+     */
     readImageFiles(e) {
       var input = e.srcElement || e.target;
+      // note: input.files is an object
       if (input.files && input.files[0]) {
         for (let i = 0; i < input.files.length; i++){
           this.readImageFile(input.files[i]);
@@ -140,46 +148,29 @@ export default {
       }
     },
 
+    /**
+     * Slides the thumbnail preview to the left
+     */
     slideleft() {
       let firstThumbnail = this.thumbnails.shift();
       this.thumbnails.push(firstThumbnail);
     },
 
+    /**
+     * Slides the thumbnail preview to the right
+     */
     slideright() {
       let lastThumbnail = this.thumbnails.pop();
       this.thumbnails.unshift(lastThumbnail);
     },
 
+    /**
+     * Set the clicked thumbnail as the image selected
+     * @param {Number} index - index in the list of thumbnails
+     */
     loadIntoWorkArea(index) {
       let imageSelected = this.thumbnails[index];
       this.setImageSelected(imageSelected);
-    },
-
-    beforeEnter(el) {
-      el.style.opacity = 0;
-      el.style.height = 0;
-    },
-
-    enter(el, done) {
-      let delay = el.dataset.index * 150;
-      setTimeout(function() {
-        Velocity(
-          el,
-          { opacity: 1, height: 100 + "%" },
-          { complete: done }
-        )
-      }, delay);
-    },
-
-    leave(el, done) {
-      let delay = el.dataset.index * 150;
-      setTimeout(function() {
-        Velocity(
-          el,
-          { opacity: 0, height: 0 },
-          { complete: done }
-        )
-      }, delay);
     }
   }
 }

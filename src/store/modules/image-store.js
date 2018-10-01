@@ -1,10 +1,17 @@
 import { Image } from "../../models/Image";
+import { FeaturePoint } from "../../models/FeaturePoint";
 import {
   scaleShape,
   scaleShapePoints,
   scaleRbox
 } from "../../utils/scale-shapes";
 
+/**
+ * Helper function to get the shape via the image name and shape ID
+ * @param {Observer} state - state of image store
+ * @param {String} imageName - name of image
+ * @param {String} shapeID - shape ID
+ */
 function getShape(state, imageName, shapeID) {
   return state.images[imageName].shapes.find(shape => {
     return shape.id === shapeID;
@@ -78,6 +85,8 @@ const mutations = {
 
   /**
    * Update shape label
+   * @param {String} shapeID - id of shape
+   * @param {String} newLabel - new label
    */
   updateLabel(status, { shapeID, newLabel }) {
     let shape = getShape(state, state.imageSelected.name, shapeID);
@@ -86,25 +95,40 @@ const mutations = {
     }
   },
 
-  updateFeaturePoints(state, { shapeID, pointID, position, newLabel }) {
+  /**
+   * Updates a single feature point
+   * @param {String} shapeID - id of shape
+   * @param {String} pointID - id of point
+   * @param {SVG.Rbox} position
+   * @param {String} newLabel - new label for feature point
+   */
+  updateFeaturePoint(
+    state,
+    { shapeID, pointID, position, newLabel = undefined }
+  ) {
     var shape = getShape(state, state.imageSelected.name, shapeID);
     var scale = 1 / state.imageSelected.size.imageScale;
-    var featurePoints = shape.featurePoints;
-    var index = featurePoints.findIndex(point => {
-      return point.id == pointID;
+
+    var index = shape.featurePoints.findIndex(featurePoint => {
+      return featurePoint.id == pointID;
     });
+    var point = shape.featurePoints[index];
 
-    if (position) {
-      featurePoints[index].x = position.cx * scale;
-      featurePoints[index].y = position.cy * scale;
-    }
-
-    if (newLabel) {
-      featurePoints[index].label = newLabel;
-    }
+    shape.featurePoints[index] = new FeaturePoint({
+      x: position.cx * scale,
+      y: position.cy * scale,
+      label: newLabel || point.label,
+      id: pointID
+    });
   },
 
-  updateShapeDetailInStore(state, { shapeID, rbox, points }) {
+  /**
+   * Update shape details
+   * @param {String} shapeID - id of shape
+   * @param {SVG.Rbox} rbox
+   * @param {Point[]} points - points of a shape, e.g. 4 corners of a rectangle
+   */
+  updateShapeDetail(state, { shapeID, rbox, points }) {
     var shapes = state.images[state.imageSelected.name].shapes;
     var shape = getShape(state, state.imageSelected.name, shapeID);
     var index = shapes.findIndex(shape => {
