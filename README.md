@@ -66,6 +66,30 @@ You can either import a file from a URL or from your computer. You can plot the 
 
 Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration for more details.
 
+## Getting Started
+
+### Installing
+
+1. Fork this repository on github and make a clone from your forked copy
+```
+$ git clone 'your_local_fork_on_github'
+```
+
+### Setup local environment for development
+
+1. Install node and npm
+2. Open the terminal and run `$ npm install -g live-server` to install node live server.
+3. Run `$ live-server` in /imglab/ folder.
+4. Open your browser (if it hasn't popped up already) at: `http://127.0.0.1:8080/`
+
+## Built with
+
+- [Riot.js](https://github.com/riot/riot) - Simple and elegant component-based UI library
+
+## Contributing 
+
+Please read [CONTRIBUTING.md](https://github.com/NaturalIntelligence/imglab/blob/master/.github/First_Time_Contributors.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
 ## Showcase your work
 
 While using this library, if you happen to build an open database that can help other users or something you would like to showcase, please raise an issue or PR.

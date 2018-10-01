@@ -92,15 +92,6 @@ var pluginsStore = {
 </plugintagname>
 ```
 
-### How to run imglab on localhost server to properly handle CORS requests.
-If you are encountering missing elements when running html from file://
-
-Source: [Riot Issue #1991](https://github.com/riot/riot/issues/1991)
-1. Install Node and npm.
-2. Open the terminal and run $ `npm install -g live-server` to install node live server.
-3. Run $ `live-server` in /imglab/ folder.
-4. Open your browser (if it hasn't popped up already) at: `http://127.0.0.1:8080/`
-
 ## Overview of riot js framework
 
 Sample tag file
@@ -141,4 +132,4 @@ Sample tag file
 * check if thumbnail slider left, right button are working fine
 
 ### Error on console
-Press F12 key to open deubugger window. Open console and check if there is an error.
+Press F12 key to open the developer's console. Switch to console and check for errors.
