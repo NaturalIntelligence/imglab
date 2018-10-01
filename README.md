@@ -2,8 +2,6 @@
 
 A web based tool to label images for objects that can be used to train dlib or other object detectors.
 
-To run it offline, check [downloads](downloads) folder to download the OS specific executable.
-
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](http://www.firsttimersonly.com/)
 [![Bountysource](https://img.shields.io/bountysource/team/imglab/activity.svg)](https://salt.bountysource.com/teams/imglab)
 
@@ -23,11 +21,11 @@ To run it offline, check [downloads](downloads) folder to download the OS specif
 
 ## Features
 
-ImgLab is platform independent, runs directly from the browser, and requires no prerequisites. It requires minimal CPU and memory.
+ImgLab is platform independent, runs directly from the browser, and has no prerequisites. It requires minimal CPU and memory.
 
 One of imglab's key advantages is that you can use 3rd party libraries to **fast annotation process**, which can save a lot of time and effort.
 
-**Other features are**:
+**Other features**:
 
 * Special attention for dlib users. You can easily adjust the order of parts / landmarks / featurepoints.
 * Open-source and free forever.
@@ -40,7 +38,7 @@ One of imglab's key advantages is that you can use 3rd party libraries to **fast
   * COCO
   * Tenserflow (in plan)
   
-**Other quality-of-life features are**:
+**Other quality-of-life features**:
 
 * Drag or resize any annotation shape.
 * Select and delete any annotation shape or landmark points.
