@@ -83,24 +83,38 @@
         	if (imgSelected.name) {
 
 	        	var selectedImageName = imgSelected.name;
-                // console.log(imgSelected)
                 var image = labellingData[ selectedImageName ];
                 var labels = [];
+                // console.log(image)
                 if(image.workType === "rect"){
                     for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
-                        var shape = image.shapes[ 1 ];
-                        // if(image.shapes[0].featurePoints[0].x < image.shapes[ 1 ].)这边需要判断框有没有把点包裹住
-                        var labelData = [
-                            {//这边修改为points的坐标是因为，如果是驳回的框，一开始是没有bbox
-                                x: shape.points[0],
-                                y: shape.points[1]
-                            },
-                            {
-                                x: shape.points[2] + shape.points[0],
-                                y: shape.points[3] + shape.points[1]
+                        if(shape_i === 1 && image.shapes.length === 2){
+                            var shape = image.shapes[ shape_i ];
+                            // console.log(shape)
+                            if(//这里判断画的框有没有把点框住
+                                (shape.points[0] + shape.points[2] > image.shapes[0].points[0]) 
+                                && 
+                                (shape.points[0] < image.shapes[0].points[0])
+                                &&
+                                (shape.points[1] + shape.points[3] > image.shapes[0].points[1])
+                                &&
+                                (shape.points[1] < image.shapes[0].points[1])
+                            ){
+                                var labelData = [
+                                    {//这边修改为points的坐标是因为，如果是驳回的框，一开始是没有bbox
+                                        x: shape.points[0],
+                                        y: shape.points[1]
+                                    },
+                                    {
+                                        x: shape.points[2] + shape.points[0],
+                                        y: shape.points[3] + shape.points[1]
+                                    }
+                                ];
+                                labels.push(labelData);
+                            }else{
+                                alert("没有将点包裹住")
                             }
-                        ];
-                        labels.push(labelData);
+                        } 
                     }
                 } else if(image.workType === "count"){
                     image.shapes[0].featurePoints.forEach((item) => {

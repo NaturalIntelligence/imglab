@@ -145,7 +145,7 @@
         });
 
         function attachEvents(currentTool) {
-            moveOnlyOnMoveTool(currentTool);
+            moveOnlyOnMoveTool(currentTool);  //缩放功能
 
             onMouse(currentTool.parent(), function (e) { //drag callback : doesn't fire on click
                 if (currentTool.node.id === e.target.id) {
