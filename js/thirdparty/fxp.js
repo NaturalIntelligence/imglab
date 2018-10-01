@@ -19,7 +19,7 @@ var defaultOptions = {
 function Parser(options) {
     this.options = Object.assign({}, defaultOptions, options);
     if (this.options.ignoreAttributes || this.options.attrNodeName) {
-        this.isAttribute = function(/*a*/) { return false;};
+        this.isAttribute = function(/*a*/) {return false;};
     } else {
         this.attrPrefixLen = this.options.attributeNamePrefix.length;
         this.isAttribute = isAttribute;
@@ -27,7 +27,7 @@ function Parser(options) {
     if (this.options.cdataTagName) {
         this.isCDATA = isCDATA;
     } else {
-        this.isCDATA = function(/*a*/) { return false;};
+        this.isCDATA = function(/*a*/) {return false;};
     }
     this.replaceCDATAstr = replaceCDATAstr;
     this.replaceCDATAarr = replaceCDATAarr;
@@ -37,7 +37,7 @@ function Parser(options) {
         this.tagEndChar = ">\n";
         this.newLine = "\n";
     } else {
-        this.indentate = function() { return "";};
+        this.indentate = function() {return "";};
         this.tagEndChar = ">";
         this.newLine = "";
     }
@@ -69,7 +69,7 @@ Parser.prototype.j2x = function(jObj, level) {
         if (typeof jObj[key] === "undefined") {
             // supress undefined node
         }
-        else if (typeof jObj[key] !== "object") {//premitive type
+        else if (typeof jObj[key] !== "object") { // primitive type
             var attr = this.isAttribute(key);
             if (attr) {
                 attrStr += " " + attr + "=\"" +  this.options.attrValueProcessor("" + jObj[key]) + "\"";
@@ -79,10 +79,10 @@ Parser.prototype.j2x = function(jObj, level) {
                 } else {
                     val += this.replaceCDATAstr("", jObj[key]);
                 }
-            } else {//tag value
+            } else { // tag value
                 if (key === this.options.textNodeName) {
                     if (jObj[this.options.cdataTagName]) {
-                        //value will added while processing cdata
+                        // value will added while processing cdata
                     } else {
                         val +=  this.options.tagValueProcessor("" + jObj[key]);
                     }
@@ -90,14 +90,14 @@ Parser.prototype.j2x = function(jObj, level) {
                     val += this.buildTextNode(jObj[key], key, "", level);
                 }
             }
-        } else if (Array.isArray(jObj[key])) {//repeated nodes
+        } else if (Array.isArray(jObj[key])) { // repeated nodes
             if (this.isCDATA(key)) {
                 if (jObj[this.options.textNodeName]) {
                     val += this.replaceCDATAarr(jObj[this.options.textNodeName], jObj[key]);
                 } else {
                     val += this.replaceCDATAarr("", jObj[key]);
                 }
-            } else {//nested nodes
+            } else { // nested nodes
                 var arrLen = jObj[key].length;
                 for (var j = 0; j < arrLen; j++) {
                     var item = jObj[key][j];
@@ -154,7 +154,7 @@ function buildObjectNode(val, key, attrStr, level) {
            + "<" + key + attrStr
            + this.tagEndChar
            + val
-           //+ this.newLine
+           // + this.newLine
            + this.indentate(level)
            + "</" + key + this.tagEndChar;
 }
@@ -167,7 +167,7 @@ function buildEmptyObjNode(val, key, attrStr, level) {
                + "<" + key + attrStr
                + "/"
                + this.tagEndChar;
-        //+ this.newLine
+        // + this.newLine
     }
 }
 
