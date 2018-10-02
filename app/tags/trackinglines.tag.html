@@ -22,7 +22,7 @@
             console.log(imgSelected.preloadedShapes)
             if(imgSelected.preloadedShapes){
                 imgSelected.preloadedShapes.forEach((item) => {
-                    if(item.id === "_labelPoint"){
+                    if(item.id === imgSelected.name + '_prerequisite_point'){
                         $("#tooltip-span").show();
                         $(tag.refs["h_line"]).show();
                         $(tag.refs["v_line"]).show();
@@ -38,7 +38,7 @@
                             left: item.featurePoints[0].x
                         });
                         var elementParent = $("#canvas-container");
-                        var elementChild = $("#_labelPoint");
+                        var elementChild = $("#" + item.id);
                         elementParent.animate({
                             scrollTop: elementChild.offset().top - elementParent.offset().top - 250
                         }, 2000)
