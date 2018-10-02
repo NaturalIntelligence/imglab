@@ -1,20 +1,28 @@
 ##ImgLab Features:
 
+### Auto suggestion
+
+![Auto suggestion](img/imglab-autosuggestion.gif)
+
+### Plugins
+
+![Plugins](img/imglab-fpp.gif)
+
+### Different Shapes
+
+![Polygons](img/imglab-polygon.gif)
+
 ###Keyboard Shortcuts:
 
-No image manipulation tool is complete without hotkeys.
-This convenience feature allows you to focus on what's really important without constantly clicking back and forth between your image and the toolbar.
-
-DEMONSTRATION GIF GOES HERE.
+![Hotkeys](img/imglab-hotkeys.gif)
 
 ###Zoom In/Out:
 
-Allows for zooming in and out to ensure precision in your annotations.
-
-DEMONSTRATION GIF GOES HERE.
+![Hotkeys](img/imglab-zoom.gif)
 
 ###Copy/Paste Labels Across Images:
 
-Save the tedious work for ImgLab.
-
 DEMONSTRATION GIF GOES HERE.
+
+
+Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration for more details.

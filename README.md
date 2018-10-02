@@ -93,6 +93,14 @@ Alt + W : Magic wand
 
 ![Plugins](img/imglab-polygon.gif)
 
+###Keyboard Shortcuts:
+
+![Hotkeys](img/imglab-hotkeys.gif)
+
+###Zoom In/Out:
+
+![Hotkeys](img/imglab-zoom.gif)
+
 Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration for more details.
 
 ## Showcase your work
