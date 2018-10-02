@@ -92,7 +92,12 @@ Please read [CONTRIBUTING.md](https://github.com/NaturalIntelligence/imglab/blob
 
 ## Built with
 
-- [Riot.js](https://github.com/riot/riot) - Simple and elegant component-based UI library
+This application is built upon following technology stack.
+
+* [jQuery](https://jquery.com)
+* [Bootstrap](https://getbootstrap.com)
+* [Riot.js](https://github.com/riot/riot) - Simple and elegant component-based UI library
+* [SVG.js](http://svgjs.com)
 
 ## Showcase your work
 
