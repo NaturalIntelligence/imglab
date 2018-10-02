@@ -111,27 +111,29 @@
                     console.log(currentTool)
                     moveOnlyOnMoveTool(currentTool);
 
-                    currentTool.on('drawstart', function () {
-                        alreadyDrawing = true;
-                    });
+                    attachShapeListener(currentTool);
 
-                    currentTool.on('drawcancel', function () {});
+                    // currentTool.on('drawstart', function () {
+                    //     alreadyDrawing = true;
+                    // });
 
-                    currentTool.on('resizedone', function () {
-                        updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas),
-                            getPoints(currentTool));
-                    });
-                    currentTool.on('drawstop', function () {
-                        alreadyDrawing = false;
-                        if (!selectedTool.validate(currentTool)) { //Don't draw an element on accidentle click
-                            currentTool.parent().remove();
-                            currentTool.remove();
-                        } else {
-                            attachShapeData(currentTool);
+                    // currentTool.on('drawcancel', function () {});
 
-                            attachEvents(currentTool)
-                        }
-                    });
+                    // currentTool.on('resizedone', function () {
+                    //     updateShapeDetailInStore(currentTool.node.id, currentTool.rbox(myCanvas),
+                    //         getPoints(currentTool));
+                    // });
+                    // currentTool.on('drawstop', function () {
+                    //     alreadyDrawing = false;
+                    //     if (!selectedTool.validate(currentTool)) { //Don't draw an element on accidentle click
+                    //         currentTool.parent().remove();
+                    //         currentTool.remove();
+                    //     } else {
+                    //         attachShapeData(currentTool);
+
+                    //         attachEvents(currentTool)
+                    //     }
+                    // });
 
                     if (currentTool.type !== 'polygon') currentTool.draw(event);
                     selectedElement = currentTool;
@@ -142,6 +144,30 @@
             });
 
         });
+
+        function attachShapeListener(shape) {
+            shape.on('drawstart', function() {
+                alreadyDrawing = true;
+            });
+
+            shape.on('drawcancel', function() {});
+
+            shape.on('resizedone', function() {
+                updateShapeDetailInStore(shape.node.id, shape.rbox(myCanvas),
+                getPoints(shape));
+            });
+
+            shape.on('drawstop', function() {
+                alreadyDrawing = false;
+                if (!selectedTool.validate(shape)) {
+                    shape.parent().remove();
+                    shape.remove();
+                } else {
+                    attachShapeData(shape);
+                    attachEvents(shape);
+                }
+            });
+        }
 
         function attachEvents(currentTool) {
             moveOnlyOnMoveTool(currentTool);
@@ -411,6 +437,7 @@
                     }
 
                     attachEvents(currentShape);
+                    attachShapeListener(currentShape);
                     drawAllFeaturePoints(shape.featurePoints, currentShape);
                     if (shape.editable) {
                         setZoomLevel(shape.zoomScale, currentShape);

@@ -33,33 +33,41 @@
                                 instance.get('/works/'+workId+'/file', {
                                     responseType: 'blob'
                                 }).then(function(response) { 
+                                    var preloadedShapes = [];  
                                     if(postData.type === "rect"){
-                                        var preloadedShapes = [];  
-                                        if(v.prerequisites){
-                                            v.prerequisites.forEach((item) => {
+                                        if(v.prerequisites && v.prerequisites.length === 1 && v.meta){
+                                            // v.prerequisites.forEach((item) => {
+                                                var item = v.prerequisites[0];
                                                 preloadedShapes.push({
-                                                    "id" : '_labelPoint' ,
+                                                    "id" : v.id + '_prerequisite_point' ,
                                                     "type" : 'rect',
                                                     "points" : [item.result[v.meta.index].x-1, item.result[v.meta.index].y-1, 2, 2 ],
                                                     "featurePoints" : [{x : item.result[v.meta.index].x, y : item.result[v.meta.index].y}],
-                                                    "editable" : true
+                                                    "editable" : false
                                                 })
-                                            })
+                                            // })
                                         }
-                                        if(v.previousWork && v.previousWork.result.length != 0){
-                                            v.previousWork.result.forEach((item,index) => {
-                                                console.log(item)
+                                        if(v.previousWork && v.previousWork.result.length === 1){
+                                            // v.previousWork.result.forEach((item,index) => {
+                                                // console.log(item);
+                                                var item = v.previousWork.result[0];
                                                 preloadedShapes.push({
-                                                    "id" : v.id + "_" +index,
+                                                    "id" : v.id + "_previous_work",
                                                     "type" :"rect",
                                                     "points" : [item[0].x ,item[0].y ,item[1].x -item[0].x , item[1].y -item[0].y],
                                                     "editable": true
                                                 })
-                                            })
+                                            // })
                                         }
                                         readImageBlob(response.data, {name: workId, preloadedShapes ,workType: postData.type});
                                     }else if(postData.type === "count"){
-                                        readImageBlob(response.data, {name: workId, workType: postData.type});
+                                        if(v.previousWork && v.previousWork.result){
+                                            var preloadedFeaturePoints = [];
+                                            v.previousWork.result.forEach((item) => {
+                                                preloadedFeaturePoints.push({x : item.x , y : item.y});
+                                            })
+                                        }
+                                        readImageBlob(response.data, {name: workId, workType: postData.type, preloadedFeaturePoints : preloadedFeaturePoints});
                                     }
                                 });
                             });
@@ -93,35 +101,42 @@
                 var labels = [];
                 console.log(image)
                 if(image.workType === "rect"){
-                    for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
-                        if(shape_i === 1 && image.shapes.length === 2){
-                            var shape = image.shapes[ shape_i ];
+                    // for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
+                        if(image.shapes.length === 2){
+                            var shape = image.shapes[ 1 ];
+                            var anchor = image.shapes[ 0 ];
                             // console.log(shape)
+                            var xmin = shape.points[0],
+                                xmax = shape.points[0] + shape.points[2],
+                                ymin = shape.points[1],
+                                ymax = shape.points[1] + shape.points[3];
+
                             if(//这里判断画的框有没有把点框住
-                                (shape.points[0] + shape.points[2] > image.shapes[0].points[0]) 
+                                (xmax > anchor.featurePoints[0].x) 
                                 && 
-                                (shape.points[0] < image.shapes[0].points[0])
+                                (xmin < anchor.featurePoints[0].x)
                                 &&
-                                (shape.points[1] + shape.points[3] > image.shapes[0].points[1])
+                                (ymax > anchor.featurePoints[0].y)
                                 &&
-                                (shape.points[1] < image.shapes[0].points[1])
+                                (ymin < anchor.featurePoints[0].y)
                             ){
                                 var labelData = [
-                                    {//这边修改为points的坐标是因为，如果是驳回的框，一开始是没有bbox
-                                        x: shape.points[0],
-                                        y: shape.points[1]
+                                    {
+                                        x: xmin,
+                                        y: ymin
                                     },
                                     {
-                                        x: shape.points[2] + shape.points[0],
-                                        y: shape.points[3] + shape.points[1]
+                                        x: xmax,
+                                        y: ymax
                                     }
                                 ];
                                 labels.push(labelData);
                             }else{
-                                alert("没有将点包裹住")
+                                alert("没有将点包裹住");
+                                return;
                             }
-                        } 
-                    }
+                        }
+                    // }
                 } else if(image.workType === "count"){
                     image.shapes[0].featurePoints.forEach((item) => {
                         labels.push({x:item.x, y:item.y})
