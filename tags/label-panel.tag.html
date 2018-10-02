@@ -165,7 +165,7 @@
                 //Add
                 var val = $(this).val().toLowerCase();
                 if(e.keyCode === 13 && suggestedCategories.indexOf(val) === -1){
-                    $("#category-select-box").editableSelect('add', val , 0);
+                    $("#category-select-box").editableSelect('add', val, 0);
                     suggestedCategories.push(val);
                     tag.targetShape.category = val;
                 }
@@ -181,7 +181,7 @@
                     }
                 },
                 onTagRemove : function(event, tagText){
-                    tag.targetShape.tags.splice(tag.targetShape.tags.indexOf(tagText) ,1);
+                    tag.targetShape.tags.splice(tag.targetShape.tags.indexOf(tagText), 1);
                 },
             });
 
@@ -190,7 +190,7 @@
 
             $(tagInputBoxInput).autocomplete({
                 source : suggestedTags,
-                //appendTo: tagInputBoxContainer,
+                // appendTo: tagInputBoxContainer,
                 appendTo: $("#tags-input-box"),
                 position: { at: "left bottom", of: $("#tags-input-box") },
                 messages: {
@@ -199,7 +199,7 @@
                 },
                 select: function(event, data) {
                     event.preventDefault();
-                    //Add the tag if user clicks
+                    // Add the tag if user clicks
                     if (event.which === 1) {
                         tagInputBox.add(data.item.value);
                     }

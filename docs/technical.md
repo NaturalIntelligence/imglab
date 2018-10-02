@@ -92,7 +92,6 @@ var pluginsStore = {
 </plugintagname>
 ```
 
-
 ## Overview of riot js framework
 
 Sample tag file
@@ -133,4 +132,4 @@ Sample tag file
 * check if thumbnail slider left, right button are working fine
 
 ### Error on console
-Press F12 key to open deubugger window. Open console and check if there is an error.
+Press F12 key to open the developer's console. Switch to console and check for errors.
