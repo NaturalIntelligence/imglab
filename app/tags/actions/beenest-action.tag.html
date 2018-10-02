@@ -32,31 +32,35 @@
                                 var workId = v.id;
                                 instance.get('/works/'+workId+'/file', {
                                     responseType: 'blob'
-                                }).then(function(response) {
-                                    var preloadedShapes = [];   
-                                    if(v.previousWork && v.previousWork.result.length != 0){
-                                        v.previousWork.result.forEach((item,index) => {
-                                            preloadedShapes.push({
-                                                "id" : v.id + "_" +index,
-                                                "type" :"rect",
-                                                "points" : [item[0].x ,item[0].y ,item[1].x -item[0].x , item[1].y -item[0].y],
-                                                "editable": true
+                                }).then(function(response) { 
+                                    if(postData.type === "rect"){
+                                        var preloadedShapes = [];  
+                                        if(v.prerequisites){
+                                            v.prerequisites.forEach((item) => {
+                                                preloadedShapes.push({
+                                                    "id" : '_labelPoint' ,
+                                                    "type" : 'rect',
+                                                    "points" : [item.result[v.meta.index].x-1, item.result[v.meta.index].y-1, 2, 2 ],
+                                                    "featurePoints" : [{x : item.result[v.meta.index].x, y : item.result[v.meta.index].y}],
+                                                    "editable" : true
+                                                })
                                             })
-                                        })
-                                    }
-                                    if(v.prerequisites){
-                                        v.prerequisites.forEach((item) => {
-                                            preloadedShapes.push({
-                                                "id" : '_labelPoint' ,
-                                                "type" : 'rect',
-                                                "points" : [item.result[v.meta.index].x-1, item.result[v.meta.index].y-1, 2, 2 ],
-                                                "featurePoints" : [{x : item.result[v.meta.index].x, y : item.result[v.meta.index].y}],
-                                                "editable" : true
+                                        }
+                                        if(v.previousWork && v.previousWork.result.length != 0){
+                                            v.previousWork.result.forEach((item,index) => {
+                                                console.log(item)
+                                                preloadedShapes.push({
+                                                    "id" : v.id + "_" +index,
+                                                    "type" :"rect",
+                                                    "points" : [item[0].x ,item[0].y ,item[1].x -item[0].x , item[1].y -item[0].y],
+                                                    "editable": true
+                                                })
                                             })
-                                            item.result[v.meta.index]
-                                        })
+                                        }
+                                        readImageBlob(response.data, {name: workId, preloadedShapes ,workType: postData.type});
+                                    }else if(postData.type === "count"){
+                                        readImageBlob(response.data, {name: workId, workType: postData.type});
                                     }
-                                    readImageBlob(response.data, {name: workId, preloadedShapes ,workType: postData.type});
                                 });
                             });
                         } else{
@@ -87,7 +91,7 @@
 	        	var selectedImageName = imgSelected.name;
                 var image = labellingData[ selectedImageName ];
                 var labels = [];
-                // console.log(image)
+                console.log(image)
                 if(image.workType === "rect"){
                     for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
                         if(shape_i === 1 && image.shapes.length === 2){
