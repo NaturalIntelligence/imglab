@@ -12,15 +12,15 @@
 
 ![Polygons](img/imglab-polygon.gif)
 
-###Keyboard Shortcuts:
+### Keyboard Shortcuts:
 
 ![Hotkeys](img/imglab-hotkeys.gif)
 
-###Zoom In/Out:
+### Zoom In/Out:
 
 ![Hotkeys](img/imglab-zoom.gif)
 
-###Copy/Paste Labels Across Images:
+### Copy/Paste Labels Across Images:
 
 DEMONSTRATION GIF GOES HERE.
 
