@@ -48,7 +48,6 @@
                                         }
                                         if(v.previousWork && v.previousWork.result.length != 0){
                                             v.previousWork.result.forEach((item,index) => {
-                                                console.log(item)
                                                 preloadedShapes.push({
                                                     "id" : v.id + "_" +index,
                                                     "type" :"rect",
@@ -57,6 +56,7 @@
                                                 })
                                             })
                                         }
+                                        // console.log(preloadedShapes)
                                         readImageBlob(response.data, {name: workId, preloadedShapes ,workType: postData.type});
                                     }else if(postData.type === "count"){
                                         readImageBlob(response.data, {name: workId, workType: postData.type});

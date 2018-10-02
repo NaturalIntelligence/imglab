@@ -19,7 +19,32 @@
 
             $(tag.refs["h_line"]).width(imgSelected.size.scaledWidth > canvasContainer.width() ? imgSelected.size.scaledWidth : canvasContainer.width() );
             $(tag.refs["v_line"]).height(imgSelected.size.scaledHeight > canvasContainer.height() ? imgSelected.size.scaledHeight : canvasContainer.height() );
-
+            console.log(imgSelected.preloadedShapes)
+            if(imgSelected.preloadedShapes){
+                imgSelected.preloadedShapes.forEach((item) => {
+                    if(item.id === "_labelPoint"){
+                        $("#tooltip-span").show();
+                        $(tag.refs["h_line"]).show();
+                        $(tag.refs["v_line"]).show();
+                        $("#tooltip-span").css({
+                            "left": item.featurePoints[0].x + 15 + "px",
+                            "top": item.featurePoints[0].y + 15 + "px"
+                        });
+                        $("#tooltip-span").html("x:" + item.featurePoints[0].x + "<br> y:" + item.featurePoints[0].y);
+                        $(tag.refs["h_line"]).css({
+                            top: item.featurePoints[0].y
+                        });
+                        $(tag.refs["v_line"]).css({
+                            left: item.featurePoints[0].x
+                        });
+                        var elementParent = $("#canvas-container");
+                        var elementChild = $("#_labelPoint");
+                        elementParent.animate({
+                            scrollTop: elementChild.offset().top - elementParent.offset().top - 250
+                        }, 2000)
+                    }
+                })
+            }
             canvas.mousemove(function (event) {
 
                 $("#tooltip-span").show();
