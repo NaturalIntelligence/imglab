@@ -1,0 +1,46 @@
+.input-bar {
+    width: 970px;
+    padding: 8px 4px;
+    margin: 10px auto;
+    border: 1px solid #AAA;
+}
+
+.left-paddle,
+.right-paddle {
+    float: left;
+    width: 35px;
+    height: 90px;
+    cursor: pointer;
+}
+
+.left-paddle {
+    background: url("../img/left-paddle.png") no-repeat 5px center;
+}
+
+.right-paddle {
+    background: url("../img/right-paddle.png") no-repeat -5px center;
+}
+
+.photolist-wrapper {
+    position: relative;
+    float: left;
+    width: 890px;
+    height: 90px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.photolist-wrapper .photolist {
+    position: relative;
+    width: 3000px;
+    height: 90px;
+}
+.photolist-wrapper .photolist  img {
+    padding: 2px;
+    margin: 2px;
+    cursor: pointer;
+    background: #F6F6F6;
+    border: 1px solid #666;
+}
+.photolist-wrapper .photolist  img:hover {
+    opacity: 1.0;
+}

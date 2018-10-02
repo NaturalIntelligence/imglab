@@ -1,0 +1,13 @@
+<plugins-menu>
+    <div class="dropdown" style="float:right;">
+        <div class="dropbtn" ><i class="icon-puzzle" ></i></div>
+        <div class="dropdown-content" >
+            <a href="#" each={ plugin in plugins} onclick={ loadPlugin } >{ plugin.title }</a>
+        </div>
+    </div>
+    <script>
+        this.loadPlugin = function(e){
+            riot.mount('plugin-window',e.item);
+        }
+    </script>
+</plugins-menu>

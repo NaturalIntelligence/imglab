@@ -1,0 +1,17 @@
+<beenest>
+    <style>
+        .fppBtn{
+            background: #17a2b8; width: 100%;color: white;
+        }
+    </style>
+    <input onchange={saveToken} class="form-control" type="text" name="api_token" id="beenest_api_token" placeholder="api_token" value={ pluginsStore.beenest.token } />
+    <br>
+    <!-- <input onclick={fetchFpp} class="btn fppBtn" type="button" name="beenestBtn" id="beenestBtn" value="Set API Token" /> -->
+    <script>
+        this.saveToken = function(e){
+            pluginsStore.beenest.token = e.target.value;
+            localStorage.setItem("beenest_api_token", e.target.value);
+        }
+
+    </script>
+</beenest>

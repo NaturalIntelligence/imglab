@@ -1,0 +1,65 @@
+
+.input-bar {
+    width: calc(100vw - 400px);
+    height: 100px;
+    padding: 8px 4px;
+    /* margin: 10px auto;
+    border: 1px solid grey; */
+}
+
+.left-paddle,
+.right-paddle {
+    float: left;
+    width: 35px;
+    height: 90px;
+    cursor: pointer;
+}
+
+.left-paddle {
+    background: url("../img/left-paddle-white.png") no-repeat 5px center;
+}
+
+.right-paddle {
+    background: url("../img/right-paddle-white.png") no-repeat -5px;
+    background-position: right;
+}
+
+.photolist-wrapper {
+    position: relative;
+    float: left;
+    /* width: 890px; */
+    margin: 0 auto;
+    overflow: hidden;
+}
+.photolist-wrapper .photolist {
+    position: relative;
+    /* width: 3000px; */
+    /* height: 90px; */
+}
+.photolist-wrapper .photolist  img {
+    padding: 2px;
+    margin: 2px;
+    cursor: pointer;
+    vertical-align: top;
+    background: #F6F6F6;
+    border: 1px solid #666;
+    opacity: 0.3;
+    transition: .5s ease;
+}
+.photolist-wrapper .photolist  img:hover {
+    opacity: 1.0;
+    transition: .5s ease;
+}
+
+.delete {
+    background: url("../img/delete.svg") no-repeat;
+    width:15px;
+    height: 15px;
+    float: left;
+    position: absolute;
+    cursor: pointer;
+}
+.imgbox {
+    float: left;
+    position: relative;
+}

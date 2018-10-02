@@ -1,0 +1,89 @@
+<plugin-window>
+    <style>
+        #plugin-titlebar{
+            background: grey;
+            color: white;
+            text-align: center;
+            -webkit-user-select: none; /* Safari */        
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+        #plugin-window{
+            border: 2px solid grey;
+            top: 200px;
+            left: 40vw;
+            position: absolute;
+            min-width: 200px;
+            background: #c3bfbf;
+            z-index: 10;
+        }
+        #plugin-content{
+            padding: 10px;
+        }
+    </style>
+    <div id="plugin-window">
+        <div id="plugin-titlebar">
+            <span>{ opts.plugin.title }</span>
+            <button type="button" class="close" aria-label="Close" onclick={closeme}>
+                <span aria-hidden="true" style="color: white;">&times;</span>
+            </button>
+        </div>
+        <div id="plugin-content"></div>
+    </div>
+    <script>
+        this.on('mount',function(){
+            $("#plugin-content").append(`<${opts.plugin.tagName}></${opts.plugin.tagName}>`)
+            riot.mount(this.opts.plugin.tagName);
+            dragElement(
+                document.getElementById("plugin-window"),
+                document.getElementById("plugin-titlebar"),
+            );
+        });
+
+        this.closeme= function(e){
+            $("#plugin-window").hide();
+        }
+
+        
+
+        function dragElement(elmnt,titlebar) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            if (titlebar) {
+                /* if present, the header is where you move the DIV from:*/
+                titlebar.onmousedown = dragMouseDown;
+            } else {
+                /* otherwise, move the DIV from anywhere inside the DIV:*/
+                elmnt.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                /* stop moving when mouse button is released:*/
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+    </script>
+</plugin-window>

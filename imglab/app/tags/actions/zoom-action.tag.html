@@ -1,0 +1,85 @@
+<action-zoom>
+  <style>
+    .zoom-bar{
+      display: flex;
+    }
+    .zoom-bar > div:not(:first-child){
+      margin-left: .2em;
+    }
+    .zoom-button{
+      padding: .3em;
+      cursor: pointer;
+    }
+    .zoom-button:not(.zoom-selected):hover{
+      background: grey;
+    }
+    input[type="text"]{
+      border: 0px;
+      text-align:center;
+      margin-top:.2em;
+    }
+  </style>
+  <div class="zoom-bar">
+    <div class="zoom-button">
+      <img src="img/icons/zoomin.svg" data-zoom-type="in" onclick={ zoom }>
+    </div>
+    <div>
+      <input id="zoom-scale" type='text' disabled value="100%" maxlength="4" size="4"/>
+    </div>
+    <div class="zoom-button">
+      <img src="img/icons/zoomout.svg" data-zoom-type="out" onclick={ zoom }>
+    </div>
+    <div class="zoom-button">
+      <div class="tool-icon icon-cw" data-zoom-type="reset" onclick={ zoom }/>
+    </div>
+  </div>
+  <script>
+    var tag = this;
+    tag.zoom = function (e){
+
+      if(!imgSelected) return;
+      var mulScale = 0;
+      switch (e.target.dataset.zoomType) {
+        case 'in':
+          if(imgSelected.size.imageScale>=10)return;
+          mulScale = 1;
+          break;
+        case 'out':
+          if(imgSelected.size.imageScale<=0.1)return;
+          mulScale = -1;
+          break;
+        case 'reset':
+          mulScale = 0;
+          break;
+      }
+
+      const preImgSelectedScale = imgSelected.size.imageScale;
+      imgSelected.size.imageScale = (mulScale===0) ? 1 : preImgSelectedScale+mulScale*appConfig.zoomStepSize;
+
+      const img = labellingData[imgSelected.name];
+      if(img){//if there are labels
+        img.shapes.forEach((shape)=>{
+          //each shape should zoom in relation to the image's scale
+          shape.zoomScale = (mulScale===0) ? shape.defaultZoomScale : shape.zoomScale*imgSelected.size.imageScale/preImgSelectedScale;
+        })
+      }
+
+      rescaleImage();
+    }
+
+    this.on('mount', function () {
+      //reset the input box's value according to image scale
+      if(imgSelected) $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
+    });
+
+    function rescaleImage(){
+
+      $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
+
+      imgSelected.size.scaledWidth = Math.floor(imgSelected.size.width * imgSelected.size.imageScale);
+      imgSelected.size.scaledHeight = Math.floor(imgSelected.size.height * imgSelected.size.imageScale);
+
+      riot.mount('workarea');
+  }
+  </script>
+</action-zoom>
