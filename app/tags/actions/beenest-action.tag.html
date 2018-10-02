@@ -64,7 +64,9 @@
                         }
                 })
                 .catch(function (error) {
-                    if (error.response.status === 403 && error.response.data.error.code === "16") {
+                    if (!error.response) {
+                        alert('无效令牌或已过期。');
+                    } else if (error.response.status === 403 && error.response.data.error.code === "16") {
                         alert('尚余其它类型任务未完成，无法请求此类型新任务。');
                     } else if (error.response.status === 403) {
                         alert('未授权操作。');
