@@ -52,6 +52,35 @@ One of imglab's key advantages is that you can use 3rd party libraries to **fast
 
 You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which automatically gets plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to the correct location. Check [Demo video](https://youtu.be/Y-bJo_ylHTw) on Youtube.
 
+### Keyboard Shortcuts:
+
+*File Management:*
+
+Shift + Alt + O : Open image folder.
+Ctrl + I : Import data file.
+Ctrl + E : Export data file.
+Alt + Left/Right Arrow : Navigate through images in the slider.
+
+*Image Manipulation:*
+
+Del : Delete selected shapes or feature points.
+Enter : Confirm action.
+Alt + A : Select all shapes.
+Ctrl + Directional Arrow : Move the currently selected shape in the corresponding direction.
+
+*Toolbar Shortcuts:*
+
+Alt + F : Feature Point
+Alt + C : Circle
+Alt + R : Rectangle
+Alt + P : Polygon
+Alt + M : Move
+Alt + L : Light
+Alt + E : Ellipse
+Alt + + (Plus key) : Zoom
+Alt + W : Magic wand
+
+
 ### Auto suggestion
 
 ![Auto suggestion](img/imglab-autosuggestion.gif)
@@ -63,6 +92,14 @@ You can either import a file from a URL or from your computer. You can plot the 
 ### Different Shapes
 
 ![Plugins](img/imglab-polygon.gif)
+
+###Keyboard Shortcuts:
+
+![Hotkeys](img/imglab-hotkeys.gif)
+
+###Zoom In/Out:
+
+![Hotkeys](img/imglab-zoom.gif)
 
 Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration for more details.
 
