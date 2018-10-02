@@ -68,6 +68,8 @@ Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration for more deta
 
 ## Getting Started
 
+To use it offline, you can either download installers or clone this repo and run it on a local server.
+
 ### Installing
 
 1. Fork this repository on github and make a clone from your forked copy
@@ -75,20 +77,22 @@ Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration for more deta
 $ git clone 'your_local_fork_on_github'
 ```
 
-### Setup local environment for development
+### Setup local environment
 
 1. Install node and npm
 2. Open the terminal and run `$ npm install -g live-server` to install node live server.
 3. Run `$ live-server` in /imglab/ folder.
 4. Open your browser (if it hasn't popped up already) at: `http://127.0.0.1:8080/`
 
-## Built with
-
-- [Riot.js](https://github.com/riot/riot) - Simple and elegant component-based UI library
+*Nore that* [live-server](https://www.npmjs.com/package/live-server) is just an app to run the server in easy way. You may try any other option as well. 
 
 ## Contributing 
 
 Please read [CONTRIBUTING.md](https://github.com/NaturalIntelligence/imglab/blob/master/.github/First_Time_Contributors.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Built with
+
+- [Riot.js](https://github.com/riot/riot) - Simple and elegant component-based UI library
 
 ## Showcase your work
 
@@ -96,9 +100,12 @@ While using this library, if you happen to build an open database that can help 
 
 ## Worth to mention
 
-- **[निम्न (NIMN)](https://github.com/nimndata/spec)** : A data format which can save up to 80% network bandwidth and speed up network communication.
-- [Stubmatic](https://github.com/NaturalIntelligence/Stubmatic) : Create HTTP mock  services in minutes without code. You can also mock some binary data formats.
-- **[अनुमार्गक (anumargak)](https://github.com/NaturalIntelligence/anumargak)** : Amazing fast router for node web servers.
+- [Stubmatic](https://github.com/NaturalIntelligence/Stubmatic) : Mock web servers and services. Designed specialy for testers and testing. 
+- [अनुमार्गक (anumargak)](https://github.com/node-muneem/anumargak) : Amazing fast router for node web servers.
+- **[मुनीम (Muneem)](https://github.com/node-muneem/muneem)** : Simple and fast web framework designed not only for developers but whole team.
+- [Match it](https://funcards.github.io/match-it/) : Generate Spot it like card game decks. 
+
+*Note that* All above mentioned projects are free to use and welcome contributors.
 
 ## Contributors
 
