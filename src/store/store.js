@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import appConfig from "./modules/app-config";
-import actionConfig from "./modules/actions-config";
+import actionConfig from "./modules/action-config";
 import imageStore from "./modules/image-store";
 
 Vue.use(Vuex);

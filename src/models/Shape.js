@@ -1,7 +1,5 @@
-import imageStore from "../store/modules/image-store";
-
 export class Shape {
-  constructor({ id, type, rbox, points } = {}) {
+  constructor({ id, type, rbox, points, defaultZoomScale = 1 } = {}) {
     this.id = id;
     this.label = "unlabelled";
     this.type = type;
@@ -11,9 +9,7 @@ export class Shape {
     this.tags = [];
     this.featurePoints = [];
     this.zoomScale = 1;
-
-    let parentImage = imageStore.getters.getImageSelected;
-    let imageScale = parentImage.size.imageScale;
-    this.defaultZoomScale = 1 / imageScale;
+    // default scale when image is at 100% zoom
+    this.defaultZoomScale = defaultZoomScale;
   }
 }

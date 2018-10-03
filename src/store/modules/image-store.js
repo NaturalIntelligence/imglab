@@ -44,9 +44,14 @@ const mutations = {
   },
 
   /**
-   * Adds a shape to image and returns a shape data object
+   * Adds a shape to image and returns a Shape object
+   * @param {String} id - id of shape
+   * @param {String} type - type of shape
+   * @param {SVG.Rbox} rbox - rbox of shape
+   * @param {Array[]} points - array of shape metadata,
+   * @see getPoints for more info about points
    */
-  attachShapeToImage(state, { id, type, rbox, points }) {
+  addShapeToImage(state, { id, type, rbox, points }) {
     var shape = scaleShape(
       id,
       type,
@@ -164,7 +169,7 @@ const getters = {
    */
   getImageByName: state =>
     /**
-     * Returns and image
+     * Takes a name and returns an image
      * @param {String} name - image name
      * @returns {Image | undefined}
      */

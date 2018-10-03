@@ -1,8 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store/store";
-import svgJs from "./plugins/svg";
-import svgDrawJs from "./plugins/svgDrawJs";
+import svgjs from "./plugins/svg";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faImages,
@@ -12,11 +11,9 @@ import {
 import { faFolderOpen as farFolderOpen } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faImages, farFolderOpen, faChevronLeft, faChevronRight);
+Vue.use(svgjs);
 
-// Add svg.js and svg.draw.js as plugins
-Vue.use(svgJs);
-Vue.use(svgDrawJs);
+library.add(faImages, farFolderOpen, faChevronLeft, faChevronRight);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

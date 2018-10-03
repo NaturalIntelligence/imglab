@@ -15,7 +15,10 @@
         :style="{ width: imageWidth + 'px', height: imageHeight + 'px' }"
         @mouseover="showTrackingLine = true"
         @mousemove="showPosition"
-        @mouseout="showTrackingLine = false">
+        @mouseout="showTrackingLine = false"
+        @mousedown="mouseDown"
+        @mouseup="mouseUp">
+        <!-- Span used for calculating image scale changes  -->
         <span
           visibility="hidden"
           style="position: absolute;"
@@ -31,9 +34,13 @@
 </template>
 
 <script>
-import TrackingLines from './tracking-lines/tracking-lines'
-import { mapGetters } from 'vuex';
+import TrackingLines from "./tracking-lines/tracking-lines";
+import { mapGetters, mapMutations } from "vuex";
 import { getCoordinates } from "../utils/app";
+import { dispatch } from "../utils/actions.js";
+import { RECTANGLE, CIRCLE, POLYGON } from "../utils/tool-names";
+
+const debounce = require("lodash.debounce");
 
 export default {
   components: {
@@ -48,8 +55,8 @@ export default {
     };
   },
   computed: {
-    // Map getters from actions-config.js
-    ...mapGetters('actions-config', {
+    // Map getters from action-config.js
+    ...mapGetters('action-config', {
       copiedElements: 'getCopiedElements',
       selectedTool: 'getSelectedTool',
       selectedElement: 'getSelectedElement',
@@ -79,11 +86,30 @@ export default {
 
     // Trick: Returns image scale and redraws canvas everytime image/scale changes
     imageScale() {
-      this.drawCanvas();
       return (this.imageSelected && this.imageSelected.size.imageScale) || 0;
     }
   },
+  watch: {
+    /**
+     * Call draw canvas when image scale changes
+     */
+    imageScale() {
+      this.drawCanvas();
+    }
+  },
   methods: {
+    ...mapMutations("action-config", [
+      "setAlreadyDrawing",
+      "setSelectedElement"
+    ]),
+
+    ...mapMutations("image-store", [
+      "addImageToStore",
+      "addShapeToImage",
+      "updateFeaturePoint",
+      "updateShapeDetail"
+    ]),
+
     /**
      * Sets the mouse position accordingly
      * @param {MouseEvent} event - mouse event
@@ -102,10 +128,9 @@ export default {
      */
     drawCanvas() {
       if (this.canvas) {
-        let SVG = this.$svg;
         // Replace canvas with a new one
         this.canvas.remove();
-        this.canvas = new SVG("work-canvas");
+        this.canvas = this.$svg("work-canvas");
         // Draws all shapes in image
         this.drawShapes()
       }
@@ -128,7 +153,7 @@ export default {
      */
     drawShape(shape) {
       if (!shape) return;
-      let scale = this.iamgeSelected.size.imageScale;
+      let scale = this.imageScale;
       let currentShape;
       switch (shape.type) {
         case "rect":
@@ -142,12 +167,161 @@ export default {
           currentShape = rect;
           break;
       }
+    },
+
+    /**
+     * Deselects previously selected elements and selects the current element
+     */
+    mouseDown(event) {
+      this.deselectAll();
+
+      if (this.selectedTool && this.selectedTool.type !== "point"
+        && !this.alreadyDrawing && this.selectedTool.drawable) {
+        // Creates a new shape
+        let shape = this.selectedTool.create(this.canvas, event);
+        this.attachShapeListeners(shape);
+
+        if (shape.type !== "polygon") shape.draw(event);
+        this.setSelectedElement({ selectedElement: shape });
+      }
+    },
+
+    /**
+     *
+     */
+    mouseUp(event) {
+      if (this.selectedTool && this.selectedElement) {
+        this.selectedElement.draw(event);
+      }
+    },
+
+    /**
+     * Deselects all selectedElements
+     * @see getSelectedElements for more details
+     */
+    deselectAll() {
+      if (this.selectedElements) {
+        this.selectedElements.forEach(el => {
+          el.selectize(false, {
+            deepSelect: true
+          });
+          el.selectize(false);
+        })
+      }
+    },
+
+    /**
+     * Allows shapes to be dragged only if move tool is selected
+     * @param {SVG.Shape} shape - SVG element
+     */
+    dragOnMove(shape) {
+      shape.on("mousedown", (event) => {
+        if (!this.selectedTool || this.selectedTool.type !== "move") {
+          event.preventDefault();
+          event.stopPropogation();
+        }
+      })
+    },
+
+    /**
+     * Attach draw and resize listeners to a shape
+     * @param {SVG.Shape} shape - SVG shape
+     */
+    attachShapeListeners(shape) {
+      // Set draw start to true when drawing
+      shape.on("drawstart", () => {
+        this.setAlreadyDrawing({
+          alreadyDrawing: true
+        });
+      });
+
+      /**
+       * Set draw stop to false once done with drawing
+       * Make sure that the shape size is large enough to prevent accidental draws
+       * Add shape to image if valid, remove previously drawn shape otherwise
+       */
+      shape.on("drawstop", () => {
+        this.setAlreadyDrawing({
+          alreadyDrawing: false
+        });
+
+        if (!this.selectedTool.validate(shape)) {
+          shape.parent().remove();
+          shape.remove();
+        } else {
+          // Attach shape data
+          let points = this.getPoints(shape);
+          this.addShapeToImage({
+            id: shape.node.id,
+            type: shape.type,
+            rbox: shape.rbox(this.canvas),
+            points: this.getPoints(shape)
+          });
+          //
+          this.attachEvents(shape);
+        }
+      });
+
+      shape.on('resizedone', () => {
+        this.updateShapeDetail(
+          shape.node.id,
+          shape.rbox(this.canvas),
+          getPoints(shape)
+        );
+      });
+    },
+
+    /**
+     * Returns the shapes that make up the SVG Element
+     * Eg. four points of a rectangle
+     * @param {SVG.Shape} shape - SVG shape
+     */
+    getPoints(shape) {
+      // Maps each shape type to a function
+      let map = {
+        // Returns rectangle metadata, [x-coord, y-coord, width, height]
+        [RECTANGLE]: function() {
+          let box = shape.rbox(this.canvas);
+          return [box.x, box.y, box.w, box.w]
+        },
+        // Returns circle metadata, [cx-coord, cy-coord, radius]
+        [CIRCLE]: function() {
+          var box = shape.rbox(this.canvas);
+          return [box.cx, box.cy, shape.attr("r")];
+        },
+        // Returns list of polygon vertices, [[point1.x, point1.y], ...]
+        [POLYGON]: function() {
+          var parentSvg = shape.parent();
+          var calculatedPoints = [];
+          // Polygon points are relative to it's container SVG
+          var vector = {
+              x: parseInt(parentSvg.attr("x"), 10) || 0,
+              y: parseInt(parentSvg.attr("y"), 10) || 0
+          }
+
+          shape.array().value.forEach(pointArray => {
+              calculatedPoints.push([pointArray[0] + vector.x, pointArray[1] + vector.y]);
+          });
+
+          return calculatedPoints;
+        }
+      };
+
+      return map[shape.type]();
+    },
+
+    /**
+     * @param {SVG.Shape} shape - SVG shape
+     */
+    attachEvents(shape) {
+      this.dragOnMove(shape);
+
+      // TODO: Complete actions
     }
   },
   mounted() {
     // Set up a new canvas
-    let SVG = this.$svg;
-    let canvas = new SVG("work-canvas");
+    let canvas = this.$svg("work-canvas");
     this.canvas = canvas;
   }
 }

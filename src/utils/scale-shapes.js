@@ -20,7 +20,8 @@ export function scaleShape(id, type, rbox, points, scale) {
       w: 0,
       h: 0
     },
-    points: scaleShapePoints(points, scale, type)
+    points: scaleShapePoints(points, scale, type),
+    defaultZoomScale: scale
   });
 }
 

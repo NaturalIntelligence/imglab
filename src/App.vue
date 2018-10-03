@@ -29,7 +29,7 @@
       <div class="d-flex flex-row" style="height: calc(100vh - 50px);">
         <div id="toolbar" class="d-flex flex-column overlay-color grey-border">
           <!-- <toolbox tools="labelling"></toolbox> -->
-          <!-- <toolbox class="mt-auto toolbox-border-top" tools="canvas"></toolbox> -->
+          <toolbox class="toolbox-border-top"></toolbox>
         </div>
         <div class="d-flex flex-column base-color" style="width: 100vw">
           <div>
@@ -54,13 +54,15 @@
 </template>
 
 <script>
-import WorkArea from './components/workarea';
-import ImageSlider from './components/image-slider/image-slider';
+import ToolBox from "./components/tools/toolbox";
+import WorkArea from "./components/workarea";
+import ImageSlider from "./components/image-slider/image-slider";
 
 export default {
   components: {
     'workarea': WorkArea,
-    'image-slider': ImageSlider
+    'image-slider': ImageSlider,
+    'toolbox': ToolBox
   }
 };
 </script>

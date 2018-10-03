@@ -17,7 +17,8 @@ const mutations = {
 
   /**
    * Assign selected tool
-   * @param {Object} selectedTool
+   * @param {Tool} selectedTool - Tool object
+   * @see /components/tools/tools/[shape].js for more info
    */
   setSelectedTool(state, { selectedTool = null } = {}) {
     state.selectedTool = selectedTool;
