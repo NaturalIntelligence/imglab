@@ -39,9 +39,7 @@
                         });
                         var elementParent = $("#canvas-container");
                         var elementChild = $("#" + item.id);
-                        elementParent.animate({
-                            scrollTop: elementChild.offset().top - elementParent.offset().top - 250
-                        }, 2000)
+                        elementParent.scrollTop(elementChild.offset().top - elementParent.offset().top - 250)
                     }
                 })
             }
