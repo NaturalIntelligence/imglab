@@ -1,15 +1,21 @@
+import { RECTANGLE } from "../../../utils/tool-names";
+
 export const rectangle = {
-  type: "rect",
-  title: "Rectangle",
+  type: RECTANGLE,
+  title: RECTANGLE,
   description: "Draw a rectanglular box",
-  icon: "rectangle.svg",
   drawable: true,
+  actionable: false,
+  icon: {
+    isSVG: true,
+    name: "rectangle.svg"
+  },
   create: function(canvas) {
     let rect = canvas
       .nested()
       .rect()
-      .addClass("labelbox shape");
-    rect.resize();
+      .addClass("labelbox shape")
+      .resize();
     rect.parent().draggable();
     return rect;
   },

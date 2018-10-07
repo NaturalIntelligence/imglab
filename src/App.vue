@@ -1,5 +1,6 @@
 <template>
-  <div class="">
+  <div class=""
+    @click="click">
     <div class="container-fluid">
       <div id="menubar" class="row overlay-color align-items-center" style="height: 50px;">
         <div class="col-3 col-sm-2 col-md-1 col-xl-1 no-pl">
@@ -28,12 +29,12 @@
     <div class="flex-row">
       <div class="d-flex flex-row" style="height: calc(100vh - 50px);">
         <div id="toolbar" class="d-flex flex-column overlay-color grey-border">
-          <!-- <toolbox tools="labelling"></toolbox> -->
-          <toolbox class="toolbox-border-top"></toolbox>
+          <toolbox :toolType="LABEL_TAG"></toolbox>
+          <toolbox :toolType="CANVAS_TAG" class="toolbox-border-top"></toolbox>
         </div>
         <div class="d-flex flex-column base-color" style="width: 100vw">
           <div>
-            <!-- <actionbar></actionbar> -->
+            <actionbar></actionbar>
           </div>
           <div>
             <workarea></workarea>
@@ -54,18 +55,53 @@
 </template>
 
 <script>
+import ActionBar from "./components/action-bar/action-bar";
 import ToolBox from "./components/tools/toolbox";
 import WorkArea from "./components/workarea";
 import ImageSlider from "./components/image-slider/image-slider";
+import { LABEL_TAG, CANVAS_TAG } from "./utils/tool-names";
 
 export default {
   components: {
     'workarea': WorkArea,
     'image-slider': ImageSlider,
-    'toolbox': ToolBox
+    'toolbox': ToolBox,
+    "actionbar": ActionBar
+  },
+  data() {
+    return {
+      LABEL_TAG,
+      CANVAS_TAG
+    }
+  },
+  methods: {
+    click(event) {
+      console.log("APP.VUE", event.target.nodeName);
+    }
   }
 };
 </script>
 
 <style>
+  .labelpoint {
+    fill: red;
+  }
+
+  .labelpolygon, .labelcircle, .labelbox {
+    fill: yellow;
+    stroke: green;
+    stroke-width: 2px;
+    fill-opacity: 0.1;
+  }
+
+  .svg_select_points{
+    fill: black;
+    fill-opacity: 0.1;
+    stroke: grey;
+  }
+
+  .svg_select_boundingRect{
+    stroke-dasharray: initial !important;
+  }
+
 </style>

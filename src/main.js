@@ -6,14 +6,31 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faImages,
   faChevronLeft,
-  faChevronRight
+  faChevronRight,
+  faSearchPlus,
+  faSearchMinus,
+  faUndo
 } from "@fortawesome/free-solid-svg-icons";
-import { faFolderOpen as farFolderOpen } from "@fortawesome/free-regular-svg-icons";
+import {
+  faFolderOpen as farFolderOpen,
+  faHandRock as farHandRock,
+  faLightbulb as farLightbulb
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 Vue.use(svgjs);
 
-library.add(faImages, farFolderOpen, faChevronLeft, faChevronRight);
+library.add(
+  faImages,
+  faChevronLeft,
+  faChevronRight,
+  faSearchPlus,
+  faSearchMinus,
+  faUndo,
+  farFolderOpen,
+  farHandRock,
+  farLightbulb
+);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

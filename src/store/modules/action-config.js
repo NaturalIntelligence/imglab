@@ -1,9 +1,9 @@
 const state = {
   selectedElements: [],
   copiedElements: [],
+  selectedToolDom: null,
   selectedTool: null,
   selectedElement: null,
-  alreadyDrawing: false
 };
 
 const mutations = {
@@ -17,11 +17,20 @@ const mutations = {
 
   /**
    * Assign selected tool
-   * @param {Tool} selectedTool - Tool object
+   * @param {Element} selectedTool - Dom element of selected tool
    * @see /components/tools/tools/[shape].js for more info
    */
-  setSelectedTool(state, { selectedTool = null } = {}) {
+  setSelectedTool(state, { dom, selectedTool } = {}) {
+    if (state.selectedTool) {
+      // Remove previous tool style
+      state.selectedToolDom.classList.remove("tool-selected");
+    }
     state.selectedTool = selectedTool;
+    state.selectedToolDom = dom;
+    // Add selected style to current tool
+    if (dom) {
+      state.selectedToolDom.classList.add("tool-selected");
+    }
   },
 
   /**
@@ -41,11 +50,13 @@ const mutations = {
   },
 
   /**
-   * Toggle to draw/stop
-   * @param {boolean} alreadyDrawing - true if drawing, false otherwise
+   * Adds a single shape into selectedElements
+   * @param {Shape} shape - SVG shape
    */
-  setAlreadyDrawing(state, { alreadyDrawing = false } = {}) {
-    state.alreadyDrawing = alreadyDrawing;
+  addShapeToSelectedElements(state, { shape }) {
+    if (shape) {
+      state.selectedElements.push(shape);
+    }
   },
 
   /**
@@ -62,8 +73,7 @@ const mutations = {
       copiedElements = [],
       selectedTool = null,
       selectedElement = null,
-      selectedElements = [],
-      alreadyDrawing = false
+      selectedElements = []
     } = {}
   ) {
     state = {
@@ -71,7 +81,6 @@ const mutations = {
       selectedTool,
       selectedElement,
       selectedElements,
-      alreadyDrawing
     };
   }
 };
@@ -107,14 +116,6 @@ const getters = {
    */
   getSelectedElements: state => {
     return state.selectedElements;
-  },
-
-  /**
-   * Returns a boolean variable to check if currently drawing
-   * @returns {boolean} true if currently drawing, false otherwise
-   */
-  getAlreadyDrawing: state => {
-    return state.alreadyDrawing;
   },
 
   /**

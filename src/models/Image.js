@@ -14,7 +14,8 @@ export class Image {
     shapes = [],
     shapeIndex = 0,
     pointIndex = 0,
-    featurePointSize = 3
+    featurePointSize = 3,
+    opacity = 1
   } = {}) {
     this.name = name;
     this.src = src;
@@ -24,6 +25,7 @@ export class Image {
     this.shapes = shapes;
     this.shapeIndex = shapeIndex; // Used to generate new ids for copy pasted shapes
     this.pointIndex = pointIndex; // Used to generate new ids for feature points
-    this.featurePointSize = featurePointSize; //
+    this.featurePointSize = featurePointSize;
+    this.opacity = opacity;
   }
 }

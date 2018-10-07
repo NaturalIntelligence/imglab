@@ -1,9 +1,15 @@
+import { POINT } from "../../../utils/tool-names";
+
 export const point = {
-  type: "point",
-  title: "Point",
+  type: POINT,
+  title: POINT,
   description: "Draw a point",
-  icon: "point.svg",
-  drawable: true,
+  drawable: false,
+  actionable: false,
+  icon: {
+    isSVG: true,
+    name: "point.svg"
+  },
   /**
    * Create a point
    * @param {SVG.Container} canvas
@@ -14,7 +20,8 @@ export const point = {
   create: function({ canvas, event, shape, featurePointRadius }) {
     let canvasOffset = canvas.node.getBoundingClientRect();
     let point = drawPoint(event, shape, canvasOffset);
-    point.radius(featurePointRadius);
+    // TODO: Specify style
+    point.radius(featurePointRadius).addClass("labelpoint");
     return point;
   },
   validate: function() {
@@ -31,21 +38,24 @@ export const point = {
  * @returns {SVG.Circle} - featurePoint SVG
  */
 export function drawPoint(position, shape, canvasOffset) {
-  // Get the parent svg element that surrounds the container
-  var parentSvg = shape.parent();
+  // Get shape location
   var containerOffset = {
-    x: parseInt(parentSvg.attr("x"), 10) || 0,
-    y: parseInt(parentSvg.attr("y"), 10) || 0
+    x: parseInt(shape.parent().attr("x"), 10) || 0,
+    y: parseInt(shape.parent().attr("y"), 10) || 0
   };
-
+  // Label shape as parent of point
   var point = shape
     .parent()
     .circle()
-    .radius(1)
+    .radius(3)
     .attr({
+      for: shape.node.id,
       cx: position.x - canvasOffset.x - containerOffset.x,
       cy: position.y - canvasOffset.y - containerOffset.y
-    });
-  point.draggable();
+    })
+    .draggable()
+    .addClass("labelpoint");
+  // Assign a new type to point
+  point.type = POINT;
   return point;
 }

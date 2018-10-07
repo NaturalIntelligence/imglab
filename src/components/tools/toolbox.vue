@@ -1,29 +1,47 @@
 <template lang="html">
-  <div>
+  <div
+    v-if="tools[toolType]"
+  >
     <div
-      v-for="(iconName, index) in icons" :key="index"
+      v-for="(tool, index) in tools[toolType]" :key="index"
       class="tool-button"
-      :id="iconName"
-      :ref="iconName"
-      @click="action(iconName)">
+      :id="tool.type"
+      :ref="tool.type"
+      @click="dispatch(tool)"
+    >
       <img
-        :src="require('../../assets/icons/' + iconName + '.svg')"
-        :alt="iconName">
+        v-if="tool.icon.isSVG"
+        :src="require('../../assets/icons/' + tool.icon.name)"
+        :alt="tool.type"
+      >
+      <font-awesome-icon
+        v-else
+        :icon="[tool.icon.type, tool.icon.name]"
+        style="font-size: 1.5em"
+      >
+      </font-awesome-icon>
       <div>
-        {{ iconName }}
+        {{ tool.type }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { tools } from "./config/config";
+import { tools as t } from "./config/config";
 import { mapGetters, mapMutations } from "vuex";
+import { LABEL_TAG } from "../../utils/tool-names";
 
 export default {
+  props: {
+    toolType: {
+      type: String,
+      default: LABEL_TAG
+    }
+  },
   data() {
     return {
-      icons: []
+      tools: t
     }
   },
   computed: {
@@ -38,28 +56,22 @@ export default {
 
     /**
      * Updates to newly selected tool
-     * @param {String} toolName - name of selected tool
+     * @param {Tool} tool - selected tool
      */
-    action(toolName) {
-      let tool = tools[toolName];
-      if (this.selectedTool) {
-        let previousTool = this.$refs[this.selectedTool.type][0];
-        previousTool.classList.remove("tool-selected");
-      }
-      // Add selected style to current tool
+    dispatch(tool) {
       let currentTool = this.$refs[tool.type][0];
-      currentTool.classList.add("tool-selected");
 
-      this.setSelectedTool({
-        selectedTool: tool
-      });
+      if (this.selectedTool && tool.type === this.selectedTool.type) {
+        // Unselect current tool
+        this.setSelectedTool();
+      } else {
+        // Select new tool
+        this.setSelectedTool({
+          dom: currentTool,
+          selectedTool: tool
+        });
+      }
     }
-  },
-  created() {
-    // Each tool name corresponds to an icon name
-    this.icons = Object.keys(tools).map(toolname => {
-      return toolname;
-    })
   }
 }
 </script>

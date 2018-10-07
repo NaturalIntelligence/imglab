@@ -5,6 +5,7 @@ const state = {
     deleteIfExported: true //Mark the data as saved when exported as nimn format, and delte the copy from browser cache.
   },
   zoomStepSize: 0.1,
+  opacityStepSize: 0.1,
   featurePointColor: "#ee0000"
 };
 
@@ -15,6 +16,13 @@ const mutations = {
    */
   setZoomStepSize(state, { zoomStepSize = 0.1 } = {}) {
     state.zoomStepSize = zoomStepSize;
+  },
+
+  /**
+   * Set opacity step size
+   */
+  setOpacityStepSize(state, { opacityStepSize = 0.1 } = {}) {
+    state.opacityStepSize = opacityStepSize;
   },
 
   /**
@@ -56,6 +64,13 @@ const getters = {
    */
   getZoomStepSize: state => {
     return state.zoomStepSize;
+  },
+
+  /**
+   * Returns the opacity step size
+   */
+  getOpacityStepSize: state => {
+    return state.opacityStepSize;
   },
 
   /**

@@ -3,7 +3,8 @@ import { FeaturePoint } from "../../models/FeaturePoint";
 import {
   scaleShape,
   scaleShapePoints,
-  scaleRbox
+  scaleRbox,
+  scaleFeaturePoints
 } from "../../utils/scale-shapes";
 
 /**
@@ -20,7 +21,7 @@ function getShape(state, imageName, shapeID) {
 
 const state = {
   images: {},
-  imageSelected: ""
+  imageSelected: null
 };
 
 const mutations = {
@@ -44,11 +45,12 @@ const mutations = {
   },
 
   /**
-   * Adds a shape to image and returns a Shape object
+   * Adds a shape to current image and returns a Shape object
    * @param {String} id - id of shape
    * @param {String} type - type of shape
    * @param {SVG.Rbox} rbox - rbox of shape
    * @param {Array[]} points - array of shape metadata,
+   * @returns {Shape} shape - a Shape object
    * @see getPoints for more info about points
    */
   addShapeToImage(state, { id, type, rbox, points }) {
@@ -59,23 +61,46 @@ const mutations = {
       points,
       1 / state.imageSelected.size.imageScale
     );
-    state.images[state.imageSelected.name].shapes.push(shape);
+
+    state.imageSelected.shapes.push(shape);
+
     return shape;
+  },
+
+  /**
+   * Adds a feature point to a shape
+   * @param {String} shapeID - id of shape
+   * @param {String} pointID - id of point
+   * @param {SVG.Rbox} position - rbox of point
+   */
+  addPointToShape(state, { shapeID, pointID, position }) {
+    var shape = getShape(state, state.imageSelected.name, shapeID);
+    var scale = 1 / state.imageSelected.size.imageScale;
+    shape.featurePoints.push(
+      new FeaturePoint({
+        x: position.cx * scale,
+        y: position.cy * scale,
+        id: pointID,
+        label: shape.featurePoints.length
+      })
+    );
   },
 
   /**
    * Removes shape from image
    * @param {String} shapeID
+   * @returns {Shape | undefined} removed shape or undefined if shape DNE
    */
   detachShapeFromImage(state, { imageName, shapeID }) {
     let name = imageName || state.imageSelected.name;
-    var index = state.images[name].shapes.findIndex(shape => {
-      return shape.id === shapeID;
-    });
 
-    if (index !== -1) {
-      this.shapes.splice(index, 1);
-    }
+    let shapes = state.images[name].shapes;
+    let index = shapes.findIndex(shape => shape.id === shapeID);
+
+    if (index < 0) return;
+
+    let shape = shapes.splice(index, 1);
+    return shape;
   },
 
   /**
@@ -85,6 +110,16 @@ const mutations = {
   setImageSelected(state, { name }) {
     if (name) {
       state.imageSelected = state.images[name];
+    }
+  },
+
+  /**
+   * Sets the current image opacity
+   * @param {Number} opacity - image opacity
+   */
+  setImageOpacity(state, { opacity = 1 }) {
+    if (state.imageSelected) {
+      state.imageSelected.opacity = opacity;
     }
   },
 
@@ -127,6 +162,13 @@ const mutations = {
     });
   },
 
+  updateFeaturePoints(state, { shapeID, featurePoints }) {
+    let shape = state.imageSelected.shapes.find(shape => shape.id === shapeID);
+    let scale = 1 / state.imageSelected.size.imageScale;
+
+    shape.featurePoints = scaleFeaturePoints(featurePoints, scale);
+  },
+
   /**
    * Update shape details
    * @param {String} shapeID - id of shape
@@ -135,14 +177,12 @@ const mutations = {
    */
   updateShapeDetail(state, { shapeID, rbox, points }) {
     var shapes = state.images[state.imageSelected.name].shapes;
-    var shape = getShape(state, state.imageSelected.name, shapeID);
-    var index = shapes.findIndex(shape => {
+    var shape = shapes.find(shape => {
       return shape.id === shapeID;
     });
     var scale = 1 / state.imageSelected.size.imageScale;
-    rbox && (shapes[index].rbox = scaleRbox(rbox, scale));
-    points &&
-      (shapes[index].points = scaleShapePoints(points, scale, shape.type));
+    rbox && (shape.rbox = scaleRbox(rbox, scale));
+    points && (shape.points = scaleShapePoints(points, scale, shape.type));
   }
 };
 

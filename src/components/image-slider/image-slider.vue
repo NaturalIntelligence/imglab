@@ -37,10 +37,14 @@
       </div>
       <div class="col-9">
         <div class="photolist-wrapper" style="width: 100%; overflow: hidden;">
-          <div id="photolist" class="photolist d-flex align-items-center" ref="photolist">
+          <div
+            id="photolist"
+            class="photolist d-flex align-items-center"
+            ref="photolist"
+          >
               <img
-                class="thumbnail"
                 v-for="(thumbnail, index) in thumbnails"
+                class="thumbnail"
                 :id="'thumbnail_' + index"
                 :key="thumbnail.name + index"
                 :src="thumbnail.src"
@@ -65,7 +69,7 @@
 
 <script>
 import { mapMutations } from 'vuex';
-import { Image as Img } from '../../models/Image';
+import { Image as _Image } from '../../models/Image';
 import Velocity from 'velocity-animate'
 
 export default {
@@ -77,20 +81,19 @@ export default {
   },
   data() {
     return {
-      thumbnails: [],
-      currentIndex: 0,
-      dummy: [1,2,3,4,5,6]
+      thumbnails: []
     }
   },
   methods: {
     // Map mutations from image-store
-    ...mapMutations('image-store', [
-      'setImageSelected' // Map this.setImgSelected to this.$store.setImgSelected
+    ...mapMutations("image-store", [
+      "setImageSelected",
+      "addImageToStore"
     ]),
 
     /**
      * Loads the image dynamically and stores it in the image store
-     * @param { Img } imageData - an Image object from models/Image
+     * @param { _Image } imageData - an Image object from models/Image
      */
     loadImage(imageData) {
       let self = this;
@@ -108,10 +111,11 @@ export default {
           imageScale: 1
         };
 
-        self.$store.commit('image-store/addImageToStore', {
+        self.addImageToStore({
           src: imageData.src,
           name: imageData.name,
-          size: imageSize});
+          size: imageSize
+        });
       }
 
       image.src = imageData.src;
@@ -126,7 +130,7 @@ export default {
       if (file.type.startsWith("image")) {
         let reader = new FileReader();
         reader.onload = e => {
-          let image = new Img({name: file.name, src: e.target.result});
+          let image = new _Image({name: file.name, src: e.target.result});
           this.loadImage(image);
           this.thumbnails.push(image);
         }
@@ -152,6 +156,7 @@ export default {
      * Slides the thumbnail preview to the left
      */
     slideleft() {
+      if (!this.thumbnails || this.thumbnails.length === 0) return;
       let firstThumbnail = this.thumbnails.shift();
       this.thumbnails.push(firstThumbnail);
     },
@@ -160,6 +165,7 @@ export default {
      * Slides the thumbnail preview to the right
      */
     slideright() {
+      if (!this.thumbnails || this.thumbnails.length === 0) return;
       let lastThumbnail = this.thumbnails.pop();
       this.thumbnails.unshift(lastThumbnail);
     },
