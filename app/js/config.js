@@ -117,12 +117,12 @@ var tools = {
             icon : "move.svg",
             type : "move"
         },
-        "tool-zoom" : {
-            title  : "缩放",
-            desp : "Enlarge the workarea",
-            icon_font : "icon-zoom-in",
-            actions : ["zoom"]
-        },
+        // "tool-zoom" : {
+        //     title  : "缩放",
+        //     desp : "Enlarge the workarea",
+        //     icon_font : "icon-zoom-in",
+        //     actions : ["zoom"]
+        // },
         "tool-light" : {
             title  : "亮度",
             desp : "Highlight the labels",
