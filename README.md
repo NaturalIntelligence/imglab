@@ -151,5 +151,5 @@ While using this library, if you happen to build an open database that can help 
 
 ## Contributors
 
-<a href="graphs/contributors"><img src="https://opencollective.com/imglab/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/NaturalIntelligence/imglab/graphs/contributors"><img src="https://opencollective.com/imglab/contributors.svg?width=890&button=false" /></a>
 
