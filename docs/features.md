@@ -6,19 +6,23 @@
 
 ### Plugins
 
+<<<<<<< HEAD
+![Plugins](/img/imglab-autosuggestion.gif)
+=======
 ![Plugins](imglab-fpp.gif)
+>>>>>>> 90ca97bea80732f1185a9ad0961e868c61c2131c
 
 ### Different Shapes
 
-![Polygons](https://github.com/derekdkim/imglab/tree/test/img/imglab-polygon.gif)
+![Polygons](/img/imglab-autosuggestion.gif)
 
 ### Keyboard Shortcuts:
 
-![Hotkeys](https://github.com/derekdkim/imglab/tree/test/img/imglab-hotkeys.gif)
+![Hotkeys](/img/imglab-autosuggestion.gif)
 
 ### Zoom In/Out:
 
-![Hotkeys](https://github.com/derekdkim/imglab/tree/test/img/imglab-zoom.gif)
+![Hotkeys](/img/imglab-autosuggestion.gif)
 
 ### Copy/Paste Labels Across Images:
 
