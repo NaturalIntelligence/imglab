@@ -6,11 +6,7 @@
 
 ### Plugins
 
-<<<<<<< HEAD
-![Plugins](/img/imglab-autosuggestion.gif)
-=======
-![Plugins](imglab-fpp.gif)
->>>>>>> 90ca97bea80732f1185a9ad0961e868c61c2131c
+![Plugins](/img/imglab-fpp.gif)
 
 ### Different Shapes
 
