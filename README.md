@@ -83,23 +83,23 @@ You can either import a file from a URL or from your computer. You can plot the 
 
 ### Auto suggestion
 
-![Auto suggestion](imglab-autosuggestion.gif)
+![Auto suggestion](img/imglab-autosuggestion.gif)
 
 ### Plugins
 
-![Plugins](imglab-fpp.gif)
+![Plugins](img/imglab-fpp.gif)
 
 ### Different Shapes
 
-![Plugins](imglab-polygon.gif)
+![Plugins](img/imglab-polygon.gif)
 
 ### Keyboard Shortcuts:
 
-![Hotkeys](imglab-hotkeys.gif)
+![Hotkeys](img/imglab-hotkeys.gif)
 
 ### Zoom In/Out:
 
-![Hotkeys](imglab-zoom.gif)
+![Hotkeys](img/imglab-zoom.gif)
 
 Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration or a list of notable [features](features.md) for more details.
 

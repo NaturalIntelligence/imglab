@@ -2,23 +2,23 @@
 
 ### Auto suggestion
 
-![Auto suggestion](imglab-autosuggestion.gif)
+![Auto suggestion](https://github.com/NaturalIntelligence/imglab/tree/master/img/imglab-autosuggestion.gif)
 
 ### Plugins
 
-![Plugins](imglab-fpp.gif)
+![Plugins](https://github.com/NaturalIntelligence/imglab/tree/master/img/imglab-fpp.gif)
 
 ### Different Shapes
 
-![Polygons](imglab-polygon.gif)
+![Polygons](https://github.com/NaturalIntelligence/imglab/tree/master/img/imglab-polygon.gif)
 
 ### Keyboard Shortcuts:
 
-![Hotkeys](imglab-hotkeys.gif)
+![Hotkeys](https://github.com/NaturalIntelligence/imglab/tree/master/img/imglab-hotkeys.gif)
 
 ### Zoom In/Out:
 
-![Hotkeys](imglab-zoom.gif)
+![Hotkeys](https://github.com/NaturalIntelligence/imglab/tree/master/img/imglab-zoom.gif)
 
 ### Copy/Paste Labels Across Images:
 
