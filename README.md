@@ -101,7 +101,7 @@ You can either import a file from a URL or from your computer. You can plot the 
 
 ![Hotkeys](img/imglab-zoom.gif)
 
-Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration or a list of notable [features](features.md) for more details.
+Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration or a list of notable [features](docs/features.md) for more details.
 
 ## Getting Started
 
