@@ -40,6 +40,7 @@ function axiosClient() {
    }, function(error) {
      //请求错误时做些事
      if (error.response.status === 401) {
+        alert('登陆过期。');
         logout();
      } else if (error.response.status === 403 && error.response.data && error.response.data.error.code === "16") {
         alert('尚余其它类型任务未完成，无法请求此类型新任务。');
