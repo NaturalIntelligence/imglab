@@ -76,17 +76,7 @@
                         }
                 })
                 .catch(function (error) {
-                    if (!error.response) {
-                        alert('无效令牌或已过期。');
-                    } else if (error.response.status === 403 && error.response.data.error.code === "16") {
-                        alert('尚余其它类型任务未完成，无法请求此类型新任务。');
-                    } else if (error.response.status === 403) {
-                        alert('未授权操作。');
-                    } else if (error.response.status === 401) {
-                        alert('无效令牌或已过期。');
-                    } else {
-                        alert('系统错误，请稍候重试。');
-                    }
+                    
                 });
             }
 
@@ -153,7 +143,7 @@
                         // console.log(error);
                         // if (error.response.status === 403) {
                             clearAllImages();
-                            alert('提交失败（任务超时或格式错误）');
+                            // alert('提交失败（任务超时或格式错误）');
                             // console.log(error);
                         // }
                       });
@@ -183,7 +173,7 @@
 	              	// if (error.response.status === 403) {
 	                    clearAllImages();
 	              		// alert('Failed to submit');
-	              		console.log(error);
+	              		// console.log(error);
 	              	// }
 	              });
 

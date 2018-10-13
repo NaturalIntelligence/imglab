@@ -120,7 +120,7 @@
 	<script src="tags/workarea.tag.html" type="riot/tag"></script>
 	<script src="tags/pluginWindow.tag.html" type="riot/tag"></script>
 	<!-- <script src="tags/plugins/facepp.tag.html" type="riot/tag"></script> -->
-	<script src="tags/plugins/beenest.tag.html" type="riot/tag"></script>
+	<!-- <script src="tags/plugins/beenest.tag.html" type="riot/tag"></script> -->
 	<script src="tags/actionbar.tag.html" type="riot/tag"></script>
 	<script src="tags/trackinglines.tag.html" type="riot/tag"></script>
 	<script src="tags/settings-window.tag.html" type="riot/tag"></script>
@@ -159,12 +159,13 @@
 	<script src="js/app.js"></script>
 	<script type="text/javascript">
 
+
     	var login = localStorage.getItem("beevalley_login");
     	if (!login) {
 			var url = new URL(window.location.href);
 			var code = url.searchParams.get("code");
 			if (!code) {
-	    		var redirect_uri = encodeURIComponent("http://bee-valley.todview.com");
+	    		var redirect_uri = encodeURIComponent(pluginsStore.beenest.host);
 	            var state = Math.ceil(Math.random()*1000);
 				window.location = 'https://open.weixin.qq.com/connect/qrconnect?appid=wx325f7c60ccdd70ed&redirect_uri='+redirect_uri+'&response_type=code&scope=snsapi_login&state='+state+'#wechat_redirect';
 			} else {
@@ -174,14 +175,14 @@
                   instance.post('/login/weixin/' + code)
                   .then(function(response) {
                         var token = response.data;
-                        console.log(token);
-
+                        // console.log(token);
+                        localStorage.setItem("beevalley_login", "true");
                   })
                   .catch(function (error) {
-                    console.log(error);
-                        alert('请求失败.');
+                    	console.log(error);
+                        alert('登陆失败，请稍后再试。');
+                        logout();
                   });
-
 			}
 
     	}

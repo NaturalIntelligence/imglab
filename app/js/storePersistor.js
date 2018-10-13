@@ -32,10 +32,10 @@ function confirmUserToLoadBrowserCache(){
     //     }catch(e){
     //     }
     // }
-    var beenestApiToken = localStorage.getItem("beenest_api_token");
-    if(beenestApiToken){
-        pluginsStore.beenest.token = beenestApiToken;
-    }
+    // var beenestApiToken = localStorage.getItem("beenest_api_token");
+    // if(beenestApiToken){
+    //     pluginsStore.beenest.token = beenestApiToken;
+    // }
 }
 
 function clearCache(){

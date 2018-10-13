@@ -152,16 +152,17 @@ var plugins = {
     //     title: "Face Plus Plus",
     //     tagName: 'facepp'
     // },
-    "beenest" : {
-        title: "玉蜂谷设置",
-        tagName: "beenest"
-    }
+    // "beenest" : {
+    //     title: "玉蜂谷设置",
+    //     tagName: "beenest"
+    // }
 }
 var pluginsStore = {
     // "facepp" : {
     // },
     "beenest": {
-        baseURL: "https://api.todview.com/v1/"
+        baseURL: "https://api.todview.com/v1/",
+        host: "http://bee-valley.todview.com"
     },
 }
 

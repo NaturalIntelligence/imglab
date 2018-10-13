@@ -21,12 +21,36 @@ function getCordinates(event, element) {
     };
 }
 
+function logout() {
+    localStorage.removeItem('beevalley_login');
+    window.location = pluginsStore.beenest.host;
+}
+
 // aidition beenest publick methods
 function axiosClient() {
-    return axios.create({
+    // axios.defaults.withCredentials = true;
+    var instance = axios.create({
         baseURL: pluginsStore.beenest.baseURL,
-        headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token}
+        // headers: {Authorization: 'Bearer ' + pluginsStore.beenest.token,},
+        withCredentials: true
     });
+    instance.interceptors.response.use(function(response) {
+     //对响应数据做些事
+      return response;
+   }, function(error) {
+     //请求错误时做些事
+     if (error.response.status === 401) {
+        logout();
+     } else if (error.response.status === 403 && error.response.data && error.response.data.error.code === "16") {
+        alert('尚余其它类型任务未完成，无法请求此类型新任务。');
+     } else if (error.response.status === 403) {
+        alert('未授权操作。请关注公众号“淘然视界”，联系客服获取权限。');
+     } else {
+        alert('系统错误，请稍候重试。');
+     }
+     return Promise.reject(error);
+   });
+   return instance;
 }
 
 function updateDimentions(imgFileSrc, imageDataObject) {
