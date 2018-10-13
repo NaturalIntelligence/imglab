@@ -10,15 +10,15 @@
 
 ### Different Shapes
 
-![Polygons](/img/imglab-autosuggestion.gif)
+![Polygons](/img/imglab-polygon.gif)
 
 ### Keyboard Shortcuts:
 
-![Hotkeys](/img/imglab-autosuggestion.gif)
+![Hotkeys](/img/imglab-hotkeys.gif)
 
 ### Zoom In/Out:
 
-![Hotkeys](/img/imglab-autosuggestion.gif)
+![Hotkeys](/img/imglab-zoom.gif)
 
 ### Copy/Paste Labels Across Images:
 
