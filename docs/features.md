@@ -2,11 +2,11 @@
 
 ### Auto suggestion
 
-![Auto suggestion](https://github.com/derekdkim/imglab/tree/test/img/imglab-autosuggestion.gif)
+![Auto suggestion](/img/imglab-autosuggestion.gif)
 
 ### Plugins
 
-![Plugins](https://github.com/derekdkim/imglab/tree/test/img/imglab-fpp.gif)
+![Plugins](imglab-fpp.gif)
 
 ### Different Shapes
 
