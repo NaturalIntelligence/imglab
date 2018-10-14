@@ -18,7 +18,7 @@
 
 ### Zoom In/Out:
 
-![Hotkeys](/img/imglab-zoom.gif)
+![Zoom](/img/imglab-zoom.gif)
 
 ### Copy/Paste Labels Across Images:
 
