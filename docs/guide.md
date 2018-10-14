@@ -4,7 +4,7 @@
 
 ![Auto suggestion](/img/imglab-autosuggestion.gif)
 
-### [Plugins:](#plug-ins)
+### [Plugins:](#plugins)
 
 Use 3rd party plugins such as Face Plus Plus for a one click annotation.
 
@@ -15,7 +15,7 @@ Use 3rd party plugins such as Face Plus Plus for a one click annotation.
 
 ![Plugins](/img/imglab-fpp.gif)
 
-### [Different Shapes:](#polygon)
+### [Different Shapes:](#different-shapes)
 
 Create various shapes (circles, rectangles, polygons) on your image.
 
@@ -25,7 +25,7 @@ Create various shapes (circles, rectangles, polygons) on your image.
 
 ![Polygons](/img/imglab-polygon.gif)
 
-### [Keyboard Shortcuts:](#hotkeys)
+### [Keyboard Shortcuts:](##keyboard-shortcuts)
 
 Use the following shortcuts to speed up your work and save yourself some clicking.
 
@@ -57,7 +57,7 @@ Use the following shortcuts to speed up your work and save yourself some clickin
 
 ![Hotkeys](/img/imglab-hotkeys.gif)
 
-### [Zoom In/Out:](#zoom)
+### [Zoom In/Out:](#zoom-inout)
 
 Zoom in and out of your image to adjust your precision or simply get a different view.
 
@@ -66,7 +66,7 @@ Zoom in and out of your image to adjust your precision or simply get a different
 
 ![Zoom](/img/imglab-zoom.gif)
 
-### [Copy/Paste Labels Across Images:](#copy-paste)
+### [Copy/Paste Labels Across Images:](##copypaste-labels-across-images)
 
 A short description of the feature will go here.
 
@@ -75,7 +75,7 @@ A short description of the feature will go here.
 
 DEMONSTRATION GIF NOT YET AVAILABLE.
 
-### [Offline Installation:](#offline-install)
+### [Offline Installation:](#offline-installation)
 
 To use it offline, you can either download installers or clone this repo and run it on a local server.
 
