@@ -23,7 +23,28 @@ A web based tool to label images for objects that can be used to train dlib or o
 
 ImgLab is platform independent, runs directly from the browser, and has no prerequisites. It requires minimal CPU and memory.
 
-One of imglab's key advantages is that you can use 3rd party libraries to **fast annotation process**, which can save a lot of time and effort.
+**Core features**:
+
+### Auto suggestion
+
+![Auto suggestion](/img/imglab-autosuggestion.gif)
+
+### Plugins
+3rd party library compatibility: Carry over other libraries for a painless annotation process.
+
+![Plugins](/img/imglab-fpp.gif)
+
+### Different Shapes
+
+![Plugins](/img/imglab-polygon.gif)
+
+### Keyboard Shortcuts:
+
+![Hotkeys](/img/imglab-hotkeys.gif)
+
+### Zoom In/Out:
+
+![Hotkeys](/img/imglab-zoom.gif)
 
 **Other features**:
 
@@ -48,80 +69,25 @@ One of imglab's key advantages is that you can use 3rd party libraries to **fast
 * Set image opacity to highlight annotation shapes and points.
 * Tracking lines and mouse coordinates for precise annotations.
 
+Visit the [Features Documentation](/docs/features.md) for a complete list of the features.
+
 ## How to use
 
 You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which automatically gets plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to the correct location. Check [Demo video](https://youtu.be/Y-bJo_ylHTw) on Youtube.
 
-### Keyboard Shortcuts:
+### How to use Imglab's features:
 
-*File Management:*
+* [Auto-suggestions](/docs/guide.md/#auto-suggestion)
+* [Plug-ins](/docs/guide.md/#plug-ins)
+* [Creating shapes](/docs/guide.md/#polygon)
+* [Keyboard Shortcuts](/docs/guide.md/#hotkeys)
+* [Zooming in/out](/docs/guide.md/#zoom)
 
-* Shift + Alt + O : Open image folder.
-* Ctrl + I : Import data file.
-* Ctrl + E : Export data file.
-* Alt + Left/Right Arrow : Navigate through images in the slider.
-
-*Image Manipulation:*
-
-* Del : Delete selected shapes or feature points.
-* Enter : Confirm action.
-* Alt + A : Select all shapes.
-* Ctrl + Directional Arrow : Move the currently selected shape in the corresponding direction.
-
-*Toolbar Shortcuts:*
-
-* Alt + F : Feature Point
-* Alt + C : Circle
-* Alt + R : Rectangle
-* Alt + P : Polygon
-* Alt + M : Move
-* Alt + L : Light
-* Alt + E : Ellipse
-* Alt + + (Plus key) : Zoom
-* Alt + W : Magic wand
-
-
-### Auto suggestion
-
-![Auto suggestion](/img/imglab-autosuggestion.gif)
-
-### Plugins
-
-![Plugins](/img/imglab-fpp.gif)
-
-### Different Shapes
-
-![Plugins](/img/imglab-polygon.gif)
-
-### Keyboard Shortcuts:
-
-![Hotkeys](/img/imglab-hotkeys.gif)
-
-### Zoom In/Out:
-
-![Hotkeys](/img/imglab-zoom.gif)
-
-Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration or a list of notable [features](/docs/features.md) for more details.
+Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration or the [User Guide](/docs/guide.md) for more details.
 
 ## Getting Started
 
-To use it offline, you can either download installers or clone this repo and run it on a local server.
-
-### Installing
-
-1. Fork this repository on github and make a clone from your forked copy
-```
-$ git clone 'your_local_fork_on_github'
-```
-
-### Setup local environment
-
-1. Install node and npm
-2. Open the terminal and run `$ npm install -g live-server` to install node live server.
-3. Run `$ live-server` in /imglab/ folder.
-4. Open your browser (if it hasn't popped up already) at: `http://127.0.0.1:8080/`
-
-*Nore that* [live-server](https://www.npmjs.com/package/live-server) is just an app to run the server in easy way. You may try any other option as well. 
+Head to the [Installation Guide](/docs/guide.md/#offline-install) to install locally on your machine.
 
 ## Contributing 
 
