@@ -1,17 +1,25 @@
 # ImgLab User Guide:
 
+### [Import:](#import)
+
+1. To open a file, click the photo icon on the bottom left-hand corner (or press Ctrl + I).
+2. To open a folder, click the folder icon right below the photo icon.
+3. Left click a photo that appears in the slider in the bottom row.
+
 ### [Auto suggestion:](#auto-suggestion)
 
 ![Auto suggestion](/img/imglab-autosuggestion.gif)
 
 ### [Plugins:](#plugins)
 
-Use 3rd party plugins such as Face Plus Plus for a one click annotation.
+You can request to face++ API to collect the points which automatically gets plotted on the image.
+To use this, you must register on Face++ to use their API.
 
 1. Click the puzzle icon on the top right-hand corner.
 2. On the drag-down menu, select Face Plus Plus.
 3. Enter the api_key if applicable (or leave blank).
 4. Click Plot with Face++.
+5. If you feel that the result should be improved, you can drag any of the points to the correct location.
 
 ![Plugins](/img/imglab-fpp.gif)
 
