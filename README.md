@@ -70,19 +70,19 @@ Visit the [Features Documentation](/docs/features.md) for a complete list of the
 
 ## How to use
 
-You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which automatically gets plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to the correct location. Check [Demo video](https://youtu.be/Y-bJo_ylHTw) on Youtube.
+* [Importing images](/docs/guide.md/#import)
 
 To install locally, head to the [Installation Guide](/docs/guide.md/#offline-installation).
 
 ### How to use Imglab's features:
 
 * [Auto-suggestions](/docs/guide.md/#auto-suggestion)
-* [Plug-ins](/docs/guide.md/#plugins)
+* [Plug-ins](/docs/guide.md/#plugins) (Face++)
 * [Creating shapes](/docs/guide.md/#different-shapes)
 * [Keyboard Shortcuts](/docs/guide.md/#keyboard-shortcuts)
 * [Zooming in/out](/docs/guide.md/#zoom-inout)
 
-Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration or the [User Guide](/docs/guide.md) for more details.
+Check the [Demo Video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration or the [User Guide](/docs/guide.md) for more details.
 
 ## Contributing 
 
