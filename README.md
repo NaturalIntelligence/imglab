@@ -23,14 +23,11 @@ A web based tool to label images for objects that can be used to train dlib or o
 
 ImgLab is platform independent, runs directly from the browser, and has no prerequisites. It requires minimal CPU and memory.
 
-**Core features**:
-
 ### Auto suggestion
 
 ![Auto suggestion](/img/imglab-autosuggestion.gif)
 
 ### Plugins
-3rd party library compatibility: Carry over other libraries for a painless annotation process.
 
 ![Plugins](/img/imglab-fpp.gif)
 
@@ -75,19 +72,17 @@ Visit the [Features Documentation](/docs/features.md) for a complete list of the
 
 You can either import a file from a URL or from your computer. You can plot the landmark points by yourself or you can request to face++ API to collect the points which automatically gets plotted on the image (You will need to register on face++ to use the API.). If you feel that the result should be improved, you can drag a point to the correct location. Check [Demo video](https://youtu.be/Y-bJo_ylHTw) on Youtube.
 
+To install locally, head to the [Installation Guide](/docs/guide.md/#offline-installation).
+
 ### How to use Imglab's features:
 
 * [Auto-suggestions](/docs/guide.md/#auto-suggestion)
-* [Plug-ins](/docs/guide.md/#plug-ins)
-* [Creating shapes](/docs/guide.md/#polygon)
-* [Keyboard Shortcuts](/docs/guide.md/#hotkeys)
-* [Zooming in/out](/docs/guide.md/#zoom)
+* [Plug-ins](/docs/guide.md/#plugins)
+* [Creating shapes](/docs/guide.md/#different-shapes)
+* [Keyboard Shortcuts](/docs/guide.md/#keyboard-shortcuts)
+* [Zooming in/out](/docs/guide.md/#zoom-inout)
 
 Check [video](https://youtu.be/Y-bJo_ylHTw) tutorial/demonstration or the [User Guide](/docs/guide.md) for more details.
-
-## Getting Started
-
-Head to the [Installation Guide](/docs/guide.md/#offline-install) to install locally on your machine.
 
 ## Contributing 
 
