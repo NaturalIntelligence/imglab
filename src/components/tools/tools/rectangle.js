@@ -10,13 +10,12 @@ export const rectangle = {
     isSVG: true,
     name: "rectangle.svg"
   },
-  create: function(canvas) {
+  create: function({ canvas }) {
     let rect = canvas
       .nested()
       .rect()
       .addClass("labelbox shape")
       .resize();
-    rect.parent().draggable();
     return rect;
   },
   validate: function(el) {

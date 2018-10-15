@@ -1,9 +1,13 @@
+import { convertToArray } from "../../utils/app";
+
 const state = {
-  selectedElements: [],
   copiedElements: [],
   selectedToolDom: null,
   selectedTool: null,
-  selectedElement: null,
+  selected: {
+    shapes: [],
+    featurePoints: []
+  }
 };
 
 const mutations = {
@@ -34,53 +38,55 @@ const mutations = {
   },
 
   /**
-   * Assign currently selected element
-   * @param {SVGElement} selectedElement - currently selected SVGElement on the canvas
+   * Assign selected shapes / featurePoints
+   * @param {String[]} shapes - array of shape ids
+   * @param {String[]} featurePoints - array of featurePoint ids
    */
-  setSelectedElement(state, { selectedElement = null } = {}) {
-    state.selectedElement = selectedElement;
+  setSelectedElements(state, { shapes = [], featurePoints = [] } = {}) {
+    // Convert shapes and featurePoints to array if necessary
+    state.selected.shapes = convertToArray(shapes);
+    state.selected.featurePoints = convertToArray(featurePoints);
   },
 
   /**
-   * Assign selected elements
-   * @param {SVGElement[]} selectedElements - array of SVGElements that are selected on the canvas
+   * Adds shapes / featurePoints
+   * @param {String[]} shapes - array of shape ids
+   * @param {String[]} featurePoints - array of featurePoint ids
    */
-  setSelectedElements(state, { selectedElements = [] } = {}) {
-    state.selectedElements = selectedElements;
-  },
+  addSelectedElement(state, { shapeID, featurePointID }) {
+    if (shapeID) {
+      state.selected.shapes = state.selected.shapes.concat([shapeID]);
+    }
 
-  /**
-   * Adds a single shape into selectedElements
-   * @param {Shape} shape - SVG shape
-   */
-  addShapeToSelectedElements(state, { shape }) {
-    if (shape) {
-      state.selectedElements.push(shape);
+    if (featurePointID) {
+      state.selected.featurePoints = state.selected.shapes.concat([
+        featurePointID
+      ]);
     }
   },
 
   /**
    * Intialize the state of the image
-   * @param {shape[]} copiedElements - array of copied shapes
-   * @param {object} selectedTool - selected tool
-   * @param {SVGElement} selectedElement - selected shape, used to show label data
-   * @param {SVGElement[]} selectedElements - array of selected SVGElements
-   * @param {boolean} alreadyDrawing - toggle to draw/stop
+   * @param {Shape[]} copiedElements - array of copied shapes
+   * @param {Object} selectedTool - selected tool
+   * @param {Object} selected - object containing array of shapes and featurePoints
+   * @param {Boolean} alreadyDrawing - toggle to draw/stop
    */
   init(
     state,
     {
       copiedElements = [],
       selectedTool = null,
-      selectedElement = null,
-      selectedElements = []
+      selected = {
+        shapes: [],
+        featurePoints: []
+      }
     } = {}
   ) {
     state = {
       copiedElements,
       selectedTool,
-      selectedElement,
-      selectedElements,
+      selected
     };
   }
 };
@@ -102,20 +108,23 @@ const getters = {
     return state.selectedTool;
   },
 
+  getSelectedShape: state => {
+    return state.selected.shapes.slice(-1)[0]
+  },
   /**
-   * Returns a selected element
-   * @returns {SVGElement} selected element
+   * Returns an array of selected shapes
+   * @returns {SVG.Shape[]} array of selected shapes
    */
-  getSelectedElement: state => {
-    return state.selectedElement;
+  getSelectedShapes: state => {
+    return state.selected.shapes;
   },
 
   /**
-   * Returns an array of selected elements
-   * @returns {SVGElement[]} array of selected element
+   * Returns an array of selected feature points
+   * @returns {FeaturePoint[]} array of selected feature points
    */
-  getSelectedElements: state => {
-    return state.selectedElements;
+  getSelectedFeaturePoints: state => {
+    return state.selected.featurePoints;
   },
 
   /**

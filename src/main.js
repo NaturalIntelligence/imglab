@@ -1,5 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
+// import App from "./test.vue";
 import store from "./store/store";
 import svgjs from "./plugins/svg";
 import { library } from "@fortawesome/fontawesome-svg-core";

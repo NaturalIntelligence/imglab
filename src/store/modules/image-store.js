@@ -7,20 +7,10 @@ import {
   scaleFeaturePoints
 } from "../../utils/scale-shapes";
 
-/**
- * Helper function to get the shape via the image name and shape ID
- * @param {Observer} state - state of image store
- * @param {String} imageName - name of image
- * @param {String} shapeID - shape ID
- */
-function getShape(state, imageName, shapeID) {
-  return state.images[imageName].shapes.find(shape => {
-    return shape.id === shapeID;
-  });
-}
-
 const state = {
   images: {},
+  shapes: {},
+  featurePoints: {},
   imageSelected: null
 };
 
@@ -62,7 +52,8 @@ const mutations = {
       1 / state.imageSelected.size.imageScale
     );
 
-    state.imageSelected.shapes.push(shape);
+    state.imageSelected.shapes.push(id);
+    state.shapes[id] = shape;
 
     return shape;
   },
@@ -74,16 +65,15 @@ const mutations = {
    * @param {SVG.Rbox} position - rbox of point
    */
   addPointToShape(state, { shapeID, pointID, position }) {
-    var shape = getShape(state, state.imageSelected.name, shapeID);
+    var shape = state.shapes[shapeID];
     var scale = 1 / state.imageSelected.size.imageScale;
-    shape.featurePoints.push(
-      new FeaturePoint({
-        x: position.cx * scale,
-        y: position.cy * scale,
-        id: pointID,
-        label: shape.featurePoints.length
-      })
-    );
+    shape.featurePoints.push(pointID);
+    state.featurePoints[pointID] = new FeaturePoint({
+      x: position.cx * scale,
+      y: position.cy * scale,
+      id: pointID,
+      label: shape.featurePoints.length
+    });
   },
 
   /**
@@ -98,9 +88,33 @@ const mutations = {
     let index = shapes.findIndex(shape => shape.id === shapeID);
 
     if (index < 0) return;
-
+    // Detach shape from image
     let shape = shapes.splice(index, 1);
+
+    // Detach feature points from shape
+    state.shapes[shapeID].featurePoints.forEach(featurePointID => {
+      state.featurePoints[featurePointID] = undefined;
+    });
+
+    // Detach shape
+    state.shapes[shapeID] = undefined;
+
     return shape;
+  },
+
+  detachFeaturePoint(state, { shapeID, featurePointID }) {
+    let shape = state.shapes[shapeID];
+
+    let index = shape.featurePoints.findIndex(fpID => {
+      return fpID === featurePointID;
+    });
+
+    // Feature point does not exist
+    if (index === -1) return;
+
+    // Remove feature point from shape
+    shape.featurePoints.splice(index, 1);
+    state.featurePoints[featurePointID] = undefined;
   },
 
   /**
@@ -114,59 +128,43 @@ const mutations = {
   },
 
   /**
-   * Sets the current image opacity
-   * @param {Number} opacity - image opacity
-   */
-  setImageOpacity(state, { opacity = 1 }) {
-    if (state.imageSelected) {
-      state.imageSelected.opacity = opacity;
-    }
-  },
-
-  /**
-   * Update shape label
-   * @param {String} shapeID - id of shape
-   * @param {String} newLabel - new label
-   */
-  updateLabel(status, { shapeID, newLabel }) {
-    let shape = getShape(state, state.imageSelected.name, shapeID);
-    if (shape) {
-      shape.label = newLabel;
-    }
-  },
-
-  /**
    * Updates a single feature point
-   * @param {String} shapeID - id of shape
    * @param {String} pointID - id of point
    * @param {SVG.Rbox} position
    * @param {String} newLabel - new label for feature point
    */
-  updateFeaturePoint(
-    state,
-    { shapeID, pointID, position, newLabel = undefined }
-  ) {
-    var shape = getShape(state, state.imageSelected.name, shapeID);
-    var scale = 1 / state.imageSelected.size.imageScale;
-
-    var index = shape.featurePoints.findIndex(featurePoint => {
-      return featurePoint.id == pointID;
-    });
-    var point = shape.featurePoints[index];
-
-    shape.featurePoints[index] = new FeaturePoint({
-      x: position.cx * scale,
-      y: position.cy * scale,
-      label: newLabel || point.label,
-      id: pointID
-    });
-  },
-
-  updateFeaturePoints(state, { shapeID, featurePoints }) {
-    let shape = state.imageSelected.shapes.find(shape => shape.id === shapeID);
+  updateFeaturePoint(state, { pointID, position, newLabel = undefined }) {
     let scale = 1 / state.imageSelected.size.imageScale;
 
-    shape.featurePoints = scaleFeaturePoints(featurePoints, scale);
+    let point = state.featurePoints[pointID];
+
+    if (position) {
+      point.x = position.cx * scale;
+      point.y = position.cy * scale;
+    }
+
+    newLabel && (point.label = newLabel);
+  },
+
+  /**
+   * Updates feature points of shape
+   * @param {String} shapeID
+   * @param {FeaturePoint[]} featurePoints
+   */
+  updateFeaturePoints(state, { shapeID, featurePoints }) {
+    let shape = state.shapes[shapeID];
+    let scale = 1 / state.imageSelected.size.imageScale;
+
+    // Update list of feature point list of shape
+    shape.featurePoints = featurePoints.map(featurePoint => {
+      return featurePoint.id;
+    });
+
+    // Scale feature points and insert into store
+    let scaledFeaturePoints = scaleFeaturePoints(featurePoints, scale);
+    scaledFeaturePoints.forEach(sFP => {
+      state.featurePoints[sFP.id] = sFP;
+    });
   },
 
   /**
@@ -174,15 +172,53 @@ const mutations = {
    * @param {String} shapeID - id of shape
    * @param {SVG.Rbox} rbox
    * @param {Point[]} points - points of a shape, e.g. 4 corners of a rectangle
+   * @param {String} label
+   * @param {}
    */
-  updateShapeDetail(state, { shapeID, rbox, points }) {
-    var shapes = state.images[state.imageSelected.name].shapes;
-    var shape = shapes.find(shape => {
-      return shape.id === shapeID;
-    });
+  updateShapeDetail(
+    state,
+    { shapeID, attributes, category, label, points, rbox, zoomScale }
+  ) {
+    var shape = state.shapes[shapeID];
     var scale = 1 / state.imageSelected.size.imageScale;
-    rbox && (shape.rbox = scaleRbox(rbox, scale));
+
+    attributes && (shape.attributse = attributes);
+    category && (shape.category = category);
+    label && (shape.label = label);
     points && (shape.points = scaleShapePoints(points, scale, shape.type));
+    rbox && (shape.rbox = scaleRbox(rbox, scale));
+    zoomScale && (shape.zoomScale = zoomScale);
+  },
+
+  /**
+   * Updates selected image details
+   */
+  updateImageDetail(
+    state,
+    {
+      name,
+      attributes,
+      tags,
+      scaledWidth,
+      scaledHeight,
+      imageScale,
+      shapeIndex,
+      pointIndex,
+      featurePointSize,
+      opacity
+    }
+  ) {
+    let image = state.imageSelected;
+    name && (image.name = name);
+    attributes && (image.attributes = attributes);
+    tags && (image.tags = tags);
+    scaledWidth && (image.size.scaledWidth = scaledWidth);
+    scaledHeight && (image.size.scaledHeight = scaledHeight);
+    imageScale && (image.size.imageScale = imageScale);
+    shapeIndex && (image.shapeIndex = shapeIndex);
+    pointIndex && (image.pointIndex = pointIndex);
+    featurePointSize && (image.featurePointSize = featurePointSize);
+    opacity && (image.opacity = opacity);
   }
 };
 
@@ -204,25 +240,41 @@ const getters = {
   },
 
   /**
-   * Get image by name
-   * @returns {Function(): Image} takes an image name and returns an Image object
+   * Returns an image from a name
+   * @param {String} name - image name
+   * @returns {Function(): }
    */
-  getImageByName: state =>
-    /**
-     * Takes a name and returns an image
-     * @param {String} name - image name
-     * @returns {Image | undefined}
-     */
-    name => {
-      return state.images[name];
-    },
+  getImageByName: state => name => {
+    return state.images[name];
+  },
 
   /**
-   * Gers shape by id
+   * Gets shape by id
+   * @param {String} shapeID
    * @returns {Function(): Shape} takes a shapeID and returns a shape
    */
   getShapeByID: state => shapeID => {
-    return getShape(state, state.imageSelected.name, shapeID);
+    return state.shapes[shapeID];
+  },
+
+  /**
+   * Gets shape feature points
+   * @param {String} shapeID
+   * @returns {Function(): FeaturePoint[]} takes a shape ID and returns an array of feature points
+   */
+  getShapeFeaturePoints: state => shapeID => {
+    return state.shapes[shapeID].featurePoints.map(featurePointID => {
+      return state.featurePoints[featurePointID];
+    });
+  },
+
+  /**
+   * Gets feature point by ID
+   * @param {String} featurePointID
+   * @returns {Function: FeaturePoint}
+   */
+  getFeaturePointByID: state => featurePointID => {
+    return state.featurePoints[featurePointID];
   }
 };
 

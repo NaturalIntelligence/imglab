@@ -10,14 +10,13 @@ export const circle = {
     isSVG: true,
     name: "circle.svg"
   },
-  create: function(canvas) {
+  create: function({ canvas }) {
     let circle = canvas
       .nested()
       .circle()
       .radius()
       .addClass("labelcircle shape")
       .resize();
-    circle.parent().draggable();
     return circle;
   },
   validate: function(el) {

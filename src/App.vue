@@ -17,7 +17,7 @@
         </div>
         <div class="col-3 col-sm-4 col-md-4 col-xl-4">
           <div class="form-inline flex-row-reverse float-right">
-            <a class="btn btn-info" onclick="javascript:displayDonationPrompt()" style="margin: 0px 10px;">Donate</a>
+            <!-- <a class="btn btn-info" onclick="javascript:displayDonationPrompt()" style="margin: 0px 10px;">Donate</a> -->
             <!-- <shortcuts class="d-none d-md-block"></shortcuts>
             <plugins-menu class="d-none d-md-block"></plugins-menu> -->
           </div>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div id="sidebar" class="p-2 overlay-color grey-border" style="width: 350px;">
-          <!-- <label-panel></label-panel> -->
+          <label-panel></label-panel>
         </div>
       </div>
 
@@ -59,6 +59,7 @@ import ActionBar from "./components/action-bar/action-bar";
 import ToolBox from "./components/tools/toolbox";
 import WorkArea from "./components/workarea";
 import ImageSlider from "./components/image-slider/image-slider";
+import LabelPanel from "./components/label-panel/label-panel";
 import { LABEL_TAG, CANVAS_TAG } from "./utils/tool-names";
 
 export default {
@@ -66,7 +67,8 @@ export default {
     'workarea': WorkArea,
     'image-slider': ImageSlider,
     'toolbox': ToolBox,
-    "actionbar": ActionBar
+    "actionbar": ActionBar,
+    "label-panel": LabelPanel
   },
   data() {
     return {

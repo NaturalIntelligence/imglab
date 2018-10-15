@@ -17,7 +17,8 @@
         @mousemove="showPosition"
         @mouseleave="mouseLeave"
         @mousedown="mouseDown"
-        @mouseup="mouseUp">
+        @mouseup="mouseUp"
+      >
         <tracking-lines
           :show="showTrackingLine"
           :xPos="xPos"
@@ -32,11 +33,13 @@
 import TrackingLines from "./tracking-lines/tracking-lines";
 import { FeaturePoint } from "../models/FeaturePoint";
 import { mapGetters, mapMutations } from "vuex";
-import { getCoordinates } from "../utils/app";
+import { getCoordinates, _ } from "../utils/app";
 import { dispatch } from "../utils/actions.js";
 import { RECTANGLE, CIRCLE, POLYGON, POINT, MOVE, ZOOM, OPACITY } from "../utils/tool-names";
 import { drawPoint } from "./tools/tools/point";
 import { scaleFeaturePoints, scaleShapePoints } from "../utils/scale-shapes";
+import { KEY } from "../utils/actions";
+import SVG from "svg.js";
 
 const debounce = require("lodash.debounce");
 
@@ -46,10 +49,12 @@ export default {
   },
   data() {
     return {
+      alreadyDrawing: false,
+      canvas: null,
       showTrackingLine: false,
       xPos: 0,
       yPos: 0,
-      canvas: null
+      drawingShape: undefined
     };
   },
   computed: {
@@ -57,14 +62,16 @@ export default {
     ...mapGetters("action-config", {
       copiedElements: "getCopiedElements",
       selectedTool: "getSelectedTool",
-      selectedElement: "getSelectedElement",
-      selectedElements: "getSelectedElements"
+      selectedShapes: "getSelectedShapes",
+      selectedFeaturePoints: "getSelectedFeaturePoints"
     }),
 
     // Map getters from image-store.js
     ...mapGetters("image-store", {
       imageSelected: "getImageSelected",
       getShapeByID: "getShapeByID",
+      getShapeFeaturePoints: "getShapeFeaturePoints",
+      getFeaturePointByID: "getFeaturePointByID"
     }),
 
     // Get image width
@@ -97,6 +104,7 @@ export default {
      * Redraw canvas when image changes
      */
     imageSelected() {
+      this.setSelectedElements();
       this.drawCanvas();
     },
 
@@ -105,12 +113,16 @@ export default {
      */
     imageScale() {
       this.drawCanvas();
+    },
+
+    selectedTool() {
+      this.deselectAll();
     }
   },
   methods: {
     ...mapMutations("action-config", [
       "setCopiedElements",
-      "setSelectedElement",
+      "addSelectedElement",
       "setSelectedElements"
     ]),
 
@@ -147,7 +159,7 @@ export default {
         // Removes all children and replaces canvas with a new one
         this.canvas.clear();
         this.canvas.remove();
-        this.canvas = this.$svg("work-canvas");
+        this.canvas = SVG("work-canvas");
         // Draws all shapes in image
         this.drawShapes()
       }
@@ -158,7 +170,8 @@ export default {
      */
     drawShapes() {
       if (this.imageSelected) {
-        this.imageSelected.shapes.forEach(shape => {
+        this.imageSelected.shapes.forEach(shapeID => {
+          let shape = this.getShapeByID(shapeID);
           this.drawShape(shape);
         })
       }
@@ -219,7 +232,7 @@ export default {
       if (currentShape) {
         this.attachEvents(currentShape);
         this.attachShapeListeners(currentShape);
-        this.drawFeaturePoints(shape.featurePoints, currentShape);
+        this.drawFeaturePoints(this.getShapeFeaturePoints(currentShape.id()), currentShape);
       }
     },
 
@@ -231,12 +244,32 @@ export default {
 
       if (this.selectedTool && this.selectedTool.drawable
         && !this.alreadyDrawing) {
+        // Set drawing flag to true
+        this.alreadyDrawing = true;
         // Creates a new shape, rect/circle/polygon
-        let shape = this.selectedTool.create(this.canvas, event);
-        this.attachShapeListeners(shape);
+        let shape = this.selectedTool.create({
+          canvas: this.canvas,
+          event
+        });
 
-        if (shape.type !== "polygon") shape.draw(event);
-        this.setSelectedElement({ selectedElement: shape });
+        if (shape.type !== POLYGON) {
+          shape.draw(event);
+        } else {
+          shape.draw();
+          // Adds an event listener for Enter to stop drawing polygon
+          shape.on("drawstart", function() {
+            document.addEventListener("keydown", function(e) {
+              if (e.keyCode == KEY.ENTER) {
+                shape.draw("done");
+                shape.off("drawstart");
+                shape.parent().draggable();
+              }
+            });
+          });
+        }
+        this.drawingShape = shape;
+
+        this.attachShapeListeners(shape);
       }
     },
 
@@ -244,8 +277,8 @@ export default {
      * Event handling for mouse up
      */
     mouseUp(event) {
-      if (this.selectedTool && this.selectedTool.drawable && this.selectedElement) {
-        this.selectedElement.draw(event);
+      if (this.selectedTool && this.selectedTool.drawable && this.alreadyDrawing) {
+        this.drawingShape.draw(event);
       }
     },
 
@@ -257,22 +290,56 @@ export default {
       this.showTrackingLine = false;
     },
 
+    click(event) {
+      console.log('click', event.target);
+    },
+
     /**
-     * Deselects all selectedElements
-     * @see getSelectedElements for more details
+     * Closure function to monitor shape drag event
+     * @param {SVG.Shape} shape - a SVG shape
+     * @param {Function} cb - callback function
+     */
+    customDragHandler(shape, cb) {
+      var mousestate = 0;
+      shape.parent().on("mousedown", function(e) {
+        mousestate = 1;
+
+        let _mousemove = function(e) {
+          mousestate = 2;
+        }
+        let _mouseup = function(e) {
+          if (mousestate === 2) {
+              cb && cb(e);
+          }
+          mousestate = 0;
+          // unbind events
+          shape.parent().off("mousemove", _mousemove);
+          shape.parent().off("mouseup", _mouseup);
+        }
+        // bind events
+        shape.parent().on("mousemove", _mousemove);
+        shape.parent().on("mouseup", _mouseup);
+      });
+    },
+
+    /**
+     * Deselects all selected shapes / featurepoints
      */
     deselectAll() {
-      if (this.selectedElements) {
-        // Deselect all svg elements
-        this.selectedElements.forEach(el => {
-          el.selectize(false, {
-            deepSelect: true
-          });
-          el.selectize(false);
-        });
-        // Reset selected elements
-        this.setSelectedElements();
-      }
+      console.log("deselectAll", this.selectedShapes, this.selectedFeaturePoints);
+      // Deselect all svg elements
+      this.selectedShapes.forEach(shapeID => {
+        let svgShape = this.$svg.get(shapeID);
+        svgShape.selectize(false);
+      })
+
+      this.selectedFeaturePoints.forEach(featurePointID => {
+        let svgFP = this.$svg.get(featurePointID);
+        svgFP.selectize(false);
+      })
+
+      // Reset selected elements
+      this.setSelectedElements();
     },
 
     /**
@@ -280,13 +347,13 @@ export default {
      */
     selectAll() {
       if (this.imageSelected) {
-        this.imageSelected.shapes.forEach(shape => {
-          let curShape = this.$svg.get(shape.id);
-          curShape.selectize({
+        this.imageSelected.shapes.forEach(shapeID => {
+          let shape = this.$svg.get(shapeID);
+          shape.selectize({
             rotationPoint: false
           });
-          this.setSelectedElements({
-            selectedElements: this.selectedElements.concat([curShape])
+          this.addSelectedElement({
+            shapeID
           })
         })
       }
@@ -317,23 +384,21 @@ export default {
      * @param {SVG.Shape} shape - SVG shape
      */
     attachShapeListeners(shape) {
-      // Set draw start to true when drawing
-      shape.on("drawstart", () => {
-        this.alreadyDrawing = true;
-      });
-
       /**
        * Set draw stop to false once done with drawing
        * Make sure that the shape size is large enough to prevent accidental draws
        * Add shape to image if valid, remove previously drawn shape otherwise
        */
       shape.on("drawstop", () => {
-        console.log("drawstop");
+        // Reset flags
         this.alreadyDrawing = false;
+        this.drawingShape = undefined;
         if (!this.selectedTool.validate(shape)) {
           shape.parent().remove();
           shape.remove();
         } else {
+          // Make shape draggable
+          shape.parent().draggable();
           // Attach shape data
           let points = this.getPoints(shape);
           this.addShapeToImage({
@@ -348,11 +413,11 @@ export default {
       });
 
       shape.on('resizedone', () => {
-        this.updateShapeDetail(
-          shape.node.id,
-          shape.rbox(this.canvas),
-          this.getPoints(shape)
-        );
+        this.updateShapeDetail({
+          shapeID: shape.node.id,
+          rbox: shape.rbox(this.canvas),
+          points: this.getPoints(shape),
+        });
       });
     },
 
@@ -400,7 +465,7 @@ export default {
     attachEvents(shape) {
       this.dragOnMove(shape);
 
-      shape.parent().on("dragend", event => {
+      this.customDragHandler(shape, event => {
         if (this.selectedTool && this.selectedTool.type === MOVE) {
           this.updateShapeDetail({
             shapeID: shape.node.id,
@@ -429,14 +494,14 @@ export default {
           });
           this.attachEventsToFeaturePoint(point, shape);
         } else if (event.altKey) {
-          // Deep select shapes
+          // Deep select shape
           this.deselectAll();
           shape.selectize({
             rotationPoint: false,
             deepSelect: true
           });
-          this.setSelectedElements({
-            selectedElements: this.selectedElements.concat([shape])
+          this.addSelectedElement({
+            shapeID: shape.id()
           });
         } else {
           if (!event.ctrlKey) {
@@ -449,11 +514,11 @@ export default {
           shape.selectize({
             rotationPoint: false
           });
-          this.setSelectedElements({
-            selectedElements: this.selectedElements.concat([shape])
+
+          this.addSelectedElement({
+            shapeID: shape.id()
           });
         }
-        event.stopPropagation();
       });
     },
 
@@ -463,13 +528,13 @@ export default {
      * @param {SVG.Shape} shape - SVG shape
      */
     attachEventsToFeaturePoint(featurePoint, shape) {
-      featurePoint.on("dragend", event => {
+      this.customDragHandler(featurePoint, event => {
         this.updateFeaturePoint({
           shapeID: shape.id(),
           pointID: featurePoint.id(),
           position: featurePoint.rbox(this.canvas)
         });
-      })
+      });
 
       featurePoint.on('click', event => {
         if (!event.ctrlKey) {
@@ -478,10 +543,9 @@ export default {
           // TODO: Show in label panel
           // riot.mount('label-panel', { id : parent.node.id, pointId : f_point.node.id })
         }
-        this.setSelectedElements({
-          selectedElements: this.selectedElements.concat([featurePoint])
+        this.addSelectedElement({
+          featurePointID: featurePoint.id()
         });
-        event.stopPropagation();
       });
     },
 
@@ -490,10 +554,10 @@ export default {
      * @param {SVG.Shape} shape - SVG shape
      */
     updateFeaturePoints(shape) {
-      let parent = this.getShapeByID(shape.id());
+      let shapeFeaturePoints = this.getShapeFeaturePoints(shape.id());
       // Map feature point ID to label
       let fpLabelToID = {};
-      parent.featurePoints.forEach(({id , label}) => {
+      shapeFeaturePoints.forEach(({id , label}) => {
         fpLabelToID[id] = label;
       });
       // Create a list of feature points with the updated position
@@ -512,7 +576,7 @@ export default {
         return accumulator;
       }, []);
 
-      // update feature point in store
+      // Update feature point in store
       this.updateFeaturePointsInStore({
         shapeID: shape.id(),
         featurePoints
@@ -522,8 +586,8 @@ export default {
     /**
      * Draws all the feature points in the shape according to
      * current image scale and attachEventListeners to points
-     * @param {Array} fPoints - array of shape featurePoints
-     * @param {Object} shape - shape that contains the feature points
+     * @param {FeaturePoint[]} fPoints - array of shape featurePoints
+     * @param {SVG.Shape} shape - shape that contains the feature points
      * @see getPoints
      */
     drawFeaturePoints(fPoints, shape) {
@@ -540,7 +604,7 @@ export default {
   },
   mounted() {
     // Set up a new canvas
-    this.canvas = this.$svg("work-canvas");
+    this.canvas = SVG("work-canvas");
     this.drawCanvas();
   },
   destroyed() {

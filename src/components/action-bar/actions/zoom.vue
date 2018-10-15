@@ -46,15 +46,12 @@ export default {
   },
   computed: {
     ...mapGetters("image-store", {
-      imageSelected: "getImageSelected"
+      imageSelected: "getImageSelected",
+      getShapeByID: "getShapeByID"
     }),
 
     ...mapGetters("app-config", {
       zoomStepSize: "getZoomStepSize"
-    }),
-
-    ...mapGetters("image-store", {
-      imageSelected: "getImageSelected"
     }),
 
     imageScale() {
@@ -64,7 +61,8 @@ export default {
   },
   methods: {
     ...mapMutations("image-store", [
-      "setImageSelected"
+      "updateShapeDetail",
+      "updateImageDetail"
     ]),
 
     /**
@@ -112,8 +110,12 @@ export default {
       // Rescale image
       this.rescaleImage(1);
       // Reset shapes to its original scale
-      this.imageSelected.shapes.forEach(shape => {
-        shape.zoomScale = shape.defaultZoomScale;
+      this.imageSelected.shapes.forEach(shapeID => {
+        let shape = this.getShapeByID(shapeID);
+        this.updateShapeDetail({
+          shapeID: shape.id,
+          zoomScale: shape.defaultZoomScale
+        });
       });
     },
 
@@ -124,22 +126,25 @@ export default {
      */
     rescaleShapes(oldScale, newScale) {
       // Increase/Decrease each image scale
-      this.imageSelected.shapes.forEach(shape => {
-        shape.zoomScale = shape.zoomScale * newScale / oldScale;
+      this.imageSelected.shapes.forEach(shapeID => {
+        let shape = this.getShapeByID(shapeID);
+        this.updateShapeDetail({
+          shapeID: shape.id,
+          zoomScale: shape.zoomScale * newScale / oldScale
+        })
       });
     },
 
     /**
-     * Helper method to rescale image
+     * Helper method to change image dimensions
      * @param {Number} newScale - new image scale
      */
     rescaleImage(newScale) {
-      this.imageSelected.size.scaledWidth =
-        Math.floor(this.imageSelected.size.width * newScale);
-      this.imageSelected.size.scaledHeight =
-        Math.floor(this.imageSelected.size.height * newScale);
-      // Set new image scale
-      this.imageSelected.size.imageScale = newScale;
+      this.updateImageDetail({
+        scaledWidth: Math.floor(this.imageSelected.size.width * newScale),
+        scaledHeight: Math.floor(this.imageSelected.size.height * newScale),
+        imageScale: newScale
+      })
     }
   }
 }

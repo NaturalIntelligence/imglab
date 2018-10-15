@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     ...mapMutations("image-store", {
-      "setImageOpacity": "setImageOpacity"
+      "updateImageDetail": "updateImageDetail"
     }),
 
     /**
@@ -40,7 +40,7 @@ export default {
     dispatch(event) {
       // Set image opacity if image exists
       if (this.imageSelected) {
-        this.setImageOpacity({ opacity: event.target.value });
+        this.updateImageDetail({ opacity: event.target.value });
       }
     }
   }
