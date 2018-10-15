@@ -32,18 +32,20 @@ var cocoFormater = {
                 if (annotation.image_id === image.id) {
                     let id = "SvgjsRect",
                         type = "rect",
-                        points = [annotation.bbox.x, annotation.bbox.y, annotation.bbox.width, annotation.bbox.height];
-                    if (segLength === 2 && (annotation.segmentation[0][0] === annotation.bbox.cx && annotation.segmentation[0][1] === annotation.bbox.cy) && annotation.area !== 0) {
+                        bbox = annotation.bbox,
+                        segmentation = annotation.segmentation[0],
+                        points = [bbox.x, bbox.y, bbox.width, bbox.height];
+                    if (segLength === 2 && (segmentation[0] === bbox.cx && segmentation[1] === bbox.cy) && annotation.area !== 0) {
                         id = "SvgjsCircle",
                         type = "circle",
-                        points = [annotation.bbox.cx, annotation.bbox.cy, (annotation.bbox.height / 2)];
-                    } else if (segLength !== 8) {
+                        points = [bbox.cx, bbox.cy, (bbox.height / 2)];
+                    } else if (segLength !== 8 || (segmentation[0] || segmentation[6]) !== bbox.x || (segmentation[1] || segmentation[3]) !== bbox.y || (segmentation[2] || segmentation[4]) !== bbox.width || (segmentation[5] || segmentation[7]) !== bbox.height) {
                         let polyPoints = [];
                         id = "SvgjsPolygon",
                         type = "polygon";
                         for (var point_i = 0; point_i < segLength; point_i += 2) {
                             polyPoints.push(
-                                [annotation.segmentation[0][point_i], annotation.segmentation[0][point_i+1]]
+                                [segmentation[point_i], segmentation[point_i+1]]
                             );
                         }
                         points = polyPoints;
