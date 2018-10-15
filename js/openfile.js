@@ -27,9 +27,9 @@ function readDataFile(e){
         reader.onload = function (e) {
             /* if(pointFile.name.endsWith(".pts")){
                 loadPts(e.target.result);
-            }else if(dataFile.name.endsWith(".json")){
+            }else*/ if(dataFile.name.endsWith(".json")){
                 loadJSONFile(e.target.result);
-            }else*/ if(dataFile.name.endsWith(".nimn")){
+            }else if(dataFile.name.endsWith(".nimn")){
                 loadProjectFile(e.target.result);
             }else if(dataFile.name.endsWith(".fpp")){
                 loadFpp(e.target.result);
@@ -43,6 +43,10 @@ function readDataFile(e){
         reader.readAsText(input.files[0]);
     }
     input.value = null;
+}
+
+var loadJSONFile = function(data){
+    labellingData = cocoFormater.fromCOCO(JSON.parse(data));
 }
 
 var loadProjectFile = function(data){
