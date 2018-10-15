@@ -66,14 +66,20 @@
                     e.stopPropagation()
                 } */
 
-                if (e.key == 'm'  && e.altKey){//Magic wand
+                if (e.key == 'm'  && e.altKey){//Move
                     $("#tool-move").click();
                     e.preventDefault();
                     e.stopPropagation()
                 }
 
-                if (e.key == 'l'  && e.altKey){//Magic wand
+                if (e.key == 'l'  && e.altKey){//Light
                     $("#tool-light").click();
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+
+                if (e.key == 'Ω'){//Zoom
+                    $("#tool-zoom").click();
                     e.preventDefault();
                     e.stopPropagation()
                 }
