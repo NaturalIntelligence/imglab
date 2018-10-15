@@ -56,7 +56,7 @@ var cocoFormater = {
                     area : area,
                     "iscrowd": 0,
                     "image_id": image_i+1,
-                    "bbox": shape_i.bbox,
+                    "bbox": shape.bbox,
                     "category_id": categories.indexOf(shape.category) + 1,
                     "id": shape_i+1,
                     "ignore": 0
