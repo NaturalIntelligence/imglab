@@ -23,7 +23,8 @@
           :show="showTrackingLine"
           :xPos="xPos"
           :yPos="yPos"
-        ></tracking-lines>
+        >
+        </tracking-lines>
       </div>
     </div>
   </div>
@@ -71,7 +72,12 @@ export default {
       imageSelected: "getImageSelected",
       getShapeByID: "getShapeByID",
       getShapeFeaturePoints: "getShapeFeaturePoints",
-      getFeaturePointByID: "getFeaturePointByID"
+      getFeaturePointByID: "getFeaturePointByID",
+      featurePointSize: "getFeaturePointSize"
+    }),
+
+    ...mapGetters("app-config", {
+      featurePointColor: "getFeaturePointColor"
     }),
 
     // Get image width
@@ -290,10 +296,6 @@ export default {
       this.showTrackingLine = false;
     },
 
-    click(event) {
-      console.log('click', event.target);
-    },
-
     /**
      * Closure function to monitor shape drag event
      * @param {SVG.Shape} shape - a SVG shape
@@ -326,7 +328,7 @@ export default {
      * Deselects all selected shapes / featurepoints
      */
     deselectAll() {
-      console.log("deselectAll", this.selectedShapes, this.selectedFeaturePoints);
+      console.log("deselectAll");
       // Deselect all svg elements
       this.selectedShapes.forEach(shapeID => {
         let svgShape = this.$svg.get(shapeID);
@@ -364,19 +366,12 @@ export default {
      * @param {SVG.Shape} shape - SVG element
      */
     dragOnMove(shape) {
-      shape.parent().on("beforedrag", event => {
+      shape.on("mousedown", function(event) {
         if (!this.selectedTool || this.selectedTool.type !== "move") {
           event.preventDefault();
           event.stopPropagation();
         }
-      });
-
-      shape.parent().on("dragmove", event => {
-        if (!this.selectedTool || this.selectedTool.type !== "move") {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-      });
+      }, this);
     },
 
     /**
@@ -479,13 +474,13 @@ export default {
       shape.on("click", event => {
         if (this.selectedTool && this.selectedTool.type === "point") {
           // Selected tool is point, has highest precedence
-          var point = drawPoint(
-            event,
+          var point = drawPoint({
+            position: event,
+            canvasOffset: this.canvas.node.getBoundingClientRect(),
             shape,
-            this.canvas.node.getBoundingClientRect()
-          );
-          // Set the feature point size
-          point.addClass("labelpoint");
+            featurePointSize: this.featurePointSize,
+            featurePointColor: this.featurePointColor
+          });
           // Position of point is relative to canvas
           this.addPointToShape({
             shapeID: shape.node.id,
@@ -528,6 +523,8 @@ export default {
      * @param {SVG.Shape} shape - SVG shape
      */
     attachEventsToFeaturePoint(featurePoint, shape) {
+      this.dragOnMove(featurePoint);
+
       this.customDragHandler(featurePoint, event => {
         this.updateFeaturePoint({
           shapeID: shape.id(),
@@ -543,9 +540,17 @@ export default {
           // TODO: Show in label panel
           // riot.mount('label-panel', { id : parent.node.id, pointId : f_point.node.id })
         }
+
+        featurePoint.selectize({
+          rotationPoint: false,
+          points: []
+        });
+
         this.addSelectedElement({
           featurePointID: featurePoint.id()
         });
+
+        event.stopPropagation();
       });
     },
 
@@ -593,9 +598,12 @@ export default {
     drawFeaturePoints(fPoints, shape) {
       let scaledFPoints = scaleFeaturePoints(fPoints, this.imageSelected.size.imageScale);
       for (var fPointIndex in scaledFPoints) {
-        var fPoint = drawPoint(scaledFPoints[fPointIndex], shape, {
-          x: 0,
-          y: 0
+        var fPoint = drawPoint({
+          position: scaledFPoints[fPointIndex],
+          canvasOffset: { x: 0, y: 0 },
+          shape,
+          featurePointSize: this.featurePointSize,
+          featurePointColor: this.featurePointColor
         });
         fPoint.id(scaledFPoints[fPointIndex].id);
         this.attachEventsToFeaturePoint(fPoint, shape);
@@ -608,7 +616,6 @@ export default {
     this.drawCanvas();
   },
   destroyed() {
-    console.log("destroyed");
     // Remove all children and the canvas itself
     this.canvas.clear();
     this.canvas.remove();

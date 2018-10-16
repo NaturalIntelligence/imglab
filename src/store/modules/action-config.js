@@ -59,7 +59,7 @@ const mutations = {
     }
 
     if (featurePointID) {
-      state.selected.featurePoints = state.selected.shapes.concat([
+      state.selected.featurePoints = state.selected.featurePoints.concat([
         featurePointID
       ]);
     }
@@ -109,7 +109,7 @@ const getters = {
   },
 
   getSelectedShape: state => {
-    return state.selected.shapes.slice(-1)[0]
+    return state.selected.shapes.slice(-1)[0];
   },
   /**
    * Returns an array of selected shapes

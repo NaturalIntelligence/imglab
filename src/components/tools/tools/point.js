@@ -5,7 +5,7 @@ export const point = {
   title: POINT,
   description: "Draw a point",
   drawable: false,
-  actionable: false,
+  actionable: true,
   icon: {
     isSVG: true,
     name: "point.svg"
@@ -15,13 +15,24 @@ export const point = {
    * @param {SVG.Container} canvas
    * @param {Event} event - mouse click event
    * @param {SVG.Shape} shape - SVG shape
-   * @param {Number} featurePointRadius - radius of feature point
+   * @param {Number} featurePointSize - size of feature point
+   * @param {String} featurePointColor - hexadecimal color string
    */
-  create: function({ canvas, event, shape, featurePointRadius }) {
+  create: function({
+    canvas,
+    event,
+    shape,
+    featurePointSize,
+    featurePointColor
+  }) {
     let canvasOffset = canvas.node.getBoundingClientRect();
-    let point = drawPoint(event, shape, canvasOffset);
-    // TODO: Specify style
-    point.radius(featurePointRadius).addClass("labelpoint");
+    let point = drawPoint({
+      position: event,
+      shape,
+      canvasOffset,
+      featurePointSize,
+      featurePointColor
+    });
     return point;
   },
   validate: function() {
@@ -35,9 +46,17 @@ export const point = {
  * @param {Event} position - click position
  * @param {SVG.Shape} shape - shape that should hold the featurePoint
  * @param {DOMReact | Object} canvasOffset - offset of canvas
+ * @param {Number} featurePointSize - size of feature point
+ * @param {String} featurePointColor - hexadecimal color string
  * @returns {SVG.Circle} - featurePoint SVG
  */
-export function drawPoint(position, shape, canvasOffset) {
+export function drawPoint({
+  position,
+  shape,
+  canvasOffset,
+  featurePointSize,
+  featurePointColor
+}) {
   // Get shape location
   var containerOffset = {
     x: parseInt(shape.parent().attr("x"), 10) || 0,
@@ -47,14 +66,15 @@ export function drawPoint(position, shape, canvasOffset) {
   var point = shape
     .parent()
     .circle()
-    .radius(3)
+    .radius(featurePointSize)
+    .addClass("labelpoint")
     .attr({
       for: shape.node.id,
       cx: position.x - canvasOffset.x - containerOffset.x,
-      cy: position.y - canvasOffset.y - containerOffset.y
+      cy: position.y - canvasOffset.y - containerOffset.y,
+      fill: featurePointColor
     })
-    .draggable()
-    .addClass("labelpoint");
+    .draggable();
   // Assign a new type to point
   point.type = POINT;
   return point;

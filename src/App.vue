@@ -85,10 +85,6 @@ export default {
 </script>
 
 <style>
-  .labelpoint {
-    fill: red;
-  }
-
   .labelpolygon, .labelcircle, .labelbox {
     fill: yellow;
     stroke: green;
@@ -96,14 +92,24 @@ export default {
     fill-opacity: 0.1;
   }
 
-  .svg_select_points{
+  .svg_select_points {
     fill: black;
     fill-opacity: 0.1;
     stroke: grey;
   }
 
-  .svg_select_boundingRect{
-    stroke-dasharray: initial !important;
+  .svg_select_points_point{
+      cursor: move;
+  }
+
+  .svg_select_boundingRect {
+  	stroke-width: 1;
+  	fill: gray;
+  	stroke-dasharray: initial !important;
+  	stroke: #000;
+  	stroke-opacity: 0.8;
+  	fill-opacity: 0.1;
+    pointer-events:none; /* This ons is needed if you want to deselect or drag the shape*/
   }
 
 </style>

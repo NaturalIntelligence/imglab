@@ -1,8 +1,10 @@
-import { OPACITY, ZOOM } from "../action-names";
-import ActionOpacity from "../actions/opacity";
-import ActionZoom from "../actions/zoom";
+import { OPACITY, ZOOM, POINT } from "../../../utils/tool-names";
+import ActionOpacity from "../actions/action-opacity";
+import ActionZoom from "../actions/action-zoom";
+import ActionFeaturePoint from "../actions/action-feature-point"
 
 export const actions = {
   [OPACITY]: ActionOpacity,
-  [ZOOM]: ActionZoom
+  [ZOOM]: ActionZoom,
+  [POINT]: ActionFeaturePoint
 };

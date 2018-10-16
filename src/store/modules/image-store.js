@@ -128,6 +128,16 @@ const mutations = {
   },
 
   /**
+   * Sets feature point size for current image
+   * @param {Number} featurePointSize
+   */
+  setFeaturePointSize(state, { featurePointSize }) {
+    if (state.imageSelected) {
+      state.imageSelected.featurePointSize = featurePointSize;
+    }
+  },
+
+  /**
    * Updates a single feature point
    * @param {String} pointID - id of point
    * @param {SVG.Rbox} position
@@ -275,6 +285,14 @@ const getters = {
    */
   getFeaturePointByID: state => featurePointID => {
     return state.featurePoints[featurePointID];
+  },
+
+  /**
+   * Returns feature point size for an image,
+   * Default size, which is the min size, is 3
+   */
+  getFeaturePointSize: state => {
+    return (state.imageSelected && state.imageSelected.featurePointSize) || 3;
   }
 };
 

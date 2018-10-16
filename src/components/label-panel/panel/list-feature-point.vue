@@ -1,31 +1,28 @@
 <template lang="html">
   <div id="feature-points-list" >
-    <div
-      class=""
-      v-if="selectedShape">
-      <draggable v-model="featurePoints">
-        <div
-          class=""
-          v-for="(featurePoint, index) in featurePoints"
-          :key="featurePoint.id"
+    <draggable v-model="featurePoints">
+      <div
+        class=""
+        v-for="(featurePoint, index) in featurePoints"
+        :key="featurePoint.id"
+      >
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Label the feature point"
+          style="width: 100px;"
+          :value="featurePoint.label"
+          @change="setFeaturePointLabel($event, featurePoint)"
+          @keyup.enter="setFeaturePointLabel($event, featurePoint)"
         >
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Label the feature point"
-            :value="featurePoint.label"
-            @input.lazy="setFeaturePointLabel($event, featurePoint)"
-            @keyup.enter="setFeaturePointlabel($event, featurePoint)"
-          >
-          <div
-            class="input-group-btn"
-            @click="deleteFeaturePoint"
-          >
-            <i class="icon icon-trash-empty"></i>
-          </div>
+        <div
+          class="input-group-btn"
+          @click="deleteFeaturePoint"
+        >
+          <i class="icon icon-trash-empty"></i>
         </div>
-      </draggable>
-    </div>
+      </div>
+    </draggable>
   </div>
 </template>
 
@@ -44,18 +41,33 @@ export default {
     }),
 
     ...mapGetters("image-store", {
-      "getFeaturePointByID": "getFeaturePointByID"
+      getFeaturePointByID: "getFeaturePointByID"
     }),
 
-    featurePoints() {
-      return this.selectedFeaturePoints.map(fpID => {
-        return this.getFeaturePointByID(fpID);
-      });
+    /**
+     * Computed getter and setter
+     */
+    featurePoints: {
+      get() {
+        return this.selectedFeaturePoints.map(fpID => {
+          return this.getFeaturePointByID(fpID);
+        });
+      },
+      set(val) {
+        let featurePointIDs = val.map(featurePoint => {
+          return featurePoint.id;
+        })
+        this.setSelectedElements({ featurePoints: featurePointIDs });
+      }
     }
   },
   methods: {
     ...mapMutations("image-store", {
-      "updateFeaturePoint": "updateFeaturePoint"
+      updateFeaturePoint: "updateFeaturePoint"
+    }),
+
+    ...mapMutations("action-config", {
+      setSelectedElements: "setSelectedElements"
     }),
 
     /**
@@ -67,7 +79,7 @@ export default {
 
       this.updateFeaturePoint({
         pointID: featurePoint.id,
-        label: event.target.value
+        newLabel: event.target.value
       })
     },
 

@@ -1,2 +1,3 @@
-export const OPACITY = "opacity";
-export const ZOOM = "zoom";
+export const OPACITY = "action-opacity";
+export const ZOOM = "action-zoom";
+export const FEATUREPOINT = "action-feature-point";
