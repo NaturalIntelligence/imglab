@@ -1,6 +1,72 @@
 var cocoFormater = {
-    fromCOCO : function(){
+    fromCOCO : function(cocoData){
+        let labellingData = {},
+            idNumber = 1000;
 
+        let categories = [];
+        for(var category_i = 0; category_i < cocoData.categories.length; category_i++){
+            categories.push(cocoData.categories[category_i]);
+        }
+
+        for(var image_i = 0; image_i < cocoData.images.length; image_i++){
+            let image = cocoData.images[ image_i ];
+            labellingData[ image.file_name ] = {
+                "imagename": image.file_name,
+                "shapeIndex": 0,
+                "pointIndex": 0,
+                "featurePointSize": 3,
+                "attributes": [],
+                "tags": [],
+                "size": {
+                    "height": image.height,
+                    "width": image.width
+                },
+                "shapes": [],
+                "zoomScale": 1,
+                "defaultZoomScale": 1
+            };
+
+            for(var annot_i = 0; annot_i < cocoData.annotations.length; annot_i++){
+                const annotation = cocoData.annotations[ annot_i ],
+                    segLength = annotation.segmentation[0].length;
+                if (annotation.image_id === image.id) {
+                    let id = "SvgjsRect",
+                        type = "rect",
+                        bbox = annotation.bbox,
+                        segmentation = annotation.segmentation[0],
+                        points = [bbox.x, bbox.y, bbox.width, bbox.height];
+                    if (segLength === 2 && (segmentation[0] === bbox.cx && segmentation[1] === bbox.cy) && annotation.area !== 0) {
+                        id = "SvgjsCircle",
+                        type = "circle",
+                        points = [bbox.cx, bbox.cy, (bbox.height / 2)];
+                    } else if (segLength !== 8 || (segmentation[0] || segmentation[6]) !== bbox.x || (segmentation[1] || segmentation[3]) !== bbox.y || (segmentation[2] || segmentation[4]) !== bbox.width || (segmentation[5] || segmentation[7]) !== bbox.height) {
+                        let polyPoints = [];
+                        id = "SvgjsPolygon",
+                        type = "polygon";
+                        for (var point_i = 0; point_i < segLength; point_i += 2) {
+                            polyPoints.push(
+                                [segmentation[point_i], segmentation[point_i+1]]
+                            );
+                        }
+                        points = polyPoints;
+                    }
+                    labellingData[ image.file_name ].shapes.push({
+                        "id": id+idNumber.toString(),
+                        "label": "",
+                        "attributes": [],
+                        "tags": [],
+                        "type": type,
+                        "bbox": annotation.bbox,
+                        "points": points,
+                        "featurePoints": [],
+                        "category": "undefined"
+                    });
+                    idNumber++;
+                }
+            }
+        }
+
+        return labellingData;
     },
     toCOCO : function(labellingData){
         var categories = [];
