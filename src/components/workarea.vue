@@ -298,12 +298,12 @@ export default {
 
     /**
      * Closure function to monitor shape drag event
-     * @param {SVG.Shape} shape - a SVG shape
+     * @param {SVG.Shape} el - a SVG shape to attach drag listener to
      * @param {Function} cb - callback function
      */
-    customDragHandler(shape, cb) {
+    customDragHandler(el, cb) {
       var mousestate = 0;
-      shape.parent().on("mousedown", function(e) {
+      el.on("mousedown", function(e) {
         mousestate = 1;
 
         let _mousemove = function(e) {
@@ -315,12 +315,12 @@ export default {
           }
           mousestate = 0;
           // unbind events
-          shape.parent().off("mousemove", _mousemove);
-          shape.parent().off("mouseup", _mouseup);
+          el.off("mousemove", _mousemove);
+          el.off("mouseup", _mouseup);
         }
         // bind events
-        shape.parent().on("mousemove", _mousemove);
-        shape.parent().on("mouseup", _mouseup);
+        el.on("mousemove", _mousemove);
+        el.on("mouseup", _mouseup);
       });
     },
 
@@ -466,7 +466,7 @@ export default {
     attachEvents(shape) {
       this.dragOnMove(shape);
 
-      this.customDragHandler(shape, event => {
+      this.customDragHandler(shape.parent(), event => {
         if (this.selectedTool && this.selectedTool.type === MOVE) {
           this.updateShapeDetail({
             shapeID: shape.node.id,

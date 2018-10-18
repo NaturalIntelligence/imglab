@@ -2,7 +2,7 @@
   <div class="tags-wrapper">
     <div
       class="tags"
-      v-for="(tag, index) in tags"
+      v-for="(tag, index) in shapeTags"
       :key="tag"
     >
       {{ tag }}
@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters("label-data", {
-      getTags: "getTags"
+      appTags: "getTags"
     }),
 
     ...mapGetters("action-config", {
@@ -42,13 +42,13 @@ export default {
       getShapeByID: "getShapeByID"
     }),
 
-    tags() {
+    shapeTags() {
       let shape = this.getShapeByID(this.selectedShapeID);
+      console.log("shapeTags", shape && shape.tags);
       return shape && shape.tags;
     },
 
     placeholderText() {
-      console.log("this.tags && this.tags.size")
       return this.tags && this.tags.size === 0 ? "Enter tags": "";
     }
   },
@@ -58,8 +58,20 @@ export default {
       removeTagFromShape: "removeTagFromShape"
     }),
 
-    addTag(event) {
+    ...mapMutations("label-data", {
+      addTagToApp: "addTag"
+    }),
 
+    /**
+     * Adds tag to shape and app if doesn't exist
+     * @param {Event} event - change event
+     */
+    addTag(event) {
+      console.log("tag added", event.target.value);
+      let tag = event.target.value;
+      let shapeID = this.selectedShapeID;
+      this.addTagToShape({ shapeID, tag });
+      this.addTagToApp({ tag });
     }
   }
 }

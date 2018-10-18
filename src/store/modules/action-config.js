@@ -1,12 +1,12 @@
-import { convertToArray } from "../../utils/app";
+import { convertToArray, setAdd, setRemove } from "../../utils/app";
 
 const state = {
   copiedElements: [],
   selectedTool: null,
   selectedToolDom: null,
   selected: {
-    shapes: new Set(),
-    featurePoints: new Set(),
+    shapes: [],
+    featurePoints: [],
     lastShape: null
   }
 };
@@ -19,12 +19,12 @@ const mutations = {
    */
   addSelectedElement(state, { shapeID, featurePointID }) {
     if (shapeID) {
-      state.selected.shapes.add(shapeID);
+      setAdd({ arr: state.selected.shapes, item: shapeID });
       state.selected.lastShape = shapeID;
     }
 
     if (featurePointID) {
-      state.selected.featurePoints.add(featurePointID);
+      setAdd({ arr: state.selected.featurePoints, item: featurePointID });
     }
   },
 
@@ -34,8 +34,11 @@ const mutations = {
    * @param {String} featurePointID - featurePoint id
    */
   removeSelectedElement(state, { shapeID, featurePointID }) {
-    state.selected.shapes.delete(shapeID);
-    state.selected.featurePoints.delete(featurePointID);
+    if (shapeID === state.selected.lastShape) {
+      state.selected.lastShape = null;
+    }
+    setRemove({ arr: state.selected.shapes, item: shapeID });
+    setRemove({ arr: state.selected.featurePoints, item: featurePointID });
   },
 
   /**
@@ -71,8 +74,8 @@ const mutations = {
    */
   setSelectedElements(state, { shapes = [], featurePoints = [] } = {}) {
     // Convert shapes and featurePoints to array if necessary
-    state.selected.shapes = new Set(convertToArray(shapes));
-    state.selected.featurePoints = new Set(convertToArray(featurePoints));
+    state.selected.shapes = convertToArray(shapes);
+    state.selected.featurePoints = convertToArray(featurePoints);
     state.selected.lastShape = shapes.slice(-1)[0] || null;
   },
 
@@ -132,7 +135,7 @@ const getters = {
    * @returns {SVG.Shape[]} array of selected shape ids
    */
   getSelectedShapes: state => {
-    return Array.from(state.selected.shapes);
+    return state.selected.shapes;
   },
 
   /**
@@ -140,7 +143,7 @@ const getters = {
    * @returns {FeaturePoint[]} array of selected feature point ids
    */
   getSelectedFeaturePoints: state => {
-    return Array.from(state.selected.featurePoints);
+    return state.selected.featurePoints;
   },
 
   /**

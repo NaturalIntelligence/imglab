@@ -1,58 +1,60 @@
+import { setAdd, setRemove } from "../../utils/app";
+
 const state = {
-  categories: new Set(),
-  attributes: new Set(),
-  tags: new Set()
+  categories: [],
+  attributes: [],
+  tags: []
 };
 
 const mutations = {
   addCategory(state, { category }) {
-    category && state.category.add(category);
+    category && setAdd({ arr: state.category, item: category });
   },
 
   addAttribute(state, { attribute }) {
-    attribute && state.attributes.add(attribute);
+    attribute && setAdd({ arr: state.attributes, item: attribute });
   },
 
   addTag(state, { tag }) {
-    tag && state.tags.add(tag);
+    tag && setAdd({ arr: state.tags, item: tag });
   },
 
   setCategories(state, { categories }) {
-    state.categories = new Set(categories);
+    state.categories = categories;
   },
 
   setAttributes(state, { attributes }) {
-    state.attributes = new Set(attributes);
+    state.attributes = attributes;
   },
 
   setTags(state, { tags }) {
-    state.tags = new Set(tags);
+    state.tags = tags;
   },
 
   removeCategory(state, { category }) {
-    state.category.delete(category);
+    category && setRemove({ arr: state.category, item: category });
   },
 
   removeAttribute(state, { attribute }) {
-    state.attributes.delete(attribute);
+    attribute && setRemove({ arr: state.attributes, item: attribute });
   },
 
   removeTag(state, { tag }) {
-    state.tags.delete(tag);
+    tag && setRemove({ arr: state.tags, item: tag });
   }
 };
 
 const getters = {
   getCategory: state => {
-    return Array.from(state.categories);
+    return state.categories;
   },
 
   getAttributes: state => {
-    return Array.from(state.attributes);
+    return state.attributes;
   },
 
   getTags: state => {
-    return Array.from(state.tags);
+    return state.tags;
   }
 };
 

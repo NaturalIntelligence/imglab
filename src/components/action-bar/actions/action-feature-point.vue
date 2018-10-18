@@ -62,10 +62,8 @@ export default {
      * @param {Event} - change event
      */
     setColorInStore(event) {
-      console.log("setColor", event.target.value);
       if (this.featurePointColor === event.target.value) return;
       this.setFeaturePointColor({ featurePointColor: event.target.value });
-      // this.switchColor(this.featurePointColor);
     },
 
     /**

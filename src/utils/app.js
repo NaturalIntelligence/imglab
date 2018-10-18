@@ -39,6 +39,48 @@ export function toggleItemInArray(arr, item) {
   }
 }
 
+/**
+ * Adds a unique item to array
+ * @param {Array} arr - array of items
+ * @param {Any} item - item to be added
+ * @param {Any} key - used to compare object equality
+ */
+export function setAdd({ arr, item, key }) {
+  // Key default is set to item
+  if (!key) {
+    key = item;
+  }
+
+  let index = arr.findIndex(arrItem => {
+    return arrItem === key || arrItem === key;
+  });
+
+  if (index === -1) {
+    arr.push(item);
+  }
+}
+
+/**
+ * Removes a unique item from array
+ * @param {Array} arr - array of items
+ * @param {Any} item - item to be removed
+ * @param {Any} key - used to compare object equality
+ */
+export function setRemove({ arr, item, key }) {
+  // Key default is set to item
+  if (!key) {
+    key = item;
+  }
+
+  let index = arr.findIndex(arrItem => {
+    return arrItem === key || arrItem === key;
+  });
+
+  if (index === -1) return;
+
+  arr.splice(index, 1);
+}
+
 export const _ = {
   on(el, type, cb) {
     return el.addEventListener(type, cb);

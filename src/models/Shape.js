@@ -8,9 +8,9 @@ export class Shape {
     defaultZoomScale = 1,
     label = "unlabelled",
     featurePoints = [],
-    attributes = new Set(),
-    category = new Set(),
-    tags = new Set()
+    attributes = [],
+    category = [],
+    tags = []
   } = {}) {
     this.id = id;
     this.label = label;

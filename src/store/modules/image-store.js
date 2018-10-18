@@ -1,3 +1,4 @@
+import { setAdd, setRemove } from "../../utils/app";
 import { Image } from "../../models/Image";
 import { FeaturePoint } from "../../models/FeaturePoint";
 import {
@@ -84,7 +85,7 @@ const mutations = {
    * @param {String} attribute - attribute
    */
   addAttributeToShape(state, { shapeID, attribute }) {
-    state.shapes[shapeID].attributes.add(attribute);
+    setAdd({ arr: state.shapes[shapeID].attributes, item: attribute });
   },
 
   /**
@@ -92,7 +93,7 @@ const mutations = {
    * @param {String} categpry - category
    */
   addCategoryToShape(state, { shapeID, category }) {
-    state.images[shapeID].category.add(category);
+    setAdd({ arr: state.shapes[shapeID].category, item: category });
   },
 
   /**
@@ -101,7 +102,7 @@ const mutations = {
    * @param {String} tag - tag
    */
   addTagToShape(state, { shapeID, tag }) {
-    state.shapes[shapeID].tags.add(tag);
+    setAdd({ arr: state.shapes[shapeID].tags, item: tag });
   },
 
   /**
