@@ -15,21 +15,21 @@
           <draggable v-model="featurePoints">
             <div
               class=""
-              v-for="(fp, index) in featurePoints"
-              :key="fp.id"
+              v-for="(featurePoint, index) in featurePoints"
+              :key="featurePoint.id"
             >
               <input
                 type="text"
                 class="form-control"
                 placeholder="Label the feature point"
                 style="width: 100px;"
-                :value="fp.label"
+                :value="featurePoint.label"
                 @change="setFeaturePointLabel($event, fp)"
                 @keyup.enter="setFeaturePointLabel($event, fp)"
               >
               <div
                 class="input-group-btn"
-                @click="deleteFeaturePoint"
+                @click="deleteFeaturePoint(featurePoint.id)"
               >
                 <font-awesome-icon
                   :icon="['far', 'trash-alt']"
@@ -47,6 +47,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
+import { removeFeaturePoint } from "../../../utils/actions";
 
 export default {
   components: {
@@ -84,6 +85,7 @@ export default {
   },
   methods: {
     ...mapMutations("image-store", {
+      removeFeaturePoint: "detachFeaturePoint",
       updateFeaturePoint: "updateFeaturePoint",
       updateFeaturePoints: "updateFeaturePoints"
     }),
@@ -105,8 +107,18 @@ export default {
       })
     },
 
-    deleteFeaturePoint() {
-
+    /**
+     * Removes feature point from canvas and store
+     * @see removeFeaturePoint @ actions.js for more details
+     */
+    deleteFeaturePoint(featurePointID) {
+      let shapeID = this.selectedShape;
+      removeFeaturePoint({
+        shapeID,
+        featurePointID,
+        SVG: this.$svg,
+        store: this.$store,
+      });
     }
   }
 }

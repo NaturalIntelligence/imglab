@@ -80,6 +80,31 @@ const mutations = {
   },
 
   /**
+   * Adds a attribute to shape
+   * @param {String} attribute - attribute
+   */
+  addAttributeToShape(state, { shapeID, attribute }) {
+    state.shapes[shapeID].attributes.add(attribute);
+  },
+
+  /**
+   * Adds a category to shape
+   * @param {String} categpry - category
+   */
+  addCategoryToShape(state, { shapeID, category }) {
+    state.images[shapeID].category.add(category);
+  },
+
+  /**
+   * Adds a tag to shape
+   * @param {String} shapeID - id of shape
+   * @param {String} tag - tag
+   */
+  addTagToShape(state, { shapeID, tag }) {
+    state.shapes[shapeID].tags.add(tag);
+  },
+
+  /**
    * Removes shape from image
    * @param {String} shapeID
    * @returns {Shape | undefined} removed shape or undefined if shape DNE
@@ -118,6 +143,33 @@ const mutations = {
     // Remove feature point from shape
     shape.featurePoints.splice(index, 1);
     state.featurePoints[featurePointID] = undefined;
+  },
+
+  /**
+   * Removes an attribute from shape
+   * @param {String} shapeID - shape id
+   * @param {String} attribute - attribute
+   */
+  removeAttributeFromShape(state, { shapeID, attribute }) {
+    state.shapes[shapeID].attributes.remove(attribute);
+  },
+
+  /**
+   * Removes a category from shape
+   * @param {String} shapeID - shape id
+   * @param {String} category - category
+   */
+  removeCategoryFromShape(state, { shapeID, category }) {
+    state.shapes[shapeID].category.remove(category);
+  },
+
+  /**
+   * Removes a tag from shape
+   * @param {String} shapeID - shape id
+   * @param {String} tag - tag
+   */
+  removeTagFromShape(state, { shapeID, tag }) {
+    state.shapes[shapeID].tags.remove(tag);
   },
 
   /**
@@ -193,20 +245,24 @@ const mutations = {
   /**
    * Update shape details
    * @param {String} shapeID - id of shape
-   * @param {SVG.Rbox} rbox
+   * @param {String[]} attributes - shape attributes
+   * @param {String[]} category - shape categories
+   * @param {String[]} tags - shape tags
+   * @param {String} label - shape label
    * @param {Point[]} points - points of a shape, e.g. 4 corners of a rectangle
-   * @param {String} label
-   * @param {}
+   * @param {SVG.Rbox} rbox - shape rbox
+   * @param {Number} zoomScale - shape zoomScale
    */
   updateShapeDetail(
     state,
-    { shapeID, attributes, category, label, points, rbox, zoomScale }
+    { shapeID, attributes, category, tags, label, points, rbox, zoomScale }
   ) {
     var shape = state.shapes[shapeID];
     var scale = 1 / state.imageSelected.size.imageScale;
 
-    attributes && (shape.attributse = attributes);
+    attributes && (shape.attributes = attributes);
     category && (shape.category = category);
+    tags && (shape.tags = tags);
     label && (shape.label = label);
     points && (shape.points = scaleShapePoints(points, scale, shape.type));
     rbox && (shape.rbox = scaleRbox(rbox, scale));
@@ -220,8 +276,6 @@ const mutations = {
     state,
     {
       name,
-      attributes,
-      tags,
       scaledWidth,
       scaledHeight,
       imageScale,
@@ -233,8 +287,6 @@ const mutations = {
   ) {
     let image = state.imageSelected;
     name && (image.name = name);
-    attributes && (image.attributes = attributes);
-    tags && (image.tags = tags);
     scaledWidth && (image.size.scaledWidth = scaledWidth);
     scaledHeight && (image.size.scaledHeight = scaledHeight);
     imageScale && (image.size.imageScale = imageScale);

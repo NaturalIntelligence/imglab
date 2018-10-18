@@ -8,9 +8,9 @@ const state = {
   opacityStepSize: 0.1,
   featurePointColor: "#ee0000",
   suggested: {
-    categories: [],
-    tags: [],
-    attributes: []
+    categories: new Set(),
+    tags: new Set(),
+    attributes: new Set()
   }
 };
 

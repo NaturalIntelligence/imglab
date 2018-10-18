@@ -13,6 +13,32 @@ const state = {
 
 const mutations = {
   /**
+   * Adds shapes / featurePoints
+   * @param {String[]} shapes - array of shape ids
+   * @param {String[]} featurePoints - array of featurePoint ids
+   */
+  addSelectedElement(state, { shapeID, featurePointID }) {
+    if (shapeID) {
+      state.selected.shapes.add(shapeID);
+      state.selected.lastShape = shapeID;
+    }
+
+    if (featurePointID) {
+      state.selected.featurePoints.add(featurePointID);
+    }
+  },
+
+  /**
+   * Removes a shape or featurePoint from selected elements
+   * @param {String} shapeID - shape id
+   * @param {String} featurePointID - featurePoint id
+   */
+  removeSelectedElement(state, { shapeID, featurePointID }) {
+    state.selected.shapes.delete(shapeID);
+    state.selected.featurePoints.delete(featurePointID);
+  },
+
+  /**
    * Sets the copied elements into an array
    * @param {shape[]} copiedElements - array of shape data
    */
@@ -48,22 +74,6 @@ const mutations = {
     state.selected.shapes = new Set(convertToArray(shapes));
     state.selected.featurePoints = new Set(convertToArray(featurePoints));
     state.selected.lastShape = shapes.slice(-1)[0] || null;
-  },
-
-  /**
-   * Adds shapes / featurePoints
-   * @param {String[]} shapes - array of shape ids
-   * @param {String[]} featurePoints - array of featurePoint ids
-   */
-  addSelectedElement(state, { shapeID, featurePointID }) {
-    if (shapeID) {
-      state.selected.shapes.add(shapeID);
-      state.selected.lastShape = shapeID;
-    }
-
-    if (featurePointID) {
-      state.selected.featurePoints.add(featurePointID);
-    }
   },
 
   /**
