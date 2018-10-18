@@ -15,7 +15,8 @@ import {
 import {
   faFolderOpen as farFolderOpen,
   faHandRock as farHandRock,
-  faLightbulb as farLightbulb
+  faLightbulb as farLightbulb,
+  faTrashAlt as farTrashAlt
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -30,7 +31,8 @@ library.add(
   faUndo,
   farFolderOpen,
   farHandRock,
-  farLightbulb
+  farLightbulb,
+  farTrashAlt
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);

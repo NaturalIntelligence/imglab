@@ -1,28 +1,46 @@
 <template lang="html">
-  <div id="feature-points-list" >
-    <draggable v-model="featurePoints">
-      <div
-        class=""
-        v-for="(featurePoint, index) in featurePoints"
-        :key="featurePoint.id"
-      >
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Label the feature point"
-          style="width: 100px;"
-          :value="featurePoint.label"
-          @change="setFeaturePointLabel($event, featurePoint)"
-          @keyup.enter="setFeaturePointLabel($event, featurePoint)"
-        >
-        <div
-          class="input-group-btn"
-          @click="deleteFeaturePoint"
-        >
-          <i class="icon icon-trash-empty"></i>
-        </div>
-      </div>
-    </draggable>
+  <div
+    v-if="selectedShape"
+  >
+    <p class="mb-2">
+      <small>
+      Feature Points {{ featurePoints.length }}
+      </small>
+    </p>
+
+    <div id="feature-points-list">
+      <ul id="fpoints-list">
+        <li
+          class="li-fpoints grey-border">
+          <draggable v-model="featurePoints">
+            <div
+              class=""
+              v-for="(fp, index) in featurePoints"
+              :key="fp.id"
+            >
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Label the feature point"
+                style="width: 100px;"
+                :value="fp.label"
+                @change="setFeaturePointLabel($event, fp)"
+                @keyup.enter="setFeaturePointLabel($event, fp)"
+              >
+              <div
+                class="input-group-btn"
+                @click="deleteFeaturePoint"
+              >
+                <font-awesome-icon
+                  :icon="['far', 'trash-alt']"
+                  style="font-size: 1.5em"
+                ></font-awesome-icon>
+              </div>
+            </div>
+          </draggable>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -36,11 +54,14 @@ export default {
   },
   computed: {
     ...mapGetters("action-config", {
-      "selectedShape": "getSelectedShape",
-      "selectedFeaturePoints": "getSelectedFeaturePoints"
+      selectedShape: "getSelectedShape",
+      selectedFeaturePoints: "getSelectedFeaturePoints"
     }),
 
     ...mapGetters("image-store", {
+      getFeaturePointByID: "getFeaturePointByID",
+      getShapeFeaturePointIDs: "getShapeFeaturePointIDs",
+      getShapeFeaturePoints: "getShapeFeaturePoints",
       getFeaturePointByID: "getFeaturePointByID"
     }),
 
@@ -49,21 +70,22 @@ export default {
      */
     featurePoints: {
       get() {
-        return this.selectedFeaturePoints.map(fpID => {
-          return this.getFeaturePointByID(fpID);
-        });
+        let shapeID = this.selectedShape;
+        return shapeID && this.getShapeFeaturePoints(shapeID);
       },
       set(val) {
-        let featurePointIDs = val.map(featurePoint => {
-          return featurePoint.id;
-        })
-        this.setSelectedElements({ featurePoints: featurePointIDs });
+        let shapeID = this.selectedShape;
+        this.updateFeaturePoints({
+          shapeID,
+          featurePoints: val
+        });
       }
     }
   },
   methods: {
     ...mapMutations("image-store", {
-      updateFeaturePoint: "updateFeaturePoint"
+      updateFeaturePoint: "updateFeaturePoint",
+      updateFeaturePoints: "updateFeaturePoints"
     }),
 
     ...mapMutations("action-config", {
@@ -90,5 +112,23 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+  .li-fpoints {
+    margin: 5px 0px;
+    border-radius: 6px;
+    width: 100%;
+    list-style: none;
+  }
+
+  #fpoints-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+
+  #feature-points-list {
+    margin-top: 10px;
+    overflow-x: hidden;
+  }
 </style>

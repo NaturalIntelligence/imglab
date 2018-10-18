@@ -30,7 +30,7 @@ const mutations = {
     // Only add image to array if it has never been added before
     if (!state.images[name]) {
       let newImage = new Image({ name, src, size });
-      state.images[name] = newImage;
+      state.images = { ...state.images, [name]: newImage };
     }
   },
 
@@ -53,7 +53,7 @@ const mutations = {
     );
 
     state.imageSelected.shapes.push(id);
-    state.shapes[id] = shape;
+    state.shapes = { ...state.shapes, [id]: shape };
 
     return shape;
   },
@@ -68,12 +68,15 @@ const mutations = {
     var shape = state.shapes[shapeID];
     var scale = 1 / state.imageSelected.size.imageScale;
     shape.featurePoints.push(pointID);
-    state.featurePoints[pointID] = new FeaturePoint({
-      x: position.cx * scale,
-      y: position.cy * scale,
-      id: pointID,
-      label: shape.featurePoints.length
-    });
+    state.featurePoints = {
+      ...state.featurePoints,
+      [pointID]: new FeaturePoint({
+        x: position.cx * scale,
+        y: position.cy * scale,
+        id: pointID,
+        label: shape.featurePoints.length
+      })
+    };
   },
 
   /**
@@ -160,8 +163,12 @@ const mutations = {
    * Updates feature points of shape
    * @param {String} shapeID
    * @param {FeaturePoint[]} featurePoints
+   * @param {Boolean} switchposition - flag to indicate position switch only
    */
-  updateFeaturePoints(state, { shapeID, featurePoints }) {
+  updateFeaturePoints(
+    state,
+    { shapeID, featurePoints, switchPosition = false }
+  ) {
     let shape = state.shapes[shapeID];
     let scale = 1 / state.imageSelected.size.imageScale;
 
@@ -170,11 +177,17 @@ const mutations = {
       return featurePoint.id;
     });
 
+    // Stop after switch positions
+    if (switchPosition) return;
+
     // Scale feature points and insert into store
     let scaledFeaturePoints = scaleFeaturePoints(featurePoints, scale);
-    scaledFeaturePoints.forEach(sFP => {
-      state.featurePoints[sFP.id] = sFP;
-    });
+
+    // Use temp to batch assign feature points
+    let temp = {};
+    scaledFeaturePoints.forEach(sFP => (temp[sFP.id] = sFP));
+
+    state.featurePoints = { ...state.featurePoints, ...temp };
   },
 
   /**
@@ -276,6 +289,10 @@ const getters = {
     return state.shapes[shapeID].featurePoints.map(featurePointID => {
       return state.featurePoints[featurePointID];
     });
+  },
+
+  getShapeFeaturePointIDs: state => shapeID => {
+    return state.shapes[shapeID].featurePoints;
   },
 
   /**

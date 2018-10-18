@@ -326,8 +326,11 @@ export default {
 
     /**
      * Deselects all selected shapes / featurepoints
+     * Able to specify which element to keep by passing in an options object
+     * @param {Boolean} shape - deselect shape
+     * @param {Boolean} featurePoint - deselect feature point
      */
-    deselectAll() {
+    deselectAll({ shape = false, featurePoint = false } = {}) {
       console.log("deselectAll");
       // Deselect all svg elements
       this.selectedShapes.forEach(shapeID => {
@@ -340,8 +343,11 @@ export default {
         svgFP.selectize(false);
       })
 
-      // Reset selected elements
-      this.setSelectedElements();
+      // Set selected elements
+      this.setSelectedElements({
+        shapes: shape ? this.selectedShapes : [],
+        featurePoints: featurePoint ? this.selectedFeaturePoints : []
+      });
     },
 
     /**
@@ -502,8 +508,6 @@ export default {
           if (!event.ctrlKey) {
             // Single click event
             this.deselectAll();
-            // TODO: Show label panel for clicked shape
-            // riot.mount('label-panel', { id : shape.node.id })
           }
           // select current element
           shape.selectize({
@@ -536,9 +540,7 @@ export default {
       featurePoint.on('click', event => {
         if (!event.ctrlKey) {
           // Single select
-          this.deselectAll();
-          // TODO: Show in label panel
-          // riot.mount('label-panel', { id : parent.node.id, pointId : f_point.node.id })
+          this.deselectAll({ shape: true });
         }
 
         featurePoint.selectize({
@@ -547,6 +549,7 @@ export default {
         });
 
         this.addSelectedElement({
+          shapeID: shape.id(),
           featurePointID: featurePoint.id()
         });
 

@@ -2,11 +2,12 @@ import { convertToArray } from "../../utils/app";
 
 const state = {
   copiedElements: [],
-  selectedToolDom: null,
   selectedTool: null,
+  selectedToolDom: null,
   selected: {
-    shapes: [],
-    featurePoints: []
+    shapes: new Set(),
+    featurePoints: new Set(),
+    lastShape: null
   }
 };
 
@@ -44,8 +45,9 @@ const mutations = {
    */
   setSelectedElements(state, { shapes = [], featurePoints = [] } = {}) {
     // Convert shapes and featurePoints to array if necessary
-    state.selected.shapes = convertToArray(shapes);
-    state.selected.featurePoints = convertToArray(featurePoints);
+    state.selected.shapes = new Set(convertToArray(shapes));
+    state.selected.featurePoints = new Set(convertToArray(featurePoints));
+    state.selected.lastShape = shapes.slice(-1)[0] || null;
   },
 
   /**
@@ -55,13 +57,12 @@ const mutations = {
    */
   addSelectedElement(state, { shapeID, featurePointID }) {
     if (shapeID) {
-      state.selected.shapes = state.selected.shapes.concat([shapeID]);
+      state.selected.shapes.add(shapeID);
+      state.selected.lastShape = shapeID;
     }
 
     if (featurePointID) {
-      state.selected.featurePoints = state.selected.featurePoints.concat([
-        featurePointID
-      ]);
+      state.selected.featurePoints.add(featurePointID);
     }
   },
 
@@ -78,8 +79,8 @@ const mutations = {
       copiedElements = [],
       selectedTool = null,
       selected = {
-        shapes: [],
-        featurePoints: []
+        shapes: new Set(),
+        featurePoints: new Set()
       }
     } = {}
   ) {
@@ -108,23 +109,28 @@ const getters = {
     return state.selectedTool;
   },
 
-  getSelectedShape: state => {
-    return state.selected.shapes.slice(-1)[0];
-  },
   /**
-   * Returns an array of selected shapes
-   * @returns {SVG.Shape[]} array of selected shapes
+   * Returns the last shape id added into set
+   * @returns {String} last shape id added
    */
-  getSelectedShapes: state => {
-    return state.selected.shapes;
+  getSelectedShape: state => {
+    return state.selected.lastShape;
   },
 
   /**
-   * Returns an array of selected feature points
-   * @returns {FeaturePoint[]} array of selected feature points
+   * Returns an array of selected shape ids
+   * @returns {SVG.Shape[]} array of selected shape ids
+   */
+  getSelectedShapes: state => {
+    return Array.from(state.selected.shapes);
+  },
+
+  /**
+   * Returns an array of selected feature point ids
+   * @returns {FeaturePoint[]} array of selected feature point ids
    */
   getSelectedFeaturePoints: state => {
-    return state.selected.featurePoints;
+    return Array.from(state.selected.featurePoints);
   },
 
   /**
