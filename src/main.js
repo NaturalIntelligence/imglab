@@ -3,7 +3,8 @@ import App from "./App.vue";
 // import App from "./test.vue";
 import store from "./store/store";
 import svgjs from "./plugins/svg";
-import InputTag from 'vue-input-tag'
+import InputTag from "vue-input-tag";
+import draggable from "vuedraggable";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faImages,
@@ -38,7 +39,8 @@ library.add(
   farTrashAlt
 );
 
-Vue.component('input-tag', InputTag);
+Vue.component("draggable", draggable);
+Vue.component("input-tag", InputTag);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.config.productionTip = false;

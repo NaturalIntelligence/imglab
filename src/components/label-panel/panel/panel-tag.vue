@@ -10,20 +10,24 @@
       class=""
       @click="focusInput"
     >
-      <div
-        class="tags"
-        v-for="(tag, index) in shapeTags"
-        :class="{ focused: tag === selectedTag }"
-        :key="tag"
+      <draggable
+        v-model="shapeTags"
       >
-        {{ tag }}
-        <font-awesome-icon
-          :icon="['fas', 'times']"
-          style="font-size: 1.5em; padding: 5px;"
-          @click="removeTagByCross(tag)"
+        <div
+          class="tags"
+          v-for="(tag, index) in shapeTags"
+          :class="{ focused: tag === selectedTag }"
+          :key="tag"
         >
-        </font-awesome-icon>
-      </div>
+          {{ tag }}
+          <font-awesome-icon
+            :icon="['fas', 'times']"
+            style="font-size: 1.5em; padding: 5px;"
+            @click="removeTagByCross(tag)"
+          >
+          </font-awesome-icon>
+        </div>
+      </draggable>
 
       <label for="tag-input">
         <input
@@ -65,10 +69,18 @@ export default {
       getShapeByID: "getShapeByID"
     }),
 
-    shapeTags() {
-      let shape = this.getShapeByID(this.selectedShapeID);
-      console.log("shapeTags", shape && shape.tags);
-      return shape && shape.tags;
+    /**
+     * Computed getter and setter needed by draggable component
+     */
+    shapeTags: {
+      get() {
+        let shape = this.getShapeByID(this.selectedShapeID);
+        return shape && shape.tags;
+      },
+
+      set(val) {
+        this.updateShapeDetail({ shapeID: this.selectedShapeID, tags: val })
+      }
     },
 
     placeholderText() {
@@ -78,7 +90,8 @@ export default {
   methods: {
     ...mapMutations("image-store", {
       addTagToShape: "addTagToShape",
-      removeTagFromShape: "removeTagFromShape"
+      removeTagFromShape: "removeTagFromShape",
+      updateShapeDetail: "updateShapeDetail"
     }),
 
     ...mapMutations("label-data", {

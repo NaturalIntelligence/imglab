@@ -47,14 +47,10 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import draggable from "vuedraggable";
 import { removeFeaturePoint } from "../../../utils/actions";
 import { _ } from "../../../utils/app";
 
 export default {
-  components: {
-    draggable
-  },
   computed: {
     ...mapGetters("action-config", {
       selectedShape: "getSelectedShape",
