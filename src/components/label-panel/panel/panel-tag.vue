@@ -9,11 +9,11 @@
     <div
       class=""
       @click="focusInput"
-      @keypress.delete="removeTagByBackspace"
     >
       <div
         class="tags"
         v-for="(tag, index) in shapeTags"
+        :class="{ focused: tag === selectedTag }"
         :key="tag"
       >
         {{ tag }}
@@ -35,7 +35,7 @@
           :value="tagText"
           @input="onInput"
           @change="addTag"
-          @keypress.delete.stop
+          @keypress.delete="removeTagByBackspace"
         >
       </label>
     </div>
@@ -134,10 +134,6 @@ export default {
       let lastTag = tags.slice(-1)[0];
       if (lastTag) {
         this.selectedTag = lastTag;
-        // focus last element
-        let tagNode = event.target.parentNode.previousSibling;
-        tagNode.tabIndex = 0;
-        tagNode.focus();
       }
     }
   },
@@ -156,7 +152,7 @@ export default {
   }
 
   .tags {
-    background-color: grey;
+    background-color: #26a69a;
     margin: 5px;
     border-radius: 5%;
     display: inline-block;
@@ -170,5 +166,9 @@ export default {
     list-style: none;
     padding: 0;
     margin: 0;
+  }
+
+  .focused {
+    background-color: #00766c;
   }
 </style>
