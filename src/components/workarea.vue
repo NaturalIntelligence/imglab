@@ -584,8 +584,8 @@ export default {
           let pos = point.rbox(this.canvas);
           accumulator.push(
             new FeaturePoint({
-              x: pos.x,
-              y: pos.y,
+              x: pos.cx,
+              y: pos.cy,
               label: fpLabelToID[point.id()],
               id: point.id()
             })
