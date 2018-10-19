@@ -123,6 +123,16 @@ export default {
 
     selectedTool() {
       this.deselectAll();
+    },
+
+    selectedFeaturePoints() {
+      this.selectedFeaturePoints.forEach(featurePointID => {
+        let svgFP = this.$svg.get(featurePointID);
+        svgFP.selectize({
+          rotationPoint: false,
+          points: []
+        });
+      });
     }
   },
   methods: {

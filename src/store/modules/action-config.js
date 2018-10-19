@@ -69,14 +69,14 @@ const mutations = {
 
   /**
    * Assign selected shapes / featurePoints
-   * @param {String[]} shapes - array of shape ids
-   * @param {String[]} featurePoints - array of featurePoint ids
+   * @param {String || String[]} shapes - array of shape ids
+   * @param {String || String[]} featurePoints - array of featurePoint ids
    */
-  setSelectedElements(state, { shapes = [], featurePoints = [] } = {}) {
+  setSelectedElements(state, { shapes, featurePoints } = {}) {
     // Convert shapes and featurePoints to array if necessary
     state.selected.shapes = convertToArray(shapes);
     state.selected.featurePoints = convertToArray(featurePoints);
-    state.selected.lastShape = shapes.slice(-1)[0] || null;
+    state.selected.lastShape = state.selected.shapes.slice(-1)[0] || null;
   },
 
   /**
@@ -132,7 +132,7 @@ const getters = {
 
   /**
    * Returns an array of selected shape ids
-   * @returns {SVG.Shape[]} array of selected shape ids
+   * @returns {String[]} array of selected shape ids
    */
   getSelectedShapes: state => {
     return state.selected.shapes;
@@ -140,7 +140,7 @@ const getters = {
 
   /**
    * Returns an array of selected feature point ids
-   * @returns {FeaturePoint[]} array of selected feature point ids
+   * @returns {String[]} array of selected feature point ids
    */
   getSelectedFeaturePoints: state => {
     return state.selected.featurePoints;

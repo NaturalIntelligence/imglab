@@ -152,7 +152,7 @@ const mutations = {
    * @param {String} attribute - attribute
    */
   removeAttributeFromShape(state, { shapeID, attribute }) {
-    state.shapes[shapeID].attributes.remove(attribute);
+    setRemove({ arr: state.shapes[shapeID].attributes, item: attribute });
   },
 
   /**
@@ -161,7 +161,7 @@ const mutations = {
    * @param {String} category - category
    */
   removeCategoryFromShape(state, { shapeID, category }) {
-    state.shapes[shapeID].category.remove(category);
+    setRemove({ arr: state.shapes[shapeID].category, item: category });
   },
 
   /**
@@ -170,7 +170,7 @@ const mutations = {
    * @param {String} tag - tag
    */
   removeTagFromShape(state, { shapeID, tag }) {
-    state.shapes[shapeID].tags.remove(tag);
+    setRemove({ arr: state.shapes[shapeID].tags, item: tag });
   },
 
   /**

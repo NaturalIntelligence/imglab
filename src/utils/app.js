@@ -16,7 +16,7 @@ export function convertToArray(val) {
     return val;
   }
 
-  return [val];
+  return val && val !== null ? [val] : [];
 }
 
 /**

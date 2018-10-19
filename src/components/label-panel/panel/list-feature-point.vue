@@ -14,7 +14,6 @@
           class="li-fpoints grey-border">
           <draggable v-model="featurePoints">
             <div
-              class=""
               v-for="(featurePoint, index) in featurePoints"
               :key="featurePoint.id"
             >
@@ -23,19 +22,19 @@
                 class="form-control"
                 placeholder="Label the feature point"
                 style="width: 100px;"
+                :class="{ focusInput : selectedFeaturePoints.includes(featurePoint.id) }"
+                :ref="featurePoint.id"
                 :value="featurePoint.label"
-                @change="setFeaturePointLabel($event, fp)"
-                @keyup.enter="setFeaturePointLabel($event, fp)"
+                @click="onClick($event, featurePoint)"
+                @change="setFeaturePointLabel($event, featurePoint)"
+                @keyup.enter="setFeaturePointLabel($event, featurePoint)"
               >
-              <div
-                class="input-group-btn"
+              <font-awesome-icon
+                :icon="['far', 'trash-alt']"
+                style="font-size: 1.5em"
                 @click="deleteFeaturePoint(featurePoint.id)"
               >
-                <font-awesome-icon
-                  :icon="['far', 'trash-alt']"
-                  style="font-size: 1.5em"
-                ></font-awesome-icon>
-              </div>
+              </font-awesome-icon>
             </div>
           </draggable>
         </li>
@@ -91,21 +90,9 @@ export default {
     }),
 
     ...mapMutations("action-config", {
+      addSelectedElement: "addSelectedElement",
       setSelectedElements: "setSelectedElements"
     }),
-
-    /**
-     * Sets the feature point label after a delay
-     */
-    setFeaturePointLabel(event, featurePoint) {
-      // Stop if feature point label hasn't changed
-      if (event.target.value === featurePoint.label) return;
-
-      this.updateFeaturePoint({
-        pointID: featurePoint.id,
-        newLabel: event.target.value
-      })
-    },
 
     /**
      * Removes feature point from canvas and store
@@ -119,6 +106,41 @@ export default {
         SVG: this.$svg,
         store: this.$store,
       });
+    },
+
+    deselectAll() {
+      this.selectedFeaturePoints.forEach(featurePointID => {
+        let svgFP = this.$svg.get(featurePointID);
+        svgFP.selectize(false);
+      })
+
+      this.setSelectedElements({ shapes: this.selectedShape });
+    },
+
+    /**
+     * Set selected element on click
+     * @param {Event} event - click event
+     * @param {FeaturePoint} featurePoint - featurePoint clicked
+     */
+    onClick(event, featurePoint) {
+      if (!event.ctrlKey) {
+        this.deselectAll();
+      }
+
+      this.addSelectedElement({ featurePointID: featurePoint.id });
+    },
+
+    /**
+     * Sets the feature point label after a delay
+     */
+    setFeaturePointLabel(event, featurePoint) {
+      // Stop if feature point label hasn't changed
+      if (event.target.value === featurePoint.label) return;
+
+      this.updateFeaturePoint({
+        pointID: featurePoint.id,
+        newLabel: event.target.value
+      })
     }
   }
 }
@@ -142,5 +164,9 @@ export default {
   #feature-points-list {
     margin-top: 10px;
     overflow-x: hidden;
+  }
+
+  .focusInput {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
   }
 </style>
