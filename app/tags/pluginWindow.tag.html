@@ -29,7 +29,9 @@
                 <span aria-hidden="true" style="color: white;">&times;</span>
             </button>
         </div>
-        <div id="plugin-content"></div>
+        <div id="plugin-content">
+            <input type="text" placeholder="圆点的半径" onchange={changes}>
+        </div>
     </div>
     <script>
         this.on('mount',function(){
@@ -45,7 +47,14 @@
             $("#plugin-window").hide();
         }
 
-        
+        this.changes = function(e){ //修改点的半径
+            if(imgSelected.workType === "count"){
+                appConfig.featurePointSize = e.target.value;
+            }else{
+                alert("当前状态无法设置点半径")
+            }
+            // console.log(appConfig.featurePointSize);
+        }
 
         function dragElement(elmnt,titlebar) {
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;

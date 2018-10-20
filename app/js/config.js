@@ -152,10 +152,14 @@ var plugins = {
     //     title: "Face Plus Plus",
     //     tagName: 'facepp'
     // },
-    // "beenest" : {
-    //     title: "玉蜂谷设置",
-    //     tagName: "beenest"
-    // }
+    "setPoint" : {
+        title: "点半径设置",
+        tagName: "setPoint"
+    },
+    "logout" : {
+        title: "登出",
+        tagName: "logout"
+    }
 }
 var pluginsStore = {
     // "facepp" : {
