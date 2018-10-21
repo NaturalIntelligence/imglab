@@ -33,6 +33,7 @@
       <div class="tool-icon icon-cw" data-zoom-type="reset" onclick={ zoom }/>
     </div>
   </div>
+
   <script>
     var tag = this;
     tag.zoom = function (e){
@@ -67,23 +68,12 @@
       rescaleImage();
     }
 
+
+  
+
     this.on('mount', function () {
       //reset the input box's value according to image scale
       if(imgSelected) $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
-
-      document.addEventListener('keydown', e=>{
-        if (e.key == '≠') {//Zoom in
-            $("img[data-zoom-type='in']").click();
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    
-        if (e.key == '–' && e.altKey) {//Zoom out
-            $("img[data-zoom-type='out']").click();
-            e.preventDefault();
-            e.stopPropagation();
-        }
-      });
     });
 
     function rescaleImage(){
