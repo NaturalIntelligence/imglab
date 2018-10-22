@@ -52,7 +52,11 @@ export default {
     // Initial data to display
     value: String,
     placeholder: String,
-    autocompleteClass: Array
+    autocompleteClass: Array,
+    filter: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
@@ -63,6 +67,7 @@ export default {
   },
   computed: {
     suggestions() {
+      if (!this.filter) return this.list || [];
       return this.list.filter(item => item.includes(this.text)) || [];
     },
 

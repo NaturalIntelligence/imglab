@@ -19,12 +19,12 @@
         @mousedown="mouseDown"
         @mouseup="mouseUp"
       >
-        <tracking-lines
+        <!-- <tracking-lines
           :show="showTrackingLine"
           :xPos="xPos"
           :yPos="yPos"
         >
-        </tracking-lines>
+        </tracking-lines> -->
       </div>
     </div>
   </div>
@@ -487,6 +487,8 @@ export default {
       });
 
       shape.on("click", event => {
+        event.stopPropagation();
+
         if (this.selectedTool && this.selectedTool.type === "point") {
           // Selected tool is point, has highest precedence
           var point = drawPoint({

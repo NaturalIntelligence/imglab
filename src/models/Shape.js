@@ -1,16 +1,16 @@
 export class Shape {
   constructor({
+    attributes = [],
+    category = "",
+    defaultZoomScale = 1,
+    featurePoints = [],
     id,
+    label = "",
     points,
     rbox,
+    tags = [],
     type,
-    zoomScale = 1,
-    defaultZoomScale = 1,
-    label = "unlabelled",
-    featurePoints = [],
-    attributes = [],
-    category = [],
-    tags = []
+    zoomScale = 1
   } = {}) {
     this.id = id;
     this.label = label;

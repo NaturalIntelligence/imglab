@@ -165,7 +165,6 @@ export default {
     },
 
     suggestedValues(attribute) {
-      console.log("suggested values", attribute, this.getSuggestedValues(attribute));
       return this.getSuggestedValues(attribute);
     },
 

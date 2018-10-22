@@ -7,15 +7,15 @@
       Tags
     </div>
     <div
-      class=""
+      class="form-control"
       @click="focusInput"
     >
       <draggable
         v-model="shapeTags"
       >
         <div
-          class="tags"
           v-for="(tag, index) in shapeTags"
+          class="tags"
           :class="{ focused: tag === selectedTag }"
           :key="tag"
         >

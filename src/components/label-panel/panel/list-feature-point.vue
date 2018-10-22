@@ -17,6 +17,7 @@
           <draggable v-model="featurePoints">
             <div
               v-for="(featurePoint, index) in featurePoints"
+              class="d-flex align-items-center"
               :key="featurePoint.id"
             >
               <input

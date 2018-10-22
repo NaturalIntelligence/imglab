@@ -19,8 +19,9 @@ const state = {
 const mutations = {
   /**
    * Adds an image to images array
-   * @param {String} imageName - name of image
-   * @param {Object} imageSize - {
+   * @param {String} name - name of image
+   * @param {String} src - image source
+   * @param {Object} size - {
    *   width        - original width of image
    *   height       - original height of image
    *   scaledWidth  - scaled width of image
@@ -95,14 +96,6 @@ const mutations = {
   },
 
   /**
-   * Adds a category to shape
-   * @param {String} categpry - category
-   */
-  addCategoryToShape(state, { shapeID, category }) {
-    setAdd({ arr: state.shapes[shapeID].category, item: category });
-  },
-
-  /**
    * Adds a tag to shape
    * @param {String} shapeID - id of shape
    * @param {String} tag - tag
@@ -114,7 +107,6 @@ const mutations = {
   /**
    * Removes shape from image
    * @param {String} shapeID
-   * @returns {Shape | undefined} removed shape or undefined if shape DNE
    */
   detachShapeFromImage(state, { imageName, shapeID }) {
     let name = imageName || state.imageSelected.name;
@@ -137,6 +129,11 @@ const mutations = {
     return shape;
   },
 
+  /**
+   * Removes feature point from shape
+   * @param {String} shapeID - shape id
+   * @param {String} featurePointID - feature point id
+   */
   detachFeaturePoint(state, { shapeID, featurePointID }) {
     let shape = state.shapes[shapeID];
 
@@ -155,19 +152,10 @@ const mutations = {
   /**
    * Removes an attribute from shape
    * @param {String} shapeID - shape id
-   * @param {String} attribute - attribute
+   * @param {Number} index - index of item to be removed
    */
   removeAttributeFromShape(state, { shapeID, index }) {
     state.shapes[shapeID].attributes.splice(index, 1);
-  },
-
-  /**
-   * Removes a category from shape
-   * @param {String} shapeID - shape id
-   * @param {String} category - category
-   */
-  removeCategoryFromShape(state, { shapeID, category }) {
-    setRemove({ arr: state.shapes[shapeID].category, item: category });
   },
 
   /**
@@ -193,16 +181,6 @@ const mutations = {
   },
 
   /**
-   * Sets selected image via name
-   * @param {String} name - image name
-   */
-  setImageSelected(state, { name }) {
-    if (name) {
-      state.imageSelected = state.images[name];
-    }
-  },
-
-  /**
    * Sets feature point size for current image
    * @param {Number} featurePointSize
    */
@@ -210,6 +188,22 @@ const mutations = {
     if (state.imageSelected) {
       state.imageSelected.featurePointSize = featurePointSize;
     }
+  },
+
+  /**
+   * Sets selected image via name
+   * @param {String} name - image name
+   */
+  setImageSelected(state, { name }) {
+    name && (state.imageSelected = state.images[name]);
+  },
+
+  /**
+   * Sets shape category
+   * @param {String} categpry - category
+   */
+  setShapeCategory(state, { shapeID, category = "" }) {
+    state.shapes[shapeID].category = category;
   },
 
   /**
@@ -291,8 +285,7 @@ const mutations = {
   /**
    * Update shape details
    * @param {String} shapeID - id of shape
-   * @param {String[]} attributes - shape attributes
-   * @param {String[]} category - shape categories
+   * @param {String} category - shape category
    * @param {String[]} tags - shape tags
    * @param {String} label - shape label
    * @param {Point[]} points - points of a shape, e.g. 4 corners of a rectangle
@@ -316,6 +309,14 @@ const mutations = {
 
   /**
    * Updates selected image details
+   * @param {String} name - new image name
+   * @param {Number} scaledWidth - scaled image width
+   * @param {Number} scaledHeight - scaled image height
+   * @param {Number} imageScale - current image scale
+   * @param {Number} shapeIndex - used as uuid for copied shapes
+   * @param {Number} pointIndex - used as uuid for copied feature points
+   * @param {Number} featurePointSize - feature point size of image
+   * @param {Number} opacity - image opacity
    */
   updateImageDetail(
     state,

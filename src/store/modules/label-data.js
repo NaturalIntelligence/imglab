@@ -45,7 +45,7 @@ const mutations = {
    * @param {String} category
    */
   addCategory(state, { category }) {
-    category && setAdd({ arr: state.category, item: category });
+    category && setAdd({ arr: state.categories, item: category });
   },
 
   /**
@@ -117,7 +117,7 @@ const mutations = {
    * @param {String} category
    */
   removeCategory(state, { category }) {
-    category && setRemove({ arr: state.category, item: category });
+    category && setRemove({ arr: state.categories, item: category });
   },
 
   /**

@@ -1,39 +1,31 @@
 <template lang="html">
   <div
-    v-show="selectedShape">
+    v-if="selectedShape"
+  >
     <div
       class="d-flex flex-column"
       style="height: 100%;"
     >
-        <!-- <div ref="category-data" class="mb-2 mt-2">
-          Category Name
-          <select id="category-select-box" class="form-text">
-            <option
-              v-for="(category, index) in suggestedCategories"
-              :key="index"
-              :selected="category === targetShape.category"
-            >
-              {{ category }}
-            </option>
-          </select>
-        </div>
-        <div ref="label-data" class="mb-2 mt-2">
-          Label Name
-          <input
-            type="text"
-            class="form-text w-100"
-            value="{ targetShape.label }"
-            onchange={updateLabel}
-            placeholder="Label the shape, Eg: face, clock .."
-          >
-        </div>
-        <div ref="label-data" class="mb-2 mt-2">
-          <attributes-list attributes={targetShape.attributes}></attributes-list>
-        </div>
-        <div ref="label-data" class="mb-2 mt-2">
-          Tags <small>(separated by comma)</small>
-          <div id="tags-input-box" class="input tagarea clearfix"></div>
-        </div> -->
+      <div class="mb-2 mt-2">
+        Category Name
+        <autocomplete-input
+          :value="selectedShape.category"
+          :list="appCategories"
+          @added="addCategory"
+          @selected="addCategory"
+        >
+        </autocomplete-input>
+      </div>
+      <div class="mb-2 mt-2">
+        Label Name
+        <input
+          type="text"
+          class="form-text w-100"
+          placeholder="Label the shape, Eg: face, clock .."
+          :value="selectedShape.label"
+          @change="updateLabel"
+        >
+      </div>
       <panel-attribute></panel-attribute>
       <panel-tag></panel-tag>
       <list-feature-point></list-feature-point>
@@ -60,8 +52,49 @@ export default {
   },
   computed: {
     ...mapGetters("action-config", {
-      selectedShape: "getSelectedShape",
-    })
+      selectedShapeID: "getSelectedShape",
+    }),
+
+    ...mapGetters("image-store", {
+      getShapeByID: "getShapeByID"
+    }),
+
+    ...mapGetters("label-data", {
+      appCategories: "getCategory"
+    }),
+
+    selectedShape() {
+      return this.selectedShapeID && this.getShapeByID(this.selectedShapeID);
+    }
+  },
+  methods: {
+    ...mapMutations("image-store", {
+      setShapeCategory: "setShapeCategory",
+      updateShapeDetail: "updateShapeDetail"
+    }),
+
+    ...mapMutations("label-data", {
+      addCategoryToApp: "addCategory"
+    }),
+
+    addCategory(category) {
+      this.setShapeCategory({
+        category,
+        shapeID: this.selectedShapeID,
+      });
+      this.addCategoryToApp({ category });
+    },
+
+    /**
+     * Updates shape label
+     * @param {Event} - change event
+     */
+    updateLabel(event) {
+      this.updateShapeDetail({
+        shapeID: this.selectedShapeID,
+        label: event.target.value
+      });
+    }
   }
 }
 </script>
