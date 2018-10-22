@@ -89,11 +89,9 @@ const mutations = {
     if (!property || !value) return;
 
     let key = formatID(property, value);
-    setAdd({
-      arr: state.shapes[shapeID].attributes,
-      item: new Attribute({ key, property, value }),
-      key
-    });
+    state.shapes[shapeID].attributes.push(
+      new Attribute({ key, property, value })
+    );
   },
 
   /**
@@ -159,9 +157,8 @@ const mutations = {
    * @param {String} shapeID - shape id
    * @param {String} attribute - attribute
    */
-  removeAttributeFromShape(state, { shapeID, property, value }) {
-    let key = formatID(property, value);
-    setRemove({ arr: state.shapes[shapeID].attributes, key });
+  removeAttributeFromShape(state, { shapeID, index }) {
+    state.shapes[shapeID].attributes.splice(index, 1);
   },
 
   /**

@@ -7,14 +7,15 @@
       :placeholer="placeholder"
       :value="text"
       @blur="onBlur"
+      @click="showSuggestions = true"
       @input="onInput"
       @keydown.up.stop="moveSelection(-1)"
       @keydown.down.stop="moveSelection(1)"
       @keydown.enter="selectSuggestion"
+      @keydown.esc="resetState"
     >
     <ul
       ref="suggestions"
-      tabindex="-1"
       v-show="showSuggestions && suggestions.length"
       :class="autocompleteClass"
     >
@@ -45,7 +46,7 @@ export default {
     list: {
       type: Array,
       default: function() {
-        return ["123", "1", "2"];
+        return [];
       }
     },
     // Initial data to display
@@ -102,13 +103,17 @@ export default {
      * @param {Number} index
      */
     isValid(index) {
-      return index >= 0 && index < this.suggestions.length;
+      return index >= -1 && index < this.suggestions.length;
     },
 
     /**
      * Selects item based on index position
      */
     moveSelection(step) {
+      if (!this.showSuggestions) {
+        this.showSuggestions = true;
+      }
+
       let nextPos = this.selected + step;
 
       if (!this.isValid(nextPos)) return;
@@ -120,9 +125,12 @@ export default {
      * Blur event: When input loses focus, flush previous @added events and
      * reset state
      */
-    onBlur() {
-      this.debouncedEmitAddEvent.flush();
+    onBlur(event) {
+      this.debouncedEmitAddEvent(event.target.value);
       this.resetState();
+      this.$nextTick(function() {
+        this.debouncedEmitAddEvent.flush();
+      })
     },
 
     /**
@@ -159,6 +167,16 @@ export default {
       let index = this.selected;
       if (!this.isValid(index)) return;
 
+      // Pressed enter without a valid selection, flush and continue
+      if (index === -1) {
+        this.debouncedEmitAddEvent.flush();
+        this.resetState();
+        return;
+      }
+
+      // Cancel previous add event and emit selected event
+      this.debouncedEmitAddEvent.cancel();
+
       let val = this.suggestions[index];
       this.text = val;
       this.$emit("selected", val);
@@ -193,7 +211,7 @@ export default {
     list-style: none;
   }
 
-  li:hover {
+  .focused, li:hover {
     background-color: #03a9f4;
   }
 </style>

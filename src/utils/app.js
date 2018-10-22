@@ -52,7 +52,7 @@ export function setAdd({ arr, item, key }) {
   }
 
   let index = arr.findIndex(arrItem => {
-    return arrItem === key || arrItem.key === key || arrItem[key];
+    return arrItem === key || arrItem.key === key;
   });
 
   if (index === -1) {
@@ -73,7 +73,7 @@ export function setRemove({ arr, item, key }) {
   }
 
   let index = arr.findIndex(arrItem => {
-    return arrItem === key || arrItem.key === key || arrItem[key];
+    return arrItem === key || arrItem.key === key;
   });
 
   if (index === -1) return;

@@ -2,28 +2,24 @@
   <div class="">
     <div class="clearfix">
       Attributes
-      <!-- <button
-        class="btn btn-sm float-right"
-        @click="addAttributeRow">
-        +
-      </button> -->
     </div>
+    <!-- End of attribute heading -->
     <div
-      class="border mb-5"
+      v-if="shapeAttributes.length"
+      class="mb-2"
       id="attributes-list"
-      v-if="selectedShapeID"
     >
       <div
-        class="form-inline"
+        class="d-flex align-items-start"
         style="margin-top:3px;"
         v-for="(attribute, index) in shapeAttributes"
-        :key="attribute.key"
+        :key="index"
       >
         <autocomplete-input
           class="form-text w-40"
           :list="suggestedProperties"
           :value="attribute.property"
-          :autocompleteClass="['form-text', 'w-100']"
+          :autocompleteClass="['form-control', 'w-100']"
           @added="updateAttributeProp(attribute, $event)"
           @selected="updateAttributeProp(attribute, $event)"
         >
@@ -32,21 +28,28 @@
           class="form-text w-60"
           :list="suggestedValues(attribute.property)"
           :value="attribute.value"
-          :autocompleteClass="['form-text', 'w-100']"
+          :autocompleteClass="['form-control', 'w-100']"
           @added="updateAttributeValue(attribute, $event)"
           @selected="updateAttributeValue(attribute, $event)"
         >
         </autocomplete-input>
-        <font-awesome-icon
-          :icon="['far', 'trash-alt']"
-          style="font-size: 1.5em;"
-          @click="removeAttribute(attribute.property, attribute.value)"
-        ></font-awesome-icon>
+        <button
+          type="button"
+          name="button"
+          class="btn"
+          @click="removeAttribute(index)"
+        >
+          <font-awesome-icon
+            :icon="['far', 'trash-alt']"
+            style="font-size: 1.5em;"
+          ></font-awesome-icon>
+        </button>
       </div>
     </div>
-    <div class="form-inline">
+    <!-- End of attribute list -->
+    <div class="d-flex align-items-start">
       <autocomplete-input
-        class="w-40"
+        class="form-text w-40"
         :value="enterProperty"
         :list="suggestedProperties"
         :autocompleteClass="['form-control', 'w-100']"
@@ -54,10 +57,8 @@
         @selected="enterProperty = $event"
       >
       </autocomplete-input>
-      <!-- {{ suggestedProperties }} - {{ suggestedValues(enterProperty) }}
-      {{ enterProperty }} -->
       <autocomplete-input
-        class="add-attr w-60"
+        class="form-text w-60"
         :value="enterValue"
         :list="suggestedValues(enterProperty)"
         :autocompleteClass="['form-control', 'w-100']"
@@ -65,15 +66,20 @@
         @selected="enterValue = $event"
       >
       </autocomplete-input>
-      <!-- {{ enterProperty }} - {{ enterValue }} -->
-      <font-awesome-icon
-        :icon="['fas', 'plus']"
-        style="font-size: 1.5em;"
+      <button
+        type="button"
+        name="button"
+        class="btn"
         @click="addAttribute"
-      ></font-awesome-icon>
+      >
+        <font-awesome-icon
+          :icon="['fas', 'plus']"
+          style="font-size: 1.5em;"
+        ></font-awesome-icon>
+      </button>
     </div>
+    <!-- End of add attribute -->
   </div>
-
 </template>
 
 <script>
@@ -105,7 +111,7 @@ export default {
 
     shapeAttributes() {
       let shapeID = this.selectedShapeID;
-      return this.getShapeAttributes(shapeID);
+      return shapeID && this.getShapeAttributes(shapeID);
     }
   },
   methods: {
@@ -139,26 +145,27 @@ export default {
      * Adds an attribute to both shape and app on click
      */
     addAttribute() {
-      console.log("addAttribute")
-      let shapeID = this.selectedShapeID;
-      let property = this.enterProperty;
-      let value = this.enterValue;
+      this.$nextTick(function() {
+        let shapeID = this.selectedShapeID;
+        let property = this.enterProperty;
+        let value = this.enterValue;
 
-      if (!property || !value) return;
+        if (!property || !value) return;
 
-      console.log("adding...")
-      this.addAttributeToShape({ shapeID, property, value });
-      this.addAttributeToApp({ property, value });
-      this.enterProperty = "";
-      this.enterValue = "";
+        this.addAttributeToShape({ shapeID, property, value });
+        this.addAttributeToApp({ property, value });
+        this.enterProperty = "";
+        this.enterValue = "";
+      });
     },
 
-    removeAttribute(property, value) {
+    removeAttribute(index) {
       let shapeID = this.selectedShapeID;
-      this.removeAttributeFromShape({ shapeID, property, value });
+      this.removeAttributeFromShape({ shapeID, index });
     },
 
     suggestedValues(attribute) {
+      console.log("suggested values", attribute, this.getSuggestedValues(attribute));
       return this.getSuggestedValues(attribute);
     },
 
@@ -171,6 +178,7 @@ export default {
         newProp,
         newValue: attribute.value
       });
+      this.addAttributeToApp({ property: newProp, value: attribute.value });
     },
 
     updateAttributeValue(attribute, newValue) {
@@ -182,6 +190,7 @@ export default {
         newProp: attribute.property,
         newValue: newValue
       });
+      this.addAttributeToApp({ property: attribute.property, value: newValue });
     }
   }
 }
