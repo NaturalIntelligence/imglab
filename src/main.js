@@ -8,9 +8,10 @@ import Draggable from "vuedraggable";
 import AutocompleteInput from "./components/autocomplete-input/autocomplete-input";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faImages,
+  faBars,
   faChevronLeft,
   faChevronRight,
+  faImages,
   faPlus,
   faSearchPlus,
   faSearchMinus,
@@ -28,9 +29,10 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 Vue.use(svgjs);
 
 library.add(
-  faImages,
+  faBars,
   faChevronLeft,
   faChevronRight,
+  faImages,
   faPlus,
   faSearchPlus,
   faSearchMinus,

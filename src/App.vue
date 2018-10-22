@@ -1,10 +1,11 @@
 <template>
   <div class=""
     @click="click">
+    <prompt-restore v-if="showModal" @close="showModal = false"></prompt-restore>
     <div class="container-fluid">
       <div id="menubar" class="row overlay-color align-items-center" style="height: 50px;">
         <div class="col-3 col-sm-2 col-md-1 col-xl-1 no-pl">
-          <!-- <menu-dropdown></menu-dropdown> -->
+          <app-menu></app-menu>
         </div>
         <div class="col-6 col-sm-6 col-md-7 col-xl-7 text-center">
           <!-- form-inline input-group -->
@@ -60,6 +61,8 @@ import ToolBox from "./components/tools/toolbox";
 import WorkArea from "./components/workarea";
 import ImageSlider from "./components/image-slider/image-slider";
 import LabelPanel from "./components/label-panel/label-panel";
+import Menu from "./components/menu/menu";
+import PromptRestoreData from "./components/prompt-restore-data/restore-data";
 import { LABEL_TAG, CANVAS_TAG } from "./utils/tool-names";
 
 export default {
@@ -68,12 +71,15 @@ export default {
     'image-slider': ImageSlider,
     'toolbox': ToolBox,
     "actionbar": ActionBar,
-    "label-panel": LabelPanel
+    "label-panel": LabelPanel,
+    "app-menu": Menu,
+    "prompt-restore": PromptRestoreData
   },
   data() {
     return {
       LABEL_TAG,
-      CANVAS_TAG
+      CANVAS_TAG,
+      showModal: true
     }
   },
   methods: {

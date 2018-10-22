@@ -55,7 +55,7 @@ const mutations = {
    * @see /components/tools/tools/[shape].js for more info
    */
   setSelectedTool(state, { dom, selectedTool } = {}) {
-    if (state.selectedTool) {
+    if (state.selectedTool && state.selectedToolDom) {
       // Remove previous tool style
       state.selectedToolDom.classList.remove("tool-selected");
     }

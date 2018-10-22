@@ -45,11 +45,6 @@ export default {
     "panel-tag": PanelTag,
     "panel-attribute": PanelAttribute
   },
-  data() {
-    return {
-
-    }
-  },
   computed: {
     ...mapGetters("action-config", {
       selectedShapeID: "getSelectedShape",
