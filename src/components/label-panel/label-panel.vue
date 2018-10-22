@@ -34,6 +34,7 @@
           Tags <small>(separated by comma)</small>
           <div id="tags-input-box" class="input tagarea clearfix"></div>
         </div> -->
+      <panel-attribute></panel-attribute>
       <panel-tag></panel-tag>
       <list-feature-point></list-feature-point>
     </div>
@@ -44,11 +45,13 @@
 import { mapGetters, mapMutations } from "vuex";
 import ListFeaturePoints from "./panel/list-feature-point";
 import PanelTag from "./panel/panel-tag";
+import PanelAttribute from "./panel/panel-attribute";
 
 export default {
   components: {
     "list-feature-point": ListFeaturePoints,
-    "panel-tag": PanelTag
+    "panel-tag": PanelTag,
+    "panel-attribute": PanelAttribute
   },
   data() {
     return {

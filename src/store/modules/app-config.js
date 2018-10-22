@@ -6,12 +6,7 @@ const state = {
   },
   zoomStepSize: 0.1,
   opacityStepSize: 0.1,
-  featurePointColor: "#ee0000",
-  suggested: {
-    categories: [],
-    tags: [],
-    attributes: []
-  }
+  featurePointColor: "#ee0000"
 };
 
 const mutations = {

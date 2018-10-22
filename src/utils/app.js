@@ -52,7 +52,7 @@ export function setAdd({ arr, item, key }) {
   }
 
   let index = arr.findIndex(arrItem => {
-    return arrItem === key || arrItem === key;
+    return arrItem === key || arrItem.key === key || arrItem[key];
   });
 
   if (index === -1) {
@@ -73,7 +73,7 @@ export function setRemove({ arr, item, key }) {
   }
 
   let index = arr.findIndex(arrItem => {
-    return arrItem === key || arrItem === key;
+    return arrItem === key || arrItem.key === key || arrItem[key];
   });
 
   if (index === -1) return;
@@ -82,11 +82,23 @@ export function setRemove({ arr, item, key }) {
 }
 
 export const _ = {
-  on(el, type, cb) {
-    return el.addEventListener(type, cb);
+  on(el, type, cb, useCapture = false) {
+    return el.addEventListener(type, cb, useCapture);
   },
 
-  off(el, type, cb) {
-    return el.removeEventListener(type, cb);
+  off(el, type, cb, useCapture = false) {
+    return el.removeEventListener(type, cb, useCapture);
   }
 };
+
+/**
+ * Returns a formatted string based on arguments
+ * e.g. formatID("shapeID", "attribute") returns "shapeID:attribute"
+ * @returns {String}
+ */
+export function formatID() {
+  let args = Array.from(arguments);
+  return args.slice(1).reduce(function(acc, cur) {
+    return acc + ":" + cur;
+  }, args[0]);
+}

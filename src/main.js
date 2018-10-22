@@ -4,12 +4,14 @@ import App from "./App.vue";
 import store from "./store/store";
 import svgjs from "./plugins/svg";
 import InputTag from "vue-input-tag";
-import draggable from "vuedraggable";
+import Draggable from "vuedraggable";
+import AutocompleteInput from "./components/autocomplete-input/autocomplete-input";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faImages,
   faChevronLeft,
   faChevronRight,
+  faPlus,
   faSearchPlus,
   faSearchMinus,
   faTimes,
@@ -29,6 +31,7 @@ library.add(
   faImages,
   faChevronLeft,
   faChevronRight,
+  faPlus,
   faSearchPlus,
   faSearchMinus,
   faTimes,
@@ -39,7 +42,8 @@ library.add(
   farTrashAlt
 );
 
-Vue.component("draggable", draggable);
+Vue.component("autocomplete-input", AutocompleteInput);
+Vue.component("draggable", Draggable);
 Vue.component("input-tag", InputTag);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

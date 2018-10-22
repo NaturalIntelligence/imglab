@@ -122,7 +122,6 @@ export default {
     },
 
     removeTagByCross(tag) {
-      console.log("removeTagByCross")
       let shapeID = this.selectedShapeID;
       tag && this.removeTagFromShape({ shapeID, tag });
     },
@@ -153,7 +152,6 @@ export default {
   mounted() {
     let el = this.$refs.wrapper;
     let compStyles = window.getComputedStyle(el);
-    console.log("mounted", compStyles.width);
     this.inputWidth = compStyles.width;
   }
 }

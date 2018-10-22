@@ -341,7 +341,6 @@ export default {
      * @param {Boolean} featurePoint - deselect feature point
      */
     deselectAll({ shape = false, featurePoint = false } = {}) {
-      console.log("deselectAll");
       // Deselect all svg elements
       this.selectedShapes.forEach(shapeID => {
         let svgShape = this.$svg.get(shapeID);
@@ -548,6 +547,8 @@ export default {
       });
 
       featurePoint.on('click', event => {
+        shape.selectize(false);
+
         if (!event.ctrlKey) {
           // Single select
           this.deselectAll({ shape: true });

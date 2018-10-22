@@ -1,6 +1,7 @@
-import { setAdd, setRemove } from "../../utils/app";
+import { setAdd, setRemove, formatID } from "../../utils/app";
 import { Image } from "../../models/Image";
 import { FeaturePoint } from "../../models/FeaturePoint";
+import { Attribute } from "../../models/Attribute";
 import {
   scaleShape,
   scaleShapePoints,
@@ -81,11 +82,18 @@ const mutations = {
   },
 
   /**
-   * Adds a attribute to shape
+   * Adds a attribute to shape with a valid property and value
    * @param {String} attribute - attribute
    */
-  addAttributeToShape(state, { shapeID, attribute }) {
-    setAdd({ arr: state.shapes[shapeID].attributes, item: attribute });
+  addAttributeToShape(state, { shapeID, property, value }) {
+    if (!property || !value) return;
+
+    let key = formatID(property, value);
+    setAdd({
+      arr: state.shapes[shapeID].attributes,
+      item: new Attribute({ key, property, value }),
+      key
+    });
   },
 
   /**
@@ -151,8 +159,9 @@ const mutations = {
    * @param {String} shapeID - shape id
    * @param {String} attribute - attribute
    */
-  removeAttributeFromShape(state, { shapeID, attribute }) {
-    setRemove({ arr: state.shapes[shapeID].attributes, item: attribute });
+  removeAttributeFromShape(state, { shapeID, property, value }) {
+    let key = formatID(property, value);
+    setRemove({ arr: state.shapes[shapeID].attributes, key });
   },
 
   /**
@@ -174,6 +183,19 @@ const mutations = {
   },
 
   /**
+   * Removes a value from shape attribute
+   * @param {String} shapeID - shape id
+   * @param {String} tag - tag
+   */
+  removeValueFromAttribute(state, { shapeID, attribute, value }) {
+    let id = formatID(shapeID, attribute);
+    // Only remove if id exists
+    if (state.shapeAttributes[id]) {
+      setRemove({ arr: state.shapeAttributes[id], item: value });
+    }
+  },
+
+  /**
    * Sets selected image via name
    * @param {String} name - image name
    */
@@ -191,6 +213,32 @@ const mutations = {
     if (state.imageSelected) {
       state.imageSelected.featurePointSize = featurePointSize;
     }
+  },
+
+  /**
+   * Updates shape attribute only if attribute fields are filled
+   * @param {String} shapeID
+   * @param {String} oldProp
+   * @param {String} oldValue
+   * @param {String} newProp
+   * @param {String} newValue
+   */
+  updateAttribute(state, { shapeID, oldProp, oldValue, newProp, newValue }) {
+    if (!oldProp || !oldValue || !newProp || !newValue) return;
+
+    let oldID = formatID(oldProp, oldValue);
+    let newID = formatID(newProp, newValue);
+    let shapeAttrs = state.shapes[shapeID].attributes;
+
+    let index = shapeAttrs.findIndex(attr => {
+      return attr.key === oldID;
+    });
+
+    shapeAttrs.splice(
+      index,
+      1,
+      new Attribute({ key: newID, property: newProp, value: newValue })
+    );
   },
 
   /**
@@ -256,12 +304,11 @@ const mutations = {
    */
   updateShapeDetail(
     state,
-    { shapeID, attributes, category, tags, label, points, rbox, zoomScale }
+    { shapeID, category, tags, label, points, rbox, zoomScale }
   ) {
     var shape = state.shapes[shapeID];
     var scale = 1 / state.imageSelected.size.imageScale;
 
-    attributes && (shape.attributes = attributes);
     category && (shape.category = category);
     tags && (shape.tags = tags);
     label && (shape.label = label);
@@ -334,6 +381,25 @@ const getters = {
   },
 
   /**
+   * Returns an array of shape attributes
+   * @param {String} shapeID - shape id
+   * @returns {Function(): String[]} - array of shape attributes
+   */
+  getShapeAttributes: state => shapeID => {
+    return state.shapes[shapeID].attributes;
+  },
+
+  /**
+   * Returns values associated with the shape attribute
+   * @param {String} shapeID - shape id
+   * @returns {Function(): String[]} - array of shape attribute values
+   */
+  getShapeAttributeValues: state => ({ shapeID, attribute }) => {
+    let id = formatID(shapeID, attribute);
+    return state.shapeAttributes[id];
+  },
+
+  /**
    * Gets shape feature points
    * @param {String} shapeID
    * @returns {Function(): FeaturePoint[]} takes a shape ID and returns an array of feature points
@@ -344,6 +410,11 @@ const getters = {
     });
   },
 
+  /**
+   * Get shape feature point ids
+   * @param {String} shapeID
+   * @returns {Function(): String[]} featurePoints
+   */
   getShapeFeaturePointIDs: state => shapeID => {
     return state.shapes[shapeID].featurePoints;
   },
@@ -360,6 +431,7 @@ const getters = {
   /**
    * Returns feature point size for an image,
    * Default size, which is the min size, is 3
+   * @returns {Number} feature point size
    */
   getFeaturePointSize: state => {
     return (state.imageSelected && state.imageSelected.featurePointSize) || 3;
