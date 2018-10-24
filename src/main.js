@@ -26,6 +26,8 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
 Vue.use(svgjs);
 
 library.add(
