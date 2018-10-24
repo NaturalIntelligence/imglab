@@ -112,12 +112,12 @@
                             ){
                                 var labelData = [
                                     {
-                                        x: xmin,
-                                        y: ymin
+                                        x: Math.round(xmin),
+                                        y: Math.round(ymin)
                                     },
                                     {
-                                        x: xmax,
-                                        y: ymax
+                                        x: Math.round(xmax),
+                                        y: Math.round(ymax)
                                     }
                                 ];
                                 labels.push(labelData);
@@ -129,7 +129,7 @@
                     // }
                 } else if(image.workType === "count"){
                     image.shapes[0].featurePoints.forEach((item) => {
-                        labels.push({x:item.x, y:item.y})
+                        labels.push({x: Math.round(item.x), y: Math.round(item.y)})
                     })
                 }
                 if (labels.length > 0) {

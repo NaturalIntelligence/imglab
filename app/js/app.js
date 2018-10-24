@@ -13,8 +13,8 @@ function showSnackBar(msg) {
 //get mouse cordinates on image
 function getCordinates(event, element) {
     var rect = element[0].getBoundingClientRect();
-    var x = event.pageX - rect.left.toFixed(0);
-    var y = event.pageY - rect.top.toFixed(0);
+    var x = Math.round(event.pageX - rect.left);
+    var y = Math.round(event.pageY - rect.top);
     return {
         x: x,
         y: y
