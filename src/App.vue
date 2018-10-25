@@ -40,7 +40,7 @@
           <div>
             <workarea></workarea>
           </div>
-          <div class="grey-border" style="height: 100px; width: 100%; margin: 0px 2px;">
+          <div class="grey-border mt-auto" style="height: 100px; width: 100%; margin: 0px 2px;">
             <image-slider thumbnail-width="90px"></image-slider>
           </div>
         </div>

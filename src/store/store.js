@@ -7,6 +7,8 @@ import labelData from "./modules/label-data";
 
 Vue.use(Vuex);
 
+const throttle = require("lodash.throttle");
+
 const mutations = {
   /**
    * Initialze the store with data stored in local storage
@@ -16,7 +18,7 @@ const mutations = {
     if (!storeData) {
       storeData = localStorage.getItem("imglab-store");
     }
-    this.replaceState(Object.assign(state, JSON.parse(storeData)));
+    this.replaceState(Object.assign(state, storeData));
   }
 };
 
@@ -40,11 +42,10 @@ const store = new Vuex.Store({
 /**
  * Subscribe to store mutations and store state to local storage
  */
-store.subscribe((mutation, state) => {
-  // Store state object as a JSON string
-  let saveData = { ...state };
-  saveData["action-config"] = undefined;
-  localStorage.setItem("imglab-store", JSON.stringify(saveData));
-});
+store.subscribe(
+  throttle(function(mutation, state) {
+    localStorage.setItem("imglab-store", JSON.stringify(state));
+  }, 5000)
+);
 
 export default store;

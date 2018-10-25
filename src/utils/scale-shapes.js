@@ -1,5 +1,5 @@
-import { Shape } from "../models/Shape"
-import { FeaturePoint } from "../models/FeaturePoint"
+import { Shape } from "../models/Shape";
+import { FeaturePoint } from "../models/FeaturePoint";
 
 /**
  * Scales the shape data based on scale
@@ -32,15 +32,8 @@ export function scaleShape(id, type, rbox, points, scale) {
  * @param {string} type - type of shape
  * @returns {points[] | Array[points[]]} scaled points
  */
-export function scaleShapePoints(points, scale, type) {
+export function scaleShapePoints(points, scale) {
   if (!points) return;
-
-  if (type == "polygon") {
-    return points.map(point => {
-      return point.map(val => val * scale);
-    });
-  }
-  // Return this for other shapes
   return points.map(point => point * scale);
 }
 

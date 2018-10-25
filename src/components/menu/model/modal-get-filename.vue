@@ -9,10 +9,19 @@
       >
         <div class="modal-container">
           <div class="modal-header">
-            <h3 class="modal-title">Recovery</h3>
+            <h3 class="modal-title">File Name</h3>
           </div>
           <div class="modal-body">
-            You've previously saved data. Would you like to restore it?
+            <label for="file-name">
+              <input
+                class="form-control"
+                type="text"
+                name="file-name"
+                :class="{ error: showError }"
+                :value="filename"
+                @input="onInput"
+              >
+            </label>
           </div>
           <div class="modal-footer">
             <button
@@ -22,15 +31,15 @@
               data-dismiss="modal"
               @click="$emit('close')"
             >
-              No
+              Cancel
             </button>
             <button
               type="button"
               name="button"
               class="btn btn-primary float-right"
-              @click="restoreData"
+              @click="setFilename"
             >
-              Yes
+              Confirm
             </button>
           </div>
         </div>
@@ -43,30 +52,42 @@
 import { mapGetters } from "vuex";
 
 export default {
+  props: {
+    value: {
+      type: String,
+      required: true
+    },
+    ext: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
-      storeData: null
+      filename: this.value + this.ext,
+      showError: false
     }
-  },
-  computed: {
-    ...mapGetters({
-      localStoreData: "getLocalStoreData"
-    })
   },
   methods: {
-    checkBrowserCache() {
-      let cache = this.localStoreData;
-      if (!cache) return;
-      this.storeData = cache;
+    onInput(event) {
+      if (event.target.value.length) {
+        this.showError = false;
+      }
+      this.filename = event.target.value;
     },
 
-    restoreData() {
-      this.$store.commit("initializeStore", { storeData: this.storeData });
-      this.$emit("close");
+    setFilename() {
+      if (this.validFilename && this.filename.length) {
+        this.$emit("input", this.filename);
+      } else {
+        this.showError = true;
+      }
+    },
+
+    validFilename() {
+      return /^[a-z0-9_.@()-]/i.test(this.filename) &&
+        this.filename.endsWith(this.ext);
     }
-  },
-  mounted() {
-    this.checkBrowserCache();
   }
 }
 </script>
@@ -107,5 +128,9 @@ export default {
 
   .modal-body {
     margin: 20px 0;
+  }
+
+  .error {
+    border: 2px solid red;
   }
 </style>

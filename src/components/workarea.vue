@@ -82,12 +82,12 @@ export default {
 
     // Get image width
     imageWidth() {
-      return (this.imageSelected && this.imageSelected.size.scaledWidth) || 0;
+      return this.imageSelected ? this.imageSelected.size.scaledWidth : 0;
     },
 
     // Get image height
     imageHeight() {
-      return (this.imageSelected && this.imageSelected.size.scaledHeight) || 0;
+      return this.imageSelected ? this.imageSelected.size.scaledHeight : 0;
     },
 
     // Get image opacity
@@ -97,12 +97,12 @@ export default {
 
     // Get image selected source
     imageSrc() {
-      return (this.imageSelected && this.imageSelected.src) || "";
+      return this.imageSelected ? this.imageSelected.src : "";
     },
 
     // Get image scale
     imageScale() {
-      return (this.imageSelected && this.imageSelected.size.imageScale) || 0;
+      return this.imageSelected ? this.imageSelected.size.imageScale : 0;
     }
   },
   watch: {
@@ -110,29 +110,37 @@ export default {
      * Redraw canvas when image changes
      */
     imageSelected() {
-      this.setSelectedElements();
-      this.drawCanvas();
+      // this.$nextTick(function() {
+        this.setSelectedElements();
+        this.drawCanvas();
+      // });
     },
 
     /**
      * Redraw canvas when image scale changes
      */
     imageScale() {
-      this.drawCanvas();
+      // this.$nextTick(function() {
+        this.drawCanvas();
+      // });
     },
 
     selectedTool() {
-      this.deselectAll();
+      this.$nextTick(function() {
+        this.deselectAll();
+      });
     },
 
     selectedFeaturePoints() {
-      this.selectedFeaturePoints.forEach(featurePointID => {
-        let svgFP = this.$svg.get(featurePointID);
-        svgFP.selectize({
-          rotationPoint: false,
-          points: []
+      this.$nextTick(function() {
+        this.selectedFeaturePoints.forEach(featurePointID => {
+          let svgFP = this.$svg.get(featurePointID);
+          svgFP.selectize({
+            rotationPoint: false,
+            points: []
+          });
         });
-      });
+      })
     }
   },
   methods: {
@@ -460,7 +468,7 @@ export default {
           }
 
           shape.array().value.forEach(pointArray => {
-            calculatedPoints.push([pointArray[0] + vector.x, pointArray[1] + vector.y]);
+            calculatedPoints.push(pointArray[0] + vector.x, pointArray[1] + vector.y);
           });
 
           return calculatedPoints;

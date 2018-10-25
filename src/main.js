@@ -1,6 +1,5 @@
 import Vue from "vue";
 import App from "./App.vue";
-// import App from "./test.vue";
 import store from "./store/store";
 import svgjs from "./plugins/svg";
 import InputTag from "vue-input-tag";

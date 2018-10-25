@@ -159,16 +159,29 @@ export default {
       });
     },
 
+    /**
+     * Remove an attribute from shape based on index
+     * @param {Number} index
+     */
     removeAttribute(index) {
       let shapeID = this.selectedShapeID;
       this.removeAttributeFromShape({ shapeID, index });
     },
 
+    /**
+     * Returns a list of suggested values for autocompletion
+     * @param {String} attribute
+     */
     suggestedValues(attribute) {
       return this.getSuggestedValues(attribute);
     },
 
-    updateAttributeProp: function(attribute, newProp) {
+    /**
+     * Updates an attribute prop when it's changed
+     * @param {Attribute} attribute - contains old attribute and props
+     * @param {String} newProp
+     */
+    updateAttributeProp(attribute, newProp) {
       let shapeID = this.selectedShapeID;
       this.updateAttribute({
         shapeID,
@@ -180,6 +193,11 @@ export default {
       this.addAttributeToApp({ property: newProp, value: attribute.value });
     },
 
+    /**
+     * Update attribute value when it's changed
+     * @param {Attribute} attribute - contains old attribute and props
+     * @param {String} newvalue
+     */
     updateAttributeValue(attribute, newValue) {
       let shapeID = this.selectedShapeID;
       this.updateAttribute({

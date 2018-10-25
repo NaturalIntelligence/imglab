@@ -36,11 +36,12 @@
         </div>
       </div>
       <div class="col-9">
-        <div class="photolist-wrapper" style="width: 100%; overflow: hidden;">
+        <div class="photolist-wrapper" style="height:90px; width: 100%; overflow: hidden;">
           <div
             id="photolist"
-            class="photolist d-flex align-items-center"
+            class="d-flex align-items-center photolist"
             ref="photolist"
+            style="height: 100%;"
           >
               <img
                 v-for="(thumbnail, index) in thumbnails"
@@ -49,7 +50,7 @@
                 :key="thumbnail.name + index"
                 :src="thumbnail.src"
                 :label="thumbnail.name"
-                :title="thumbnail.name"
+                :title= "thumbnail.name"
                 :width="thumbnailWidth"
                 :data-index="index"
                 @click="loadIntoWorkArea(index)">
@@ -68,7 +69,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import { Image as _Image } from '../../models/Image';
 import Velocity from 'velocity-animate'
 
@@ -83,6 +84,11 @@ export default {
     return {
       thumbnails: []
     }
+  },
+  computed: {
+    ...mapGetters("image-store", {
+      images: "getImages"
+    })
   },
   methods: {
     // Map mutations from image-store
@@ -177,6 +183,11 @@ export default {
     loadIntoWorkArea(index) {
       let imageSelected = this.thumbnails[index];
       this.setImageSelected(imageSelected);
+    }
+  },
+  watch: {
+    images(val) {
+      this.thumbnails = val;
     }
   }
 }

@@ -340,16 +340,29 @@ const mutations = {
     pointIndex && (image.pointIndex = pointIndex);
     featurePointSize && (image.featurePointSize = featurePointSize);
     opacity && (image.opacity = opacity);
+  },
+
+  /**
+   * Initialze the state of the store
+   * @param {Object} images
+   * @param {Object} shapes
+   * @param {Object} featurePoints
+   */
+  init(state, { images, shapes, featurePoints }) {
+    state.images = images;
+    state.shapes = shapes;
+    state.featurePoints = featurePoints;
+    state.imageSelected = null;
   }
 };
 
 const getters = {
   /**
    * Returns an array of images
-   * @returns {Image[]} array of images
+   * @returns {Images[]} array of images
    */
   getImages: state => {
-    return state.images;
+    return Object.values(state.images);
   },
 
   /**
@@ -433,6 +446,14 @@ const getters = {
    */
   getFeaturePointSize: state => {
     return (state.imageSelected && state.imageSelected.featurePointSize) || 3;
+  },
+
+  /**
+   * Returns store data: Returns raw data
+   */
+  getStoreData: state => {
+    let cloneDeepWith = require("lodash.clonedeepwith");
+    return cloneDeepWith(state);
   }
 };
 

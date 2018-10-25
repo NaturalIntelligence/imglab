@@ -14,7 +14,7 @@ export class Image {
     pointIndex = 0,
     featurePointSize = 3,
     opacity = 1
-  } = {}) {
+  }) {
     this.name = name;
     this.src = src;
     this.size = size;

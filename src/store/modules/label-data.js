@@ -167,6 +167,14 @@ const getters = {
 
   getValues: state => property => {
     return state.propValues[property];
+  },
+
+  /**
+   * Returns store data: Returns raw data
+   */
+  getStoreData: state => {
+    let cloneDeepWith = require("lodash.clonedeepwith");
+    return cloneDeepWith(state);
   }
 };
 

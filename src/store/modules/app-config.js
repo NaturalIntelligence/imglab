@@ -48,6 +48,29 @@ const mutations = {
       enable,
       deleteIfExported
     };
+  },
+
+  init(
+    state,
+    {
+      autosave: {
+        syncingInterval = 10 * 1000, //10 seconds
+        enable = true,
+        deleteIfExported = true //Mark the data as saved when exported as nimn format, and delte the copy from browser cache.
+      },
+      zoomStepSize = 0.1,
+      opacityStepSize = 0.1,
+      featurePointColor = "#ee0000"
+    }
+  ) {
+    this.autosave = {
+      syncingInterval,
+      enable,
+      deleteIfExported
+    };
+    this.zoomStepSize = zoomStepSize;
+    this.opacityStepSize = opacityStepSize;
+    this.featurePointColor = featurePointColor;
   }
 };
 
@@ -83,6 +106,14 @@ const getters = {
    */
   getAutosave: state => {
     return state.autosave;
+  },
+
+  /**
+   * Returns store data: Returns raw data
+   */
+  getStoreData: state => {
+    let cloneDeepWith = require("lodash.clonedeepwith");
+    return cloneDeepWith(state);
   }
 };
 

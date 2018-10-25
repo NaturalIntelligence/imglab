@@ -1,82 +1,131 @@
 <template lang="html">
-  <div class="dropdown" >
-    <div class="dropbtn">
-      <font-awesome-icon
-        :icon="['fas', 'bars']"
-        style="font-size:1.5em; color: green"
-      >
-      </font-awesome-icon>
+  <div class="">
+    <div class="dropdown" >
+      <div class="dropbtn">
+        <font-awesome-icon
+          :icon="['fas', 'bars']"
+          style="font-size:1.5em; color: green"
+        >
+        </font-awesome-icon>
+      </div>
+      <div class="dropdown-content">
+        <a href="#" >
+          <label class="btn-bs-file">Open
+            <input
+              class="filebutton"
+              ref="open"
+              type="file"
+              accept=".fpp,.nimn,.xml,.json"
+              @change="openFile"
+            >
+          </label>
+          <span>Ctrl + i</span>
+        </a>
+        <a
+          href="#"
+          ref="save"
+          @click="showModal = true"
+        >
+          <label>Save</label>
+          <span>Ctrl + e</span>
+        </a>
+        <a
+          href="#"
+          @click="openSettings"
+        >
+          Settings
+        </a>
+      </div>
     </div>
-    <div class="dropdown-content">
-      <a href="#" >
-        <label class="btn-bs-file">Open
-          <input
-            class="filebutton"
-            ref="open"
-            type="file"
-            accept=".fpp,.nimn,.xml,.json"
-            @change="openFile"
-          >
-        </label>
-        <span>Ctrl + i</span>
-      </a>
-      <a
-        href="#"
-        ref="save"
-        @click="saveFile"
-      >
-        <label>Save</label>
-        <span>Ctrl + e</span>
-      </a>
-      <a
-        href="#"
-        @click="openSettings"
-      >
-        Settings
-      </a>
-    </div>
+    <modal-select-savetype
+      v-if="showModal"
+      @close="showModal = false"
+    >
+  </modal-select-savetype>
   </div>
+
 </template>
 
 <script>
+import nimnImageStore from "./action/nimn-format-imagestore";
+import nimnAppConfig from "./action/nimn-format-appconfig";
+import nimnLabelData from "./action/nimn-format-labeldata";
 
+import { mapMutations } from "vuex";
+import ModalSelectSavetype from "./model/modal-select-savetype";
+import { saveAsNimn } from "./action/saveas-nimn";
 import { _ } from "../../utils/app";
+import { Ext } from "./filetype";
 
 export default {
+  components: {
+    "modal-select-savetype": ModalSelectSavetype
+  },
+  data() {
+    return {
+      showModal: false
+    }
+  },
   methods: {
-    openFile(event) {
-      console.log("openFile");
+    ...mapMutations("app-config", {
+      initAppConfig: "init"
+    }),
+
+    ...mapMutations("image-store", {
+      initImageStore: "init"
+    }),
+
+    ...mapMutations("label-data", {
+      initLabelData: "init"
+    }),
+
+    loadProjectFile(data) {
+      var nimn = require("nimnjs");
+
+      let nimnStore = {
+        type: "map",
+        detail: [nimnImageStore, nimnAppConfig, nimnLabelData]
+      };
+
+      let schemaStore = nimn.buildSchema(nimnStore);
+      let nimnObj = nimn.parse(schemaStore, data);
+
+      this.initAppConfig(nimnObj["app-config"]);
+      this.initImageStore(nimnObj["image-store"]);
+      this.initLabelData(nimnObj["label-data"]);
     },
 
-    openSettings(event) {
+    openSettings() {
       console.log("openSettings");
     },
 
-    saveFile(event) {
-      console.log("saveFile");
-      let cache = localStorage.getItem("imglab-store");
-      console.log("cache", cache);
-    },
+    /**
+     * Opens file and initialize store
+     */
+    openFile(event) {
+      var input = event.srcElement;
+      if (input.files && input.files[0]) {
+        var dataFile = input.files[0];
 
-    registerShortcuts(event) {
-      if ((event.key == "I" || event.key == "i") && !event.shiftKey && !event.altKey && event.ctrlKey) {
-        // Open file
-        this.$refs.open.click();
-        event.preventDefault();
-        event.stopPropagation();
-      } else if ((event.key == "event" || event.key == "event") && !event.shiftKey && !event.altKey && event.ctrlKey) {
-        // Save file
-        this.$refs.save.click();
-        event.preventDefault();
-        event.stopPropagation();
+        var reader = new FileReader();
+        reader.onload = e => {
+          if (dataFile.name.endsWith(".json")) {
+            this.loadJSONFile(e.target.result);
+          } else if (dataFile.name.endsWith(Ext.NIMN)) {
+            this.loadProjectFile(e.target.result);
+          } else if (dataFile.name.endsWith(".fpp")) {
+            this.loadFpp(e.target.result);
+          } else if (dataFile.name.endsWith(".xml")) {
+            this.loadDlibXml(e.target.result);
+          } else {
+            console.log("Not supported");
+          }
+        };
+
+        reader.readAsText(input.files[0]);
       }
+      input.value = null;
     }
-  },
-  mounted() {
-    _.on(document, "keydown", this.registerShortcuts);
-  },
-  beforeDestroy() {
-    _.off(document, "keydown", this.registerShortcuts);
   }
 }
 
