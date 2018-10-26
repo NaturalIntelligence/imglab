@@ -128,12 +128,13 @@ export default {
                 part = []
               }
             ) => {
-              let shapeHash = image.id + "-" + _shapeIndex++;
+              let index = _shapeIndex++;
+              let shapeHash = image.id + "-" + index;
               // Populate shape data
               let shape = new Shape({
                 id: RECTANGLE + "#" + shapeHash,
-                label: _text || "rect",
-                type: "rect",
+                label: _text || RECTANGLE + "#" + index,
+                type: RECTANGLE,
                 rbox: { x, y, w, h },
                 points: [x, y, w, h]
               });
