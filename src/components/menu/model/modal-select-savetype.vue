@@ -26,7 +26,7 @@
                   <button
                     type="button"
                     class="btn"
-                    @click="fileext = _ext.NIMN"
+                    @click="validate(_ext.NIMN)"
                   >
                     Project file
                   </button>
@@ -35,7 +35,7 @@
                   <button
                     type="button"
                     class="btn"
-                    @click="fileext = _ext.DLIB_XML"
+                    @click="validate(_ext.DLIB_XML)"
                   >
                     Dlib XML
                   </button>
@@ -44,7 +44,7 @@
                   <button
                     type="button"
                     class="btn"
-                    @click="fileext = ext.DLIB_PTS"
+                    @click="validate(_ext.DLIB_PTS)"
                   >
                     Dlib pts
                   </button>
@@ -81,7 +81,7 @@ import ModalGetFilename from "./modal-get-filename";
 import { mapGetters } from "vuex";
 
 import { Ext } from "../filetype";
-import { encodeAsNimn, encodeAsDlibXML } from "../action/file-handler";
+import { encodeAsNimn, encodeAsDlibXML, encodeAsDlibPts } from "../action/file-handler";
 
 const FileSaver = require('file-saver');
 
@@ -97,11 +97,13 @@ export default {
         [Ext.DLIB_XML]: "imglab",
         [Ext.DLIB_PTS]: "imglab"
       },
+      snackbarMsg: ""
     }
   },
   computed: {
     ...mapGetters("image-store", {
-      dataImageStore: "getStoreData"
+      dataImageStore: "getStoreData",
+      imageSelected: "getImageSelected"
     }),
 
     ...mapGetters("app-config", {
@@ -112,6 +114,10 @@ export default {
       dataLabelData: "getStoreData"
     }),
 
+    ...mapGetters("action-config", {
+      getSelectedShape: "getSelectedShape"
+    }),
+
     /**
      * Used on template to access the Ext const
      */
@@ -120,6 +126,13 @@ export default {
     }
   },
   methods: {
+    /**
+     * Display a snackbar with a message
+     * @param {String} message
+     */
+    displaySnackbar(message) {
+      this.snackbarMsg = message;
+    },
     /**
      * Save given data to a file
      * @param {Any} data - string data
@@ -160,8 +173,14 @@ export default {
       }
     },
 
+    /**
+     * Save selected shape into a pts file
+     * @param {String} filename
+     */
     saveAsDlibPts(filename) {
-
+      let selectedShape = this.getSelectedShape;
+      let ptsData = encodeAsDlibPts(this.$store, selectedShape);
+      download(ptsData, filename, "text/plain");
     },
 
     saveAsDlibXml(filename) {
@@ -177,6 +196,30 @@ export default {
       let nimnStore = encodeAsNimn(this.$store);
       this.download(nimnStore, filename, "application/nimn");
     },
+
+    /**
+     * Checks if action can be performed
+     * @param {String} fileext
+     */
+    validate(fileext) {
+      switch (fileext) {
+        case Ext.DLIB_PTS: {
+          let selectedShape = this.getSelectedShape;
+          if (!selectedShape) {
+            this.displaySnackbar("Please create an image and select a shape to continue");
+            return;
+          }
+          this.fileext = fileext;
+          return true;
+        }
+        case Ext.DLIB_XML:
+        case Ext.NIMN:
+          this.fileext = fileext;
+          return true;
+        default:
+          return false;
+      }
+    }
   }
 }
 </script>

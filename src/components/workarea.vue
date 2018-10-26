@@ -111,31 +111,25 @@ export default {
      * Redraw canvas when image changes
      */
     imageSelected() {
-      // this.$nextTick(function() {
-        this.setSelectedElements();
-        this.drawCanvas();
-      // });
+      this.setSelectedElements();
+      this.drawCanvas();
     },
 
     /**
      * Redraw canvas when image scale changes
      */
     imageScale() {
-      // this.$nextTick(function() {
-        this.drawCanvas();
-      // });
+      this.drawCanvas();
     },
 
     selectedFeaturePoints() {
-      // this.$nextTick(function() {
-        this.selectedFeaturePoints.forEach(featurePointID => {
-          let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
-          svgFP.selectize({
-            rotationPoint: false,
-            points: []
-          });
+      this.selectedFeaturePoints.forEach(featurePointID => {
+        let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
+        svgFP.selectize({
+          rotationPoint: false,
+          points: []
         });
-      // })
+      });
     }
   },
   methods: {

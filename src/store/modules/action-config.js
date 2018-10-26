@@ -35,10 +35,12 @@ const mutations = {
    */
   removeSelectedElement(state, { shapeID, featurePointID }) {
     if (shapeID === state.selected.lastShape) {
-      state.selected.lastShape = null;
+      state.selected.shapes.splice(-1);
+      state.selected.lastShape = state.selected.shapes.slice(-1)[0] || null;
+    } else {
+      setRemove({ arr: state.selected.shapes, item: shapeID });
+      setRemove({ arr: state.selected.featurePoints, item: featurePointID });
     }
-    setRemove({ arr: state.selected.shapes, item: shapeID });
-    setRemove({ arr: state.selected.featurePoints, item: featurePointID });
   },
 
   /**

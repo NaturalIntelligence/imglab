@@ -84,6 +84,23 @@ export function encodeAsDlibXML(store) {
   return dlib_header + xml + dlib_footer;
 }
 
-function encodeAsDlibPts(store) {
+export function encodeAsDlibPts(store, shapeID) {
+  let storeData = getStoreData(store);
+  let shapes = storeData["image-store"].shapes;
+  let shape = shapes[shapeID];
+  var data = `
+version: 1
+n_points: ${shape.featurePoints.length}
+{
+`;
 
+  let featurePoints = storeData["image-store"].featurePoints;
+  shape.featurePoints.forEach(featurePointID => {
+    let featurePoint = featurePoints[featurePointID];
+    data += `${Math.floor(featurePoint.x)} ${Math.floor(featurePoint.y)}\n`;
+  });
+
+  data += "}";
+
+  return data;
 }
