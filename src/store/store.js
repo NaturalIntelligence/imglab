@@ -42,10 +42,11 @@ const store = new Vuex.Store({
 /**
  * Subscribe to store mutations and store state to local storage
  */
-store.subscribe(
-  throttle(function(mutation, state) {
-    localStorage.setItem("imglab-store", JSON.stringify(state));
-  }, 5000)
-);
+// store.subscribe(
+  // TODO: Use indexdb to store session data
+  // throttle(function(mutation, state) {
+  //   localStorage.setItem("imglab-store", JSON.stringify(state));
+  // }, 5000)
+// );
 
 export default store;

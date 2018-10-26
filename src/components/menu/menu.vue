@@ -53,6 +53,7 @@ import nimnLabelData from "./action/nimn-format-labeldata";
 import { Image } from "../../models/Image";
 import { Shape } from "../../models/Shape";
 import { FeaturePoint } from "../../models/FeaturePoint";
+import { RECTANGLE, POINT } from "../../utils/tool-names";
 
 import {
   mapMutations
@@ -96,21 +97,29 @@ export default {
       };
 
       var result = convert.xml2js(data, options);
-      console.log("result", result);
 
       try {
         let dataset = result.dataset;
         // Images should be stored under the dataset/images/image
         let images = dataset.images.image
+
+        if (images.constructor !== Array) images = [images];
+
         // New store data
         let _images = {};
         let _shapes = {};
         let _featurePoints = {};
+        let _imageIndex = 0;
 
         images.forEach(({ _attributes: { file }, box }) => {
-          let image = new Image({ name: file });
+          let image = new Image({ name: file, id: _imageIndex++ });
 
           let shapes = [];
+          // Keeps track of uid of shapes per image
+          let _shapeIndex = 0;
+
+          if (box.constructor !== Array) box = [box];
+
           box.forEach(
             (
               {
@@ -119,9 +128,10 @@ export default {
                 part = []
               }
             ) => {
+              let shapeHash = image.id + "-" + _shapeIndex++;
               // Populate shape data
               let shape = new Shape({
-                id: "rect" + image.shapeIndex++,
+                id: RECTANGLE + "#" + shapeHash,
                 label: _text || "rect",
                 type: "rect",
                 rbox: { x, y, w, h },
@@ -130,28 +140,50 @@ export default {
 
               // Populate feature point data
               let featurePoints = [];
+              // Keeps track of uid for featurepoint of shape
+              let _featurePointIndex = 0;
+
+              if (part.constructor !== Array) part = [part];
+
               part.forEach(({ _attributes: { name, x, y } }) => {
+                let index = _featurePointIndex++;
+                let fpHash = shapeHash + "-" + index;
                 let featurePoint = new FeaturePoint({
                   x,
                   y,
-                  label: "point" + image.pointIndex++,
-                  id: name
+                  id: POINT + "#" + fpHash,
+                  label: POINT + "#" + index
                 });
-                _featurePoints[featurePoint.id] = featurePoint;
+                // Add feature point to list
                 featurePoints.push(featurePoint.id);
+                // Add feature point data to map
+                _featurePoints[featurePoint.id] = featurePoint;
               });
 
+              // Shape keeps track of feature point uids
+              shape.featurePointIndex = _featurePointIndex;
+              // Add feature points
               shape.featurePoints = featurePoints;
+              // Add shape to list of shapes
               shapes.push(shape.id);
+              // Add shape data to map
               _shapes[shape.id] = shape;
             }
           );
-
+          // Image keeps track of shape uid
+          image.shapeIndex = _shapeIndex;
+          // Add list of shapes to image
           image.shapes = shapes;
+          // Add image data to map
           _images[image.name] = image;
         });
 
-        this.initImageStore({ images: _images, shapes: _shapes, featurePoints: _featurePoints });
+        this.initImageStore({
+          images: _images,
+          shapes: _shapes,
+          featurePoints: _featurePoints,
+          imageIndex: _imageIndex
+        });
       } catch (e) {
         console.log("error", e);
       }
@@ -167,8 +199,6 @@ export default {
 
       let schemaStore = nimn.buildSchema(nimnStore);
       let nimnObj = nimn.parse(schemaStore, data);
-
-      console.log("data", nimnObj);
 
       this.initAppConfig(nimnObj["app-config"]);
       this.initImageStore(nimnObj["image-store"]);
