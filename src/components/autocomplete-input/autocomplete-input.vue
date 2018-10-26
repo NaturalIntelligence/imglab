@@ -6,7 +6,7 @@
       :class="autocompleteClass"
       :placeholer="placeholder"
       :value="text"
-      @blur="onBlur"
+      @blur="onInputBlur"
       @click="showSuggestions = true"
       @input="onInput"
       @keydown.up.stop="moveSelection(-1)"
@@ -15,12 +15,15 @@
       @keydown.esc="resetState"
     >
     <ul
-      ref="suggestions"
       v-show="showSuggestions && suggestions.length"
+      class="list-style"
+      ref="suggestions"
       :class="autocompleteClass"
+      @click="test"
     >
       <li
         v-for="(suggestion, index) in suggestions"
+        class="list-item-style"
         :key="index"
         :class="{ focused: index === selected }"
         @click="selectSuggestion"
@@ -76,6 +79,10 @@ export default {
     }
   },
   methods: {
+    test(event) {
+      console.log("test", event.target);
+    },
+
     emitAddEvent: function(val) {
       this.$emit("added", val);
     },
@@ -126,16 +133,9 @@ export default {
       this.selected = nextPos;
     },
 
-    /**
-     * Blur event: When input loses focus, flush previous @added events and
-     * reset state
-     */
-    onBlur(event) {
-      this.debouncedEmitAddEvent(event.target.value);
+    onDivBlur() {
+      console.log("div blur...")
       this.resetState();
-      this.$nextTick(function() {
-        this.debouncedEmitAddEvent.flush();
-      })
     },
 
     /**
@@ -154,6 +154,18 @@ export default {
     },
 
     /**
+     * Blur event: When input loses focus, flush previous @added events and
+     * reset state
+     */
+    onInputBlur(event) {
+      this.debouncedEmitAddEvent(event.target.value);
+      if (this.selected === -1) this.resetState();
+      this.$nextTick(function() {
+        this.debouncedEmitAddEvent.flush();
+      })
+    },
+
+    /**
      * Hide suggestion list and reset selected to -1
      */
     resetState() {
@@ -166,8 +178,11 @@ export default {
      * @param {Event} event - clicked event
      */
     selectSuggestion(event) {
+      console.log("selectSuggestion", event);
+
       // Necessary to maintain input focus
       event.preventDefault();
+
 
       let index = this.selected;
       if (!this.isValid(index)) return;
@@ -207,13 +222,16 @@ export default {
     border: 2px solid;
   }
 
-  ul, li {
+  .list-style {
+    list-style: none;
+    position: relative;
+    z-index: 100;
     padding: 0;
     margin: 0;
   }
 
-  ul {
-    list-style: none;
+  .list-item-style {
+    padding: 4px 20px;
   }
 
   .focused, li:hover {

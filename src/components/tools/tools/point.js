@@ -1,4 +1,5 @@
 import { POINT } from "../../../utils/tool-names";
+import store from "../../../store/store";
 
 export const point = {
   type: POINT,
@@ -42,7 +43,6 @@ export const point = {
 
 /**
  * Helper function to draw a featurePoint on canvas,
- * Important: radius, and style must be set externally
  * @param {Event} position - click position
  * @param {SVG.Shape} shape - shape that should hold the featurePoint
  * @param {DOMReact | Object} canvasOffset - offset of canvas
@@ -57,6 +57,8 @@ export function drawPoint({
   featurePointSize,
   featurePointColor
 }) {
+  let index = store.getters["image-store/nextFeaturePointHash"](shape.id());
+  let id = POINT + "#" + index;
   // Get shape location
   var containerOffset = {
     x: parseInt(shape.parent().attr("x"), 10) || 0,
@@ -67,6 +69,7 @@ export function drawPoint({
     .parent()
     .circle()
     .radius(featurePointSize)
+    .id(id)
     .addClass("labelpoint")
     .attr({
       for: shape.node.id,

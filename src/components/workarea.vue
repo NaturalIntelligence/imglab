@@ -34,7 +34,7 @@
 import TrackingLines from "./tracking-lines/tracking-lines";
 import { FeaturePoint } from "../models/FeaturePoint";
 import { mapGetters, mapMutations } from "vuex";
-import { getCoordinates, _ } from "../utils/app";
+import { getCoordinates, _, getSVG } from "../utils/app";
 import { dispatch } from "../utils/actions.js";
 import { RECTANGLE, CIRCLE, POLYGON, POINT, MOVE, ZOOM, OPACITY } from "../utils/tool-names";
 import { drawPoint } from "./tools/tools/point";
@@ -134,7 +134,7 @@ export default {
     selectedFeaturePoints() {
       this.$nextTick(function() {
         this.selectedFeaturePoints.forEach(featurePointID => {
-          let svgFP = this.$svg.get(featurePointID);
+          let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
           svgFP.selectize({
             rotationPoint: false,
             points: []
@@ -351,12 +351,13 @@ export default {
     deselectAll({ shape = false, featurePoint = false } = {}) {
       // Deselect all svg elements
       this.selectedShapes.forEach(shapeID => {
-        let svgShape = this.$svg.get(shapeID);
+        let domShape = document.getElementById(shapeID);
+        let svgShape = this.$svg.adopt(domShape);
         svgShape.selectize(false);
       })
 
       this.selectedFeaturePoints.forEach(featurePointID => {
-        let svgFP = this.$svg.get(featurePointID);
+        let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
         svgFP.selectize(false);
       })
 
@@ -373,13 +374,13 @@ export default {
     selectAll() {
       if (this.imageSelected) {
         this.imageSelected.shapes.forEach(shapeID => {
-          let shape = this.$svg.get(shapeID);
+          let shape = getSVG({ svg: this.$svg, id: shapeID });
           shape.selectize({
             rotationPoint: false
           });
           this.addSelectedElement({
             shapeID
-          })
+          });
         })
       }
     },

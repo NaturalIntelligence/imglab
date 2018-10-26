@@ -54,10 +54,6 @@ export default {
             type: "number"
           },
           {
-            name: "pointIndex",
-            type: "number"
-          },
-          {
             name: "featurePointSize",
             type: "number"
           },
@@ -179,6 +175,10 @@ export default {
             }
           },
           {
+            name: "featurePointIndex",
+            type: "number"
+          },
+          {
             name: "zoomScale",
             type: "number"
           },
@@ -213,6 +213,10 @@ export default {
           }
         ]
       }
+    },
+    {
+      name: "imageIndex",
+      type: "number"
     }
   ]
 };

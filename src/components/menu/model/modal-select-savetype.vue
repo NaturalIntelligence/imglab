@@ -21,25 +21,45 @@
               </button>
             </div>
             <div class="modal-body">
-              <button
-                type="button"
-                class="btn"
-                @click="fileext = _ext.NIMN"
-              >
-                Project file
-              </button>
-              <button type="button" class="btn">
-                Dlib XML
-              </button>
-              <button type="button" class="btn">
-                Dlib pts
-              </button>
-              <button type="button" class="btn">
-                COCO JSON
-              </button>
-              <button type="button" class="btn">
-                Pascal VOC XML
-              </button>
+              <ul class="list-empty-style">
+                <li class="list-item-style">
+                  <button
+                    type="button"
+                    class="btn"
+                    @click="fileext = _ext.NIMN"
+                  >
+                    Project file
+                  </button>
+                </li>
+                <li class="list-item-style">
+                  <button
+                    type="button"
+                    class="btn"
+                    @click="fileext = _ext.DLIB_XML"
+                  >
+                    Dlib XML
+                  </button>
+                </li>
+                <li class="list-item-style">
+                  <button
+                    type="button"
+                    class="btn"
+                    @click="fileext = ext.DLIB_PTS"
+                  >
+                    Dlib pts
+                  </button>
+                </li>
+                <li class="list-item-style">
+                  <button type="button" class="btn">
+                    COCO JSON
+                  </button>
+                </li>
+                <li class="list-item-style">
+                  <button type="button" class="btn">
+                    Pascal VOC XML
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -49,22 +69,19 @@
       v-if="fileext"
       :value="defaultvalues[fileext]"
       :ext="fileext"
-      @close="fileext = ''"
-      @input="saveAs($event, _ext.NIMN)"
+      @close="fileext = null"
+      @input="saveAs($event, fileext)"
     >
     </modal-get-filename>
   </div>
 </template>
 
 <script>
-import nimnImageStore from "../action/nimn-format-imagestore";
-import nimnAppConfig from "../action/nimn-format-appconfig";
-import nimnLabelData from "../action/nimn-format-labeldata";
-
 import ModalGetFilename from "./modal-get-filename";
 import { mapGetters } from "vuex";
 
 import { Ext } from "../filetype";
+import { encodeAsNimn, encodeAsDlibXML } from "../action/file-handler";
 
 const FileSaver = require('file-saver');
 
@@ -74,9 +91,11 @@ export default {
   },
   data() {
     return {
-      fileext: "",
+      fileext: null,
       defaultvalues: {
-        [Ext.NIMN]: "Untitled_imgLab"
+        [Ext.NIMN]: "Untitled_imgLab",
+        [Ext.DLIB_XML]: "imglab",
+        [Ext.DLIB_PTS]: "imglab"
       },
     }
   },
@@ -127,10 +146,27 @@ export default {
           this.saveAsNimn(filename);
           break;
         }
+        case Ext.DLIB_XML: {
+          this.saveAsDlibXml(filename);
+          break;
+        }
+        case Ext.DLIB_PTS: {
+          this.saveAsDlibPts(filename);
+          break;
+        }
         default: {
           console.error("Filetype unknown")
         }
       }
+    },
+
+    saveAsDlibPts(filename) {
+
+    },
+
+    saveAsDlibXml(filename) {
+      let dlibXML = encodeAsDlibXML(this.$store);
+      this.download(dlibXML, filename, "text/xml");
     },
 
     /**
@@ -138,24 +174,8 @@ export default {
      * @param {String} filename
      */
     saveAsNimn(filename) {
-      var nimn = require("nimnjs");
-
-      let dataStore = {
-        "image-store": this.dataImageStore,
-        "app-config": this.dataAppConfig,
-        "label-data": this.dataLabelData
-      };
-
-      let nimnStore = {
-        type: "map",
-        detail: [nimnImageStore, nimnAppConfig, nimnLabelData]
-      };
-
-      let schemaStore = nimn.buildSchema(nimnStore);
-
-      let stringStore = nimn.stringify(schemaStore, dataStore);
-
-      this.download(stringStore, filename, "application/nimn");
+      let nimnStore = encodeAsNimn(this.$store);
+      this.download(nimnStore, filename, "application/nimn");
     },
   }
 }
@@ -197,5 +217,15 @@ export default {
 
   .modal-body {
     margin: 20px 0;
+  }
+
+  .list-empty-style {
+    list-style: none;
+    padding: 0px 30px;
+    margin: 0;
+  }
+
+  .list-item-style {
+    margin: 12px;
   }
 </style>

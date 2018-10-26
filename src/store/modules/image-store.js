@@ -13,7 +13,8 @@ const state = {
   images: {},
   shapes: {},
   featurePoints: {},
-  imageSelected: null
+  imageSelected: null,
+  imageIndex: 0 // Used to generate unique ids
 };
 
 const mutations = {
@@ -32,8 +33,17 @@ const mutations = {
   addImageToStore(state, { name, src, size }) {
     // Only add image to array if it has never been added before
     if (!state.images[name]) {
-      let newImage = new Image({ name, src, size });
+      let id = state.imageIndex++;
+      let newImage = new Image({ id, name, src, size });
       state.images = { ...state.images, [name]: newImage };
+    } else {
+      // Image already exists, update src and size
+      let oldImage = state.images[name];
+      state.images[name] = {
+        ...oldImage,
+        src,
+        size
+      };
     }
   },
 
@@ -47,15 +57,14 @@ const mutations = {
    * @see getPoints for more info about points
    */
   addShapeToImage(state, { id, type, rbox, points }) {
-    var shape = scaleShape(
-      id,
-      type,
-      rbox,
-      points,
-      1 / state.imageSelected.size.imageScale
-    );
+    let image = state.imageSelected;
 
-    state.imageSelected.shapes.push(id);
+    var shape = scaleShape(id, type, rbox, points, 1 / image.size.imageScale);
+
+    // Increment shape index
+    image.shapeIndex++;
+
+    image.shapes.push(id);
     state.shapes = { ...state.shapes, [id]: shape };
 
     return shape;
@@ -70,6 +79,9 @@ const mutations = {
   addPointToShape(state, { shapeID, pointID, position }) {
     var shape = state.shapes[shapeID];
     var scale = 1 / state.imageSelected.size.imageScale;
+    // Increment feature point index
+    ++shape.featurePointIndex;
+
     shape.featurePoints.push(pointID);
     state.featurePoints = {
       ...state.featurePoints,
@@ -348,11 +360,12 @@ const mutations = {
    * @param {Object} shapes
    * @param {Object} featurePoints
    */
-  init(state, { images, shapes, featurePoints }) {
+  init(state, { images = {}, shapes = {}, featurePoints = {}, imageIndex }) {
     state.images = images;
     state.shapes = shapes;
     state.featurePoints = featurePoints;
     state.imageSelected = null;
+    state.imageIndex = imageIndex;
   }
 };
 
@@ -454,6 +467,30 @@ const getters = {
   getStoreData: state => {
     let cloneDeepWith = require("lodash.clonedeepwith");
     return cloneDeepWith(state);
+  },
+
+  /**
+   * Returns the image id and the next shape hash
+   * @param {String} name - image name
+   * @returns {String}
+   */
+  nextShapeHash: state => name => {
+    let image = name ? state.images[name] : state.imageSelected;
+    if (image) {
+      return image.id + "-" + image.shapeIndex;
+    }
+  },
+
+  /**
+   * Takes a shapeID and returns the next featurePoint hash
+   * @param {String} shapeID
+   */
+  nextFeaturePointHash: state => shapeID => {
+    let shape = state.shapes[shapeID];
+    if (shape) {
+      let shapeHash = shape.id.split("#");
+      return shapeHash[1] + "-" + shape.featurePointIndex;
+    }
   }
 };
 

@@ -49,7 +49,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import { removeFeaturePoint } from "../../../utils/actions";
-import { _ } from "../../../utils/app";
+import { _, getSVG } from "../../../utils/app";
 
 export default {
   computed: {
@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     ...mapMutations("image-store", {
-      removeFeaturePoint: "detachFeaturePoint",
       updateFeaturePoint: "updateFeaturePoint",
       updateFeaturePoints: "updateFeaturePoints"
     }),
@@ -103,7 +102,7 @@ export default {
       removeFeaturePoint({
         shapeID,
         featurePointID,
-        SVG: this.$svg,
+        svg: this.$svg,
         store: this.$store,
       });
     },
@@ -112,7 +111,7 @@ export default {
      * Deselect shape on canvas, does not remove shape from store
      */
     deselectShape() {
-      let svgShape = this.$svg.get(this.selectedShape);
+      let svgShape = getSVG({ svg: this.$svg, id: this.selectedShape });
       svgShape.selectize(false);
     },
 
@@ -121,7 +120,7 @@ export default {
      */
     deselectShapeFeaturePoints() {
       this.selectedFeaturePoints.forEach(featurePointID => {
-        let svgFP = this.$svg.get(featurePointID);
+        let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
         svgFP.selectize(false);
       })
 

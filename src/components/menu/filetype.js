@@ -1,3 +1,5 @@
 export const Ext = {
-  NIMN: ".nimn"
+  NIMN: ".nimn",
+  DLIB_XML: ".xml",
+  DLIB_PTS: ".pts"
 };

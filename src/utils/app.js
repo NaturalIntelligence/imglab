@@ -102,3 +102,13 @@ export function formatID() {
     return acc + ":" + cur;
   }, args[0]);
 }
+
+/**
+ * Helper function to get svg with custom id
+ * @param {SVG} svg - a SVG instance
+ * @param {String} id - lookup id
+ */
+export function getSVG({ svg, id }) {
+  let dom = document.getElementById(id);
+  return svg.adopt(dom);
+}

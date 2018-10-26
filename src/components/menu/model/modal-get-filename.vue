@@ -77,7 +77,7 @@ export default {
     },
 
     setFilename() {
-      if (this.validFilename && this.filename.length) {
+      if (this.validFilename() && this.filename.length) {
         this.$emit("input", this.filename);
       } else {
         this.showError = true;

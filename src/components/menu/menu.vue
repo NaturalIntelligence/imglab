@@ -50,12 +50,20 @@
 import nimnImageStore from "./action/nimn-format-imagestore";
 import nimnAppConfig from "./action/nimn-format-appconfig";
 import nimnLabelData from "./action/nimn-format-labeldata";
+import { Image } from "../../models/Image";
+import { Shape } from "../../models/Shape";
+import { FeaturePoint } from "../../models/FeaturePoint";
 
-import { mapMutations } from "vuex";
+import {
+  mapMutations
+} from "vuex";
 import ModalSelectSavetype from "./model/modal-select-savetype";
-import { saveAsNimn } from "./action/saveas-nimn";
-import { _ } from "../../utils/app";
-import { Ext } from "./filetype";
+import {
+  _
+} from "../../utils/app";
+import {
+  Ext
+} from "./filetype";
 
 export default {
   components: {
@@ -79,6 +87,76 @@ export default {
       initLabelData: "init"
     }),
 
+    loadDlibXml(data) {
+      var convert = require('xml-js');
+      var options = {
+        alwaysChildren: true,
+        compact: true,
+        ignoreComment: true,
+      };
+
+      var result = convert.xml2js(data, options);
+      console.log("result", result);
+
+      try {
+        let dataset = result.dataset;
+        // Images should be stored under the dataset/images/image
+        let images = dataset.images.image
+        // New store data
+        let _images = {};
+        let _shapes = {};
+        let _featurePoints = {};
+
+        images.forEach(({ _attributes: { file }, box }) => {
+          let image = new Image({ name: file });
+
+          let shapes = [];
+          box.forEach(
+            (
+              {
+                _attributes: { top: y, left: x, width: w, height: h },
+                label: { _text } ,
+                part = []
+              }
+            ) => {
+              // Populate shape data
+              let shape = new Shape({
+                id: "rect" + image.shapeIndex++,
+                label: _text || "rect",
+                type: "rect",
+                rbox: { x, y, w, h },
+                points: [x, y, w, h]
+              });
+
+              // Populate feature point data
+              let featurePoints = [];
+              part.forEach(({ _attributes: { name, x, y } }) => {
+                let featurePoint = new FeaturePoint({
+                  x,
+                  y,
+                  label: "point" + image.pointIndex++,
+                  id: name
+                });
+                _featurePoints[featurePoint.id] = featurePoint;
+                featurePoints.push(featurePoint.id);
+              });
+
+              shape.featurePoints = featurePoints;
+              shapes.push(shape.id);
+              _shapes[shape.id] = shape;
+            }
+          );
+
+          image.shapes = shapes;
+          _images[image.name] = image;
+        });
+
+        this.initImageStore({ images: _images, shapes: _shapes, featurePoints: _featurePoints });
+      } catch (e) {
+        console.log("error", e);
+      }
+    },
+
     loadProjectFile(data) {
       var nimn = require("nimnjs");
 
@@ -89,6 +167,8 @@ export default {
 
       let schemaStore = nimn.buildSchema(nimnStore);
       let nimnObj = nimn.parse(schemaStore, data);
+
+      console.log("data", nimnObj);
 
       this.initAppConfig(nimnObj["app-config"]);
       this.initImageStore(nimnObj["image-store"]);
@@ -128,7 +208,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style lang="css" scoped>

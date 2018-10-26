@@ -4,6 +4,7 @@ export class Shape {
     category = "",
     defaultZoomScale = 1,
     featurePoints = [],
+    featurePointIndex = 0,
     id,
     label = "",
     points,
@@ -21,6 +22,7 @@ export class Shape {
     this.attributes = attributes;
     this.tags = tags;
     this.featurePoints = featurePoints;
+    this.featurePointIndex = featurePointIndex;
     this.zoomScale = zoomScale;
     // default scale when image is at 100% zoom
     this.defaultZoomScale = defaultZoomScale;

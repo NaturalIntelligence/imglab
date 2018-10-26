@@ -144,7 +144,10 @@ const mutations = {
    * @param {String[]} categories
    * @param {String[]} tags
    */
-  init(state, { properties, propValues, categories, tags }) {
+  init(
+    state,
+    { properties = [], propValues = {}, categories = [], tags = [] }
+  ) {
     properties && (state.properties = properties);
     propValues && (state.propValues = propValues);
     categories && (state.categories = categories);

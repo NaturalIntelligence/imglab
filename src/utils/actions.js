@@ -1,3 +1,4 @@
+import { getSVG } from "./app";
 // Ascii keycode constants
 export const KEY = {
   ENTER: 13,
@@ -14,9 +15,9 @@ export const KEY = {
  * @param {String} shapeID - shape id
  * @param {String} featurePointID - feature point id
  */
-export function removeFeaturePoint({ SVG, store, shapeID, featurePointID }) {
+export function removeFeaturePoint({ svg, store, shapeID, featurePointID }) {
   // Deselect feature point and remove from canvas
-  let svgFP = SVG.get(featurePointID);
+  let svgFP = getSVG({ svg, id: featurePointID });
   svgFP.selectize(false);
   svgFP.remove();
 

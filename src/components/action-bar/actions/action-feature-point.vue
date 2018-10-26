@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { getSVG } from "../../../utils/app";
 import { mapGetters, mapMutations } from "vuex";
 
 const throttle = require("lodash.throttle");
@@ -74,7 +75,7 @@ export default {
       this.setFeaturePointSize({ featurePointSize: event.target.value });
 
       this.applyFeaturePointChanges(featurePointID => {
-        let svgFP = this.$svg.get(featurePointID);
+        let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
         svgFP.radius(event.target.value);
       });
     }, 33),
@@ -85,14 +86,14 @@ export default {
      */
     switchColor: throttle(function(color) {
       this.applyFeaturePointChanges(featurePointID => {
-        let svgFP = this.$svg.get(featurePointID);
+        let svgFP = getSVG({ svg: this.$svg, id: featurePointID});
         svgFP.fill(color);
       });
     }, 33),
 
     /**
-     * Apply changes to all feature points in current image
-     * @param {}
+     * Apply changes to all feature points in current image via callback function
+     * @param {Function} cb - callback function
      */
     applyFeaturePointChanges(cb) {
       let shapes = this.imageSelected.shapes.map(shapeID => {
