@@ -1,4 +1,4 @@
-import { setAdd, setRemove, formatID } from "../../utils/app";
+import { setAdd, setRemove, formatID, prettifyID } from "../../utils/app";
 import { Image } from "../../models/Image";
 import { FeaturePoint } from "../../models/FeaturePoint";
 import { Attribute } from "../../models/Attribute";
@@ -83,13 +83,16 @@ const mutations = {
     ++shape.featurePointIndex;
 
     shape.featurePoints.push(pointID);
+
+    let label = prettifyID({ id: pointID });
+
     state.featurePoints = {
       ...state.featurePoints,
       [pointID]: new FeaturePoint({
+        label,
         x: position.cx * scale,
         y: position.cy * scale,
-        id: pointID,
-        label: shape.featurePoints.length
+        id: pointID
       })
     };
   },

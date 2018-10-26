@@ -112,3 +112,15 @@ export function getSVG({ svg, id }) {
   let dom = document.getElementById(id);
   return svg.adopt(dom);
 }
+
+/**
+ * Returns a shortened versioned of ID
+ * @param {String} id
+ * @returns {String} - type + id
+ */
+export function prettifyID({ id }) {
+  let types = id.split("#");
+  let hash = types[1].split("-");
+  let eid = hash.pop();
+  return types[0] + "#" + eid;
+}

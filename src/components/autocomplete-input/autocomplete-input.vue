@@ -18,8 +18,9 @@
       v-show="showSuggestions && suggestions.length"
       class="list-style"
       ref="suggestions"
+      tabindex="-1"
       :class="autocompleteClass"
-      @click="test"
+      @mouseleave="selected = -1"
     >
       <li
         v-for="(suggestion, index) in suggestions"
@@ -27,8 +28,7 @@
         :key="index"
         :class="{ focused: index === selected }"
         @click="selectSuggestion"
-        @mouseover="selected = index"
-        @mouseout="selected = -1"
+        @mouseenter="selected = index"
       >
         <div>
           {{ suggestion }}
@@ -79,10 +79,6 @@ export default {
     }
   },
   methods: {
-    test(event) {
-      console.log("test", event.target);
-    },
-
     emitAddEvent: function(val) {
       this.$emit("added", val);
     },
@@ -133,11 +129,6 @@ export default {
       this.selected = nextPos;
     },
 
-    onDivBlur() {
-      console.log("div blur...")
-      this.resetState();
-    },
-
     /**
      * Sets the text used to filter and show suggestions
      * @param {Event} event
@@ -158,8 +149,11 @@ export default {
      * reset state
      */
     onInputBlur(event) {
-      this.debouncedEmitAddEvent(event.target.value);
-      if (this.selected === -1) this.resetState();
+      if (this.$el.contains(event.relatedTarget)) {
+        event.preventDefault();
+        return;
+      }
+      this.resetState();
       this.$nextTick(function() {
         this.debouncedEmitAddEvent.flush();
       })
@@ -178,8 +172,6 @@ export default {
      * @param {Event} event - clicked event
      */
     selectSuggestion(event) {
-      console.log("selectSuggestion", event);
-
       // Necessary to maintain input focus
       event.preventDefault();
 
@@ -225,13 +217,15 @@ export default {
   .list-style {
     list-style: none;
     position: relative;
-    z-index: 100;
+    z-index: 999;
     padding: 0;
     margin: 0;
   }
 
   .list-item-style {
     padding: 4px 20px;
+    background-color: white;
+    border: 1px solid black;
   }
 
   .focused, li:hover {
