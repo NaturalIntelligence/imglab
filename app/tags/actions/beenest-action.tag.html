@@ -54,7 +54,7 @@
                                                 preloadedShapes.push({
                                                     "id" : v.id + "_previous_work",
                                                     "type" :"rect",
-                                                    "points" : [item[0].x ,item[0].y ,item[1].x -item[0].x , item[1].y -item[0].y],
+                                                    "points" : [item[0].x - 2 ,item[0].y - 2,item[1].x -item[0].x + 4, item[1].y -item[0].y + 4],
                                                     "editable": true
                                                 })
                                             // })
@@ -110,19 +110,20 @@
                                 &&
                                 (ymin < anchor.featurePoints[0].y)
                             ){
+                                // Adjust for stroke width
                                 var labelData = [
                                     {
-                                        x: Math.round(xmin),
-                                        y: Math.round(ymin)
+                                        x: Math.round(xmin) + 2,
+                                        y: Math.round(ymin) + 2
                                     },
                                     {
-                                        x: Math.round(xmax),
-                                        y: Math.round(ymax)
+                                        x: Math.round(xmax) - 2,
+                                        y: Math.round(ymax) - 2
                                     }
                                 ];
                                 labels.push(labelData);
                             }else{
-                                alert("没有将点包裹住");
+                                alert("没有将点包裹�);
                                 return;
                             }
                         }
@@ -143,12 +144,12 @@
                         // console.log(error);
                         // if (error.response.status === 403) {
                             clearAllImages();
-                            // alert('提交失败（任务超时或格式错误）');
+                            // alert('提交失败（任务超时或格式错误�);
                             // console.log(error);
                         // }
                       });
                 }else{
-                    alert("请标注对相应的信息")
+                    alert("请标注对相应的信�)
                 }
 
         	}

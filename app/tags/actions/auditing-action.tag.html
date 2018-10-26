@@ -42,10 +42,11 @@
                                     if(postData.type === "rect"){
                                         for (var shapeIndex in v.work.result) {
                                             var rect = v.work.result[shapeIndex];
+                                            // Adjust for stoke width
                                             preloadedShapes.push({
                                                 "id" : v.id + '_' + shapeIndex,
                                                 "type" : 'rect',
-                                                "points": [rect[0].x, rect[0].y, rect[1].x - rect[0].x, rect[1].y - rect[0].y],
+                                                "points": [rect[0].x - 2, rect[0].y - 2, rect[1].x - rect[0].x + 4, rect[1].y - rect[0].y + 4],
                                                 "editable": false
                                             });
                                         }
