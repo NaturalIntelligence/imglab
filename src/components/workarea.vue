@@ -13,6 +13,7 @@
         id="work-canvas"
         ref="workcanvas"
         :style="{ width: imageWidth + 'px', height: imageHeight + 'px' }"
+        @click="deselectAll"
         @mouseover="showTrackingLine = true"
         @mousemove="showPosition"
         @mouseleave="mouseLeave"
@@ -125,14 +126,8 @@ export default {
       // });
     },
 
-    selectedTool() {
-      this.$nextTick(function() {
-        this.deselectAll();
-      });
-    },
-
     selectedFeaturePoints() {
-      this.$nextTick(function() {
+      // this.$nextTick(function() {
         this.selectedFeaturePoints.forEach(featurePointID => {
           let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
           svgFP.selectize({
@@ -140,7 +135,7 @@ export default {
             points: []
           });
         });
-      })
+      // })
     }
   },
   methods: {

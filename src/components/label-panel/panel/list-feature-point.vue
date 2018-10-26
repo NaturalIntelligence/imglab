@@ -1,6 +1,7 @@
 <template lang="html">
   <div
     v-if="selectedShape"
+    @click.stop="forceFocusOut"
   >
     <p class="mb-2">
       <small>
@@ -129,6 +130,14 @@ export default {
     },
 
     /**
+     * Handles behavior when list loses focus by clicking on the component
+     */
+    forceFocusOut() {
+      this.deselectShapeFeaturePoints();
+      let shape = getSVG({ svg: this.$svg, id: this.selectedShape });
+      shape.selectize({ rotationPoint: false });
+    },
+    /**
      * Set selected element on click
      * @param {Event} event - click event
      * @param {FeaturePoint} featurePoint - featurePoint clicked
@@ -149,14 +158,8 @@ export default {
       this.updateFeaturePoint({
         pointID: featurePoint.id,
         newLabel: event.target.value
-      })
+      });
     }
-  },
-  mounted() {
-    _.on(document, "click", this.deselectShapeFeaturePoints);
-  },
-  destroyed() {
-    _.off(document, "click", this.deselectShapeFeaturePoints);
   }
 }
 </script>
