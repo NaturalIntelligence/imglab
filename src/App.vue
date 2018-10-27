@@ -32,6 +32,7 @@
         <div id="toolbar" class="d-flex flex-column overlay-color grey-border">
           <toolbox :toolType="LABEL_TAG"></toolbox>
           <toolbox :toolType="CANVAS_TAG" class="toolbox-border-top"></toolbox>
+          <mouse-coord></mouse-coord>
         </div>
         <div class="d-flex flex-column base-color" style="width: 100vw">
           <div>
@@ -62,6 +63,7 @@ import WorkArea from "./components/workarea";
 import ImageSlider from "./components/image-slider/image-slider";
 import LabelPanel from "./components/label-panel/label-panel";
 import Menu from "./components/menu/menu";
+import MouseCoord from "./components/mouse-coordinates/mouse-coordinates";
 import PromptRestoreData from "./components/prompt-restore-data/restore-data";
 import { LABEL_TAG, CANVAS_TAG } from "./utils/tool-names";
 
@@ -73,7 +75,8 @@ export default {
     "actionbar": ActionBar,
     "label-panel": LabelPanel,
     "app-menu": Menu,
-    "prompt-restore": PromptRestoreData
+    "prompt-restore": PromptRestoreData,
+    "mouse-coord": MouseCoord
   },
   data() {
     return {

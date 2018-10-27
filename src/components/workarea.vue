@@ -14,18 +14,11 @@
         ref="workcanvas"
         :style="{ width: imageWidth + 'px', height: imageHeight + 'px' }"
         @click="deselectAll"
-        @mouseover="showTrackingLine = true"
-        @mousemove="showPosition"
-        @mouseleave="mouseLeave"
+        @mousemove="onMouseMove"
+        @mouseleave="onMouseLeave"
         @mousedown="mouseDown"
         @mouseup="mouseUp"
       >
-        <!-- <tracking-lines
-          :show="showTrackingLine"
-          :xPos="xPos"
-          :yPos="yPos"
-        >
-        </tracking-lines> -->
       </div>
     </div>
   </div>
@@ -42,6 +35,7 @@ import { drawPoint } from "./tools/tools/point";
 import { scaleFeaturePoints, scaleShapePoints } from "../utils/scale-shapes";
 import { KEY } from "../utils/actions";
 import SVG from "svg.js";
+import { MouseCoordBus } from "../utils/mouseCoordBus";
 
 const debounce = require("lodash.debounce");
 
@@ -296,9 +290,20 @@ export default {
     },
 
     /**
+     * Mouse over event
+     */
+    onMouseMove(event) {
+      let workcanvas = this.$refs.workcanvas;
+      let coordinates = getCoordinates(event, workcanvas);
+
+      MouseCoordBus.$emit("mouse-move", coordinates.x, coordinates.y);
+    },
+
+    /**
      * Event handling when mouse moves out of canvas
      */
-    mouseLeave(event) {
+    onMouseLeave(event) {
+      MouseCoordBus.$emit("mouse-leave");
       // Hide tracking lines
       this.showTrackingLine = false;
     },

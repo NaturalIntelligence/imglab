@@ -1,10 +1,10 @@
 export function getCoordinates(event, element) {
   var rect = element.getBoundingClientRect();
-  var x = event.pageX - rect.left;
-  var y = event.pageY - rect.top;
+  var x = event.clientX - rect.left;
+  var y = event.clientY - rect.top;
   return {
-    x: x,
-    y: y
+    x: Math.round(x),
+    y: Math.round(y)
   };
 }
 
