@@ -28,20 +28,20 @@
       </div>
       <panel-attribute></panel-attribute>
       <panel-tag></panel-tag>
-      <list-feature-point></list-feature-point>
+      <panel-feature-point></panel-feature-point>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import ListFeaturePoints from "./panel/list-feature-point";
+import PanelFeaturePoint from "./panel/panel-feature-point";
 import PanelTag from "./panel/panel-tag";
 import PanelAttribute from "./panel/panel-attribute";
 
 export default {
   components: {
-    "list-feature-point": ListFeaturePoints,
+    "panel-feature-point": PanelFeaturePoint,
     "panel-tag": PanelTag,
     "panel-attribute": PanelAttribute
   },

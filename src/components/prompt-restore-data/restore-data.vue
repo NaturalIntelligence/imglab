@@ -54,6 +54,8 @@ export default {
     })
   },
   methods: {
+    // TODO: Switch whole implementation once indexeddb is used
+
     /**
      * Checks if there is browser cache
      */
