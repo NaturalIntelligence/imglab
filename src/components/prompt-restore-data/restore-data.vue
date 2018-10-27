@@ -20,7 +20,7 @@
               name="button"
               class="btn btn-secondary float-right"
               data-dismiss="modal"
-              @click="$emit('close')"
+              @click="clearCache"
             >
               No
             </button>
@@ -54,12 +54,26 @@ export default {
     })
   },
   methods: {
+    /**
+     * Checks if there is browser cache
+     */
     checkBrowserCache() {
       let cache = this.localStoreData;
       if (!cache) return;
       this.storeData = cache;
     },
 
+    /**
+     * Clear local storage and emit close event
+     */
+    clearCache() {
+      localStorage.clear();
+      this.$emit('close')
+    },
+
+    /**
+     * Restores data and emits close event
+     */
     restoreData() {
       this.$store.commit("initializeStore", { storeData: this.storeData });
       this.$emit("close");

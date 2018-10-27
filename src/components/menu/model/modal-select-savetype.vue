@@ -203,7 +203,7 @@ export default {
     saveAsDlibPts(filename) {
       let selectedShape = this.getSelectedShape;
       let ptsData = encodeAsDlibPts(this.$store, selectedShape);
-      download(ptsData, filename, "text/plain");
+      this.download(ptsData, filename, "text/plain");
     },
 
     saveAsDlibXml(filename) {

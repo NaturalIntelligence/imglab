@@ -285,8 +285,7 @@ export function encodeAsDlibPts(store, shapeID) {
   let storeData = getStoreData(store);
   let shapes = storeData["image-store"].shapes;
   let shape = shapes[shapeID];
-  var data = `
-version: 1
+  var data = `version: 1
 n_points: ${shape.featurePoints.length}
 {
 `;
