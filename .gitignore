@@ -21,4 +21,4 @@ yarn-error.log*
 *.sw*
 
 # Roadmap text file
-/src/roadmap.txt
+# /src/roadmap.txt
