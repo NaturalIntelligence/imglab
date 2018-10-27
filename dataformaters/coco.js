@@ -30,6 +30,19 @@ var cocoFormater = {
                 const annotation = cocoData.annotations[ annot_i ],
                     segLength = annotation.segmentation[0].length;
                 if (annotation.image_id === image.id) {
+                    // convert COCO to old format
+                    if (!('x' in annotation.bbox)) {
+                        annotation.bbox = {
+                            x : annotation.bbox[0],
+                            y : annotation.bbox[1],
+                            width : annotation.bbox[2],
+                            height : annotation.bbox[3],
+                            w : annotation.bbox[2],
+                            h : annotation.bbox[3],
+                            cx : annotation.bbox[0]+annotation.bbox[2] / 2, // x max
+                            cy : annotation.bbox[1]+annotation.bbox[3] / 2, // y max
+                        }
+                    }
                     let id = "SvgjsRect",
                         type = "rect",
                         bbox = annotation.bbox,
@@ -122,7 +135,7 @@ var cocoFormater = {
                     area : area,
                     "iscrowd": 0,
                     "image_id": image_i+1,
-                    "bbox": shape.bbox,
+                    "bbox": [shape.bbox.x, shape.bbox.y, shape.bbox.width, shape.bbox.height],
                     "category_id": categories.indexOf(shape.category) + 1,
                     "id": shape_i+1,
                     "ignore": 0
