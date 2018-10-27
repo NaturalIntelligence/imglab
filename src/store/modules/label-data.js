@@ -148,10 +148,10 @@ const mutations = {
     state,
     { properties = [], propValues = {}, categories = [], tags = [] }
   ) {
-    properties && (state.properties = properties);
-    propValues && (state.propValues = propValues);
-    categories && (state.categories = categories);
-    tags && (state.tags = tags);
+    state.properties = properties;
+    state.propValues = propValues;
+    state.categories = categories;
+    state.tags = tags;
   }
 };
 

@@ -368,6 +368,7 @@ const mutations = {
     state.shapes = shapes;
     state.featurePoints = featurePoints;
     state.imageSelected = null;
+    if (!imageIndex) imageIndex = Object.keys(images).length;
     state.imageIndex = imageIndex;
   }
 };

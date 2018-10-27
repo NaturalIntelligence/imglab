@@ -55,16 +55,11 @@ import { Shape } from "../../models/Shape";
 import { FeaturePoint } from "../../models/FeaturePoint";
 import { RECTANGLE, POINT } from "../../utils/tool-names";
 
-import {
-  mapMutations
-} from "vuex";
+import { mapMutations } from "vuex";
 import ModalSelectSavetype from "./model/modal-select-savetype";
-import {
-  _
-} from "../../utils/app";
-import {
-  Ext
-} from "./filetype";
+import { _ } from "../../utils/app";
+import { Ext } from "./filetype";
+import { decodeCocoJson, decodeDlibXML } from "./action/file-handler";
 
 export default {
   components: {
@@ -88,108 +83,29 @@ export default {
       initLabelData: "init"
     }),
 
+    /**
+     * Loads dlib xml file
+     * @param {String} data
+     */
     loadDlibXml(data) {
-      var convert = require('xml-js');
-      var options = {
-        alwaysChildren: true,
-        compact: true,
-        ignoreComment: true,
-      };
-
-      var result = convert.xml2js(data, options);
-
-      try {
-        let dataset = result.dataset;
-        // Images should be stored under the dataset/images/image
-        let images = dataset.images.image
-
-        if (images.constructor !== Array) images = [images];
-
-        // New store data
-        let _images = {};
-        let _shapes = {};
-        let _featurePoints = {};
-        let _imageIndex = 0;
-
-        images.forEach(({ _attributes: { file }, box }) => {
-          let image = new Image({ name: file, id: _imageIndex++ });
-
-          let shapes = [];
-          // Keeps track of uid of shapes per image
-          let _shapeIndex = 0;
-
-          if (box.constructor !== Array) box = [box];
-
-          box.forEach(
-            (
-              {
-                _attributes: { top: y, left: x, width: w, height: h },
-                label: { _text } ,
-                part = []
-              }
-            ) => {
-              let index = _shapeIndex++;
-              let shapeHash = image.id + "-" + index;
-              // Populate shape data
-              let shape = new Shape({
-                id: RECTANGLE + "#" + shapeHash,
-                label: _text || RECTANGLE + "#" + index,
-                type: RECTANGLE,
-                rbox: { x, y, w, h },
-                points: [x, y, w, h]
-              });
-
-              // Populate feature point data
-              let featurePoints = [];
-              // Keeps track of uid for featurepoint of shape
-              let _featurePointIndex = 0;
-
-              if (part.constructor !== Array) part = [part];
-
-              part.forEach(({ _attributes: { name, x, y } }) => {
-                let index = _featurePointIndex++;
-                let fpHash = shapeHash + "-" + index;
-                let featurePoint = new FeaturePoint({
-                  x,
-                  y,
-                  id: POINT + "#" + fpHash,
-                  label: POINT + "#" + index
-                });
-                // Add feature point to list
-                featurePoints.push(featurePoint.id);
-                // Add feature point data to map
-                _featurePoints[featurePoint.id] = featurePoint;
-              });
-
-              // Shape keeps track of feature point uids
-              shape.featurePointIndex = _featurePointIndex;
-              // Add feature points
-              shape.featurePoints = featurePoints;
-              // Add shape to list of shapes
-              shapes.push(shape.id);
-              // Add shape data to map
-              _shapes[shape.id] = shape;
-            }
-          );
-          // Image keeps track of shape uid
-          image.shapeIndex = _shapeIndex;
-          // Add list of shapes to image
-          image.shapes = shapes;
-          // Add image data to map
-          _images[image.name] = image;
-        });
-
-        this.initImageStore({
-          images: _images,
-          shapes: _shapes,
-          featurePoints: _featurePoints,
-          imageIndex: _imageIndex
-        });
-      } catch (e) {
-        console.log("error", e);
-      }
+      let storeData = decodeDlibXML(data);
+      this.initImageStore(storeData);
     },
 
+    /**
+     * Loads Coco json file
+     * @param {String} data
+     */
+    loadJSONFile(data) {
+      let storeData = decodeCocoJson(JSON.parse(data));
+      this.initImageStore(storeData["image-store"]);
+      this.initLabelData(storeData["label-data"]);
+    },
+
+    /**
+     * Loads .nimn file
+     * @param {String} data
+     */
     loadProjectFile(data) {
       var nimn = require("nimnjs");
 
@@ -212,6 +128,7 @@ export default {
 
     /**
      * Opens file and initialize store
+     * @param {Event} event - click Event
      */
     openFile(event) {
       var input = event.srcElement;

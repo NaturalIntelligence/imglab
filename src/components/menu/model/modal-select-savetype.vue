@@ -50,7 +50,11 @@
                   </button>
                 </li>
                 <li class="list-item-style">
-                  <button type="button" class="btn">
+                  <button
+                    type="button"
+                    class="btn"
+                    @click="validate(_ext.COCO_JSON)"
+                  >
                     COCO JSON
                   </button>
                 </li>
@@ -81,7 +85,12 @@ import ModalGetFilename from "./modal-get-filename";
 import { mapGetters } from "vuex";
 
 import { Ext } from "../filetype";
-import { encodeAsNimn, encodeAsDlibXML, encodeAsDlibPts } from "../action/file-handler";
+import {
+  encodeAsNimn,
+  encodeAsDlibXML,
+  encodeAsDlibPts,
+  encodeAsCocoJson
+} from "../action/file-handler";
 
 const FileSaver = require('file-saver');
 
@@ -94,8 +103,9 @@ export default {
       fileext: null,
       defaultvalues: {
         [Ext.NIMN]: "Untitled_imgLab",
-        [Ext.DLIB_XML]: "imglab",
-        [Ext.DLIB_PTS]: "imglab"
+        [Ext.DLIB_XML]: "_dlib-xml",
+        [Ext.DLIB_PTS]: "_dlib_pts",
+        [Ext.COCO_JSON]: "_coco"
       },
       snackbarMsg: ""
     }
@@ -167,10 +177,23 @@ export default {
           this.saveAsDlibPts(filename);
           break;
         }
+        case Ext.COCO_JSON: {
+          this.saveAsCocoJSON(filename);
+          break;
+        }
         default: {
-          console.error("Filetype unknown")
+          console.error("Filetype unknown", filetype);
         }
       }
+    },
+
+    /**
+     * Saves whole project as coco json
+     * @param {String} filename
+     */
+    saveAsCocoJSON(filename) {
+      let cocoData = encodeAsCocoJson(this.$store);
+      this.download(cocoData, filename, "application/json");
     },
 
     /**
@@ -212,6 +235,7 @@ export default {
           this.fileext = fileext;
           return true;
         }
+        case Ext.COCO_JSON:
         case Ext.DLIB_XML:
         case Ext.NIMN:
           this.fileext = fileext;

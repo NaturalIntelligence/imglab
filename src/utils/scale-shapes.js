@@ -18,7 +18,9 @@ export function scaleShape(id, type, rbox, points, scale) {
       x: 0,
       y: 0,
       w: 0,
-      h: 0
+      h: 0,
+      width: 0,
+      height: 0
     },
     points: scaleShapePoints(points, scale, type),
     defaultZoomScale: scale
