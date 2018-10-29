@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import TrackingLines from "./tracking-lines/tracking-lines";
 import { FeaturePoint } from "../models/FeaturePoint";
 import { mapGetters, mapMutations } from "vuex";
 import { getCoordinates, getSVG } from "../utils/app";
@@ -37,14 +36,10 @@ import SVG from "svg.js";
 import { MouseCoordBus } from "../utils/mouseCoordBus";
 
 export default {
-  components: {
-    "tracking-lines": TrackingLines
-  },
   data() {
     return {
       alreadyDrawing: false,
       canvas: null,
-      showTrackingLine: false,
       xPos: 0,
       yPos: 0,
       drawingShape: undefined
@@ -141,19 +136,6 @@ export default {
     ...mapMutations("image-store", {
       updateFeaturePointsInStore: "updateFeaturePoints"
     }),
-
-    /**
-     * Sets the mouse position accordingly
-     * @param {MouseEvent} event - mouse event
-     * @see getCoordinates() for more information about calculating mouse coordinates
-     */
-    showPosition(event) {
-      let workcanvas = this.$refs.workcanvas;
-      let coordinates = getCoordinates(event, workcanvas);
-
-      this.xPos = coordinates.x;
-      this.yPos = coordinates.y;
-    },
 
     /**
      * Draws all the shapes and fill their labels
@@ -314,8 +296,6 @@ export default {
      */
     onMouseLeave(event) {
       MouseCoordBus.$emit("mouse-leave");
-      // Hide tracking lines
-      this.showTrackingLine = false;
     },
 
     /**
