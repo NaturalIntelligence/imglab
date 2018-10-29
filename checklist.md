@@ -2,43 +2,42 @@
 
 1. Menu
     1. Open
-        - [ ] .nimn format
-        - [ ] .json (coco json)
-        - [ ] .xml (dlib xml)
-        - [ ] .pts {dlib pts)
+        - [x] .nimn format
+        - [x] .json (coco json)
+        - [x] .xml (dlib xml)
         - [ ] .xml (pascal voc)
     2. Save
-        - [ ] .nimn format
-        - [ ] .json (coco json)
-        - [ ] .xml (dlib xml)
-        - [ ] .pts {dlib pts)
+        - [x] .nimn format
+        - [x] .json (coco json)
+        - [x] .xml (dlib xml)
+        - [x] .pts {dlib pts)
         - [ ] .xml (pascal voc)
     3. Settings
         - [ ] autosave
 2. Toolbar 
     1. Point
-        - [ ] Size slider
-        - [ ] Color changer
+        - [x] Size slider
+        - [x] Color changer
     2. Shapes
-        - [ ] Circle
-        - [ ] Rectangle
-        - [ ] Polygon
+        - [x] Circle
+        - [x] Rectangle
+        - [x] Polygon
     3. Utilities
-        - [ ] Drag on move
-        - [ ] Zoom (in, out, reset)
-        - [ ] Opacity slider
-        - [ ] Mouse coordinate display
+        - [x] Drag on move
+        - [x] Zoom (in, out, reset)
+        - [x] Opacity slider
+        - [x] Mouse coordinate display
 3. Image slider
-    - [ ] Left Toggle
-    - [ ] Right Toggle
-    - [ ] Import image
-    - [ ] Import folder
+    - [x] Left Toggle
+    - [x] Right Toggle
+    - [x] Import image
+    - [x] Import folder
 4. Label Panel
-    - [ ] Category 
-    - [ ] Label name
-    - [ ] Attributes
-    - [ ] Tags
-    - [ ] Feature point list
+    - [x] Category 
+    - [x] Label name
+    - [x] Attributes
+    - [x] Tags
+    - [x] Feature point list
 5. Plugins
     - [ ] Face Plus Plus
 6. Shortcuts
