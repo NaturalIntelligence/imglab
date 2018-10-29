@@ -1,5 +1,8 @@
 <template lang="html">
-  <transition name="modal">
+  <transition
+    name="modal"
+    v-if="show"
+  >
     <div
       class="modal-mask"
     >
@@ -45,6 +48,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      show: false,
       storeData: null
     };
   },
@@ -62,6 +66,7 @@ export default {
     checkBrowserCache() {
       let cache = this.localStoreData;
       if (!cache) return;
+      this.show = true;
       this.storeData = cache;
     },
 
@@ -69,16 +74,16 @@ export default {
      * Clear local storage and emit close event
      */
     clearCache() {
+      this.show = false;
       localStorage.clear();
-      this.$emit("close");
     },
 
     /**
      * Restores data and emits close event
      */
     restoreData() {
+      this.show = false;
       this.$store.commit("initializeStore", { storeData: this.storeData });
-      this.$emit("close");
     }
   },
   mounted() {
