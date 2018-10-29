@@ -1,7 +1,7 @@
 <template>
   <div class=""
     @click="click">
-    <prompt-restore v-if="showModal" @close="showModal = false"></prompt-restore>
+    <prompt-restore></prompt-restore>
     <div class="container-fluid">
       <div id="menubar" class="row overlay-color align-items-center" style="height: 50px;">
         <div class="col-3 col-sm-2 col-md-1 col-xl-1 no-pl">
@@ -81,8 +81,7 @@ export default {
   data() {
     return {
       LABEL_TAG,
-      CANVAS_TAG,
-      showModal: true
+      CANVAS_TAG
     };
   },
   methods: {
