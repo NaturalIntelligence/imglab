@@ -84,21 +84,18 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import { formatID } from "../../../utils/app";
-
-const debounce = require("lodash.debounce");
 
 export default {
   data() {
     return {
       enterProperty: "",
       enterValue: ""
-    }
+    };
   },
   computed: {
     ...mapGetters("label-data", {
       suggestedProperties: "getProperties",
-      getSuggestedValues: "getValues",
+      getSuggestedValues: "getValues"
     }),
 
     ...mapGetters("action-config", {
@@ -137,7 +134,7 @@ export default {
       }
 
       if (!this.shapeAttributes.includes(attribute)) {
-        this.addAttributeToShape({ shapeID: this.selectedShapeID, attribute })
+        this.addAttributeToShape({ shapeID: this.selectedShapeID, attribute });
       }
     },
 
@@ -210,7 +207,7 @@ export default {
       this.addAttributeToApp({ property: attribute.property, value: newValue });
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

@@ -92,7 +92,7 @@ import {
   encodeAsCocoJson
 } from "../action/file-handler";
 
-const FileSaver = require('file-saver');
+const FileSaver = require("file-saver");
 
 export default {
   components: {
@@ -108,7 +108,7 @@ export default {
         [Ext.COCO_JSON]: "_coco"
       },
       snackbarMsg: ""
-    }
+    };
   },
   computed: {
     ...mapGetters("image-store", {
@@ -230,7 +230,9 @@ export default {
         case Ext.DLIB_PTS: {
           let selectedShape = this.getSelectedShape;
           if (!selectedShape) {
-            this.displaySnackbar("Please create an image and select a shape to continue");
+            this.displaySnackbar(
+              "Please create an image and select a shape to continue"
+            );
             return;
           }
           this.fileext = fileext;
@@ -246,7 +248,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

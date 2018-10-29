@@ -17,11 +17,11 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   computed: {
     ...mapGetters("app-config", {
-      "opacityStepSize": "getOpacityStepSize"
+      opacityStepSize: "getOpacityStepSize"
     }),
 
     ...mapGetters("image-store", {
-      "imageSelected": "getImageSelected"
+      imageSelected: "getImageSelected"
     }),
 
     imageOpacity() {
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     ...mapMutations("image-store", {
-      "updateImageDetail": "updateImageDetail"
+      updateImageDetail: "updateImageDetail"
     }),
 
     /**
@@ -44,7 +44,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

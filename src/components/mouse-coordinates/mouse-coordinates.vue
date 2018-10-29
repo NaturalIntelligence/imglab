@@ -24,7 +24,7 @@ export default {
       x: 0,
       y: 0,
       show: false
-    }
+    };
   },
   methods: {
     hideMousePosition() {
@@ -47,7 +47,7 @@ export default {
     MouseCoordBus.$off("mouse-move", this.updateMousePosition);
     MouseCoordBus.$off("mouse-leave", this.hideMousePosition);
   }
-}
+};
 </script>
 
 <style lang="css">

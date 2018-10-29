@@ -17,7 +17,7 @@
           class="li-fpoints grey-border">
           <draggable v-model="featurePoints">
             <div
-              v-for="(featurePoint, index) in featurePoints"
+              v-for="featurePoint in featurePoints"
               class="d-flex align-items-center"
               :key="featurePoint.id"
             >
@@ -50,7 +50,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import { removeFeaturePoint } from "../../../utils/actions";
-import { _, getSVG } from "../../../utils/app";
+import { getSVG } from "../../../utils/app";
 
 export default {
   computed: {
@@ -62,8 +62,7 @@ export default {
     ...mapGetters("image-store", {
       getFeaturePointByID: "getFeaturePointByID",
       getShapeFeaturePointIDs: "getShapeFeaturePointIDs",
-      getShapeFeaturePoints: "getShapeFeaturePoints",
-      getFeaturePointByID: "getFeaturePointByID"
+      getShapeFeaturePoints: "getShapeFeaturePoints"
     }),
 
     /**
@@ -104,7 +103,7 @@ export default {
         shapeID,
         featurePointID,
         svg: this.$svg,
-        store: this.$store,
+        store: this.$store
       });
     },
 
@@ -123,7 +122,7 @@ export default {
       this.selectedFeaturePoints.forEach(featurePointID => {
         let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
         svgFP.selectize(false);
-      })
+      });
 
       // Remove feature points from store
       this.setSelectedElements({ shapes: this.selectedShape });
@@ -161,7 +160,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

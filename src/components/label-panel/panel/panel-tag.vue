@@ -14,7 +14,7 @@
         v-model="shapeTags"
       >
         <div
-          v-for="(tag, index) in shapeTags"
+          v-for="tag in shapeTags"
           class="tags"
           :class="{ focused: tag === selectedTag }"
           :key="tag"
@@ -54,7 +54,7 @@ export default {
     return {
       selectedTag: null,
       tagText: ""
-    }
+    };
   },
   computed: {
     ...mapGetters("label-data", {
@@ -79,12 +79,12 @@ export default {
       },
 
       set(val) {
-        this.updateShapeDetail({ shapeID: this.selectedShapeID, tags: val })
+        this.updateShapeDetail({ shapeID: this.selectedShapeID, tags: val });
       }
     },
 
     placeholderText() {
-      return this.tags && this.tags.size === 0 ? "Enter tags": "";
+      return this.tags && this.tags.size === 0 ? "Enter tags" : "";
     }
   },
   methods: {
@@ -126,7 +126,7 @@ export default {
       tag && this.removeTagFromShape({ shapeID, tag });
     },
 
-    removeTagByBackspace(event) {
+    removeTagByBackspace() {
       // Stop if there's text in input tag
       if (this.tagText.length !== 0) return;
 
@@ -154,7 +154,7 @@ export default {
     let compStyles = window.getComputedStyle(el);
     this.inputWidth = compStyles.width;
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

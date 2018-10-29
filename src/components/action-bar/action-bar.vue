@@ -11,11 +11,11 @@ export default {
     return {
       actions: _actions,
       action: null
-    }
+    };
   },
   computed: {
     ...mapGetters("action-config", {
-      "selectedTool": "getSelectedTool"
+      selectedTool: "getSelectedTool"
     })
   },
   watch: {
@@ -29,7 +29,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

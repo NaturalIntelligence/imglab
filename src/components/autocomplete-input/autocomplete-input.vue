@@ -39,8 +39,6 @@
 </template>
 
 <script>
-import { _ } from "../../utils/app";
-
 const debounce = require("lodash.debounce");
 
 export default {
@@ -65,8 +63,8 @@ export default {
     return {
       text: this.value,
       selected: -1,
-      showSuggestions: false,
-    }
+      showSuggestions: false
+    };
   },
   computed: {
     suggestions() {
@@ -140,8 +138,8 @@ export default {
       } else {
         this.showSuggestions = false;
       }
-      this.text = event.target.value;
-      this.debouncedEmitAddEvent(event.target.value);
+      this.text = value;
+      this.debouncedEmitAddEvent(value);
     },
 
     /**
@@ -156,7 +154,7 @@ export default {
       this.resetState();
       this.$nextTick(function() {
         this.debouncedEmitAddEvent.flush();
-      })
+      });
     },
 
     /**
@@ -174,7 +172,6 @@ export default {
     selectSuggestion(event) {
       // Necessary to maintain input focus
       event.preventDefault();
-
 
       let index = this.selected;
       if (!this.isValid(index)) return;
@@ -202,7 +199,7 @@ export default {
       this.text = val;
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

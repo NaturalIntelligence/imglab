@@ -69,9 +69,8 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
-import { Image as _Image } from '../../models/Image';
-import Velocity from 'velocity-animate'
+import { mapGetters, mapMutations } from "vuex";
+import { Image as _Image } from "../../models/Image";
 
 export default {
   props: {
@@ -83,7 +82,7 @@ export default {
   data() {
     return {
       thumbnails: []
-    }
+    };
   },
   computed: {
     ...mapGetters("image-store", {
@@ -92,10 +91,7 @@ export default {
   },
   methods: {
     // Map mutations from image-store
-    ...mapMutations("image-store", [
-      "setImageSelected",
-      "addImageToStore"
-    ]),
+    ...mapMutations("image-store", ["setImageSelected", "addImageToStore"]),
 
     /**
      * Loads the image dynamically and stores it in the image store
@@ -110,8 +106,8 @@ export default {
        */
       image.onload = function() {
         let imageSize = {
-          width : this.width,
-          height : this.height,
+          width: this.width,
+          height: this.height,
           scaledWidth: this.width,
           scaledHeight: this.height,
           imageScale: 1
@@ -122,7 +118,7 @@ export default {
           name: imageData.name,
           size: imageSize
         });
-      }
+      };
 
       image.src = imageData.src;
     },
@@ -136,10 +132,10 @@ export default {
       if (file.type.startsWith("image")) {
         let reader = new FileReader();
         reader.onload = e => {
-          let image = new _Image({name: file.name, src: e.target.result});
+          let image = new _Image({ name: file.name, src: e.target.result });
           this.loadImage(image);
           this.thumbnails.push(image);
-        }
+        };
         reader.readAsDataURL(file);
       }
     },
@@ -152,7 +148,7 @@ export default {
       var input = e.srcElement || e.target;
       // note: input.files is an object
       if (input.files && input.files[0]) {
-        for (let i = 0; i < input.files.length; i++){
+        for (let i = 0; i < input.files.length; i++) {
           this.readImageFile(input.files[i]);
         }
       }
@@ -190,7 +186,7 @@ export default {
       this.thumbnails = val;
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

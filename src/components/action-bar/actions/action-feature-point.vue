@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       scale: 100
-    }
+    };
   },
   computed: {
     ...mapGetters("image-store", {
@@ -86,7 +86,7 @@ export default {
      */
     switchColor: throttle(function(color) {
       this.applyFeaturePointChanges(featurePointID => {
-        let svgFP = getSVG({ svg: this.$svg, id: featurePointID});
+        let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
         svgFP.fill(color);
       });
     }, 33),
@@ -105,7 +105,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>
