@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     ...mapGetters("action-config", {
-      selectedShapeID: "getSelectedShape",
+      selectedShapeID: "getSelectedShape"
     }),
 
     ...mapGetters("image-store", {
@@ -75,7 +75,7 @@ export default {
     addCategory(category) {
       this.setShapeCategory({
         category,
-        shapeID: this.selectedShapeID,
+        shapeID: this.selectedShapeID
       });
       this.addCategoryToApp({ category });
     },
@@ -91,7 +91,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

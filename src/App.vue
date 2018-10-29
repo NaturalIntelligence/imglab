@@ -69,10 +69,10 @@ import { LABEL_TAG, CANVAS_TAG } from "./utils/tool-names";
 
 export default {
   components: {
-    'workarea': WorkArea,
-    'image-slider': ImageSlider,
-    'toolbox': ToolBox,
-    "actionbar": ActionBar,
+    workarea: WorkArea,
+    "image-slider": ImageSlider,
+    toolbox: ToolBox,
+    actionbar: ActionBar,
     "label-panel": LabelPanel,
     "app-menu": Menu,
     "prompt-restore": PromptRestoreData,
@@ -83,7 +83,7 @@ export default {
       LABEL_TAG,
       CANVAS_TAG,
       showModal: true
-    }
+    };
   },
   methods: {
     click(event) {
@@ -94,31 +94,32 @@ export default {
 </script>
 
 <style>
-  .labelpolygon, .labelcircle, .labelbox {
-    fill: yellow;
-    stroke: green;
-    stroke-width: 2px;
-    fill-opacity: 0.1;
-  }
+.labelpolygon,
+.labelcircle,
+.labelbox {
+  fill: yellow;
+  stroke: green;
+  stroke-width: 2px;
+  fill-opacity: 0.1;
+}
 
-  .svg_select_points {
-    fill: black;
-    fill-opacity: 0.1;
-    stroke: grey;
-  }
+.svg_select_points {
+  fill: black;
+  fill-opacity: 0.1;
+  stroke: grey;
+}
 
-  .svg_select_points_point{
-      cursor: move;
-  }
+.svg_select_points_point {
+  cursor: move;
+}
 
-  .svg_select_boundingRect {
-  	stroke-width: 1;
-  	fill: gray;
-  	stroke-dasharray: initial !important;
-  	stroke: #000;
-  	stroke-opacity: 0.8;
-  	fill-opacity: 0.1;
-    pointer-events:none; /* This ons is needed if you want to deselect or drag the shape*/
-  }
-
+.svg_select_boundingRect {
+  stroke-width: 1;
+  fill: gray;
+  stroke-dasharray: initial !important;
+  stroke: #000;
+  stroke-opacity: 0.8;
+  fill-opacity: 0.1;
+  pointer-events: none; /* This ons is needed if you want to deselect or drag the shape*/
+}
 </style>

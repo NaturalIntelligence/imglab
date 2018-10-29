@@ -257,7 +257,9 @@ export function encodeAsDlibXML(store) {
       shape.featurePoints.forEach(featurePointID => {
         let fp = featurePoints[featurePointID];
         xml += `
-          <part name='${fp.id}' x='${Math.floor(fp.x)}' y='${Math.floor(fp.y)}'/>`;
+          <part name='${fp.id}' x='${Math.floor(fp.x)}' y='${Math.floor(
+          fp.y
+        )}'/>`;
       });
       xml += `
         </box>
@@ -349,13 +351,17 @@ export function encodeAsCocoJson(store) {
       } else if (shape.type === RECTANGLE) {
         points = [
           // top left corner
-          shape.points[0], shape.points[1],
+          shape.points[0],
+          shape.points[1],
           // top right corner
-          shape.points[0] + shape.points[2], shape.points[1],
+          shape.points[0] + shape.points[2],
+          shape.points[1],
           // bottom left corner
-          shape.points[0] + shape.points[2], shape.points[1] + shape.points[3],
+          shape.points[0] + shape.points[2],
+          shape.points[1] + shape.points[3],
           // bottom right corner
-          shape.points[0], shape.points[1] + shape.points[3]
+          shape.points[0],
+          shape.points[1] + shape.points[3]
         ];
         area = calcArea(points);
       } else {

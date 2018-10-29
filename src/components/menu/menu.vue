@@ -50,14 +50,9 @@
 import nimnImageStore from "./action/nimn-format-imagestore";
 import nimnAppConfig from "./action/nimn-format-appconfig";
 import nimnLabelData from "./action/nimn-format-labeldata";
-import { Image } from "../../models/Image";
-import { Shape } from "../../models/Shape";
-import { FeaturePoint } from "../../models/FeaturePoint";
-import { RECTANGLE, POINT } from "../../utils/tool-names";
 
 import { mapMutations } from "vuex";
 import ModalSelectSavetype from "./model/modal-select-savetype";
-import { _ } from "../../utils/app";
 import { Ext } from "./filetype";
 import { decodeCocoJson, decodeDlibXML } from "./action/file-handler";
 
@@ -68,7 +63,7 @@ export default {
   data() {
     return {
       showModal: false
-    }
+    };
   },
   methods: {
     ...mapMutations("app-config", {
@@ -155,7 +150,7 @@ export default {
       input.value = null;
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       tools: t
-    }
+    };
   },
   computed: {
     ...mapGetters("action-config", {
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     ...mapMutations("action-config", {
-      setSelectedTool: 'setSelectedTool'
+      setSelectedTool: "setSelectedTool"
     }),
 
     /**
@@ -73,7 +73,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

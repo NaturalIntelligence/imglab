@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       storeData: null
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -70,7 +70,7 @@ export default {
      */
     clearCache() {
       localStorage.clear();
-      this.$emit('close')
+      this.$emit("close");
     },
 
     /**
@@ -84,7 +84,7 @@ export default {
   mounted() {
     this.checkBrowserCache();
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

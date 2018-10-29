@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       scale: 100
-    }
+    };
   },
   computed: {
     ...mapGetters("image-store", {
@@ -55,15 +55,13 @@ export default {
     }),
 
     imageScale() {
-      return this.imageSelected ?
-        Math.floor(this.imageSelected.size.imageScale * 100) : 100;
+      return this.imageSelected
+        ? Math.floor(this.imageSelected.size.imageScale * 100)
+        : 100;
     }
   },
   methods: {
-    ...mapMutations("image-store", [
-      "updateShapeDetail",
-      "updateImageDetail"
-    ]),
+    ...mapMutations("image-store", ["updateShapeDetail", "updateImageDetail"]),
 
     /**
      * Zoom in
@@ -130,8 +128,8 @@ export default {
         let shape = this.getShapeByID(shapeID);
         this.updateShapeDetail({
           shapeID: shape.id,
-          zoomScale: shape.zoomScale * newScale / oldScale
-        })
+          zoomScale: (shape.zoomScale * newScale) / oldScale
+        });
       });
     },
 
@@ -144,10 +142,10 @@ export default {
         scaledWidth: Math.floor(this.imageSelected.size.width * newScale),
         scaledHeight: Math.floor(this.imageSelected.size.height * newScale),
         imageScale: newScale
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

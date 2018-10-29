@@ -49,8 +49,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   props: {
     value: {
@@ -66,7 +64,7 @@ export default {
     return {
       filename: this.value + this.ext,
       showError: false
-    }
+    };
   },
   methods: {
     onInput(event) {
@@ -85,11 +83,13 @@ export default {
     },
 
     validFilename() {
-      return /^[a-z0-9_.@()-]/i.test(this.filename) &&
-        this.filename.endsWith(this.ext);
+      return (
+        /^[a-z0-9_.@()-]/i.test(this.filename) &&
+        this.filename.endsWith(this.ext)
+      );
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>
