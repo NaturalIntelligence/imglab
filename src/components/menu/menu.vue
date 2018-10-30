@@ -37,11 +37,13 @@
         </a>
       </div>
     </div>
-    <modal-select-savetype
+
+    <modal-save
       v-if="showModal"
       @close="showModal = false"
     >
-  </modal-select-savetype>
+    </modal-save>
+
   </div>
 
 </template>
@@ -50,16 +52,16 @@
 import nimnImageStore from "./action/nimn-format-imagestore";
 import nimnAppConfig from "./action/nimn-format-appconfig";
 import nimnLabelData from "./action/nimn-format-labeldata";
+import ModalSave from "./model/modal-save";
 
 import { mapMutations } from "vuex";
-import ModalSelectSavetype from "./model/modal-select-savetype";
 import { Ext } from "./filetype";
 import { decodeCocoJson, decodeDlibXML } from "./action/file-handler";
 import { _ } from "../../utils/app";
 
 export default {
   components: {
-    "modal-select-savetype": ModalSelectSavetype
+    "modal-save": ModalSave
   },
   data() {
     return {
@@ -151,9 +153,12 @@ export default {
       input.value = null;
     },
 
+    /**
+     * Defines possible shortcuts
+     */
     shortcuts(event) {
       if (
-        (event.key == "I" || event.key == "i") &&
+        (event.key === "I" || event.key === "i") &&
         !event.shiftKey &&
         !event.altKey &&
         event.ctrlKey
@@ -162,7 +167,7 @@ export default {
         event.preventDefault();
         event.stopPropagation();
       } else if (
-        (event.key == "E" || event.key == "e") &&
+        (event.key === "E" || event.key === "e") &&
         !event.shiftKey &&
         !event.altKey &&
         event.ctrlKey
