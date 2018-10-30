@@ -55,6 +55,7 @@ import { mapMutations } from "vuex";
 import ModalSelectSavetype from "./model/modal-select-savetype";
 import { Ext } from "./filetype";
 import { decodeCocoJson, decodeDlibXML } from "./action/file-handler";
+import { _ } from "../../utils/app";
 
 export default {
   components: {
@@ -148,7 +149,35 @@ export default {
         reader.readAsText(input.files[0]);
       }
       input.value = null;
+    },
+
+    shortcuts(event) {
+      if (
+        (event.key == "I" || event.key == "i") &&
+        !event.shiftKey &&
+        !event.altKey &&
+        event.ctrlKey
+      ) {
+        this.$refs.open.click();
+        event.preventDefault();
+        event.stopPropagation();
+      } else if (
+        (event.key == "E" || event.key == "e") &&
+        !event.shiftKey &&
+        !event.altKey &&
+        event.ctrlKey
+      ) {
+        this.$refs.save.click();
+        event.preventDefault();
+        event.stopPropagation();
+      }
     }
+  },
+  mounted() {
+    _.on(document, "keydown", this.shortcuts);
+  },
+  beforeDestroy() {
+    _.off(document, "keydown", this.shortcuts);
   }
 };
 </script>
