@@ -6,7 +6,7 @@ import { Image } from "../../../models/Image";
 import { Shape } from "../../../models/Shape";
 import { FeaturePoint } from "../../../models/FeaturePoint";
 
-function getStoreData(store) {
+export function getStoreData(store) {
   let dataImageStore = store.getters["image-store/getStoreData"];
   let dataAppConfig = store.getters["app-config/getStoreData"];
   let dataLabelData = store.getters["label-data/getStoreData"];

@@ -88,6 +88,8 @@ export default {
     click(event) {
       console.log("APP.VUE", event.target.nodeName);
     }
+  },
+  mounted() {
   }
 };
 </script>

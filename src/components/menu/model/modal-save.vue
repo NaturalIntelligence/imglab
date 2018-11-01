@@ -20,6 +20,7 @@
 <script>
 import { mapGetters } from "vuex";
 import {
+  getStoreData,
   encodeAsNimn,
   encodeAsDlibXML,
   encodeAsDlibPts,
@@ -55,6 +56,69 @@ export default {
   },
   methods: {
     /**
+     * Google analytics report file metadata
+     * @param {String} filetype
+     */
+    analyticsReport(filetype) {
+      this.analyticsFileType(filetype);
+      this.analyticsImageStore();
+      this.analyticsLabelData();
+    },
+
+    /**
+     * Sends metadata about the image store to google analytics
+     */
+    analyticsImageStore() {
+      let storeData = getStoreData(this.$store);
+      let imageStore = storeData["image-store"];
+
+      this.$ga.event({
+        eventCategory: "image - count",
+        eventAction: "save",
+        eventLabel: `${Object.keys(imageStore.images).length} images`
+      });
+
+      this.$ga.event({
+        eventCategory: "shape - count",
+        eventAction: "save",
+        eventLabel: `${Object.keys(imageStore.shapes).length} shapes`
+      });
+
+      this.$ga.event({
+        eventCategory: "points - count",
+        eventAction: "save",
+        eventLabel: `${Object.keys(imageStore.featurePoints).length} feature points`
+      });
+    },
+
+    /**
+     * Sends label metadata to google analytics
+     */
+    analyticsLabelData() {
+      let storeData = getStoreData(this.$store);
+      let labelData = storeData["label-data"];
+
+      labelData.categories.forEach(category => {
+        this.$ga.event({
+          eventCategory: "category",
+          eventAction: "save",
+          eventLabel: category
+        });
+      });
+    },
+
+    /**
+     * Sends file type to google analytics
+     */
+    analyticsFileType(filetype) {
+      this.$ga.event({
+        eventCategory: "filetype",
+        eventAction: "save",
+        eventLabel: filetype,
+      });
+    },
+
+    /**
      * Save given data to a file
      * @param {Any} data - string data
      * @param {String} filename
@@ -66,8 +130,16 @@ export default {
       });
       FileSaver.saveAs(blobData, filename);
     },
-    /**
 
+    /**
+     * Checks if file type is supported
+     * @returns {Boolean}
+     */
+    isSupported(filetype) {
+      return Object.values(Ext).includes(filetype);
+    },
+
+    /**
      * Given file name and file type, save data to corresponding format
      * @param {String} filename - filename that includes the file extension
      * @param {String} filetype - used to determine which handler to call
@@ -76,6 +148,13 @@ export default {
       this.filetype = null;
       this.showSaveDialog = true;
 
+      // Prints an error on console and returns if filetype not supported
+      if (!this.isSupported(filetype)) {
+        console.error(`${filetype} not supported`);
+        return;
+      }
+
+      this.analyticsReport(filetype);
       switch (filetype) {
         case Ext.NIMN: {
           this.saveAsNimn(filename);
@@ -94,7 +173,7 @@ export default {
           break;
         }
         default: {
-          console.error("Filetype unknown", filetype);
+          console.error("Unknown error, shouldn't reach here");
         }
       }
     },

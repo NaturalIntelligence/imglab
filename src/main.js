@@ -5,6 +5,7 @@ import svgjs from "./plugins/svg";
 import InputTag from "vue-input-tag";
 import Draggable from "vuedraggable";
 import AutocompleteInput from "./components/autocomplete-input/autocomplete-input";
+import VueAnalytics from "vue-analytics";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faBars,
@@ -27,6 +28,9 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
+Vue.use(VueAnalytics, {
+  id: "UA-128418867-1"
+});
 Vue.use(svgjs);
 
 library.add(
