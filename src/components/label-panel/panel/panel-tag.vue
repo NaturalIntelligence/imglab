@@ -39,7 +39,7 @@
           :value="tagText"
           @input="onInput"
           @change="addTag"
-          @keypress.delete="removeTagByBackspace"
+          @keyup.delete="removeTagByBackspace"
         >
       </label>
     </div>
@@ -98,11 +98,6 @@ export default {
       addTagToApp: "addTag"
     }),
 
-    focusInput() {
-      let inputNode = this.$refs.taginput;
-      inputNode.focus();
-    },
-
     /**
      * Adds tag to shape and app if doesn't exist
      * @param {Event} event - change event
@@ -116,6 +111,14 @@ export default {
       this.tagText = "";
     },
 
+    /**
+     * Sets focus on input tag
+     */
+    focusInput() {
+      let inputNode = this.$refs.taginput;
+      inputNode.focus();
+    },
+
     onInput(event) {
       this.tagText = event.target.value;
       this.selectedTag = null;
@@ -127,6 +130,7 @@ export default {
     },
 
     removeTagByBackspace() {
+      console.log("removeTagByBackspace");
       // Stop if there's text in input tag
       if (this.tagText.length !== 0) return;
 
