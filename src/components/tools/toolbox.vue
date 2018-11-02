@@ -105,7 +105,7 @@ export default {
       let tools = Object.keys(this.tools[this.toolType]);
       if (!tools.includes(toolname)) return;
 
-      if (event.altKey) {
+      if (event.altKey && !event.ctrlKey) {
         event.preventDefault();
         event.stopPropagation();
         this.$refs[toolname][0].click();
