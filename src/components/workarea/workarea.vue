@@ -25,15 +25,28 @@
 </template>
 
 <script>
-import { FeaturePoint } from "../models/FeaturePoint";
 import { mapGetters, mapMutations } from "vuex";
-import { getCoordinates, getSVG } from "../utils/app";
-import { RECTANGLE, CIRCLE, POLYGON, MOVE } from "../utils/tool-names";
-import { drawPoint } from "./tools/tools/point";
-import { scaleFeaturePoints, scaleShapePoints } from "../utils/scale-shapes";
-import { KEY } from "../utils/actions";
+import {
+  getCoordinates,
+  getSVG,
+  generateShapeID,
+  generateFeaturePointID,
+  _
+} from "../../utils/app";
+import { RECTANGLE, CIRCLE, POLYGON, MOVE } from "../../utils/tool-names";
+import { drawPoint } from "../tools/tools/point";
+import {
+  scaleFeaturePoint,
+  scaleFeaturePoints,
+  scaleShape,
+  scaleShapePoints
+} from "../../utils/scale-shapes";
+import { KEY } from "../../utils/actions";
 import SVG from "svg.js";
-import { MouseCoordBus } from "../utils/mouseCoordBus";
+import { MouseCoordBus } from "../../utils/mouseCoordBus";
+import { Shape } from "../../models/Shape";
+import { FeaturePoint } from "../../models/FeaturePoint";
+import { debounceUpdateShape } from "./util.js";
 
 export default {
   data() {
@@ -108,9 +121,24 @@ export default {
       this.drawCanvas();
     },
 
+    selectedShapes() {
+      this.selectedShapes.forEach(shapeID => {
+        let svgShape = getSVG({
+          svg: this.$svg,
+          id: shapeID
+        });
+        svgShape.selectize({
+          rotationPoint: false
+        });
+      });
+    },
+
     selectedFeaturePoints() {
       this.selectedFeaturePoints.forEach(featurePointID => {
-        let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
+        let svgFP = getSVG({
+          svg: this.$svg,
+          id: featurePointID
+        });
         svgFP.selectize({
           rotationPoint: false,
           points: []
@@ -122,6 +150,7 @@ export default {
     ...mapMutations("action-config", [
       "setCopiedElements",
       "addSelectedElement",
+      "addCopiedElement",
       "setSelectedElements"
     ]),
 
@@ -129,6 +158,7 @@ export default {
       "addImageToStore",
       "addShapeToImage",
       "addPointToShape",
+      "detachShapeFromImage",
       "updateFeaturePoint",
       "updateShapeDetail"
     ]),
@@ -335,13 +365,18 @@ export default {
     deselectAll({ shape = false, featurePoint = false } = {}) {
       // Deselect all svg elements
       this.selectedShapes.forEach(shapeID => {
-        let domShape = document.getElementById(shapeID);
-        let svgShape = this.$svg.adopt(domShape);
+        let svgShape = getSVG({
+          svg: this.$svg,
+          id: shapeID
+        });
         svgShape.selectize(false);
       });
 
       this.selectedFeaturePoints.forEach(featurePointID => {
-        let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
+        let svgFP = getSVG({
+          svg: this.$svg,
+          id: featurePointID
+        });
         svgFP.selectize(false);
       });
 
@@ -358,7 +393,10 @@ export default {
     selectAll() {
       if (this.imageSelected) {
         this.imageSelected.shapes.forEach(shapeID => {
-          let shape = getSVG({ svg: this.$svg, id: shapeID });
+          let shape = getSVG({
+            svg: this.$svg,
+            id: shapeID
+          });
           shape.selectize({
             rotationPoint: false
           });
@@ -419,7 +457,7 @@ export default {
       });
 
       shape.on("resizedone", () => {
-        this.updateShapeDetail({
+        debounceUpdateShape({
           shapeID: shape.node.id,
           rbox: shape.rbox(this.canvas),
           points: this.getPoints(shape)
@@ -491,9 +529,9 @@ export default {
         if (this.selectedTool && this.selectedTool.type === "point") {
           // Selected tool is point, has highest precedence
           var point = drawPoint({
-            position: event,
-            canvasOffset: this.canvas.node.getBoundingClientRect(),
+            event,
             shape,
+            canvasOffset: this.canvas.node.getBoundingClientRect(),
             featurePointSize: this.featurePointSize,
             featurePointColor: this.featurePointColor
           });
@@ -552,7 +590,9 @@ export default {
 
         if (!event.ctrlKey) {
           // Single select
-          this.deselectAll({ shape: true });
+          this.deselectAll({
+            shape: true
+          });
         }
 
         featurePoint.selectize({
@@ -586,8 +626,8 @@ export default {
           let pos = point.rbox(this.canvas);
           accumulator.push(
             new FeaturePoint({
-              x: pos.cx,
-              y: pos.cy,
+              cx: pos.cx,
+              cy: pos.cy,
               label: fpLabelToID[point.id()],
               id: point.id()
             })
@@ -618,7 +658,10 @@ export default {
       for (var fPointIndex in scaledFPoints) {
         var fPoint = drawPoint({
           position: scaledFPoints[fPointIndex],
-          canvasOffset: { x: 0, y: 0 },
+          canvasOffset: {
+            x: 0,
+            y: 0
+          },
           shape,
           featurePointSize: this.featurePointSize,
           featurePointColor: this.featurePointColor
@@ -626,24 +669,214 @@ export default {
         fPoint.id(scaledFPoints[fPointIndex].id);
         this.attachEventsToFeaturePoint(fPoint, shape);
       }
+    },
+
+    flushShortcuts(event) {
+      if (
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowUp" ||
+        event.key === "ArrowRight" ||
+        event.key === "ArrowDown"
+      ) {
+        debounceUpdateShape.flush();
+      }
+    },
+
+    /**
+     * List of shortcuts
+     */
+    shortcuts(event) {
+      if (event.key === "Delete") {
+        event.preventDefault();
+        event.stopPropagation();
+        // Del key. removes selected shapes and all feature points in shape
+        this.selectedShapes.forEach(shapeID => {
+          let svgShape = getSVG({
+            svg: this.$svg,
+            id: shapeID
+          });
+          // Deselect shape first
+          svgShape.selectize(false);
+          // Remove shape from store
+          this.detachShapeFromImage({ shapeID });
+        });
+
+        this.setSelectedElements();
+        // Redraw canvas
+        this.drawCanvas();
+      } else if (event.key === "a" && event.altKey) {
+        //Select all the labels
+        this.selectAll();
+        event.preventDefault();
+        event.stopPropagation();
+      } else if (event.key === "c" && event.ctrlKey) {
+        // Prevent browser defaults
+        event.preventDefault();
+        event.stopPropagation();
+        // Clear copied elements
+        this.setCopiedElements();
+
+        this.selectedShapes.forEach(shapeID => {
+          let shape = this.getShapeByID(shapeID);
+          // Copy feature point data
+          let _featurePoints = [];
+          shape.featurePoints.forEach(pointID => {
+            let featurePoint = this.getFeaturePointByID(pointID);
+            _featurePoints.push(new FeaturePoint(featurePoint));
+          });
+          // Copy shape data and add feature point data to shape
+          // let _shape = scaleShape({ ...shape, scale: this.imageScale });
+          let _shape = new Shape(shape);
+          _shape.featurePoints = _featurePoints;
+          // Add copied shape to store
+          this.addCopiedElement({ item: _shape });
+        });
+      } else if (event.key === "v" && event.ctrlKey) {
+        // Stop browser default actions
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Empty selected elements
+        this.setSelectedElements();
+
+        this.copiedElements.forEach(shape => {
+          // Get new shape id
+          let shapeID = generateShapeID({ type: shape.type });
+          // Scale shape to image
+          let scale = this.imageScale / shape.zoomScale;
+          let scaledShape = scaleShape({ ...shape, scale });
+          // Add shape to image
+          this.addShapeToImage({
+            ...scaledShape,
+            id: shapeID
+          });
+          // Add shape to selected shapes
+          this.addSelectedElement({ shapeID });
+          // Add feature points to shape
+          shape.featurePoints.forEach(point => {
+            let pointID = generateFeaturePointID({ shapeID });
+            // scale feature point to image
+            let scaledFP = scaleFeaturePoint({ point, scale });
+            this.addPointToShape({
+              shapeID,
+              pointID,
+              position: {
+                cx: scaledFP.cx,
+                cy: scaledFP.cy
+              }
+            });
+          });
+        });
+        // Redraw canvas
+        this.drawCanvas();
+      } else if (event.key === "ArrowLeft" && event.ctrlKey && event.shiftKey) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.selectedShapes.forEach(shapeID => {
+          let svgShape = getSVG({
+            svg: this.$svg,
+            id: shapeID
+          });
+          svgShape.parent().dx(-1);
+          debounceUpdateShape({
+            shapeID,
+            rbox: svgShape.rbox(this.canvas),
+            points: this.getPoints(svgShape),
+            featurePoints: this._updateFeaturePoints(shapeID)
+          });
+        });
+      } else if (
+        event.key === "ArrowRight" &&
+        event.ctrlKey &&
+        event.shiftKey
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.selectedShapes.forEach(shapeID => {
+          let svgShape = getSVG({
+            svg: this.$svg,
+            id: shapeID
+          });
+          svgShape.parent().dx(1);
+          debounceUpdateShape({
+            shapeID,
+            rbox: svgShape.rbox(this.canvas),
+            points: this.getPoints(svgShape),
+            featurePoints: this._updateFeaturePoints(shapeID)
+          });
+        });
+      } else if (event.key === "ArrowUp" && event.ctrlKey && event.shiftKey) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.selectedShapes.forEach(shapeID => {
+          let svgShape = getSVG({
+            svg: this.$svg,
+            id: shapeID
+          });
+          svgShape.parent().dy(-1);
+          debounceUpdateShape({
+            shapeID,
+            rbox: svgShape.rbox(this.canvas),
+            points: this.getPoints(svgShape),
+            featurePoints: this._updateFeaturePoints(shapeID)
+          });
+        });
+      } else if (event.key === "ArrowDown" && event.ctrlKey && event.shiftKey) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.selectedShapes.forEach(shapeID => {
+          let svgShape = getSVG({
+            svg: this.$svg,
+            id: shapeID
+          });
+          svgShape.parent().dy(1);
+          debounceUpdateShape({
+            shapeID,
+            rbox: svgShape.rbox(this.canvas),
+            points: this.getPoints(svgShape),
+            featurePoints: this._updateFeaturePoints(shapeID)
+          });
+        });
+      }
+    },
+
+    _updateFeaturePoints(shapeID) {
+      let featurePoints = [];
+      this.getShapeFeaturePoints(shapeID).forEach(({ id, label }) => {
+        let svgFP = getSVG({
+          svg: this.$svg,
+          id
+        });
+        let { cx, cy } = svgFP.rbox(this.canvas);
+        featurePoints.push(new FeaturePoint({ id, cx, cy, label }));
+      });
+      return featurePoints;
     }
   },
   mounted() {
     // Set up a new canvas
     this.canvas = SVG("work-canvas");
     this.drawCanvas();
+    _.on(document, "keydown", this.shortcuts);
+    _.on(document, "keyup", this.flushShortcuts);
   },
   destroyed() {
     // Remove all children and the canvas itself
     this.canvas.clear();
     this.canvas.remove();
+    _.off(document, "keydown", this.shortcuts);
+    _.off(document, "keyup", this.flushShortcuts);
   }
 };
 </script>
 
 <style lang="css" scoped>
   #canvas-container {
-    height: calc(100vh - 190px);
+    height: 100%;
     display: block;
     overflow: auto;
     position: relative;

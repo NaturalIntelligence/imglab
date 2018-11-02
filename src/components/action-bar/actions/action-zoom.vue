@@ -37,6 +37,7 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import { _ } from "../../../utils/app";
 
 export default {
   data() {
@@ -143,7 +144,25 @@ export default {
         scaledHeight: Math.floor(this.imageSelected.size.height * newScale),
         imageScale: newScale
       });
+    },
+
+    /**
+     * List of shortcuts
+     */
+    shortcuts(event) {
+      let key = event.key;
+      let zoomKeys = ["[", "]"];
+      if (!zoomKeys.includes(key)) return;
+      if (event.altKey && !event.ctrlKey) {
+        key === "]" ? this.zoomIn() : this.zoomOut();
+      }
     }
+  },
+  created() {
+    _.on(document, "keydown", this.shortcuts);
+  },
+  beforeDestroy() {
+    _.off(document, "keydown", this.shortcuts);
   }
 };
 </script>

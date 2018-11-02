@@ -28,9 +28,19 @@
 </template>
 
 <script>
+import {
+  LABEL_TAG,
+  RECTANGLE,
+  CIRCLE,
+  POLYGON,
+  POINT,
+  MOVE,
+  ZOOM,
+  OPACITY
+} from "../../utils/tool-names";
+import { _ } from "../../utils/app";
 import { tools as t } from "./config/config";
 import { mapGetters, mapMutations } from "vuex";
-import { LABEL_TAG } from "../../utils/tool-names";
 
 export default {
   props: {
@@ -71,7 +81,50 @@ export default {
           selectedTool: tool
         });
       }
+    },
+
+    /**
+     * List of tool shortcuts
+     */
+    shortcuts(event) {
+      let key = event.key;
+      // Check if action keys was pressed and map to action key
+      let actionKeys = ["[", "]"];
+      if (actionKeys.includes(key) && event.altKey) {
+        let sTool = this.selectedTool;
+        if (sTool && sTool.type === ZOOM) return;
+        key = "z";
+      }
+      // List of available keys and mappings
+      let keys = ["f", "r", "c", "p", "m", "z", "l"];
+      let keyMappings = {
+        f: POINT,
+        r: RECTANGLE,
+        c: CIRCLE,
+        p: POLYGON,
+        m: MOVE,
+        z: ZOOM,
+        l: OPACITY
+      };
+      // Stop if key doesn't exist in list of shortcuts
+      if (!keys.includes(key)) return;
+      // Check if tool exists in toolbar
+      let toolname = keyMappings[key];
+      let tools = Object.keys(this.tools[this.toolType]);
+      if (!tools.includes(toolname)) return;
+      // Activate tool via click
+      if (event.altKey && !event.ctrlKey) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.$refs[toolname][0].click();
+      }
     }
+  },
+  mounted() {
+    _.on(document, "keydown", this.shortcuts);
+  },
+  beforeDestroy() {
+    _.off(document, "keydown", this.shortcuts);
   }
 };
 </script>

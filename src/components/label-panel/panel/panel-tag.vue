@@ -1,13 +1,12 @@
 <template lang="html">
   <div
-    class="tags-wrapper"
     ref="wrapper"
   >
     <div class="tags-header">
       Tags
     </div>
     <div
-      class="form-control"
+      class="form-group"
       @click="focusInput"
     >
       <draggable
@@ -39,7 +38,7 @@
           :value="tagText"
           @input="onInput"
           @change="addTag"
-          @keypress.delete="removeTagByBackspace"
+          @keyup.delete="removeTagByBackspace"
         >
       </label>
     </div>
@@ -98,11 +97,6 @@ export default {
       addTagToApp: "addTag"
     }),
 
-    focusInput() {
-      let inputNode = this.$refs.taginput;
-      inputNode.focus();
-    },
-
     /**
      * Adds tag to shape and app if doesn't exist
      * @param {Event} event - change event
@@ -114,6 +108,14 @@ export default {
       this.addTagToApp({ tag });
       // Clear input after adding tags
       this.tagText = "";
+    },
+
+    /**
+     * Sets focus on input tag
+     */
+    focusInput() {
+      let inputNode = this.$refs.taginput;
+      inputNode.focus();
     },
 
     onInput(event) {

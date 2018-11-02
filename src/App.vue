@@ -1,9 +1,8 @@
 <template>
-  <div class=""
-    @click="click">
+  <div class="imglab">
     <prompt-restore></prompt-restore>
     <div class="container-fluid">
-      <div id="menubar" class="row overlay-color align-items-center" style="height: 50px;">
+      <div id="menubar" class="row overlay-color align-items-center">
         <div class="col-3 col-sm-2 col-md-1 col-xl-1 no-pl">
           <app-menu></app-menu>
         </div>
@@ -11,9 +10,9 @@
           <!-- form-inline input-group -->
           <div class="row justify-content-center align-content-center">
             <a href="https://github.com/NaturalIntelligence/imglab">
-    						<img src="./assets/imglab_logo.png" height="48px" style="margin-top: 2px">
-    					</a>
-            <span style="font-size: 2em; margin-top:5px;">Img Lab</span>
+			        <img src="./assets/imglab_logo.png" height="48px" style="margin-top: 2px">
+              <span style="font-size: 2em; margin-top:5px;">Img Lab</span>
+  					</a>
           </div>
         </div>
         <div class="col-3 col-sm-4 col-md-4 col-xl-4">
@@ -23,35 +22,29 @@
             <plugins-menu class="d-none d-md-block"></plugins-menu> -->
           </div>
         </div>
-
       </div>
       <!-- End of Menubar -->
-    </div>
-    <div class="flex-row">
-      <div class="d-flex flex-row" style="height: calc(100vh - 50px);">
-        <div id="toolbar" class="d-flex flex-column overlay-color grey-border">
+      <div class="row" style="height: 95vh">
+        <div id="toolbar" class="col-1 overlay-color grey-border">
           <toolbox :toolType="LABEL_TAG"></toolbox>
           <toolbox :toolType="CANVAS_TAG" class="toolbox-border-top"></toolbox>
           <mouse-coord></mouse-coord>
         </div>
-        <div class="d-flex flex-column base-color" style="width: 100vw">
+        <div class="col-9 base-color" style="height: 100%;">
           <div>
-            <actionbar></actionbar>
+            <actionbar style="height: 10%"></actionbar>
           </div>
-          <div>
+          <div style="height: 75%;">
             <workarea></workarea>
           </div>
-          <div class="grey-border mt-auto" style="height: 100px; width: 100%; margin: 0px 2px;">
+          <div class="grey-border" style="height: 15%; width: 100%; margin: 0px 2px;">
             <image-slider thumbnail-width="90px"></image-slider>
           </div>
         </div>
-        <div id="sidebar" class="p-2 overlay-color grey-border" style="width: 350px;">
-          <label-panel></label-panel>
+        <div class="col-2 overlay-color grey-border">
+          <label-panel style="flex: 1; overflow: auto;"></label-panel>
         </div>
       </div>
-
-      <div id="snackbar"></div>
-      <!-- <plugin-window></plugin-window> -->
     </div>
   </div>
 </template>
@@ -59,7 +52,7 @@
 <script>
 import ActionBar from "./components/action-bar/action-bar";
 import ToolBox from "./components/tools/toolbox";
-import WorkArea from "./components/workarea";
+import WorkArea from "./components/workarea/workarea";
 import ImageSlider from "./components/image-slider/image-slider";
 import LabelPanel from "./components/label-panel/label-panel";
 import Menu from "./components/menu/menu";
@@ -83,16 +76,15 @@ export default {
       LABEL_TAG,
       CANVAS_TAG
     };
-  },
-  methods: {
-    click(event) {
-      console.log("APP.VUE", event.target.nodeName);
-    }
   }
 };
 </script>
 
 <style>
+.imglab {
+  height: 100vh;
+}
+
 .labelpolygon,
 .labelcircle,
 .labelbox {
@@ -120,5 +112,10 @@ export default {
   stroke-opacity: 0.8;
   fill-opacity: 0.1;
   pointer-events: none; /* This ons is needed if you want to deselect or drag the shape*/
+}
+
+#menubar {
+  height: 5vh;
+  min-height: 50px;
 }
 </style>

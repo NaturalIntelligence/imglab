@@ -24,7 +24,6 @@ const mutations = {
 
 const getters = {
   getLocalStoreData: () => {
-    console.log("localStorage", localStorage.getItem("imglab-store"));
     return localStorage.getItem("imglab-store");
   }
 };

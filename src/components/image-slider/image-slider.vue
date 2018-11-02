@@ -6,7 +6,7 @@
           <label>
             <font-awesome-icon icon="images" style="font-size: 1.5em"></font-awesome-icon>
             <input
-              id="browseImages"
+              ref="uploadFile"
               type="file"
               class="filebutton"
               accept="image/*"
@@ -18,7 +18,7 @@
             <font-awesome-icon :icon="['far', 'folder-open']" style="font-size: 1.5em"></font-awesome-icon>
             <input
               type="file"
-              id="image_folder"
+              ref="uploadFolder"
               webkitdirectory
               mozdirectory
               msdirectory
@@ -71,6 +71,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import { Image as _Image } from "../../models/Image";
+import { _ } from "../../utils/app";
 
 export default {
   props: {
@@ -124,6 +125,15 @@ export default {
     },
 
     /**
+     * Set the clicked thumbnail as the image selected
+     * @param {Number} index - index in the list of thumbnails
+     */
+    loadIntoWorkArea(index) {
+      let imageSelected = this.thumbnails[index];
+      this.setImageSelected(imageSelected);
+    },
+
+    /**
      * Reads file data, loads the image, and stores the image detail in the
      * list of thumbnails
      * @param {File} - native file interface
@@ -173,18 +183,39 @@ export default {
     },
 
     /**
-     * Set the clicked thumbnail as the image selected
-     * @param {Number} index - index in the list of thumbnails
+     * List of shortcuts for each component
      */
-    loadIntoWorkArea(index) {
-      let imageSelected = this.thumbnails[index];
-      this.setImageSelected(imageSelected);
+    shortcuts(event) {
+      // Shortcuts for slide left / right
+      let sliderKeys = ["n", "m"];
+      let key = event.key;
+      if (sliderKeys.includes(key) && event.ctrlKey && event.altKey) {
+        event.preventDefault();
+        event.stopPropagation();
+        key === "n" ? this.slideleft() : this.slideright();
+      }
+
+      // Shortcuts for importing image / folder
+      if (key !== "o") return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (event.ctrlKey && event.altKey) {
+        this.$refs.uploadFile.click();
+      } else if (event.altKey) {
+        this.$refs.uploadFolder.click();
+      }
     }
   },
   watch: {
     images(val) {
       this.thumbnails = val;
     }
+  },
+  mounted() {
+    _.on(document, "keydown", this.shortcuts);
+  },
+  beforeDestroy() {
+    _.off(document, "keydown", this.shortcuts);
   }
 };
 </script>

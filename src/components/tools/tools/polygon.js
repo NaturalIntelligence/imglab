@@ -1,5 +1,5 @@
 import { POLYGON } from "../../../utils/tool-names";
-import store from "../../../store/store";
+import { generateShapeID } from "../../../utils/app";
 
 export const polygon = {
   type: POLYGON,
@@ -12,8 +12,7 @@ export const polygon = {
     name: "polygon.svg"
   },
   create: function({ canvas }) {
-    let index = store.getters["image-store/nextShapeHash"]();
-    let id = POLYGON + "#" + index;
+    let id = generateShapeID({ type: POLYGON });
     let polygon = canvas
       .nested()
       .polygon()

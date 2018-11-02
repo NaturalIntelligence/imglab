@@ -1,7 +1,7 @@
 export class FeaturePoint {
-  constructor({ x = 0, y = 0, id = "", label = "" } = {}) {
-    this.x = x;
-    this.y = y;
+  constructor({ cx = 0, cy = 0, id = "", label = "" } = {}) {
+    this.cx = cx;
+    this.cy = cy;
     this.id = id;
     this.label = label;
   }

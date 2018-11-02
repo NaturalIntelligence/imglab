@@ -1,54 +1,54 @@
 <template lang="html">
-  <transition name="modal">
+  <div
+    class="modal-mask"
+  >
     <div
-      class="modal-mask"
+      class="modal-wrapper"
+      role="document"
     >
-      <div
-        class="modal-wrapper"
-        role="document"
-      >
-        <div class="modal-container">
-          <div class="modal-header">
-            <h3 class="modal-title">File Name</h3>
-          </div>
-          <div class="modal-body">
-            <label for="file-name">
-              <input
-                class="form-control"
-                type="text"
-                name="file-name"
-                :class="{ error: showError }"
-                :value="filename"
-                @input="onInput"
-              >
-            </label>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              name="button"
-              class="btn btn-secondary float-right"
-              data-dismiss="modal"
-              @click="$emit('close')"
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3 class="modal-title">File Name</h3>
+        </div>
+        <div class="modal-body">
+          <label for="file-name">
+            <input
+              class="form-control"
+              type="text"
+              name="file-name"
+              :class="{ error: showError }"
+              :value="filename"
+              @input="onInput"
             >
-              Cancel
-            </button>
-            <button
-              type="button"
-              name="button"
-              class="btn btn-primary float-right"
-              @click="setFilename"
-            >
-              Confirm
-            </button>
-          </div>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            name="button"
+            class="btn btn-secondary float-right"
+            data-dismiss="modal"
+            @click="$emit('close')"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            name="button"
+            class="btn btn-primary float-right"
+            @click="setFilename"
+          >
+            Confirm
+          </button>
         </div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
+import { _ } from "../../../utils/app";
+
 export default {
   props: {
     value: {
@@ -87,7 +87,23 @@ export default {
         /^[a-z0-9_.@()-]/i.test(this.filename) &&
         this.filename.endsWith(this.ext)
       );
+    },
+
+    /**
+     * Defines possible shortcuts
+     * @param {Event} event
+     */
+    shortcuts(event) {
+      if (event.key === "Escape") {
+        this.$emit("close");
+      }
     }
+  },
+  mounted() {
+    _.on(document, "keyup", this.shortcuts);
+  },
+  beforeDestroy() {
+    _.off(document, "keyup", this.shortcuts);
   }
 };
 </script>

@@ -59,7 +59,13 @@ const mutations = {
   addShapeToImage(state, { id, type, rbox, points }) {
     let image = state.imageSelected;
 
-    var shape = scaleShape(id, type, rbox, points, 1 / image.size.imageScale);
+    var shape = scaleShape({
+      id,
+      type,
+      rbox,
+      points,
+      scale: 1 / image.size.imageScale
+    });
 
     // Increment shape index
     image.shapeIndex++;
@@ -74,7 +80,7 @@ const mutations = {
    * Adds a feature point to a shape
    * @param {String} shapeID - id of shape
    * @param {String} pointID - id of point
-   * @param {SVG.Rbox} position - rbox of point
+   * @param {SVG.Rbox | Object} position - rbox of point, just require { cx, cy }
    */
   addPointToShape(state, { shapeID, pointID, position }) {
     var shape = state.shapes[shapeID];
@@ -90,8 +96,8 @@ const mutations = {
       ...state.featurePoints,
       [pointID]: new FeaturePoint({
         label,
-        x: position.cx * scale,
-        y: position.cy * scale,
+        cx: position.cx * scale,
+        cy: position.cy * scale,
         id: pointID
       })
     };
@@ -127,11 +133,11 @@ const mutations = {
     let name = imageName || state.imageSelected.name;
 
     let shapes = state.images[name].shapes;
-    let index = shapes.findIndex(shape => shape.id === shapeID);
+    let index = shapes.findIndex(_shapeID => _shapeID === shapeID);
 
     if (index < 0) return;
     // Detach shape from image
-    let shape = shapes.splice(index, 1);
+    shapes.splice(index, 1);
 
     // Detach feature points from shape
     state.shapes[shapeID].featurePoints.forEach(featurePointID => {
@@ -140,8 +146,6 @@ const mutations = {
 
     // Detach shape
     state.shapes[shapeID] = undefined;
-
-    return shape;
   },
 
   /**
@@ -259,8 +263,8 @@ const mutations = {
     let point = state.featurePoints[pointID];
 
     if (position) {
-      point.x = position.cx * scale;
-      point.y = position.cy * scale;
+      point.cx = position.cx * scale;
+      point.cy = position.cy * scale;
     }
 
     newLabel && (point.label = newLabel);
@@ -279,7 +283,7 @@ const mutations = {
     let shape = state.shapes[shapeID];
     let scale = 1 / state.imageSelected.size.imageScale;
 
-    // Update list of feature point list of shape
+    // Update feature point list of shape
     shape.featurePoints = featurePoints.map(featurePoint => {
       return featurePoint.id;
     });

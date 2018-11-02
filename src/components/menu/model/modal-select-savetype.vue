@@ -1,82 +1,70 @@
 <template lang="html">
-  <div class="">
-    <transition name="modal">
-      <div
-        class="modal-mask"
-      >
-        <div
-          class="modal-wrapper"
-          role="document"
-        >
-          <div class="modal-container">
-            <div class="modal-header">
-              <h3 class="modal-title">File Name</h3>
+  <div
+    class="modal-mask"
+  >
+    <div
+      class="modal-wrapper"
+      role="document"
+    >
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3 class="modal-title">File Name</h3>
+          <button
+            type="button"
+            name="button"
+            class="btn float-right"
+            @click="$emit('close')"
+          >
+            x
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-empty-style">
+            <li class="list-item-style">
               <button
                 type="button"
-                name="button"
-                class="btn float-right"
-                @click="$emit('close')"
+                class="btn"
+                @click="validate(_ext.NIMN)"
               >
-                x
+                Project file
               </button>
-            </div>
-            <div class="modal-body">
-              <ul class="list-empty-style">
-                <li class="list-item-style">
-                  <button
-                    type="button"
-                    class="btn"
-                    @click="validate(_ext.NIMN)"
-                  >
-                    Project file
-                  </button>
-                </li>
-                <li class="list-item-style">
-                  <button
-                    type="button"
-                    class="btn"
-                    @click="validate(_ext.DLIB_XML)"
-                  >
-                    Dlib XML
-                  </button>
-                </li>
-                <li class="list-item-style">
-                  <button
-                    type="button"
-                    class="btn"
-                    @click="validate(_ext.DLIB_PTS)"
-                  >
-                    Dlib pts
-                  </button>
-                </li>
-                <li class="list-item-style">
-                  <button
-                    type="button"
-                    class="btn"
-                    @click="validate(_ext.COCO_JSON)"
-                  >
-                    COCO JSON
-                  </button>
-                </li>
-                <li class="list-item-style">
-                  <button type="button" class="btn">
-                    Pascal VOC XML
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
+            </li>
+            <li class="list-item-style">
+              <button
+                type="button"
+                class="btn"
+                @click="validate(_ext.DLIB_XML)"
+              >
+                Dlib XML
+              </button>
+            </li>
+            <li class="list-item-style">
+              <button
+                type="button"
+                class="btn"
+                @click="validate(_ext.DLIB_PTS)"
+              >
+                Dlib pts
+              </button>
+            </li>
+            <li class="list-item-style">
+              <button
+                type="button"
+                class="btn"
+                @click="validate(_ext.COCO_JSON)"
+              >
+                COCO JSON
+              </button>
+            </li>
+            <li class="list-item-style">
+              <button type="button" class="btn">
+                Pascal VOC XML
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
-    </transition>
-    <modal-get-filename
-      v-if="fileext"
-      :value="defaultvalues[fileext]"
-      :ext="fileext"
-      @close="fileext = null"
-      @input="saveAs($event, fileext)"
-    >
-    </modal-get-filename>
+    </div>
   </div>
 </template>
 
@@ -85,14 +73,7 @@ import ModalGetFilename from "./modal-get-filename";
 import { mapGetters } from "vuex";
 
 import { Ext } from "../filetype";
-import {
-  encodeAsNimn,
-  encodeAsDlibXML,
-  encodeAsDlibPts,
-  encodeAsCocoJson
-} from "../action/file-handler";
-
-const FileSaver = require("file-saver");
+import { _ } from "../../../utils/app";
 
 export default {
   components: {
@@ -100,13 +81,6 @@ export default {
   },
   data() {
     return {
-      fileext: null,
-      defaultvalues: {
-        [Ext.NIMN]: "Untitled_imgLab",
-        [Ext.DLIB_XML]: "_dlib-xml",
-        [Ext.DLIB_PTS]: "_dlib_pts",
-        [Ext.COCO_JSON]: "_coco"
-      },
       snackbarMsg: ""
     };
   },
@@ -144,81 +118,14 @@ export default {
       // TODO: Implement a snackbar
       this.snackbarMsg = message;
     },
-    /**
-     * Save given data to a file
-     * @param {Any} data - string data
-     * @param {String} filename
-     * @param {String} type - Mime type
-     */
-    download(data, filename, type, encoding = "utf-8") {
-      let blobData = new Blob([data], {
-        type: type + ";charset=" + encoding
-      });
-      FileSaver.saveAs(blobData, filename);
-    },
 
     /**
-     * Given file name and file type, save data to corresponding format
-     * @param {String} filename - filename that includes the file extension
-     * @param {String} filetype - used to determine which handler to call
+     * Defines possible shortcuts
      */
-    saveAs(filename, filetype) {
-      this.fileext = "";
-
-      switch (filetype) {
-        case Ext.NIMN: {
-          this.saveAsNimn(filename);
-          break;
-        }
-        case Ext.DLIB_XML: {
-          this.saveAsDlibXml(filename);
-          break;
-        }
-        case Ext.DLIB_PTS: {
-          this.saveAsDlibPts(filename);
-          break;
-        }
-        case Ext.COCO_JSON: {
-          this.saveAsCocoJSON(filename);
-          break;
-        }
-        default: {
-          console.error("Filetype unknown", filetype);
-        }
+    shortcuts(event) {
+      if (event.key === "Escape") {
+        this.$emit("close");
       }
-    },
-
-    /**
-     * Saves whole project as coco json
-     * @param {String} filename
-     */
-    saveAsCocoJSON(filename) {
-      let cocoData = encodeAsCocoJson(this.$store);
-      this.download(cocoData, filename, "application/json");
-    },
-
-    /**
-     * Save selected shape into a pts file
-     * @param {String} filename
-     */
-    saveAsDlibPts(filename) {
-      let selectedShape = this.getSelectedShape;
-      let ptsData = encodeAsDlibPts(this.$store, selectedShape);
-      this.download(ptsData, filename, "text/plain");
-    },
-
-    saveAsDlibXml(filename) {
-      let dlibXML = encodeAsDlibXML(this.$store);
-      this.download(dlibXML, filename, "text/xml");
-    },
-
-    /**
-     * Save store data to nimn format
-     * @param {String} filename
-     */
-    saveAsNimn(filename) {
-      let nimnStore = encodeAsNimn(this.$store);
-      this.download(nimnStore, filename, "application/nimn");
     },
 
     /**
@@ -235,18 +142,24 @@ export default {
             );
             return;
           }
-          this.fileext = fileext;
+          this.$emit("save", fileext);
           return true;
         }
         case Ext.COCO_JSON:
         case Ext.DLIB_XML:
         case Ext.NIMN:
-          this.fileext = fileext;
+          this.$emit("save", fileext);
           return true;
         default:
           return false;
       }
     }
+  },
+  mounted() {
+    _.on(document, "keyup", this.shortcuts);
+  },
+  beforeDestroy() {
+    _.off(document, "keyup", this.shortcuts);
   }
 };
 </script>

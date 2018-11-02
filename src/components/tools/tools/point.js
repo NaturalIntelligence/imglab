@@ -1,5 +1,5 @@
 import { POINT } from "../../../utils/tool-names";
-import store from "../../../store/store";
+import { generateFeaturePointID } from "../../../utils/app";
 
 export const point = {
   type: POINT,
@@ -28,7 +28,7 @@ export const point = {
   }) {
     let canvasOffset = canvas.node.getBoundingClientRect();
     let point = drawPoint({
-      position: event,
+      event,
       shape,
       canvasOffset,
       featurePointSize,
@@ -51,14 +51,14 @@ export const point = {
  * @returns {SVG.Circle} - featurePoint SVG
  */
 export function drawPoint({
-  position,
+  event = {},
+  position = {},
   shape,
   canvasOffset,
   featurePointSize,
   featurePointColor
 }) {
-  let index = store.getters["image-store/nextFeaturePointHash"](shape.id());
-  let id = POINT + "#" + index;
+  let id = generateFeaturePointID({ shapeID: shape.id() });
   // Get shape location
   var containerOffset = {
     x: parseInt(shape.parent().attr("x"), 10) || 0,
@@ -73,8 +73,8 @@ export function drawPoint({
     .addClass("labelpoint")
     .attr({
       for: shape.node.id,
-      cx: position.x - canvasOffset.x - containerOffset.x,
-      cy: position.y - canvasOffset.y - containerOffset.y,
+      cx: (event.x || position.cx) - canvasOffset.x - containerOffset.x,
+      cy: (event.y || position.cy) - canvasOffset.y - containerOffset.y,
       fill: featurePointColor
     })
     .draggable();
