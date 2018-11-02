@@ -46,7 +46,9 @@ import {
   drawPoint
 } from "../tools/tools/point";
 import {
+  scaleFeaturePoint,
   scaleFeaturePoints,
+  scaleShape,
   scaleShapePoints
 } from "../../utils/scale-shapes";
 import {
@@ -747,10 +749,19 @@ export default {
           let _featurePoints = [];
           shape.featurePoints.forEach(pointID => {
             let featurePoint = this.getFeaturePointByID(pointID);
-            _featurePoints.push(new FeaturePoint(featurePoint));
+            let scale = this.imageScale;
+            _featurePoints.push(
+              // scaleFeaturePoint({
+              //   scale,
+              //   point: featurePoint
+              // })
+              new FeaturePoint(featurePoint)
+            );
           });
           // Copy shape data and add feature point data to shape
+          // let _shape = scaleShape({ ...shape, scale: this.imageScale });
           let _shape = new Shape(shape);
+          console.log("_shape", _shape);
           _shape.featurePoints = _featurePoints;
           // Add copied shape to store
           this.addCopiedElement({ item: _shape });
@@ -767,9 +778,12 @@ export default {
         this.copiedElements.forEach(shape => {
           // Get new shape id
           let shapeID = generateShapeID({ type: shape.type });
+          // Scale shape to image
+          let scale = this.imageScale / shape.zoomScale;
+          let scaledShape = scaleShape({ ...shape, scale });
           // Add shape to image
           this.addShapeToImage({
-            ...shape,
+            ...scaledShape,
             id: shapeID,
           });
           // Add shape to selected shapes
@@ -777,12 +791,14 @@ export default {
           // Add feature points to shape
           shape.featurePoints.forEach(point => {
             let pointID = generateFeaturePointID({ shapeID });
+            // scale feature point to image
+            let scaledFP = scaleFeaturePoint({ point, scale });
             this.addPointToShape({
               shapeID,
               pointID,
               position: {
-                cx: point.cx,
-                cy: point.cy
+                cx: scaledFP.cx,
+                cy: scaledFP.cy
               }
             });
           });

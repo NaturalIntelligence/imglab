@@ -10,7 +10,8 @@ import { FeaturePoint } from "../models/FeaturePoint";
  * @param {Number} scale - scale used to rescale shape
  * @returns {Shape} scaled shape
  */
-export function scaleShape(id, type, rbox, points, scale) {
+export function scaleShape({ id, type, rbox, points, scale }) {
+  console.log("scaleShape", id, type, rbox, points, scale);
   return new Shape({
     id,
     type,
@@ -60,6 +61,14 @@ export function scaleRbox(rbox, scale) {
   };
 }
 
+export function scaleFeaturePoint({ point, scale }) {
+  return new FeaturePoint({
+    cx: point.cx * scale,
+    cy: point.cy * scale,
+    label: point.label,
+    id: point.id
+  });
+}
 /**
  * Scales the feature points according to scale
  * @param {FeaturePoint[]} featurePoints - array of FeaturePoints
@@ -70,11 +79,6 @@ export function scaleFeaturePoints(featurePoints, scale) {
   if (!featurePoints) return;
 
   return featurePoints.map(point => {
-    return new FeaturePoint({
-      cx: point.cx * scale,
-      cy: point.cy * scale,
-      label: point.label,
-      id: point.id
-    });
+    return scaleFeaturePoint({ point, scale });
   });
 }

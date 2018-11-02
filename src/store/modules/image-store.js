@@ -59,7 +59,13 @@ const mutations = {
   addShapeToImage(state, { id, type, rbox, points }) {
     let image = state.imageSelected;
 
-    var shape = scaleShape(id, type, rbox, points, 1 / image.size.imageScale);
+    var shape = scaleShape({
+      id,
+      type,
+      rbox,
+      points,
+      scale: 1 / image.size.imageScale
+    });
 
     // Increment shape index
     image.shapeIndex++;
