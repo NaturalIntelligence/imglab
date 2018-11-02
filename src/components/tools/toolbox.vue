@@ -28,9 +28,20 @@
 </template>
 
 <script>
+import {
+  LABEL_TAG,
+  CANVAS_TAG,
+  RECTANGLE,
+  CIRCLE,
+  POLYGON,
+  POINT,
+  MOVE,
+  ZOOM,
+  OPACITY
+} from "../../utils/tool-names";
+import { _ } from "../../utils/app";
 import { tools as t } from "./config/config";
 import { mapGetters, mapMutations } from "vuex";
-import { LABEL_TAG } from "../../utils/tool-names";
 
 export default {
   props: {
@@ -71,7 +82,41 @@ export default {
           selectedTool: tool
         });
       }
+    },
+
+    /**
+     * List of tool shortcuts
+     */
+    shortcuts(event) {
+      let keys = ["f", "r", "c", "p", "m", "z", "l"];
+      let keyMappings = {
+        f: POINT,
+        r: RECTANGLE,
+        c: CIRCLE,
+        p: POLYGON,
+        m: MOVE,
+        z: ZOOM,
+        l: OPACITY,
+      };
+
+      if (!keys.includes(event.key)) return;
+
+      let toolname = keyMappings[event.key];
+      let tools = Object.keys(this.tools[this.toolType]);
+      if (!tools.includes(toolname)) return;
+
+      if (event.altKey) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.$refs[toolname][0].click();
+      }
     }
+  },
+  mounted() {
+    _.on(document, "keydown", this.shortcuts);
+  },
+  beforeDestroy() {
+    _.off(document, "keydown", this.shortcuts);
   }
 };
 </script>
