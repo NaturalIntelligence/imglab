@@ -87,7 +87,9 @@ export default {
       this.$ga.event({
         eventCategory: "points - count",
         eventAction: "save",
-        eventLabel: `${Object.keys(imageStore.featurePoints).length} feature points`
+        eventLabel: `${
+          Object.keys(imageStore.featurePoints).length
+        } feature points`
       });
     },
 
@@ -114,7 +116,7 @@ export default {
       this.$ga.event({
         eventCategory: "filetype",
         eventAction: "save",
-        eventLabel: filetype,
+        eventLabel: filetype
       });
     },
 

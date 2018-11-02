@@ -10,9 +10,9 @@
           <!-- form-inline input-group -->
           <div class="row justify-content-center align-content-center">
             <a href="https://github.com/NaturalIntelligence/imglab">
-    						<img src="./assets/imglab_logo.png" height="48px" style="margin-top: 2px">
-    					</a>
-            <span style="font-size: 2em; margin-top:5px;">Img Lab</span>
+			        <img src="./assets/imglab_logo.png" height="48px" style="margin-top: 2px">
+              <span style="font-size: 2em; margin-top:5px;">Img Lab</span>
+  					</a>
           </div>
         </div>
         <div class="col-3 col-sm-4 col-md-4 col-xl-4">
@@ -46,32 +46,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="flex-row">
-      <div class="d-flex flex-row" style="height: calc(100vh - 50px);">
-        <div id="toolbar" class="d-flex flex-column overlay-color grey-border">
-          <toolbox :toolType="LABEL_TAG"></toolbox>
-          <toolbox :toolType="CANVAS_TAG" class="toolbox-border-top"></toolbox>
-          <mouse-coord></mouse-coord>
-        </div>
-        <div class="d-flex flex-column base-color" style="width: 100%; overflow: hidden;">
-          <div>
-            <actionbar></actionbar>
-          </div>
-          <div>
-            <workarea></workarea>
-          </div>
-          <div class="grey-border mt-auto" style="height: 100px; width: 100%; margin: 0px 2px;">
-            <image-slider thumbnail-width="90px"></image-slider>
-          </div>
-        </div>
-        <div id="sidebar" class="p-2 overlay-color grey-border" style="width: 350px;">
-          <label-panel></label-panel>
-        </div>
-      </div>
-
-      <div id="snackbar"></div>
-      <plugin-window></plugin-window>
-    </div> -->
   </div>
 </template>
 
@@ -102,13 +76,6 @@ export default {
       LABEL_TAG,
       CANVAS_TAG
     };
-  },
-  methods: {
-    click(event) {
-      console.log("APP.VUE", event.target.nodeName);
-    }
-  },
-  mounted() {
   }
 };
 </script>

@@ -30,7 +30,6 @@
 <script>
 import {
   LABEL_TAG,
-  CANVAS_TAG,
   RECTANGLE,
   CIRCLE,
   POLYGON,
@@ -105,7 +104,7 @@ export default {
         p: POLYGON,
         m: MOVE,
         z: ZOOM,
-        l: OPACITY,
+        l: OPACITY
       };
       // Stop if key doesn't exist in list of shortcuts
       if (!keys.includes(key)) return;

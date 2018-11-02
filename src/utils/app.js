@@ -115,7 +115,6 @@ export function formatID() {
  */
 export function getSVG({ svg, id }) {
   let dom = document.getElementById(id);
-  // console.log("getSVG", "dom", dom, "id", id);
   return svg.adopt(dom);
 }
 

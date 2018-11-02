@@ -137,7 +137,7 @@ const mutations = {
 
     if (index < 0) return;
     // Detach shape from image
-    let shape = shapes.splice(index, 1);
+    shapes.splice(index, 1);
 
     // Detach feature points from shape
     state.shapes[shapeID].featurePoints.forEach(featurePointID => {

@@ -11,7 +11,6 @@ import { FeaturePoint } from "../models/FeaturePoint";
  * @returns {Shape} scaled shape
  */
 export function scaleShape({ id, type, rbox, points, scale }) {
-  console.log("scaleShape", id, type, rbox, points, scale);
   return new Shape({
     id,
     type,
