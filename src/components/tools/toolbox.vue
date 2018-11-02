@@ -88,6 +88,15 @@ export default {
      * List of tool shortcuts
      */
     shortcuts(event) {
+      let key = event.key;
+      // Check if action keys was pressed and map to action key
+      let actionKeys = ["[", "]"];
+      if (actionKeys.includes(key) && event.altKey) {
+        let sTool = this.selectedTool;
+        if (sTool && sTool.type === ZOOM) return;
+        key = "z";
+      }
+      // List of available keys and mappings
       let keys = ["f", "r", "c", "p", "m", "z", "l"];
       let keyMappings = {
         f: POINT,
@@ -98,13 +107,13 @@ export default {
         z: ZOOM,
         l: OPACITY,
       };
-
-      if (!keys.includes(event.key)) return;
-
-      let toolname = keyMappings[event.key];
+      // Stop if key doesn't exist in list of shortcuts
+      if (!keys.includes(key)) return;
+      // Check if tool exists in toolbar
+      let toolname = keyMappings[key];
       let tools = Object.keys(this.tools[this.toolType]);
       if (!tools.includes(toolname)) return;
-
+      // Activate tool via click
       if (event.altKey && !event.ctrlKey) {
         event.preventDefault();
         event.stopPropagation();
