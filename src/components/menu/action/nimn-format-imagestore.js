@@ -196,11 +196,11 @@ export default {
         type: "map",
         detail: [
           {
-            name: "x",
+            name: "cx",
             type: "number"
           },
           {
-            name: "y",
+            name: "cy",
             type: "number"
           },
           {

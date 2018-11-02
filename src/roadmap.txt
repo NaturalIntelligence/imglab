@@ -1,5 +1,5 @@
 1) Support PascalVoc format
 2) Implement keyboard shortcuts
 3) Face plugin support
-4) Enable google tags -> payment and analytics
+4) Enable google tags -> payment
 5) Work on CSS improvements

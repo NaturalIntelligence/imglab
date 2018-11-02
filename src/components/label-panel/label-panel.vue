@@ -4,11 +4,12 @@
   >
     <div
       class="d-flex flex-column"
-      style="height: 100%;"
     >
       <div class="mb-2 mt-2">
         Category Name
         <autocomplete-input
+          class="form-group"
+          :autocompleteClass="['form-control']"
           :value="selectedShape.category"
           :list="appCategories"
           @added="addCategory"

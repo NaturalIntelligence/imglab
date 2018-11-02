@@ -1,3 +1,6 @@
+import store from "../store/store";
+import { POINT } from "./tool-names";
+
 export function getCoordinates(event, element) {
   var rect = element.getBoundingClientRect();
   var x = event.clientX - rect.left;
@@ -12,11 +15,13 @@ export function getCoordinates(event, element) {
  * Helper function to convert a single value to an array
  */
 export function convertToArray(val) {
-  if (val instanceof Array) {
+  if (!val) return [];
+
+  if (val.constructor === Array) {
     return val;
   }
 
-  return val && val !== null ? [val] : [];
+  return [val];
 }
 
 /**
@@ -110,6 +115,7 @@ export function formatID() {
  */
 export function getSVG({ svg, id }) {
   let dom = document.getElementById(id);
+  // console.log("getSVG", "dom", dom, "id", id);
   return svg.adopt(dom);
 }
 
@@ -123,4 +129,24 @@ export function prettifyID({ id }) {
   let hash = types[1].split("-");
   let eid = hash.pop();
   return types[0] + "#" + eid;
+}
+
+/**
+ * Helper function to generate shape ID
+ * @param {String} type - shape type
+ * @returns {String}
+ */
+export function generateShapeID({ type }) {
+  let index = store.getters["image-store/nextShapeHash"]();
+  return type + "#" + index;
+}
+
+/**
+ * Helper function to generate featurePoint ID
+ * @param {String} shapeID
+ * @returns {String}
+ */
+export function generateFeaturePointID({ shapeID }) {
+  let index = store.getters["image-store/nextFeaturePointHash"](shapeID);
+  return POINT + "#" + index;
 }

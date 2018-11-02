@@ -155,12 +155,12 @@ export function decodeDlibXML(data) {
 
         if (part.constructor !== Array) part = [part];
 
-        part.forEach(({ _attributes: { x, y } }) => {
+        part.forEach(({ _attributes: { x: cx, y: cy } }) => {
           let index = _featurePointIndex++;
           let fpHash = shapeHash + "-" + index;
           let featurePoint = new FeaturePoint({
-            x,
-            y,
+            cx,
+            cy,
             id: POINT + "#" + fpHash,
             label: POINT + "#" + index
           });
@@ -257,8 +257,8 @@ export function encodeAsDlibXML(store) {
       shape.featurePoints.forEach(featurePointID => {
         let fp = featurePoints[featurePointID];
         xml += `
-          <part name='${fp.id}' x='${Math.floor(fp.x)}' y='${Math.floor(
-          fp.y
+          <part name='${fp.id}' x='${Math.floor(fp.cx)}' y='${Math.floor(
+          fp.cy
         )}'/>`;
       });
       xml += `
@@ -295,7 +295,7 @@ n_points: ${shape.featurePoints.length}
   let featurePoints = storeData["image-store"].featurePoints;
   shape.featurePoints.forEach(featurePointID => {
     let featurePoint = featurePoints[featurePointID];
-    data += `${Math.floor(featurePoint.x)} ${Math.floor(featurePoint.y)}\n`;
+    data += `${Math.floor(featurePoint.cx)} ${Math.floor(featurePoint.cy)}\n`;
   });
 
   data += "}";

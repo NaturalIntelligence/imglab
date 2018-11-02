@@ -1,5 +1,5 @@
 import { CIRCLE } from "../../../utils/tool-names";
-import store from "../../../store/store";
+import { generateShapeID } from "../../../utils/app";
 
 export const circle = {
   type: CIRCLE,
@@ -12,8 +12,7 @@ export const circle = {
     name: "circle.svg"
   },
   create: function({ canvas }) {
-    let index = store.getters["image-store/nextShapeHash"]();
-    let id = CIRCLE + "#" + index;
+    let id = generateShapeID({ type: CIRCLE });
     let circle = canvas
       .nested()
       .circle()

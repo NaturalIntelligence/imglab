@@ -29,6 +29,14 @@ const mutations = {
   },
 
   /**
+   * Adds a single copied shape
+   * @param {Shape} item
+   */
+  addCopiedElement(state, { item }) {
+    item && state.copiedElements.push(item);
+  },
+
+  /**
    * Removes a shape or featurePoint from selected elements
    * @param {String} shapeID - shape id
    * @param {String} featurePointID - featurePoint id

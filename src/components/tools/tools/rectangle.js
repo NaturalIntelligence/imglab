@@ -1,5 +1,5 @@
 import { RECTANGLE } from "../../../utils/tool-names";
-import store from "../../../store/store";
+import { generateShapeID } from "../../../utils/app";
 
 export const rectangle = {
   type: RECTANGLE,
@@ -12,8 +12,7 @@ export const rectangle = {
     name: "rectangle.svg"
   },
   create: function({ canvas }) {
-    let index = store.getters["image-store/nextShapeHash"]();
-    let id = RECTANGLE + "#" + index;
+    let id = generateShapeID({ type: RECTANGLE });
     let rect = canvas
       .nested()
       .rect()

@@ -142,7 +142,6 @@ export default {
             );
             return;
           }
-          console.log("selectedShape", selectedShape);
           this.$emit("save", fileext);
           return true;
         }

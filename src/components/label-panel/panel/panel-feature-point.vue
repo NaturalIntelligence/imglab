@@ -180,7 +180,11 @@ export default {
 
   #feature-points-list {
     margin-top: 10px;
-    overflow-x: hidden;
+    overflow-x: auto;
+  }
+
+  .panel-wrapper {
+    height: 100%;
   }
 
   .focusInput {

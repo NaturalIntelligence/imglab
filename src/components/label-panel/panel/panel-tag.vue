@@ -1,13 +1,12 @@
 <template lang="html">
   <div
-    class="tags-wrapper"
     ref="wrapper"
   >
     <div class="tags-header">
       Tags
     </div>
     <div
-      class="form-control"
+      class="form-group"
       @click="focusInput"
     >
       <draggable
@@ -130,7 +129,6 @@ export default {
     },
 
     removeTagByBackspace() {
-      console.log("removeTagByBackspace");
       // Stop if there's text in input tag
       if (this.tagText.length !== 0) return;
 

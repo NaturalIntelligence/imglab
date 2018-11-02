@@ -49,14 +49,14 @@ export function scaleRbox(rbox, scale) {
   if (!rbox) return;
 
   return {
-    x: rbox.x * scale,
-    y: rbox.y * scale,
-    cx: (rbox.cx || 0) * scale,
-    cy: (rbox.cy || 0) * scale,
-    w: rbox.w * scale,
-    h: rbox.h * scale,
-    width: rbox.w * scale,
-    height: rbox.h * scale
+    x: Math.floor(rbox.x * scale),
+    y: Math.floor(rbox.y * scale),
+    cx: Math.floor((rbox.cx || 0) * scale),
+    cy: Math.floor((rbox.cy || 0) * scale),
+    w: Math.floor(rbox.w * scale),
+    h: Math.floor(rbox.h * scale),
+    width: Math.floor(rbox.w * scale),
+    height: Math.floor(rbox.h * scale)
   };
 }
 
@@ -71,8 +71,8 @@ export function scaleFeaturePoints(featurePoints, scale) {
 
   return featurePoints.map(point => {
     return new FeaturePoint({
-      x: point.x * scale,
-      y: point.y * scale,
+      cx: point.cx * scale,
+      cy: point.cy * scale,
       label: point.label,
       id: point.id
     });

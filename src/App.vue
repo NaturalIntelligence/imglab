@@ -1,9 +1,8 @@
 <template>
-  <div class=""
-    @click="click">
+  <div class="imglab">
     <prompt-restore></prompt-restore>
     <div class="container-fluid">
-      <div id="menubar" class="row overlay-color align-items-center" style="height: 50px;">
+      <div id="menubar" class="row overlay-color align-items-center">
         <div class="col-3 col-sm-2 col-md-1 col-xl-1 no-pl">
           <app-menu></app-menu>
         </div>
@@ -23,18 +22,38 @@
             <plugins-menu class="d-none d-md-block"></plugins-menu> -->
           </div>
         </div>
-
       </div>
       <!-- End of Menubar -->
+      <div class="row" style="height: 95vh">
+        <div id="toolbar" class="col-1 overlay-color grey-border">
+          <toolbox :toolType="LABEL_TAG"></toolbox>
+          <toolbox :toolType="CANVAS_TAG" class="toolbox-border-top"></toolbox>
+          <mouse-coord></mouse-coord>
+        </div>
+        <div class="col-9 base-color" style="height: 100%;">
+          <div>
+            <actionbar style="height: 10%"></actionbar>
+          </div>
+          <div style="height: 75%;">
+            <workarea></workarea>
+          </div>
+          <div class="grey-border" style="height: 15%; width: 100%; margin: 0px 2px;">
+            <image-slider thumbnail-width="90px"></image-slider>
+          </div>
+        </div>
+        <div class="col-2 overlay-color grey-border">
+          <label-panel style="flex: 1; overflow: auto;"></label-panel>
+        </div>
+      </div>
     </div>
-    <div class="flex-row">
+    <!-- <div class="flex-row">
       <div class="d-flex flex-row" style="height: calc(100vh - 50px);">
         <div id="toolbar" class="d-flex flex-column overlay-color grey-border">
           <toolbox :toolType="LABEL_TAG"></toolbox>
           <toolbox :toolType="CANVAS_TAG" class="toolbox-border-top"></toolbox>
           <mouse-coord></mouse-coord>
         </div>
-        <div class="d-flex flex-column base-color" style="width: 100vw">
+        <div class="d-flex flex-column base-color" style="width: 100%; overflow: hidden;">
           <div>
             <actionbar></actionbar>
           </div>
@@ -51,15 +70,15 @@
       </div>
 
       <div id="snackbar"></div>
-      <!-- <plugin-window></plugin-window> -->
-    </div>
+      <plugin-window></plugin-window>
+    </div> -->
   </div>
 </template>
 
 <script>
 import ActionBar from "./components/action-bar/action-bar";
 import ToolBox from "./components/tools/toolbox";
-import WorkArea from "./components/workarea";
+import WorkArea from "./components/workarea/workarea";
 import ImageSlider from "./components/image-slider/image-slider";
 import LabelPanel from "./components/label-panel/label-panel";
 import Menu from "./components/menu/menu";
@@ -95,6 +114,10 @@ export default {
 </script>
 
 <style>
+.imglab {
+  height: 100vh;
+}
+
 .labelpolygon,
 .labelcircle,
 .labelbox {
@@ -122,5 +145,10 @@ export default {
   stroke-opacity: 0.8;
   fill-opacity: 0.1;
   pointer-events: none; /* This ons is needed if you want to deselect or drag the shape*/
+}
+
+#menubar {
+  height: 5vh;
+  min-height: 50px;
 }
 </style>
