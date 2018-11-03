@@ -29,7 +29,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 Vue.use(VueAnalytics, {
-  id: "UA-128418867-1"
+  id: "UA-119603824-1"
 });
 Vue.use(svgjs);
 
