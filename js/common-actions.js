@@ -2,14 +2,14 @@
 
     if (e.key == '≠') {//Zoom in
         $("#tool-zoom").click();
-        $("img[data-zoom-type='in']").click();
+        $("[data-zoom-type='in']").zoom();
         e.preventDefault();
         e.stopPropagation();
      }
     
-     if (e.key == '–' && e.altKey) {//Zoom out
+     if (e.key == '–') {//Zoom out
         $("#tool-zoom").click();
-        $("img[data-zoom-type='out']").click();
+        $("[data-zoom-type='out']").zoom();
         e.preventDefault();
         e.stopPropagation();
      }
