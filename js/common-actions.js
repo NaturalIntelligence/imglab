@@ -1,4 +1,5 @@
   document.addEventListener('keydown', e=>{
+
     if (e.key == '≠') {//Zoom in
         $("#tool-zoom").click();
         $("img[data-zoom-type='in']").click();
@@ -13,3 +14,4 @@
         e.stopPropagation();
      }
 });
+
