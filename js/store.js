@@ -157,10 +157,20 @@ function updateShapeDetailInStore(shapeId, bbox, points){
 /**
  * Adds a shape into labelling data and returns a shape object
  */
-function attachShapeToImg(id, type, bbox, points){
+function attachShapeToImg(id, type, bbox, points, metadata){
     var shape = scaleShape(id, type, bbox, points, 1 / imgSelected.size.imageScale);
+    if (metadata) {
+        shape.label = metadata.label;
+        shape.category = metadata.category;
+    }
     labellingData[ imgSelected.name ].shapes.push(shape);
     return shape;
+}
+
+function getMetadata(shape) {
+    shape = getShape(shape.node.id);
+    return {'label': shape.label,
+            'category': shape.category};
 }
 
 function addImgToStore(imgname, size) {

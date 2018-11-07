@@ -71,6 +71,7 @@
                  */
                 copiedElements = [];
                 selectedElements.forEach(shape => {
+                    console.log(getMetadata(shape));
                     if (shape.hasClass('shape')) {
                         var featurePoints = [];
                         shape.siblings()
@@ -86,7 +87,8 @@
                           'type': shape.type,
                           'rbox': shape.rbox(myCanvas),
                           'points': getPoints(shape),
-                          'featurePoints': featurePoints
+                          'featurePoints': featurePoints,
+                          'metadata': getMetadata(shape)
                         });
                     }
                 })
@@ -104,7 +106,7 @@
                     copiedElements.forEach(shape => {
                         // Add shape data and any points into labellingData
                         var shapeId = shape.type + currentImgData.shapeIndex++;
-                        var shapeData = attachShapeToImg(shapeId, shape.type, shape.rbox, shape.points);
+                        var shapeData = attachShapeToImg(shapeId, shape.type, shape.rbox, shape.points, shape.metadata);
                         shape.featurePoints.forEach(point => {
                             var pointId = shapeId + point.type + currentImgData.pointIndex++;
                             attachPointToShape(shapeId, pointId, point.rbox);
