@@ -3,7 +3,6 @@
     if (e.key == '≠') {//Zoom in
         $("#tool-zoom").click();
         $("[data-zoom-type='in']").click();
-        console.log('test');
         e.preventDefault();
         e.stopPropagation();
      }
