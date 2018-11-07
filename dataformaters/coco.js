@@ -39,8 +39,8 @@ var cocoFormater = {
                             height : annotation.bbox[3],
                             w : annotation.bbox[2],
                             h : annotation.bbox[3],
-                            cx : annotation.bbox[0]+annotation.bbox[2] / 2, // x max
-                            cy : annotation.bbox[1]+annotation.bbox[3] / 2, // y max
+                            cx : annotation.bbox[0]+annotation.bbox[2] / 2,
+                            cy : annotation.bbox[1]+annotation.bbox[3] / 2,
                         }
                     }
                     let id = "SvgjsRect",
@@ -63,16 +63,17 @@ var cocoFormater = {
                         }
                         points = polyPoints;
                     }
+
                     labellingData[ image.file_name ].shapes.push({
                         "id": id+idNumber.toString(),
-                        "label": "",
+                        "label": "unlabelled",
                         "attributes": [],
                         "tags": [],
                         "type": type,
                         "bbox": annotation.bbox,
                         "points": points,
                         "featurePoints": [],
-                        "category": "undefined"
+                        "category": categories.filter((x)=>x.id == annotation.category_id)[0].name
                     });
                     idNumber++;
                 }
@@ -127,7 +128,7 @@ var cocoFormater = {
                     ];
                     area = calcArea(points);
                 }
-                
+
                 cocoData.annotations.push({
                     segmentation : [
                         points
@@ -139,7 +140,8 @@ var cocoFormater = {
                     "category_id": categories.indexOf(shape.category) + 1,
                     "id": shape_i+1,
                     "ignore": 0
-                })
+                });
+
             }
         }
 
