@@ -71,7 +71,6 @@
                  */
                 copiedElements = [];
                 selectedElements.forEach(shape => {
-                    console.log(getMetadata(shape));
                     if (shape.hasClass('shape')) {
                         var featurePoints = [];
                         shape.siblings()
@@ -107,10 +106,11 @@
                         // Add shape data and any points into labellingData
                         var shapeId = shape.type + currentImgData.shapeIndex++;
                         var shapeData = attachShapeToImg(shapeId, shape.type, shape.rbox, shape.points, shape.metadata);
-                        shape.featurePoints.forEach(point => {
+                        shape.featurePoints.forEach((point, index) => {
                             var pointId = shapeId + point.type + currentImgData.pointIndex++;
-                            attachPointToShape(shapeId, pointId, point.rbox);
+                            attachPointToShape(shapeId, pointId, point.rbox, shapeData.featurePointLabels[index]);
                         });
+                        delete shape.featurePointLabels;
                     });
                 }
                 // Call update to redraw shapes
