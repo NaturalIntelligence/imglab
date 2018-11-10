@@ -110,6 +110,7 @@
                             var pointId = shapeId + point.type + currentImgData.pointIndex++;
                             attachPointToShape(shapeId, pointId, point.rbox, shapeData.featurePointLabels[index]);
                         });
+                        // feature point labels no longer needed here after attaching feature points
                         delete shape.featurePointLabels;
                     });
                 }
