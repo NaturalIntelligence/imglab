@@ -13,7 +13,7 @@ Please have a look at our:
 
 * [Development guide](docs/development.md) to get a basic understanding of our project structure and motivation.
 
-* [Api guide](docs/API.md) to understand each individual component better. The guide contains a brief component description, data, computed methods, events, and methods.
+* [Component API guide](docs/component-api.md) to understand each individual component better. The guide contains a brief component description, data, computed methods, events, and methods.
 
 ## Project Setup
 
