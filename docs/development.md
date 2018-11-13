@@ -54,7 +54,7 @@ Contains any global utility functions and constants. Also contains an event bus 
 
 ### Component API
 
-Component data, events, computed properties, methods, etc can be found in the [component api](docs/component-api.md).
+Component data, events, computed properties, methods, etc can be found in the [component api](component-api.md).
 
 ### Component overview
 
