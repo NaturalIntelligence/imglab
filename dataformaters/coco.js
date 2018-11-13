@@ -52,7 +52,7 @@ var cocoFormater = {
                         id = "SvgjsCircle",
                         type = "circle",
                         points = [bbox.cx, bbox.cy, (bbox.height / 2)];
-                    } else if (segLength !== 8 || (segmentation[0] || segmentation[6]) !== bbox.x || (segmentation[1] || segmentation[3]) !== bbox.y || (segmentation[2] || segmentation[4]) !== bbox.width || (segmentation[5] || segmentation[7]) !== bbox.height) {
+                    } else if ( segLength !== 8 || (segmentation[2] - segmentation[0]) !== (segmentation[4] - segmentation[6]) || (segmentation[3] - segmentation[1]) !== (segmentation[5] - segmentation[7]) ) {
                         let polyPoints = [];
                         id = "SvgjsPolygon",
                         type = "polygon";
