@@ -1,8 +1,8 @@
-import { POLYGON } from "../../../utils/tool-names";
+import { POLYGON, SHAPE } from "../../../utils/tool-names";
 import { generateShapeID } from "../../../utils/app";
 
 export const polygon = {
-  type: POLYGON,
+  type: SHAPE,
   title: POLYGON,
   description: "Draw a polygon",
   drawable: true,

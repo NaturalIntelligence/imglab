@@ -85,10 +85,16 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 
+/**
+ * Panel that shows a list of shape attributes. Allows users to add or remove
+ * existing attributes.
+ */
 export default {
   data() {
     return {
+      // Property to be added
       enterProperty: "",
+      // Value to be added
       enterValue: ""
     };
   },
@@ -106,6 +112,9 @@ export default {
       getShapeAttributes: "getShapeAttributes"
     }),
 
+    /**
+     * Return shape attributes
+     */
     shapeAttributes() {
       let shapeID = this.selectedShapeID;
       return shapeID && this.getShapeAttributes(shapeID);
@@ -125,21 +134,7 @@ export default {
     }),
 
     /**
-     * Adds a new attribute to shape and app
-     * @param {String} attribute
-     */
-    addProperty(attribute) {
-      if (!this.suggestedProperties.includes(attribute)) {
-        this.addAttributeToApp({ attribute });
-      }
-
-      if (!this.shapeAttributes.includes(attribute)) {
-        this.addAttributeToShape({ shapeID: this.selectedShapeID, attribute });
-      }
-    },
-
-    /**
-     * Adds an attribute to both shape and app on click
+     * Adds an attribute to both shape and store
      */
     addAttribute() {
       this.$nextTick(function() {
@@ -158,7 +153,7 @@ export default {
 
     /**
      * Remove an attribute from shape based on index
-     * @param {Number} index
+     * @param {Number} index - list item index
      */
     removeAttribute(index) {
       let shapeID = this.selectedShapeID;
@@ -167,16 +162,17 @@ export default {
 
     /**
      * Returns a list of suggested values for autocompletion
-     * @param {String} attribute
+     * @param {String} property - property used for filtering
+     * @return {String[]} array of suggested values
      */
-    suggestedValues(attribute) {
-      return this.getSuggestedValues(attribute);
+    suggestedValues(property) {
+      return this.getSuggestedValues(property);
     },
 
     /**
-     * Updates an attribute prop when it's changed
-     * @param {Attribute} attribute - contains old attribute and props
-     * @param {String} newProp
+     * Updates an attribute property when it's changed
+     * @param {Attribute} attribute - contains old property-value pair
+     * @param {String} newProp - new property
      */
     updateAttributeProp(attribute, newProp) {
       let shapeID = this.selectedShapeID;
@@ -192,8 +188,8 @@ export default {
 
     /**
      * Update attribute value when it's changed
-     * @param {Attribute} attribute - contains old attribute and props
-     * @param {String} newvalue
+     * @param {Attribute} attribute - contains old property and value
+     * @param {String} newValue - new value
      */
     updateAttributeValue(attribute, newValue) {
       let shapeID = this.selectedShapeID;

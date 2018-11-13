@@ -5,14 +5,14 @@
     <div
       v-for="(tool, index) in tools[toolType]" :key="index"
       class="tool-button"
-      :id="tool.type"
-      :ref="tool.type"
+      :id="tool.title"
+      :ref="tool.title"
       @click="dispatch(tool)"
     >
       <img
         v-if="tool.icon.isSVG"
         :src="require('../../assets/icons/' + tool.icon.name)"
-        :alt="tool.type"
+        :alt="tool.title"
       >
       <font-awesome-icon
         v-else
@@ -21,7 +21,7 @@
       >
       </font-awesome-icon>
       <div>
-        {{ tool.type }}
+        {{ tool.title }}
       </div>
     </div>
   </div>
@@ -39,9 +39,13 @@ import {
   OPACITY
 } from "../../utils/tool-names";
 import { _ } from "../../utils/app";
-import { tools as t } from "./config/config";
+import { tools as config } from "./config/config";
 import { mapGetters, mapMutations } from "vuex";
 
+/**
+ * Loads the tools specified in config file. Shortcuts can be invoked to select
+ * tool.
+ */
 export default {
   props: {
     toolType: {
@@ -51,7 +55,8 @@ export default {
   },
   data() {
     return {
-      tools: t
+      // Set list of tools from config
+      tools: config
     };
   },
   computed: {
@@ -69,9 +74,9 @@ export default {
      * @param {Tool} tool - selected tool
      */
     dispatch(tool) {
-      let currentTool = this.$refs[tool.type][0];
+      let currentTool = this.$refs[tool.title][0];
 
-      if (this.selectedTool && tool.type === this.selectedTool.type) {
+      if (this.selectedTool && tool.title === this.selectedTool.title) {
         // Unselect current tool
         this.setSelectedTool();
       } else {
@@ -85,6 +90,7 @@ export default {
 
     /**
      * List of tool shortcuts
+     * @param {Event} event - keydown event
      */
     shortcuts(event) {
       let key = event.key;
@@ -92,7 +98,7 @@ export default {
       let actionKeys = ["[", "]"];
       if (actionKeys.includes(key) && event.altKey) {
         let sTool = this.selectedTool;
-        if (sTool && sTool.type === ZOOM) return;
+        if (sTool && sTool.title === ZOOM) return;
         key = "z";
       }
       // List of available keys and mappings
@@ -121,9 +127,15 @@ export default {
     }
   },
   mounted() {
+    /**
+     * Attach shortcuts to global keydown event
+     */
     _.on(document, "keydown", this.shortcuts);
   },
   beforeDestroy() {
+    /**
+     * Detach shortcuts from global keydown event
+     */
     _.off(document, "keydown", this.shortcuts);
   }
 };

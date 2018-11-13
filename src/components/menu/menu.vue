@@ -59,12 +59,17 @@ import { Ext } from "./filetype";
 import { decodeCocoJson, decodeDlibXML } from "./action/file-handler";
 import { _ } from "../../utils/app";
 
+/**
+ * Menu component. Valid actions are open/save file, or to open app settings.
+ * This component also handles decoding files for the "open" action.
+ */
 export default {
   components: {
     "modal-save": ModalSave
   },
   data() {
     return {
+      // Boolean toggle to display modal-save component
       showModal: false
     };
   },
@@ -76,14 +81,13 @@ export default {
     ...mapMutations("image-store", {
       initImageStore: "init"
     }),
-
     ...mapMutations("label-data", {
       initLabelData: "init"
     }),
 
     /**
-     * Loads dlib xml file
-     * @param {String} data
+     * Loads dlib xml file data to store
+     * @param {String} data - dlib xml data
      */
     loadDlibXml(data) {
       let storeData = decodeDlibXML(data);
@@ -91,8 +95,8 @@ export default {
     },
 
     /**
-     * Loads Coco json file
-     * @param {String} data
+     * Loads Coco json file data to store
+     * @param {String} data - coco json data
      */
     loadJSONFile(data) {
       let storeData = decodeCocoJson(JSON.parse(data));
@@ -101,8 +105,8 @@ export default {
     },
 
     /**
-     * Loads .nimn file
-     * @param {String} data
+     * Loads .nimn file data to store
+     * @param {String} data - nimn file data
      */
     loadProjectFile(data) {
       var nimn = require("nimnjs");
@@ -154,7 +158,8 @@ export default {
     },
 
     /**
-     * Defines possible shortcuts
+     * Shortcuts
+     * @param {Event} event - keydown event
      */
     shortcuts(event) {
       if (
@@ -179,9 +184,11 @@ export default {
     }
   },
   mounted() {
+    // Adds shortcuts to global keydown event
     _.on(document, "keydown", this.shortcuts);
   },
   beforeDestroy() {
+    // Remove shortcuts from global keydown event
     _.off(document, "keydown", this.shortcuts);
   }
 };

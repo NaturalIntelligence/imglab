@@ -1,8 +1,8 @@
-import { CIRCLE } from "../../../utils/tool-names";
+import { CIRCLE, SHAPE } from "../../../utils/tool-names";
 import { generateShapeID } from "../../../utils/app";
 
 export const circle = {
-  type: CIRCLE,
+  type: SHAPE,
   title: CIRCLE,
   description: "Draw a circle",
   drawable: true,

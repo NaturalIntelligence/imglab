@@ -2,7 +2,6 @@ import Vue from "vue";
 import App from "./App.vue";
 import store from "./store/store";
 import svgjs from "./plugins/svg";
-import InputTag from "vue-input-tag";
 import Draggable from "vuedraggable";
 import AutocompleteInput from "./components/autocomplete-input/autocomplete-input";
 import VueAnalytics from "vue-analytics";
@@ -51,7 +50,6 @@ library.add(
 
 Vue.component("autocomplete-input", AutocompleteInput);
 Vue.component("draggable", Draggable);
-Vue.component("input-tag", InputTag);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.config.productionTip = false;

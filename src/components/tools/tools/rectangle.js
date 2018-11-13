@@ -1,8 +1,8 @@
-import { RECTANGLE } from "../../../utils/tool-names";
+import { RECTANGLE, SHAPE } from "../../../utils/tool-names";
 import { generateShapeID } from "../../../utils/app";
 
 export const rectangle = {
-  type: RECTANGLE,
+  type: SHAPE,
   title: RECTANGLE,
   description: "Draw a rectanglular box",
   drawable: true,
