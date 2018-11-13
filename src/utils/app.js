@@ -1,6 +1,11 @@
 import store from "../store/store";
 import { POINT } from "./tool-names";
 
+/**
+ * Returns the x and y coordinates of mouse on the canvas
+ * @param {Event} event - mouse move event
+ * @param {SVG.Element} element - svg canvas
+ */
 export function getCoordinates(event, element) {
   var rect = element.getBoundingClientRect();
   var x = event.clientX - rect.left;
@@ -13,6 +18,7 @@ export function getCoordinates(event, element) {
 
 /**
  * Helper function to convert a single value to an array
+ * @param {*} val - value to be converted
  */
 export function convertToArray(val) {
   if (!val) return [];
@@ -25,30 +31,10 @@ export function convertToArray(val) {
 }
 
 /**
- * Toggles existence of item in array
- * E.g. If item exists, then remove from array. Else add to array
- * @param {Array} arr - any array
- * @param {Any} item - item to be inserted/removed
- */
-export function toggleItemInArray(arr, item) {
-  if (item) {
-    let exists = arr.findIndex(_item => {
-      return _item.id == item.id;
-    });
-
-    if (exists === -1) {
-      arr = arr.concat([item]);
-    } else {
-      arr.splice(exists, 1);
-    }
-  }
-}
-
-/**
  * Adds a unique item to array
  * @param {Array} arr - array of items
- * @param {Any} item - item to be added
- * @param {Any} key - used to compare object equality
+ * @param {*} item - item to be added
+ * @param {*} key - used to compare object equality
  */
 export function setAdd({ arr, item, key }) {
   // Key default is set to item
@@ -68,8 +54,8 @@ export function setAdd({ arr, item, key }) {
 /**
  * Removes a unique item from array
  * @param {Array} arr - array of items
- * @param {Any} item - item to be removed
- * @param {Any} key - used to compare object equality
+ * @param {*} item - item to be removed
+ * @param {*} key - used to compare object equality
  */
 export function setRemove({ arr, item, key }) {
   // Key default is set to item
@@ -110,7 +96,7 @@ export function formatID() {
 
 /**
  * Helper function to get svg with custom id
- * @param {SVG} svg - a SVG instance
+ * @param {SVG.Element} svg - a SVG instance
  * @param {String} id - lookup id
  */
 export function getSVG({ svg, id }) {

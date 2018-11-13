@@ -10,7 +10,7 @@ import { FeaturePoint } from "../models/FeaturePoint";
  * @param {Number} scale - scale used to rescale shape
  * @returns {Shape} scaled shape
  */
-export function scaleShape({ id, type, rbox, points, scale }) {
+export function scaleShape({ id, type, rbox, points, scale = 1 }) {
   return new Shape({
     id,
     type,
@@ -29,12 +29,12 @@ export function scaleShape({ id, type, rbox, points, scale }) {
 
 /**
  * Scales the points that make up the shape according to scale and type
- * @param {points[] | Array[points[]]} point
- * @param {number} scale
- * @param {string} type - type of shape
- * @returns {points[] | Array[points[]]} scaled points
+ * @param {points[]} point
+ * @param {Number} scale
+ * @param {String} type - type of shape
+ * @returns {points[]} scaled points
  */
-export function scaleShapePoints(points, scale) {
+export function scaleShapePoints(points, scale = 1) {
   if (!points) return;
   return points.map(point => point * scale);
 }
@@ -45,7 +45,7 @@ export function scaleShapePoints(points, scale) {
  * @param {Number} scale
  * @returns {Object} scaled rbox
  */
-export function scaleRbox(rbox, scale) {
+export function scaleRbox(rbox, scale = 1) {
   if (!rbox) return;
 
   return {
@@ -60,7 +60,7 @@ export function scaleRbox(rbox, scale) {
   };
 }
 
-export function scaleFeaturePoint({ point, scale }) {
+export function scaleFeaturePoint({ point, scale = 1 }) {
   return new FeaturePoint({
     cx: point.cx * scale,
     cy: point.cy * scale,
@@ -74,7 +74,7 @@ export function scaleFeaturePoint({ point, scale }) {
  * @param {Number} scale
  * @returns {FeaturePoint[]} array of scaled FeaturePoints
  */
-export function scaleFeaturePoints(featurePoints, scale) {
+export function scaleFeaturePoints(featurePoints, scale = 1) {
   if (!featurePoints) return;
 
   return featurePoints.map(point => {

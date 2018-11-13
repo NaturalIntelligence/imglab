@@ -39,9 +39,13 @@
 import { mapGetters, mapMutations } from "vuex";
 import { _ } from "../../../utils/app";
 
+/**
+ * Rescales all items in the canvas, excluding the feature point
+ */
 export default {
   data() {
     return {
+      // Current zoom scale
       scale: 100
     };
   },
@@ -55,6 +59,9 @@ export default {
       zoomStepSize: "getZoomStepSize"
     }),
 
+    /**
+     * Returns image scale; default is 100%
+     */
     imageScale() {
       return this.imageSelected
         ? Math.floor(this.imageSelected.size.imageScale * 100)
@@ -65,7 +72,7 @@ export default {
     ...mapMutations("image-store", ["updateShapeDetail", "updateImageDetail"]),
 
     /**
-     * Zoom in
+     * Zoom in: Scale up both image and shapes
      */
     zoomIn() {
       // No image selected, stop
@@ -82,7 +89,7 @@ export default {
     },
 
     /**
-     * Zoom out
+     * Zoom out: Scale down both image and shapes
      */
     zoomOut() {
       // No image selected, stop
@@ -119,7 +126,7 @@ export default {
     },
 
     /**
-     * Helper function to rescale shapes in selected image and set new scale
+     * Rescale shapes in selected image and set new scale
      * @param {Number} oldScale - old image scale
      * @param {Number} newScale - new image scale
      */
@@ -135,7 +142,7 @@ export default {
     },
 
     /**
-     * Helper method to change image dimensions
+     * Rescale image dimensions by new scale
      * @param {Number} newScale - new image scale
      */
     rescaleImage(newScale) {
@@ -148,6 +155,7 @@ export default {
 
     /**
      * List of shortcuts
+     * @param {Event} event - keydown event
      */
     shortcuts(event) {
       let key = event.key;

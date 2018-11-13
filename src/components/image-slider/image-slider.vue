@@ -73,8 +73,16 @@ import { mapGetters, mapMutations } from "vuex";
 import { Image as _Image } from "../../models/Image";
 import { _ } from "../../utils/app";
 
+/**
+ * Previews images in a carousel like fashion, click on an image to load image
+ * to workarea and start annotating.
+ */
 export default {
   props: {
+    /**
+     * Set thumbnail width
+     * @default "80px"
+     */
     thumbnailWidth: {
       type: String,
       default: "80px"
@@ -82,6 +90,7 @@ export default {
   },
   data() {
     return {
+      // Array of Images
       thumbnails: []
     };
   },
@@ -91,21 +100,24 @@ export default {
     })
   },
   methods: {
-    // Map mutations from image-store
+    /**
+     * Map mutations from image-store
+     */
     ...mapMutations("image-store", ["setImageSelected", "addImageToStore"]),
 
     /**
      * Loads the image dynamically and stores it in the image store
-     * @param { _Image } imageData - an Image object from models/Image
+     * @param {Image} imageData - an Image object from models/Image
      */
     loadImage(imageData) {
       let self = this;
       let image = new Image();
-      /**
-       * note: we are generating the image dynamically, hence we have to set the
-       * onload property before the src.
-       */
+
       image.onload = function() {
+        /**
+         * we are generating the image dynamically, hence we have to set the
+         * onload property before the src.
+         */
         let imageSize = {
           width: this.width,
           height: this.height,
@@ -136,7 +148,7 @@ export default {
     /**
      * Reads file data, loads the image, and stores the image detail in the
      * list of thumbnails
-     * @param {File} - native file interface
+     * @param {File} file - native file interface
      */
     readImageFile(file) {
       if (file.type.startsWith("image")) {
@@ -183,7 +195,8 @@ export default {
     },
 
     /**
-     * List of shortcuts for each component
+     * List of shortcuts
+     * @param {Event} event - keydown event
      */
     shortcuts(event) {
       // Shortcuts for slide left / right
@@ -207,14 +220,24 @@ export default {
     }
   },
   watch: {
+    /**
+     * Reassign thumbnails when images change in image-store
+     * @param {Image[]} val - array of Image objects
+     */
     images(val) {
       this.thumbnails = val;
     }
   },
   mounted() {
+    /**
+     * Adds shortcuts to global kydown event handler
+     */
     _.on(document, "keydown", this.shortcuts);
   },
   beforeDestroy() {
+    /**
+     * Remove shortcuts from global keydown event handler
+     */
     _.off(document, "keydown", this.shortcuts);
   }
 };
@@ -225,7 +248,7 @@ export default {
     display: none;
   }
 
-  .grey-border{
+  .grey-border {
     border: 1px solid grey;
   }
 

@@ -32,6 +32,10 @@ import ModalGetFilename from "./modal-get-filename";
 
 const FileSaver = require("file-saver");
 
+/**
+ * Toggles between showing the save file types and the get-filename modal.
+ * Proceeds to encode store data and save it into the file if valid.
+ */
 export default {
   components: {
     "modal-select-savetype": ModalSaveType,
@@ -39,13 +43,16 @@ export default {
   },
   data() {
     return {
+      // Contains a mapping of file extension to default names
       defaultvalues: {
         [Ext.NIMN]: "Untitled_imgLab",
         [Ext.DLIB_XML]: "_dlib-xml",
         [Ext.DLIB_PTS]: "_dlib_pts",
         [Ext.COCO_JSON]: "_coco"
       },
+      // Selected file type / exntension
       filetype: null,
+      // Boolean toggle for displaying save options / get filename component
       showSaveDialog: true
     };
   },
@@ -56,8 +63,8 @@ export default {
   },
   methods: {
     /**
-     * Google analytics report file metadata
-     * @param {String} filetype
+     * Google analytics: Report file metadata
+     * @param {String} filetype - file type
      */
     analyticsReport(filetype) {
       this.analyticsFileType(filetype);
@@ -122,8 +129,8 @@ export default {
 
     /**
      * Save given data to a file
-     * @param {Any} data - string data
-     * @param {String} filename
+     * @param {*} data - string data
+     * @param {String} filename - file name
      * @param {String} type - Mime type
      */
     download(data, filename, type, encoding = "utf-8") {
@@ -135,7 +142,8 @@ export default {
 
     /**
      * Checks if file type is supported
-     * @returns {Boolean}
+     * @param {String} filetype - file type
+     * @returns {Boolean} true if exists; false otherwise
      */
     isSupported(filetype) {
       return Object.values(Ext).includes(filetype);
@@ -182,7 +190,7 @@ export default {
 
     /**
      * Saves whole project as coco json
-     * @param {String} filename
+     * @param {String} filename - file name
      */
     saveAsCocoJSON(filename) {
       let cocoData = encodeAsCocoJson(this.$store);
@@ -191,13 +199,17 @@ export default {
 
     /**
      * Save selected shape into a pts file
-     * @param {String} filename
+     * @param {String} filename - file name
      */
     saveAsDlibPts(filename) {
       let ptsData = encodeAsDlibPts(this.$store, this.selectedShapeID);
       this.download(ptsData, filename, "text/plain");
     },
 
+    /**
+     * Save project as dlib xml
+     * @param {String} filename - file name
+     */
     saveAsDlibXml(filename) {
       let dlibXML = encodeAsDlibXML(this.$store);
       this.download(dlibXML, filename, "text/xml");
@@ -205,7 +217,7 @@ export default {
 
     /**
      * Save store data to nimn format
-     * @param {String} filename
+     * @param {String} filename - filename
      */
     saveAsNimn(filename) {
       let nimnStore = encodeAsNimn(this.$store);
@@ -213,8 +225,8 @@ export default {
     },
 
     /**
-     * Set file type and toggle prompt to get file name
-     * @param {String} filetype
+     * Set file type and toggle prompt to display get-file-name component
+     * @param {String} filetype - file type
      */
     setFileType(filetype) {
       this.filetype = filetype;

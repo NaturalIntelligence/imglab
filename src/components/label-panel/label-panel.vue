@@ -40,6 +40,10 @@ import PanelFeaturePoint from "./panel/panel-feature-point";
 import PanelTag from "./panel/panel-tag";
 import PanelAttribute from "./panel/panel-attribute";
 
+/**
+ * Side panel that displays the shape category, attributes, tags, and
+ * feature points.
+ */
 export default {
   components: {
     "panel-feature-point": PanelFeaturePoint,
@@ -59,6 +63,9 @@ export default {
       appCategories: "getCategory"
     }),
 
+    /**
+     * Returns the selected shape from image-store
+     */
     selectedShape() {
       return this.selectedShapeID && this.getShapeByID(this.selectedShapeID);
     }
@@ -73,6 +80,10 @@ export default {
       addCategoryToApp: "addCategory"
     }),
 
+    /**
+     * Adds a new category via `added` event
+     * @param {String} category - category
+     */
     addCategory(category) {
       this.setShapeCategory({
         category,
@@ -83,7 +94,7 @@ export default {
 
     /**
      * Updates shape label
-     * @param {Event} - change event
+     * @param {Event} event - change event
      */
     updateLabel(event) {
       this.updateShapeDetail({

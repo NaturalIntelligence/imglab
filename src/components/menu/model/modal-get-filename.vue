@@ -49,12 +49,20 @@
 <script>
 import { _ } from "../../../utils/app";
 
+/**
+ * Displays a modal to get the file name. There are 2 types of events emitted.
+ *
+ * Input event is emitted on providing a valid filename and on continue
+ * Close event is emitted on cancel / exit
+ */
 export default {
   props: {
+    // Initial input value
     value: {
       type: String,
       required: true
     },
+    // Expected file format
     ext: {
       type: String,
       required: true
@@ -62,11 +70,18 @@ export default {
   },
   data() {
     return {
+      // Filename that contains a file extension
       filename: this.value + this.ext,
+      // Boolean toggle to display error styles if true
       showError: false
     };
   },
   methods: {
+    /**
+     * Toggles showError if input tag is empty. Assigns input value as filename
+     * otherwise
+     * @param {Event} event - input event
+     */
     onInput(event) {
       if (event.target.value.length) {
         this.showError = false;
@@ -74,35 +89,52 @@ export default {
       this.filename = event.target.value;
     },
 
+    /**
+     * Emits `input` event if filename is valid, toggle showError to show
+     * display error styling otherwise
+     */
     setFilename() {
       if (this.validFilename() && this.filename.length) {
+        /**
+         * Emits an input event
+         * @param {String} filename - correctly formatted file name
+         */
         this.$emit("input", this.filename);
       } else {
         this.showError = true;
       }
     },
 
+    /**
+     * Shortcuts
+     * @param {Event} event - keyup event
+     */
+    shortcuts(event) {
+      if (event.key === "Escape") {
+        /**
+         * Emits a close event to toggle component display
+         */
+        this.$emit("close");
+      }
+    },
+
+    /**
+     * Checks that the filename is correct and has the correct extension
+     * @return {Boolean} true if valid; false otherwise
+     */
     validFilename() {
       return (
         /^[a-z0-9_.@()-]/i.test(this.filename) &&
         this.filename.endsWith(this.ext)
       );
-    },
-
-    /**
-     * Defines possible shortcuts
-     * @param {Event} event
-     */
-    shortcuts(event) {
-      if (event.key === "Escape") {
-        this.$emit("close");
-      }
     }
   },
   mounted() {
+    // Add shortcut to global keydown event
     _.on(document, "keyup", this.shortcuts);
   },
   beforeDestroy() {
+    // Remove shortcut from global keydown event
     _.off(document, "keyup", this.shortcuts);
   }
 };

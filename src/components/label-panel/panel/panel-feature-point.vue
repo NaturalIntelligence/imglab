@@ -49,9 +49,12 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import { removeFeaturePoint } from "../../../utils/actions";
 import { getSVG } from "../../../utils/app";
 
+/**
+ * Shows the list of shape feature points. Feature points can be reordered by
+ * dragging the list item.
+ */
 export default {
   computed: {
     ...mapGetters("action-config", {
@@ -66,7 +69,7 @@ export default {
     }),
 
     /**
-     * Computed getter and setter
+     * Computed getter and setter needed for draggable component
      */
     featurePoints: {
       get() {
@@ -95,15 +98,25 @@ export default {
 
     /**
      * Removes feature point from canvas and store
-     * @see removeFeaturePoint @ actions.js for more details
+     * @param {String} featurePointID - feature point id
      */
     deleteFeaturePoint(featurePointID) {
       let shapeID = this.selectedShape;
-      removeFeaturePoint({
+
+      // Deselect feature point and remove from canvas
+      let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
+      svgFP.selectize(false);
+      svgFP.remove();
+
+      // Remove feature point from shape
+      this.$store.commit("image-store/detachFeaturePoint", {
         shapeID,
-        featurePointID,
-        svg: this.$svg,
-        store: this.$store
+        featurePointID
+      });
+
+      // Remove from list of selected feature points
+      this.$store.commit("action-config/removeSelectedElement", {
+        featurePointID
       });
     },
 
@@ -136,10 +149,11 @@ export default {
       let shape = getSVG({ svg: this.$svg, id: this.selectedShape });
       shape.selectize({ rotationPoint: false });
     },
+
     /**
-     * Set selected element on click
+     * Set selected elements (featurePoints) on click
      * @param {Event} event - click event
-     * @param {FeaturePoint} featurePoint - featurePoint clicked
+     * @param {FeaturePoint} featurePoint - featurePoint
      */
     onClick(event, featurePoint) {
       if (!event.ctrlKey) this.deselectShapeFeaturePoints();
@@ -148,7 +162,9 @@ export default {
     },
 
     /**
-     * Sets the feature point label after a delay
+     * Sets the feature point label
+     * @param {Event} event - change / keyup.enter event
+     * @param {FeaturePoint} featurePoint - FeaturePoint
      */
     setFeaturePointLabel(event, featurePoint) {
       // Stop if feature point label hasn't changed

@@ -45,9 +45,13 @@
 <script>
 import { mapGetters } from "vuex";
 
+/**
+ * WIP: Switch implementation to indexeddb
+ */
 export default {
   data() {
     return {
+      // Toggle component
       show: false,
       storeData: null
     };
@@ -59,7 +63,6 @@ export default {
   },
   methods: {
     // TODO: Switch whole implementation once indexeddb is used
-
     /**
      * Checks if there is browser cache
      */
@@ -87,6 +90,9 @@ export default {
     }
   },
   mounted() {
+    /**
+     * Check browser cache when component is mounted
+     */
     this.checkBrowserCache();
   }
 };

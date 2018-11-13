@@ -48,5 +48,4 @@ const store = new Vuex.Store({
 //   localStorage.setItem("imglab-store", JSON.stringify(state));
 // }, 5000)
 // );
-
 export default store;

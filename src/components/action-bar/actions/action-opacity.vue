@@ -14,6 +14,9 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 
+/**
+ * Sets image opacity through a slider
+ */
 export default {
   computed: {
     ...mapGetters("app-config", {
@@ -24,6 +27,9 @@ export default {
       imageSelected: "getImageSelected"
     }),
 
+    /**
+     * Gets image opacity; default is 1
+     */
     imageOpacity() {
       return this.imageSelected ? this.imageSelected.opacity : 1;
     }

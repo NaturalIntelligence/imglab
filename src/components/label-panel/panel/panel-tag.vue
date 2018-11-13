@@ -34,7 +34,7 @@
           ref="taginput"
           type="text"
           name="tag-input"
-          :placeholder="placeholderText"
+          placeholder="Enter Tag"
           :value="tagText"
           @input="onInput"
           @change="addTag"
@@ -48,10 +48,16 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 
+/**
+ * List the shape tags. Duplicate tags are not allowed. Tags and be reordered by
+ * dragging.
+ */
 export default {
   data() {
     return {
+      // Used to set focus to selected tag
       selectedTag: null,
+      // Input tag text
       tagText: ""
     };
   },
@@ -80,10 +86,6 @@ export default {
       set(val) {
         this.updateShapeDetail({ shapeID: this.selectedShapeID, tags: val });
       }
-    },
-
-    placeholderText() {
-      return this.tags && this.tags.size === 0 ? "Enter tags" : "";
     }
   },
   methods: {
@@ -98,7 +100,7 @@ export default {
     }),
 
     /**
-     * Adds tag to shape and app if doesn't exist
+     * Adds tag to shape and store
      * @param {Event} event - change event
      */
     addTag(event) {
@@ -118,16 +120,27 @@ export default {
       inputNode.focus();
     },
 
+    /**
+     * Set tag text to event value and set selected tag to null
+     * @param {Event} event - input event
+     */
     onInput(event) {
       this.tagText = event.target.value;
       this.selectedTag = null;
     },
 
+    /**
+     * Remove tag on click event on cross
+     * @param {String} tag - tag value
+     */
     removeTagByCross(tag) {
       let shapeID = this.selectedShapeID;
       tag && this.removeTagFromShape({ shapeID, tag });
     },
 
+    /**
+     * Remove tag when backspace is pressed on the active and empty input tag
+     */
     removeTagByBackspace() {
       // Stop if there's text in input tag
       if (this.tagText.length !== 0) return;
@@ -150,11 +163,6 @@ export default {
         this.selectedTag = lastTag;
       }
     }
-  },
-  mounted() {
-    let el = this.$refs.wrapper;
-    let compStyles = window.getComputedStyle(el);
-    this.inputWidth = compStyles.width;
   }
 };
 </script>

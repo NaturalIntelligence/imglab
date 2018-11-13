@@ -75,12 +75,17 @@ import { mapGetters } from "vuex";
 import { Ext } from "../filetype";
 import { _ } from "../../../utils/app";
 
+/**
+ * Displays a list of save file types. Returns to parent controller when an
+ * item is selected via the save/close events.
+ */
 export default {
   components: {
     "modal-get-filename": ModalGetFilename
   },
   data() {
     return {
+      // Snackbar message
       snackbarMsg: ""
     };
   },
@@ -112,7 +117,7 @@ export default {
   methods: {
     /**
      * Display a snackbar with a message
-     * @param {String} message
+     * @param {String} message - message to be displayed
      */
     displaySnackbar(message) {
       // TODO: Implement a snackbar
@@ -121,16 +126,20 @@ export default {
 
     /**
      * Defines possible shortcuts
+     * @param {Event} event - keydown event
      */
     shortcuts(event) {
       if (event.key === "Escape") {
+        /**
+         * Emits close event
+         */
         this.$emit("close");
       }
     },
 
     /**
      * Checks if action can be performed
-     * @param {String} fileext
+     * @param {String} fileext - file extension
      */
     validate(fileext) {
       switch (fileext) {
@@ -142,12 +151,20 @@ export default {
             );
             return;
           }
+          /**
+           * Emits save event
+           * @param {String} filesxt - file extension
+           */
           this.$emit("save", fileext);
           return true;
         }
         case Ext.COCO_JSON:
         case Ext.DLIB_XML:
         case Ext.NIMN:
+          /**
+           * Emits save event
+           * @param {String} filesxt - file extension
+           */
           this.$emit("save", fileext);
           return true;
         default:
@@ -156,9 +173,11 @@ export default {
     }
   },
   mounted() {
+    // Add shortcuts to global keyup event handler
     _.on(document, "keyup", this.shortcuts);
   },
   beforeDestroy() {
+    // Remove shortcuts to global keyup event handler
     _.off(document, "keyup", this.shortcuts);
   }
 };

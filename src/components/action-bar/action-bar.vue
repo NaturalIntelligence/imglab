@@ -6,10 +6,16 @@
 import { mapGetters } from "vuex";
 import { actions as _actions } from "./config/config";
 
+/**
+ * Renders the corresponding action when a tool is selected.
+ * Actions are loaded from the config file
+ */
 export default {
   data() {
     return {
+      // List of actions available
       actions: _actions,
+      // Current action
       action: null
     };
   },
@@ -25,6 +31,7 @@ export default {
         // Dynamically set action by binding the Vue options object
         this.action = this.actions[this.selectedTool.type];
       } else {
+        // Reset action to null
         this.action = null;
       }
     }

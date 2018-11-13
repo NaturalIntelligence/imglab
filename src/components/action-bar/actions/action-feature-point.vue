@@ -31,13 +31,14 @@ import { mapGetters, mapMutations } from "vuex";
 
 const throttle = require("lodash.throttle");
 
+/**
+ * Sets feature point color and feature point size
+ */
 export default {
-  data() {
-    return {
-      scale: 100
-    };
-  },
   computed: {
+    /**
+     * Computed getters from image-store and app-config
+     */
     ...mapGetters("image-store", {
       imageSelected: "getImageSelected",
       featurePointSize: "getFeaturePointSize",
@@ -59,8 +60,24 @@ export default {
     }),
 
     /**
-     * Sets the feature point color in store
-     * @param {Event} - change event
+     * Apply changes to all feature points in current image via callback function
+     * @param {Function} cb - callback function
+     */
+    applyFeaturePointChanges(cb) {
+      if (!this.imageSelected) return;
+
+      let shapes = this.imageSelected.shapes.map(shapeID => {
+        return this.getShapeByID(shapeID);
+      });
+
+      shapes.forEach(shape => {
+        shape.featurePoints.forEach(cb);
+      });
+    },
+
+    /**
+     * Sets feature point color in store
+     * @param {Event} event - change event
      */
     setColorInStore(event) {
       if (this.featurePointColor === event.target.value) return;
@@ -69,7 +86,7 @@ export default {
 
     /**
      * Sets the feature point size
-     * @param {Event} - change event
+     * @param {Event} event - change event
      */
     setPointSize: throttle(function(event) {
       this.setFeaturePointSize({ featurePointSize: event.target.value });
@@ -81,29 +98,17 @@ export default {
     }, 33),
 
     /**
-     * Switches the color of feature points on input event
+     * Previews the color of featurePoints when the color is changed
      * @param {String} color - hexadecimal color code
      */
     switchColor: throttle(function(color) {
+      if (!this.imageSelected) return;
+
       this.applyFeaturePointChanges(featurePointID => {
         let svgFP = getSVG({ svg: this.$svg, id: featurePointID });
         svgFP.fill(color);
       });
-    }, 33),
-
-    /**
-     * Apply changes to all feature points in current image via callback function
-     * @param {Function} cb - callback function
-     */
-    applyFeaturePointChanges(cb) {
-      let shapes = this.imageSelected.shapes.map(shapeID => {
-        return this.getShapeByID(shapeID);
-      });
-
-      shapes.forEach(shape => {
-        shape.featurePoints.forEach(cb);
-      });
-    }
+    }, 33)
   }
 };
 </script>
