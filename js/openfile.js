@@ -19,7 +19,7 @@ function openDataFile(){
 }
 
 function readDataFile(e){
-    var input = e.srcElement;
+    var input = e.target || e.srcElement;
     if (input.files && input.files[0]) {
         var dataFile = input.files[0];
         
