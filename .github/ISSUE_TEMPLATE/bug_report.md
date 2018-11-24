@@ -5,7 +5,7 @@ about: Create a report to help us improve
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is. 
+<!-- A clear and concise description of what the bug is. -->
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -15,10 +15,10 @@ Steps to reproduce the behavior:
 4. See error
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+<!-- If applicable, add screenshots to help explain your problem. -->
 
 **Console Errors**
-if possible, provide console logs (press F12 to see browser console).
+<!-- if possible, provide console logs (press F12 to see browser console). -->
 
 **Device detail
  (please complete the following information):**
@@ -26,7 +26,7 @@ if possible, provide console logs (press F12 to see browser console).
  - Browser [e.g. chrome, firefox]
 
 **Additional context**
-Add any other context about the problem here.
+<!-- Add any other context about the problem here. -->
 
 
 > [Watch](https://github.com/NaturalIntelligence/imglab/watchers) for changes, or [Bookmark](https://github.com/NaturalIntelligence/imglab/stargazers) for easy discovery.
