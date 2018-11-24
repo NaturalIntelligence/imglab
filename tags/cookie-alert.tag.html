@@ -1,0 +1,44 @@
+<cookie-alert>
+    <style>
+        #cookie-banner{
+            background: black;
+            color: white;
+            width: 100vw;
+            position: absolute;
+            top: 0px;
+        }
+    </style>
+    <div if={displayCookieAlert} class="alert alert-dismissible fade show text-center" id="cookie-banner" role="alert">
+        <p><strong>We use cookies on this website to enhance your user experience.</strong></p>
+        <p>If you're using our website, we'll assume you are happy to receive all cookies on this website. <button><a class="accept-cookie" href="privacy-policy.html">Cookie Policy</a></button></p>
+        <button type="button" class="close accept-cookie" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <script>
+        this.displayCookieAlert = true;
+        if( getCookie() ){
+            this.displayCookieAlert = false;
+        }
+        this.on('mount', function(){
+            $('.accept-cookie').click(function(){
+                setCookie('cookiealert', 'CookieAllowed');
+            })
+        })
+        function getCookie() {
+            var cookieValue = document.cookie.match(/(;)?cookiealert=([^;]*);?/);
+            if (cookieValue == null) {
+                return undefined;
+            } else {
+                return decodeURI(cookieValue[2]);
+            }
+        }
+        function setCookie(name, value) {
+            var exdays = 30; //days how long the cookie should live
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + parseInt(exdays));
+            var cValue = encodeURI(value) + ((exdays === null) ? '' : '; expires=' + exdate.toUTCString() + ';path=/');
+            document.cookie = name + '=' + cValue;
+        }
+    </script>
+</cookie-alert>
