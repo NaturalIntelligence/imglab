@@ -31,7 +31,7 @@ function displayDonationPrompt(){
                     </div>
                 </div>
                 <br>
-                <div><a onclick="javascript:logPaypal()" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KQJAX48SPUKNC" target="_blank"><img src="img/support_paypal.svg" width="200px"></a></div>
+                <div><a onclick="javascript:logPaypal()" href="https://www.paypal.me/amitkumarguptagwl" target="_blank"><img src="img/support_paypal.svg" width="200px"></a></div>
                 <br>
                 <div><a onclick=""javascript:logPateron()" href="https://www.patreon.com/bePatron?u=9531404"  target="_blank"><img src="img/support_patreon.svg" width="200px"></a></div>
             <div>`,
