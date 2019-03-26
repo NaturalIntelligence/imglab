@@ -1,6 +1,6 @@
 <url-uploader-window class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Paste URL here..." aria-label="Paste URL here...">
+    <input type="text" id="url-field-input" class="form-control" placeholder="Paste URL here..." aria-label="Paste URL here...">
     <div class="input-group-append">
-        <button class="btn" type="button">Button</button>
+        <button class="btn" type="button" onclick="uploadFileFromURL(document.getElementById('url-field-input').value)">Upload from URL</button>
     </div>
 </url-uploader-window>
