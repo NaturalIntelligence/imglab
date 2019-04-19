@@ -97,7 +97,7 @@
             let newVal = e.target.value / 100;
 
             if (newVal > 0.1)
-                localStorage.setItem('zoom', String(e.target.value / 100));
+                localStorage.setItem('zoom', String(newVal));
         }
 
         this.changeInterval = function (e) {

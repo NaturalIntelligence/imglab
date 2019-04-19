@@ -177,13 +177,14 @@
 
             let preZoom = localStorage.getItem("zoom");
 
-            if (preZoom !== null) {
+            if (preZoom !== null && imgSelected.isZoomed !== 1) {
                 imgSelected.size.imageScale = 1 * preZoom;
 
                 imgSelected.size.scaledWidth = Math.floor(imgSelected.size.width * imgSelected.size.imageScale);
                 imgSelected.size.scaledHeight = Math.floor(imgSelected.size.height * imgSelected.size.imageScale);
             }
 
+            $("#zoom-scale").val(Math.round(imgSelected.size.imageScale * 100) + '%');
             riot.mount("workarea", { img: imgSelected });
         }
     </script>
