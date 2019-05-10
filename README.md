@@ -54,7 +54,7 @@ ImgLab is platform independent, runs directly from the browser, and has no prere
   * dlib pts
   * Pascal VOC
   * COCO
-  * Tenserflow (in plan)
+  * Tensorflow (in plan)
   
 **Other quality-of-life features**:
 
