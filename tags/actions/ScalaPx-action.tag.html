@@ -1,4 +1,4 @@
-<action-zoom>
+<action-ScalaPx>
   <style>
     .zoom-bar{
       display: flex;
@@ -59,27 +59,8 @@
       const img = labellingData[imgSelected.name];
       if(img){//if there are labels
         img.shapes.forEach((shape)=>{
-
-            if(shape.type=="rect"){
-              shape.points = [shape.bbox.x,shape.bbox.y,Math.round(shape.bbox.w/imgSelected.size.imageScale/preImgSelectedScale), Math.round(shape.bbox.h/imgSelected.size.imageScale/preImgSelectedScale)]
-              console.log(shape.bbox.cx);
-              console.log(shape.bbox.cy);
-              console.log(shape.bbox.x);
-              console.log(shape.bbox.y);
-              console.log(shape.bbox.h);
-              console.log(shape.bbox.w);
-              console.log(shape.type);
-            }
-          else if(shape.type=="circle"){
-            shape.points = [shape.bbox.x,shape.bbox.y,Math.round(shape.bbox.w/imgSelected.size.imageScale/preImgSelectedScale), Math.round(shape.bbox.h/imgSelected.size.imageScale/preImgSelectedScale)]
-
-
-            }
-            else if(shape.type=="polygon"){
-          shape.points = [shape.bbox.x+10,shape.bbox.y+10,shape.bbox.h,shape.bbox.w,shape.bbox.cx,shape.bbox.cy]
-        }
           //each shape should zoom in relation to the image's scale
-        //  shape.zoomScale = (mulScale===0) ? shape.defaultZoomScale : shape.zoomScale*imgSelected.size.imageScale/preImgSelectedScale;
+      shape.points = [shape.bbox.x,shape.bbox.y, Math.round(shape.bbox.w/2), Math.round(shape.bbox.h/2)];
         })
       }
 
@@ -88,17 +69,17 @@
 
     this.on('mount', function () {
       //reset the input box's value according to image scale
-      //if(imgSelected) $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
+      if(imgSelected) $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
     });
 
     function rescaleImage(){
 
-    // $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
+      $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
 
-      //imgSelected.size.scaledWidth = Math.floor(imgSelected.size.width * imgSelected.size.imageScale);
-      //imgSelected.size.scaledHeight = Math.floor(imgSelected.size.height * imgSelected.size.imageScale);
+      imgSelected.size.scaledWidth = Math.floor(imgSelected.size.width * imgSelected.size.imageScale);
+      imgSelected.size.scaledHeight = Math.floor(imgSelected.size.height * imgSelected.size.imageScale);
 
       riot.mount('workarea');
   }
   </script>
-</action-zoom>
+</action-ScalaPx>

@@ -507,6 +507,13 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
             var shape = labellingData[ imgSelected.name ].shapes[ shapeId ];
             var currentShape;
             switch(shape.type){
+                case "resize":
+                attachEvents(currentShape);
+                drawAllFeaturePoints(shape.featurePoints, currentShape);
+                var i=0;
+                for(i;i<labellingData[ imgSelected.name ].shapes.length;i++){
+                  
+                }
                 case "rect":
                     var rect = myCanvas.nested()
                         .rect(shape.points[2], shape.points[3])
@@ -543,10 +550,12 @@ riot.tag2('workarea', '<div id="canvas-container"> <img id="img" riot-src="{opts
 
                     currentShape = poly;
                     break;
+
             }
 
             attachEvents(currentShape);
             drawAllFeaturePoints(shape.featurePoints, currentShape);
+
 
         }
     }

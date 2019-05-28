@@ -1,5 +1,16 @@
-var tools = {
+var tools = { 
     labelling : {
+        "tool-resize" : {
+        title  : "Resize",
+        desp : "Enlarge of 10px the toolbox",
+        icon_font : "icon-zoom-in",
+        drawable : true,
+        actions: ["zoom"],
+        create : function(e, container){
+            var canvasOffset = myCanvas.node.getBoundingClientRect();
+            return getPointToDraw(e, container, canvasOffset);
+        },
+            },
         "tool-point" : {
             type: "point",
             title  : "Point",
@@ -47,7 +58,7 @@ var tools = {
                 return Number.parseInt(el.attr("width")) > 3;
             },
         },
-        "tool-polygon" : {
+          "tool-polygon" : {
             type: "poly",
             title  : "Polygon",
             desp : "Create a concave polygon",
@@ -115,7 +126,8 @@ var tools = {
             desp : "Highlight the labels",
             icon_font : "icon-lightbulb",
             actions : ["lightbulb"]
-        }
+        },
+
     }
 };
 
