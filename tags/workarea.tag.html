@@ -28,9 +28,13 @@
         });
 
         $(document).keyup(function(e) {
-            if (e.keyCode == 46) {//del key
+
+
+
+            if (e.keyCode == 46 || (e.keyCode == 68 )) {//del key
                 //Delete selected shape(s) with points
                 //Delete selected points
+
                 selectedElements.forEach(el => {
                     /* $("[for="+ el.node.id+"]").remove(); */
                     el.selectize(false, {
