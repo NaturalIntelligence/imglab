@@ -1,16 +1,5 @@
-var tools = { 
+var tools = {
     labelling : {
-        "tool-resize" : {
-        title  : "Resize",
-        desp : "Enlarge of 10px the toolbox",
-        icon_font : "icon-zoom-in",
-        drawable : true,
-        actions: ["zoom"],
-        create : function(e, container){
-            var canvasOffset = myCanvas.node.getBoundingClientRect();
-            return getPointToDraw(e, container, canvasOffset);
-        },
-            },
         "tool-point" : {
             type: "point",
             title  : "Point",
@@ -49,16 +38,18 @@ var tools = {
             icon : "rectangle.svg",
             drawable : true,
             create : function(){
+                console.log("Inserimento rettangolo");
                 var rect =  myCanvas.nested().rect().addClass('labelbox shape')/* .draw() */;
                 rect.resize();
                 rect.parent().draggable();
+
                 return rect;
             },
             validate: function(el){
                 return Number.parseInt(el.attr("width")) > 3;
             },
         },
-          "tool-polygon" : {
+        "tool-polygon" : {
             type: "poly",
             title  : "Polygon",
             desp : "Create a concave polygon",
@@ -74,29 +65,6 @@ var tools = {
                         if(e.keyCode == 13){
                             poly.draw('done');
                             poly.off('drawstart');
-
-                            /* poly.on('dblclick', function(event){
-                                if(selectedTool.type === "poly"){
-                                    var points = myCanvas.point(event.x, event.y);
-                                    var polyArray = poly.array().valueOf();
-                                    for(var p_i=0; p_i< polyArray.length; p_i++){
-                                        var point1 = polyArray[ p_i];
-                                        var point2 = [];
-
-                                        if(i === length -1 ){
-                                            point2 = polyArray[ 0];
-                                        }else{
-                                            point2 = polyArray[ p_i + 1 ];
-                                        }
-                                        var distance  = pDistance(point1[0], point1[1], point2[0], point2[1], points.x, points.y);
-                                        if(distance < 11){
-                                            polyArray.splice(p_i+1, 0, [points.x, points.y] );
-                                            poly.plot(polyArray);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }) */
                         }
                     });
                 });
@@ -109,6 +77,14 @@ var tools = {
         }
     },
     canvas : {
+        "tool-10px" : {
+          type: "lente",
+          title  : "10px",
+          desp : "Add 10 more pixel to each shape",
+          icon : "resize.png",
+          drawable : false,
+          actions: ["10px"]
+    },
         "tool-move" : {
             title  : "Move",
             desp : "Move an element or the entire workarea",
@@ -126,8 +102,7 @@ var tools = {
             desp : "Highlight the labels",
             icon_font : "icon-lightbulb",
             actions : ["lightbulb"]
-        },
-
+        }
     }
 };
 

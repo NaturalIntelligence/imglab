@@ -1,0 +1,195 @@
+<action-10px>
+  <style>
+    .zoom-bar{
+      display: flex;
+    }
+    .zoom-bar > div:not(:first-child){
+      margin-left: .2em;
+    }
+    .zoom-button{
+      padding: .3em;
+      cursor: pointer;
+    }
+    .zoom-button:not(.zoom-selected):hover{
+      background: grey;
+    }
+    input[type="text"]{
+      border: 0px;
+      text-align:center;
+      margin-top:.2em;
+    }
+  </style>
+  <div class="zoom-bar">
+    <div class="zoom-button">
+      <img src="img/icons/zoomin.svg" data-zoom-type="add" onclick={ zoom }>
+    </div>
+    <div>
+      <input id="addpx" type='text' value="10" maxlength="4" size="4"/>
+    </div>
+    <div class="zoom-button">
+      <img src="img/icons/zoomout.svg" data-zoom-type="rem" onclick={ zoom }>
+    </div>
+  </div>
+  <script>
+
+    const coordinate = [];
+
+    var tag = this;
+    tag.zoom = function (e){
+
+      var pixels = parseInt(document.getElementById("addpx").value);
+
+
+      const img = labellingData[imgSelected.name];
+      if(img){//if there are labels
+
+
+        switch (e.target.dataset.zoomType) {
+
+          case 'add':
+
+            img.shapes.forEach((shape)=>{
+
+              switch(shape.type){
+
+                case 'rect':
+
+                  shape.bbox.x -= pixels;
+                  shape.bbox.y -= pixels;
+                  shape.bbox.h += pixels * 2;
+                  shape.bbox.w += pixels * 2;
+
+                  shape.points = [shape.bbox.x, shape.bbox.y, Math.round(shape.bbox.w), Math.round(shape.bbox.h)];
+
+                  break;
+
+                case 'circle':
+
+                  shape.bbox.x -= pixels;
+                  shape.bbox.y -= pixels;
+                  shape.bbox.h += pixels;
+                  shape.bbox.w += pixels;
+
+                  shape.points = [shape.bbox.cx, shape.bbox.cy, shape.points[2] + pixels];
+
+                  break;
+
+                case 'polygon':
+
+                  var cx = shape.bbox.cx;
+                  var cy = shape.bbox.cy;
+
+                  for (var i = 0; i < shape.points.length; i++){
+
+                    var point = shape.points[i];
+
+                    var x = point[0] - cx;
+                    var y = cy - point[1];
+
+                    var alpha = Math.atan(y/x);
+
+                    if(x < 0 && y < 0) alpha = Math.PI + alpha;
+                    else if(x < 0 && y > 0) alpha = Math.PI + alpha;
+
+                    var ip = Math.sqrt(x*x + y*y) + pixels;
+
+                    var nx = ip * Math.cos(alpha);
+                    var ny = ip * Math.sin(alpha);
+
+                    point[0] = nx + cx;
+                    point[1] = cy - ny;
+
+                  }
+
+                  break;
+
+              }
+            });
+
+            break;
+
+          case 'rem':
+
+            img.shapes.forEach((shape)=>{
+
+            switch(shape.type){
+
+              case 'rect':
+
+                shape.bbox.x += pixels;
+                shape.bbox.y += pixels;
+                shape.bbox.h -= pixels * 2;
+                shape.bbox.w -= pixels * 2;
+
+                shape.points = [shape.bbox.x, shape.bbox.y, Math.round(shape.bbox.w), Math.round(shape.bbox.h)];
+
+                break;
+
+              case 'circle':
+
+                shape.bbox.x += pixels;
+                shape.bbox.y += pixels;
+                shape.bbox.h -= pixels;
+                shape.bbox.w -= pixels;
+
+                shape.points = [shape.bbox.cx, shape.bbox.cy, shape.points[2] - pixels];
+
+                break;
+
+              case 'polygon':
+
+              var cx = shape.bbox.cx;
+              var cy = shape.bbox.cy;
+
+              for (var i = 0; i < shape.points.length; i++){
+
+                var point = shape.points[i];
+
+                var x = point[0] - cx;
+                var y = cy - point[1];
+
+                var alpha = Math.atan(y/x);
+
+                if(x < 0 && y < 0) alpha = Math.PI + alpha;
+                else if(x < 0 && y > 0) alpha = Math.PI + alpha;
+
+                var ip = Math.sqrt(x*x + y*y) - pixels;
+
+                var nx = ip * Math.cos(alpha);
+                var ny = ip * Math.sin(alpha);
+
+                point[0] = nx + cx;
+                point[1] = cy - ny;
+
+              }
+
+              break;
+
+            }
+          })
+
+          break;
+          
+        }
+
+      }
+
+      rescaleImage();
+    }
+
+    this.on('mount', function () {
+      //reset the input box's value according to image scale
+      if(imgSelected) $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
+    });
+
+    function rescaleImage(){
+
+      $("#zoom-scale").val(Math.round(imgSelected.size.imageScale*100)+'%');
+
+      imgSelected.size.scaledWidth = Math.floor(imgSelected.size.width * imgSelected.size.imageScale);
+      imgSelected.size.scaledHeight = Math.floor(imgSelected.size.height * imgSelected.size.imageScale);
+
+      riot.mount('workarea');
+  }
+  </script>
+</action-10px>
