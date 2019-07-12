@@ -19,6 +19,8 @@ A web based tool to label images for objects that can be used to train dlib or o
 
 > If you would like to be a maintainer/collaborator of this project/organization, please let me know. The only condition is that you need to be polite to any user feedback.
 
+# Looking for inters/contributors
+
 ## Features
 
 ImgLab is platform independent, runs directly from the browser, and has no prerequisites. It requires minimal CPU and memory.
