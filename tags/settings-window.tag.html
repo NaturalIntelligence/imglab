@@ -1,44 +1,60 @@
 <settings-window>
     <style>
-        #settings-wrapper{
+        #settings-wrapper {
             min-height: 500px;
+            overflow-x: hidden;
             /* min-width: 400px; */
         }
-        .buttonGeneralData{
-        	text-align: center;
+
+        .buttonGeneralData {
+            text-align: center;
         }
 
-        .nav-item > a{
-          color: #aaaaaa;
+        .nav-item>a {
+            color: #aaaaaa;
         }
 
+        .setting {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-style: groove;
+            padding-bottom: 5px;
+            padding-top: 5px;
+            border-width: 0px 0px 1px 0px;
+            border-color: gray;
+        }
     </style>
     <div id="settings-wrapper">
 
-	    <h3>Auto Save</h3>
+        <h3>Auto Save</h3>
 
-    <ul class="nav nav-tabs" id="settingsTab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">Data</a>
-      </li>
-    </ul>
-    <div class="tab-content" id="settingsTabContent">
-      <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
-        <small>We auto save labeling data in browser cache.</small>
-        <br>
-        <div class="row">
-            <div class="col-6">
-                Syncing Interval
-                <small><i class="icon-attention-circled small" data-toggle="tooltip" title="Change how early the data should be saved in browser cache.  Set 0 to disable. Minimum value is 4 sec."></i></small>
-            </div>
-            <div class="col-6 float-right">
-                <input  type="text" value={ appConfig.autosave.syncingInterval / 1000} size=4 onchange={changeInterval}> <small></small> seconds
-            </div>
-        </div>
-        <!-- <div class="row">
+        <ul class="nav nav-tabs" id="settingsTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab"
+                    aria-controls="general" aria-selected="true">General</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data"
+                    aria-selected="false">Data</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="settingsTabContent">
+            <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                <div class="setting" id="syncingIntervalSetting">
+                    <small>We auto save labeling data in browser cache.</small>
+                    <br>
+                    <div class="row">
+                        <div class="col-6">
+                            Syncing Interval
+                            <small><i class="icon-attention-circled small" data-toggle="tooltip"
+                                    title="Change how early the data should be saved in browser cache.  Set 0 to disable. Minimum value is 4 sec."></i></small>
+                        </div>
+                        <div class="col-6 float-right">
+                            <input type="text" value={ appConfig.autosave.syncingInterval / 1000} size=4
+                                onchange={changeInterval}> <small></small> seconds
+                        </div>
+                    </div>
+                    <!-- <div class="row">
             <div class="col-6">
                 Keep after export
                 <small><i class="icon-attention-circled small" data-toggle="tooltip" title="If this option is unchecked, browser cahche will be cleared once you export the data."></i></small>
@@ -47,25 +63,51 @@
                 <input  type="checkbox" value={ appConfig.autosave.syncingInterval / 1000} size=4>
             </div>
         </div> -->
-        <div>
-            <button class="btn btn-theme" onclick={clearCache}>Clear cache</button>
+                    <div>
+                        <button class="btn btn-theme" onclick={clearCache}>Clear cache</button>
+                    </div>
+                </div>
+
+                <div class="setting" id="defaultZoomSetting">
+                    <small>Any value below 10% will not be saved.</small>
+                    <br>
+                    <div class="row">
+                        <div class="col-6">
+                            Default Zoom Level:
+                        </div>
+                        <div class="col-6 float-right">
+                            <input type="text" value={ localStorage.getItem("zoom") !==null ?
+                                localStorage.getItem("zoom") * 100 : 100} size=4 onchange={updateZoom}>
+                            <small></small> %
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                some data info...
+            </div>
         </div>
-      </div>
-      <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
-        some data info...
-      </div>
-    </div>
 
     </div>
     <script>
-        this.changeInterval = function(e){
-            if(e.target.value === 0){
+
+        this.updateZoom = (e) => {
+            let newVal = e.target.value / 100;
+
+            if (newVal >= 0.1)
+                localStorage.setItem('zoom', String(newVal));
+        }
+
+        this.changeInterval = function (e) {
+            if (e.target.value === 0) {
                 appConfig.autosave.enable = false;
-            }else if(e.target.value < 4) {
+            } else if (e.target.value < 4) {
                 appConfig.autosave.enable = true;
                 appConfig.autosave.syncingInterval = 4 * 1000;
                 this.update();
-            }else{
+            } else {
                 appConfig.autosave.enable = true;
                 appConfig.autosave.syncingInterval = e.target.value * 1000;
             }
