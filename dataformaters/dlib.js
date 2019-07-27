@@ -30,14 +30,14 @@ function toDlibXML(imgs){
         //Add boxes
         for(var shape_i in shapes){
             var box = shapes [ shape_i ].bbox;
-            imgXMLStr += "\t\t<box top='"+box.y+"' left='"+box.x+"' width='"+box.w+"' height='"+box.h+"'>\n";
+            imgXMLStr += "\t\t<box top='"+Math.floor(box.y)+"' left='"+Math.floor(box.x)+"' width='"+Math.ceil(box.w)+"' height='"+Math.ceil(box.h)+"'>\n";
             imgXMLStr += "\t\t\t<label>"+ shapes [ shape_i ].label +"</label>\n";
             //Add points
             var fPoints = shapes [ shape_i ].featurePoints;
             for(var fPoint_i in fPoints){
                 var fPoint = fPoints [ fPoint_i ];
                 //TODO: pad fPoint_i
-                imgXMLStr += "\t\t\t<part name='"+ fPoint_i +"' x='"+ Math.floor(fPoint.x)+"' y='"+ Math.floor(fPoint.y) +"'/>\n";
+                imgXMLStr += "\t\t\t<part name='"+ fPoint_i +"' x='"+ Math.round(fPoint.x)+"' y='"+ Math.round(fPoint.y) +"'/>\n";
             }
             imgXMLStr += "\t\t</box>\n"
         }
