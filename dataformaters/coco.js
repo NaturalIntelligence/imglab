@@ -79,7 +79,7 @@ var cocoFormater = {
                 }
             }
         }
-
+        update_suggestedCategories(categories)
         return labellingData;
     },
     toCOCO : function(labellingData){
@@ -121,8 +121,8 @@ var cocoFormater = {
                     area = shape.points[2] * shape.points[2] * Math.PI;
                 }else if(shape.type === "rect"){
                     points = [
-                        shape.points[0], shape.points[1], 
-                        shape.points[0]+shape.points[2], shape.points[1], 
+                        shape.points[0], shape.points[1],
+                        shape.points[0]+shape.points[2], shape.points[1],
                         shape.points[0]+shape.points[2], shape.points[1] + shape.points[3],
                         shape.points[0], shape.points[1] + shape.points[3]
                     ];
@@ -168,4 +168,10 @@ function calcArea(coords){
         area += coords[i]*coords[nexti+1] - coords[i+1]*coords[nexti];
     }
     return Math.abs(area/2);
+}
+
+function update_suggestedCategories(new_categories){
+  for (var index = 0; index < new_categories.length; index++){
+      suggestedCategories.push(new_categories[index].name);
+  }
 }
