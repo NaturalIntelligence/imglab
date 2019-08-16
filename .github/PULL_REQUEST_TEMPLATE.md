@@ -1,7 +1,8 @@
 # Purpose / Goal
 Please specify here what you're planning to achieve by this pull request and how it can help in regard of this work-space. 
 
-Please mention the issue number, if exists.
+* mention the issue number, if exists.
+* add some video/screenshot highlighting your changes on GUI.
 
 # Type
 Please mention the type of PR
