@@ -1,12 +1,73 @@
 $(function(){
     $.confirm({
         title: '',
-        content: '<img src="img/imglab_logo.png"><br>'
-        + '<p>Imglab is an open source free to use application.</p>'
-        + '<p> Please consider small donation for support.</p>'
-        + '<p> Give us a <a href="https://github.com/NaturalIntelligence/imglab/stargazers">star</a> on GitHub or <a href="https://github.com/NaturalIntelligence/imglab/blob/master/showcase.md" >showcase</a> your project as a motivation.</p>',
+        content: `
+        <div id="featurepopup">
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <i class="icon-github-circled featureicon"></i>
+                    <div class="summary">
+                        Free & Open source
+                        <a class="github-button" href="https://github.com/NaturalIntelligence/imglab" data-size="large" data-show-count="true" aria-label="Star NaturalIntelligence/imglab on GitHub">Star</a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <i class="icon-user-secret featureicon"></i>
+                    <div class="summary">All your images and data is safe as saved locally</div>
+                </div>
+                <div class="col-md-3">
+                    <i class="icon-object-group featureicon"></i>
+                    <div class="summary">Multiple label types: point, circle, boundary box, polygon</div>
+                </div>
+                <div class="col-md-3">
+                    <i class="icon-laptop featureicon"></i>
+                    <div class="summary">Basic IDE features: zoom in/out, light, move, image thumbnails, drag ...</div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <i class="icon-mouse-pointer featureicon"></i>
+                    <div class="summary">1 click face landmarking</div>
+                </div>
+                <div class="col-md-3">
+                    <i class="icon-firefox featureicon"></i>
+                    <div class="summary">No installation, work in your browser</div>
+                </div>
+                <div class="col-md-3">
+                    <i class="icon-doc-text featureicon"></i>
+                    <div class="summary">Multiple supported formats: dlib XML, dlib pts, Pascal VOC, COCO ..</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="featureicon">
+                        <img src="img/icons/Offline_logo.svg" width="96px" />
+                    </div>
+                    <div  class="summary">Works offline</div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <i class="icon-tags featureicon"></i>
+                    <div class="summary">Multiple labele types: name, category, tags</div>
+                </div>
+                <div class="col-md-3">
+                    <i class="icon-emo-thumbsup featureicon"></i>
+                    <div class="summary">Better user experience: autofill, hotkeys, cut paste labels, ...</div>
+                </div>
+                <div class="col-md-3">
+                    <i class="icon-globe featureicon"></i>
+                    <div class="summary">Trusted by users from 45+ countries</div>
+                </div>
+                <div class="col-md-3">
+                <i class="icon-picture featureicon"></i>
+                    <div  class="summary">0.5 millions images annotated monthly</div>
+                </div>
+            </div>
+        </div>
+        `,
         escapeKey: true,
         backgroundDismiss: true,
+        useBootstrap : false,
+        boxWidth : 900,
         buttons: {
             confirm: {
                 text: "Donate",

@@ -80,3 +80,11 @@
 .no-pl{
     padding-left: 0px!important;
 }
+
+.featureicon { 
+    font-size: 5em;
+}
+
+#featurepopup .summary { 
+    font-size: small;
+}
