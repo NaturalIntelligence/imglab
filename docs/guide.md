@@ -39,12 +39,13 @@ Use the following shortcuts to speed up your work and save yourself some clickin
 
 *File Management:*
 
+* Alt + O : Open images.
 * Shift + Alt + O : Open image folder.
 * Ctrl + I : Import data file.
 * Ctrl + E : Export data file.
 * Alt + Left/Right Arrow : Navigate through images in the slider.
 
-*Image Manipulation:*
+*Shape Manipulation:*
 
 * Del : Delete selected shapes or feature points.
 * Enter : Confirm action.
