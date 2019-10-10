@@ -36,16 +36,43 @@
     /* width: 3000px; */
     /* height: 90px; */
 }
+.taskdone {
+  position: relative;
+  margin: 1px;
+  background: #CCC;
+  float: left;
+  text-align: center;
+  padding: 0px;
+}
+.clickOut {
+    border: 1px solid #999999;
+}
+.clickIn {
+    border: 1px solid blue;
+    background: red;
+}
+.clickIn .after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  color: #FFF;
+}
+
+.clickIn .after {
+  display: block;
+  background: rgba(0, 0, 0, .6);
+}
 .photolist-wrapper .photolist  img {
     padding: 2px;
     margin: 2px;
     cursor: pointer;
     vertical-align: top;
     background: #F6F6F6;
-    border: 1px solid #666;
     opacity: 0.3;
     transition: .5s ease;
 }
+
 .photolist-wrapper .photolist  img:hover {
     opacity: 1.0;
     transition: .5s ease;
