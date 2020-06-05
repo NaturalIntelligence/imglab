@@ -76,7 +76,7 @@ $(function () {
         },
       },
       leave: {
-        text: "Umm! may be next time.",
+        text: "Umm, maybe next time!",
       },
     },
   });
