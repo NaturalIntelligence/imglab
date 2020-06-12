@@ -104,11 +104,9 @@ To use it offline, you can either download installers or clone this repo and run
 
 #### Installing Dockerized version
 
-Assuming you installed Docker on your computer, follow the above instructions.
+Assuming you installed Docker on your computer, follow below instructions.
 
-From the folder where you cloned the repository (`path/imglab/`)
-
-1. run `$ docker run -it -d --rm --name imglab -p 8080:8080 -w /src/ francozacco/imglab:latest live-server` and wait until the docker image is up and running.
+1. run `$ docker run -it -d --rm --name imglab -p 8080:8080 -w /src/ francozacco/imglab:latest live-server` and wait until the docker container is up and running.
 2. Go to your browser and go to `http://127.0.0.1:8080/`
 
 #### Stopping the docker container
