@@ -97,7 +97,8 @@ var loadDlibXml = function(data){
                         currentBox.height
                     ],
                     attributes : [],
-                    featurePoints: []
+                    featurePoints: [],
+                    tags: []
                 })
                 if(currentBox.part){
                     if(!Array.isArray(currentBox.part)){
