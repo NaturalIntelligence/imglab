@@ -108,6 +108,7 @@ While using this library, if you happen to build an open database that can help 
 - [Stubmatic](https://github.com/NaturalIntelligence/Stubmatic) : Mock web servers and services. Designed specialy for testers and testing. 
 - [अनुमार्गक (anumargak)](https://github.com/node-muneem/anumargak) : Amazing fast router for node web servers.
 - **[मुनीम (Muneem)](https://github.com/node-muneem/muneem)** : Simple and fast web framework designed not only for developers but whole team.
+- improve limited join person problem and rejoin problem
 - [Match it](https://funcards.github.io/match-it/) : Generate Spot it like card game decks. 
 
 *Note that* All above mentioned projects are free to use and welcome contributors.
