@@ -193,6 +193,18 @@
 
             // Make sure label panel is initially hidden/empty
             eventBus.trigger('unmountLabelPanel');
+
+            // Listen to label point selection
+            eventBus.on('selectFeaturePoint', (f_point_id, parent_id) => {
+                let el = SVG.get(f_point_id);
+                deselectAll();
+                riot.mount('label-panel', { id : parent_id, pointId : f_point_id })
+                el.selectize({
+                    rotationPoint: false,
+                    points: []
+                });
+                selectedElements.push(el);
+            })
         });
 
         /**
