@@ -97,7 +97,7 @@
             <ul id="fpoints-list">
                 <li class="li-fpoints grey-border" each={fPoint,fid in targetShape.featurePoints}>
                     <div class="input-group small">
-                        <span class={selectedPoint: fPoint.id === this.opts.pointId, input-group-addon: true, drag-handler: fPoint.id !== this.opts.pointId}></span>
+                        <span class={selectedPoint: fPoint.id === this.opts.pointId, input-group-addon: true, drag-handler: fPoint.id !== this.opts.pointId} onclick={updateFPointSelected}></span>
                         <input type="text" class="form-control" value="{ fPoint.label }" onchange={updateFPointLabel} placeholder="Label the feature point">
                         <div class="input-group-btn" onclick={deleteTag}>
                             <i class="icon icon-trash-empty"></i>
@@ -111,6 +111,11 @@
         var tag = this;
         tag.targetShape = getShape(this.opts.id);
         tag.tags = tag.targetShape.tags.join(", ");
+
+        tag.updateFPointSelected = function(e){
+            eventBus.trigger('selectFeaturePoint', e.item.fPoint.id, opts.id);
+            e.stopPropagation();
+        }
 
         tag.updateTags = function(e){
             tag.targetShape.tags = e.target.value.split(",").map(function(item) {
