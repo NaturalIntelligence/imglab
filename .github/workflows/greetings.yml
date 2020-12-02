@@ -1,0 +1,13 @@
+name: Greetings
+
+on: [pull_request, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: 'This repository is currently out of maintenance due to insufficient time. Any bug, feature, or query may take longer time than expected or may lose in void.'
+        pr-message: 'This repository is currently out of maintenance due to insufficient time. Any bug, feature, or query may take longer time than expected or may lose in void.'
