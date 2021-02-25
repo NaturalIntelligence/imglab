@@ -24,11 +24,12 @@
     </div>
     <div class="photolist-wrapper " style="width: calc(100% - 160px); height: 90px;">
         <div id="photolist" class="photolist">
-            <!-- <span each={ thumbnails } class="d-inline-block">
-                            <span class="delete" onclick={ deleteThumbnail }></span> -->
-            <img id="thumbnail_{index}" each={ thumbnail,index in thumbnails } src={ thumbnail.src } label={
+            <span each={ thumbnail,index in thumbnails } class="thum_{index} taskdone clickOut" height="90px" width={thumbnailWidth}>
+                            <!-- <span class="delete" onclick={ deleteThumbnail }></span> -->
+            <img id="thumbnail_{index}"  src={ thumbnail.src } label={
                 thumbnail.name } title={ thumbnail.name } width={thumbnailWidth} onclick={ loadIntoWorkArea}>
-            <!-- </span> -->
+                <span class="after" height="90px" width={thumbnailWidth}></span>
+              </span>
         </div>
     </div>
     <div id="rightpaddle" class="align-middle" style="height: 100%;">
@@ -143,7 +144,7 @@
             if (this.sliding === false) {
                 this.sliding = true;
                 photolist.css({ left: "-" + this.sliderMove })
-                    .prepend(photolist.children('img:last-child'))
+                    .prepend(photolist.children('span:last-child'))
                     .animate({ left: 0 }, 200, 'linear', () => {
                         this.sliding = false;
                     });
@@ -154,8 +155,9 @@
             if (this.sliding === false) {
                 this.sliding = true;
                 photolist.animate({ left: "-" + this.sliderMove }, 200, 'linear', () => {
+                  console.log(this.sliderMove)
                     photolist.css({ left: 0 })
-                        .append(photolist.children('img:first-child'));
+                        .append(photolist.children('span:first-child'));
                     this.sliding = false;
                 });
             }
@@ -173,6 +175,8 @@
         }
 
         function loadIntoWorkArea(e) {
+			console.log(e.item.index);
+            $(".thum_" + e.item.index).toggleClass('clickOut clickIn');
             imgSelected = tag.thumbnails[e.item.index];
 
             let preZoom = localStorage.getItem("zoom");
