@@ -37,6 +37,7 @@
       <div class="tool-icon icon-cw" data-zoom-type="reset" onclick={ zoom } />
     </div>
   </div>
+
   <script>
     var tag = this;
     tag.zoom = function (e) {
@@ -70,6 +71,9 @@
 
       rescaleImage();
     }
+
+
+  
 
     this.on('mount', function () {
       //reset the input box's value according to image scale
