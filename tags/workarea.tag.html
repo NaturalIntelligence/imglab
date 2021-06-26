@@ -86,7 +86,8 @@
                           'type': shape.type,
                           'rbox': shape.rbox(myCanvas),
                           'points': getPoints(shape),
-                          'featurePoints': featurePoints
+                          'featurePoints': featurePoints,
+                          'metadata': getMetadata(shape)
                         });
                     }
                 })
@@ -104,11 +105,13 @@
                     copiedElements.forEach(shape => {
                         // Add shape data and any points into labellingData
                         var shapeId = shape.type + currentImgData.shapeIndex++;
-                        var shapeData = attachShapeToImg(shapeId, shape.type, shape.rbox, shape.points);
-                        shape.featurePoints.forEach(point => {
+                        var shapeData = attachShapeToImg(shapeId, shape.type, shape.rbox, shape.points, shape.metadata);
+                        shape.featurePoints.forEach((point, index) => {
                             var pointId = shapeId + point.type + currentImgData.pointIndex++;
-                            attachPointToShape(shapeId, pointId, point.rbox);
+                            attachPointToShape(shapeId, pointId, point.rbox, shapeData.featurePointLabels[index]);
                         });
+                        // feature point labels no longer needed here after attaching feature points
+                        delete shape.featurePointLabels;
                     });
                 }
                 // Call update to redraw shapes
