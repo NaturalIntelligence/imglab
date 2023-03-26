@@ -95,32 +95,10 @@ function displayDonationPrompt() {
   });
 }
 
-function tezpayment() {
-  $.dialog({
-    title: "Tez Payment",
-    content:
-      "<p>Please scan the below QR code or use UPI : amitgupta.gwl@oksbi</p>" +
-      '<img src="img/tez_qrcode.png">',
-  });
-  gtag("event", "click", {
-    event_category: "outbound",
-    event_label: "tez",
-    transport_type: "beacon",
-  });
-}
-
 function logPaypal() {
   gtag("event", "click", {
     event_category: "outbound",
     event_label: "paypal",
-    transport_type: "beacon",
-  });
-}
-
-function logPateron() {
-  gtag("event", "click", {
-    event_category: "outbound",
-    event_label: "patreon",
     transport_type: "beacon",
   });
 }
