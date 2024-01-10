@@ -30,13 +30,14 @@ function getShape(shapeId){
     return findInArray(labellingData[ imgSelected.name ].shapes, "id", shapeId);
 }
 
-function attachPointToShape(shapeId, pointid, position){
+function attachPointToShape(shapeId, pointid, position, label){
     var shape = getShape(shapeId);
     var scale = 1 / imgSelected.size.imageScale;
+    label = label || shape.featurePoints.length;
     shape.featurePoints.push( {
         "x": position.cx * scale,
         "y": position.cy * scale,
-        "label" : shape.featurePoints.length,
+        "label" : label,
         "id" : pointid
     });
 }
@@ -157,10 +158,28 @@ function updateShapeDetailInStore(shapeId, bbox, points){
 /**
  * Adds a shape into labelling data and returns a shape object
  */
-function attachShapeToImg(id, type, bbox, points){
+function attachShapeToImg(id, type, bbox, points, metadata){
     var shape = scaleShape(id, type, bbox, points, 1 / imgSelected.size.imageScale);
+    if (metadata) {
+        shape.category = metadata.category;
+        shape.label = metadata.label;
+        shape.attributes = metadata.attributes;
+        shape.tags = metadata.tags;
+        shape.featurePointLabels = metadata.featurePointLabels;
+    }
     labellingData[ imgSelected.name ].shapes.push(shape);
     return shape;
+}
+
+function getMetadata(shape) {
+    shape = getShape(shape.node.id);
+    return {
+            'category': shape.category,
+            'label': shape.label,
+            'attributes': shape.attributes.map(attr => Object.assign({}, attr)),
+            'tags': shape.tags.slice(),
+            'featurePointLabels': shape.featurePoints.map(point => point.label)
+            };
 }
 
 function addImgToStore(imgname, size) {
