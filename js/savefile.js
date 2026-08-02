@@ -297,7 +297,7 @@ function yoloDataRendering() {
        analytics_reportExportType("yoloV5PyTorch");
      })
      .catch(function (error) {
-       showSnackBar("Error occoured while creating ZIP file");
+       showSnackBar("Error occurred while creating ZIP file");
        console.error("Error creating ZIP file:", error);
      });
 }
